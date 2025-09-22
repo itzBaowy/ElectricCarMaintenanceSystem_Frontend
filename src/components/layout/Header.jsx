@@ -27,7 +27,7 @@ const Header = () => {
         <div className="nav-container">
           <div className="nav-logo">
             <h2>ElectricCare</h2>
-            <span className="logo-subtitle">Hệ thống bảo dưỡng xe điện</span>
+            <span className="logo-subtitle">Electric Vehicle Maintenance System</span>
           </div>
           
           <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
@@ -39,7 +39,7 @@ const Header = () => {
                 handleNavClick('home')
               }}
             >
-              Trang chủ
+              Home
             </a>
             <a 
               href="#services" 
@@ -49,7 +49,7 @@ const Header = () => {
                 handleNavClick('services')
               }}
             >
-              Dịch vụ
+              Services
             </a>
             <a 
               href="#features" 
@@ -59,7 +59,7 @@ const Header = () => {
                 handleNavClick('features')
               }}
             >
-              Tính năng
+              Features
             </a>
             <a 
               href="#about" 
@@ -69,7 +69,7 @@ const Header = () => {
                 handleNavClick('about')
               }}
             >
-              Về chúng tôi
+              About Us
             </a>
             <a 
               href="#contact" 
@@ -79,7 +79,7 @@ const Header = () => {
                 handleNavClick('contact')
               }}
             >
-              Liên hệ
+              Contact
             </a>
           </div>
 
@@ -88,13 +88,13 @@ const Header = () => {
               className="btn-login"
               onClick={() => handleAuthClick('login')}
             >
-              Đăng nhập
+              Login
             </button>
             <button 
               className="btn-register"
               onClick={() => handleAuthClick('register')}
             >
-              Đăng ký
+              Register
             </button>
           </div>
 
