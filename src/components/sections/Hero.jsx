@@ -19,25 +19,25 @@ const Hero = () => {
       <div className="hero-container">
         <div className="hero-content">
           <h1 className="hero-title">
-            Hệ thống bảo dưỡng xe điện 
-            <span className="highlight"> thông minh</span>
+            Smart Electric Vehicle 
+            <span className="highlight"> Maintenance System</span>
           </h1>
           <p className="hero-description">
-            Quản lý và bảo dưỡng xe điện của bạn một cách hiệu quả với công nghệ tiên tiến. 
-            Đặt lịch online, theo dõi tình trạng xe và nhận thông báo bảo dưỡng định kỳ.
+            Manage and maintain your electric vehicle efficiently with advanced technology. 
+            Book appointments online, track vehicle status, and receive periodic maintenance notifications.
           </p>
           <div className="hero-buttons">
             <button 
               className="btn-primary"
               onClick={handleBookingClick}
             >
-              Đặt lịch ngay
+              Book Now
             </button>
             <button 
               className="btn-secondary"
               onClick={handleLearnMoreClick}
             >
-              Tìm hiểu thêm
+              Learn More
             </button>
           </div>
         </div>
