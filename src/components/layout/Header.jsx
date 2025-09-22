@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Header.css'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -17,8 +19,13 @@ const Header = () => {
   }
 
   const handleAuthClick = (action) => {
-    // TODO: Implement authentication logic
-    console.log(`${action} clicked`)
+    if (action === 'login') {
+      navigate('/login')
+    } else if (action === 'register') {
+      // TODO: Navigate to register page when created
+      navigate('/register')
+    }
+    setIsMenuOpen(false) // Close mobile menu after clicking
   }
 
   return (

@@ -1,18 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './styles/App.css'
-import Header from './components/layout/Header'
-import Hero from './components/sections/Hero'
-import Services from './components/sections/Services'
-import Features from './components/sections/Features'
-import Footer from './components/layout/Footer'
+import LandingPage from './pages/LandingPage'
+import Login from './components/auth/Login'
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Hero />
-      <Services />
-      <Features />
-      <Footer />
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          {/* TODO: Add more routes for register, forgot-password, etc. */}
+        </Routes>
+      </Router>
     </div>
   )
 }
