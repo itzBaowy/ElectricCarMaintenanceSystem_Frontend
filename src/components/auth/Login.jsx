@@ -108,6 +108,10 @@ const Login = () => {
                 className={errors.email ? 'error' : ''}
                 placeholder="Enter your email"
                 disabled={isLoading}
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck="false"
               />
               {errors.email && (
                 <span className="error-message">{errors.email}</span>
@@ -125,6 +129,7 @@ const Login = () => {
                 className={errors.password ? 'error' : ''}
                 placeholder="Enter your password"
                 disabled={isLoading}
+                autoComplete="current-password"
               />
               {errors.password && (
                 <span className="error-message">{errors.password}</span>
