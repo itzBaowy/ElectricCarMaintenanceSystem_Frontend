@@ -159,9 +159,13 @@ const Login = () => {
           <div className="login-footer">
             <p>
               Don't have an account? 
-              <Link to="/register" className="register-link">
+              <span 
+                className="register-link"
+                onClick={() => alert('Register functionality will be available soon!')}
+                style={{ cursor: 'pointer' }}
+              >
                 Sign up here
-              </Link>
+              </span>
             </p>
           </div>
         </div>

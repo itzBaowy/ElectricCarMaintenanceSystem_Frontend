@@ -23,7 +23,7 @@ const Header = () => {
       navigate('/login')
     } else if (action === 'register') {
       // TODO: Navigate to register page when created
-      navigate('/register')
+      alert('Register functionality will be available soon!')
     }
     setIsMenuOpen(false) // Close mobile menu after clicking
   }
@@ -88,6 +88,22 @@ const Header = () => {
             >
               Contact
             </a>
+            
+            {/* Mobile Auth Buttons */}
+            <div className="mobile-auth-buttons">
+              <button 
+                className="mobile-btn-login"
+                onClick={() => handleAuthClick('login')}
+              >
+                Login
+              </button>
+              <button 
+                className="mobile-btn-register"
+                onClick={() => handleAuthClick('register')}
+              >
+                Register
+              </button>
+            </div>
           </div>
 
           <div className="nav-buttons">
