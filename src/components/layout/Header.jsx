@@ -22,8 +22,7 @@ const Header = () => {
     if (action === 'login') {
       navigate('/login')
     } else if (action === 'register') {
-      // TODO: Navigate to register page when created
-      alert('Register functionality will be available soon!')
+      navigate('/register')
     }
     setIsMenuOpen(false) // Close mobile menu after clicking
   }

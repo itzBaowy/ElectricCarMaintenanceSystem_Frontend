@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './styles/App.css'
 import LandingPage from './pages/LandingPage'
 import Login from './components/auth/Login'
+import Register from './components/auth/Register'
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
-          {/* TODO: Add more routes for register, forgot-password, etc. */}
+          <Route path="/register" element={<Register />} />
+          {/* TODO: Add more routes for forgot-password, etc. */}
         </Routes>
       </Router>
     </div>
