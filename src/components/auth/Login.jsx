@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Login.css'
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -28,11 +29,11 @@ const Login = () => {
   const validateForm = () => {
     const newErrors = {}
 
-    // Email validation
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
+    // Username validation
+    if (!formData.username) {
+      newErrors.username = 'Username is required'
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters'
     }
 
     // Password validation
@@ -56,14 +57,18 @@ const Login = () => {
     setIsLoading(true)
     
     try {
-      // TODO: Implement actual login API call
       console.log('Login attempt with:', formData)
       
-      // Simulate API call
+      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // TODO: Handle successful login (redirect, store token, etc.)
-      alert('Login successful! (This is a demo)')
+      // Simple validation - you can customize this
+      if (formData.username === 'admin' && formData.password === '123456') {
+        alert('Login successful!')
+        navigate('/') // Redirect to homepage
+      } else {
+        setErrors({ general: 'Invalid username or password' })
+      }
       
     } catch (error) {
       console.error('Login error:', error)
@@ -98,23 +103,23 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
+              <label htmlFor="username">Username</label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
-                className={errors.email ? 'error' : ''}
-                placeholder="Enter your email"
+                className={errors.username ? 'error' : ''}
+                placeholder="Enter your username"
                 disabled={isLoading}
-                autoComplete="email"
+                autoComplete="username"
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck="false"
               />
-              {errors.email && (
-                <span className="error-message">{errors.email}</span>
+              {errors.username && (
+                <span className="error-message">{errors.username}</span>
               )}
             </div>
 
@@ -159,13 +164,9 @@ const Login = () => {
           <div className="login-footer">
             <p>
               Don't have an account? 
-              <span 
-                className="register-link"
-                onClick={() => alert('Register functionality will be available soon!')}
-                style={{ cursor: 'pointer' }}
-              >
+              <Link to="/register" className="register-link">
                 Sign up here
-              </span>
+              </Link>
             </p>
           </div>
         </div>
