@@ -17,6 +17,7 @@ const EmployeeManagement = () => {
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
+  const [showPassword, setShowPassword] = useState(false)
 
   // Mock data - replace with API call
   useEffect(() => {
@@ -203,15 +204,24 @@ const EmployeeManagement = () => {
                 
                 <div className="form-group">
                   <label htmlFor="password">Password *</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter password"
-                  />
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                  </div>
                 </div>
               </div>
 
