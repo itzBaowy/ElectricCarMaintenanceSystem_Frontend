@@ -12,7 +12,6 @@ const EmployeeManagement = () => {
     email: '',
     phone: '',
     role: 'technician', // technician or staff
-    joinDate: '',
     status: 'active'
   })
   const [searchTerm, setSearchTerm] = useState('')
@@ -61,7 +60,6 @@ const EmployeeManagement = () => {
       email: '',
       phone: '',
       role: 'technician',
-      joinDate: '',
       status: 'active'
     })
     setEditingEmployee(null)
@@ -81,7 +79,7 @@ const EmployeeManagement = () => {
       const newEmployee = {
         ...formData,
         id: Date.now(), // Simple ID generation
-        joinDate: formData.joinDate || new Date().toISOString().split('T')[0]
+        joinDate: new Date().toISOString().split('T')[0] // Current date
       }
       setEmployees(prev => [...prev, newEmployee])
     }
@@ -233,17 +231,6 @@ const EmployeeManagement = () => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="joinDate">Join Date</label>
-                  <input
-                    type="date"
-                    id="joinDate"
-                    name="joinDate"
-                    value={formData.joinDate}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                
                 <div className="form-group">
                   <label htmlFor="status">Status</label>
                   <select
