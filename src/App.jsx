@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import CustomerDashboard from './pages/customer/CustomerDashboard'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/customer" element={<CustomerDashboard />} />
           {/* TODO: Add more routes for forgot-password, etc. */}
         </Routes>
       </Router>
