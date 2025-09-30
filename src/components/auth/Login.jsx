@@ -65,12 +65,24 @@ const Login = () => {
       // Simple validation - you can customize this
       if (formData.username === 'admin' && formData.password === '123456') {
         localStorage.setItem('adminToken', 'admin-token-123')
-        localStorage.setItem('adminUser', JSON.stringify({ username: 'admin', role: 'admin' }))
+        localStorage.setItem('currentUser', JSON.stringify({ username: 'admin', role: 'admin' }))
         alert('Admin login successful!')
         navigate('/admin') // Redirect to admin dashboard
-      } else if (formData.username === 'user' && formData.password === '123456') {
-        alert('User login successful!')
-        navigate('/') // Redirect to homepage
+      } else if (formData.username === 'customer' && formData.password === '123456') {
+        localStorage.setItem('customerToken', 'customer-token-123')
+        localStorage.setItem('currentUser', JSON.stringify({ username: 'customer', role: 'customer' }))
+        alert('Customer login successful!')
+        navigate('/customer') // Redirect to customer dashboard
+      } else if (formData.username === 'staff' && formData.password === '123456') {
+        localStorage.setItem('staffToken', 'staff-token-123')
+        localStorage.setItem('currentUser', JSON.stringify({ username: 'staff', role: 'staff' }))
+        alert('Staff login successful!')
+        navigate('/admin') // Staff also use admin dashboard
+      } else if (formData.username === 'technician' && formData.password === '123456') {
+        localStorage.setItem('technicianToken', 'technician-token-123')
+        localStorage.setItem('currentUser', JSON.stringify({ username: 'technician', role: 'technician' }))
+        alert('Technician login successful!')
+        navigate('/admin') // Technician also use admin dashboard
       } else {
         setErrors({ general: 'Invalid username or password' })
       }

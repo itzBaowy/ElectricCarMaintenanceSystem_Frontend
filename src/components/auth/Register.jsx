@@ -9,7 +9,8 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     fullName: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    gender: 'male' // Default to male
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
@@ -212,6 +213,25 @@ const Register = () => {
               />
               {errors.phoneNumber && (
                 <span className="error-message">{errors.phoneNumber}</span>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="gender">Gender</label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className={errors.gender ? 'error' : ''}
+                disabled={isLoading}
+              >
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+              {errors.gender && (
+                <span className="error-message">{errors.gender}</span>
               )}
             </div>
 
