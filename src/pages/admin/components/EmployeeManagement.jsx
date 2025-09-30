@@ -10,6 +10,7 @@ const EmployeeManagement = () => {
     fullName: '',
     username: '',
     email: '',
+    password: '',
     phone: '',
     role: 'technician', // technician or staff
     status: 'active'
@@ -58,6 +59,7 @@ const EmployeeManagement = () => {
       fullName: '',
       username: '',
       email: '',
+      password: '',
       phone: '',
       role: 'technician',
       status: 'active'
@@ -199,6 +201,21 @@ const EmployeeManagement = () => {
                   />
                 </div>
                 
+                <div className="form-group">
+                  <label htmlFor="password">Password *</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Enter password"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="phone">Phone Number</label>
                   <input
