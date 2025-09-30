@@ -10,13 +10,14 @@ const EmployeeManagement = () => {
     fullName: '',
     username: '',
     email: '',
+    password: '',
     phone: '',
     role: 'technician', // technician or staff
-    joinDate: '',
     status: 'active'
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
+  const [showPassword, setShowPassword] = useState(false)
 
   // Mock data - replace with API call
   useEffect(() => {
@@ -59,9 +60,9 @@ const EmployeeManagement = () => {
       fullName: '',
       username: '',
       email: '',
+      password: '',
       phone: '',
       role: 'technician',
-      joinDate: '',
       status: 'active'
     })
     setEditingEmployee(null)
@@ -81,7 +82,7 @@ const EmployeeManagement = () => {
       const newEmployee = {
         ...formData,
         id: Date.now(), // Simple ID generation
-        joinDate: formData.joinDate || new Date().toISOString().split('T')[0]
+        joinDate: new Date().toISOString().split('T')[0] // Current date
       }
       setEmployees(prev => [...prev, newEmployee])
     }
@@ -202,6 +203,30 @@ const EmployeeManagement = () => {
                 </div>
                 
                 <div className="form-group">
+                  <label htmlFor="password">Password *</label>
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? '👁️' : '👁️‍🗨️'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
                   <label htmlFor="phone">Phone Number</label>
                   <input
                     type="tel"
@@ -233,17 +258,6 @@ const EmployeeManagement = () => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="joinDate">Join Date</label>
-                  <input
-                    type="date"
-                    id="joinDate"
-                    name="joinDate"
-                    value={formData.joinDate}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                
                 <div className="form-group">
                   <label htmlFor="status">Status</label>
                   <select
