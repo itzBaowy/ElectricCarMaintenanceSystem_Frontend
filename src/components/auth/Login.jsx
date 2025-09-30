@@ -64,7 +64,12 @@ const Login = () => {
       
       // Simple validation - you can customize this
       if (formData.username === 'admin' && formData.password === '123456') {
-        alert('Login successful!')
+        localStorage.setItem('adminToken', 'admin-token-123')
+        localStorage.setItem('adminUser', JSON.stringify({ username: 'admin', role: 'admin' }))
+        alert('Admin login successful!')
+        navigate('/admin') // Redirect to admin dashboard
+      } else if (formData.username === 'user' && formData.password === '123456') {
+        alert('User login successful!')
         navigate('/') // Redirect to homepage
       } else {
         setErrors({ general: 'Invalid username or password' })
