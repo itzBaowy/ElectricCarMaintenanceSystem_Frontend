@@ -1,0 +1,374 @@
+/* Schedule Management Styles */
+.schedule-management {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.schedule-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e1e5e9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.week-navigation {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.week-nav-btn {
+  background: #f8f9fa;
+  border: 2px solid #e1e5e9;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.week-nav-btn:hover {
+  background: #e9ecef;
+  border-color: #667eea;
+}
+
+.week-display {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.schedule-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Schedule Grid */
+.schedule-grid {
+  overflow-x: auto;
+  padding: 1.5rem;
+}
+
+.schedule-table {
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: collapse;
+  background: white;
+}
+
+.schedule-table th,
+.schedule-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e1e5e9;
+  vertical-align: top;
+}
+
+.schedule-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.employee-header {
+  width: 200px;
+  min-width: 200px;
+}
+
+.day-header {
+  width: 140px;
+  min-width: 140px;
+  text-align: center;
+}
+
+.day-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.day-date {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.employee-cell {
+  background: #fafbfc;
+}
+
+.employee-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.employee-avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.employee-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.employee-role {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  margin-top: 0.25rem;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.employee-role.technician {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.employee-role.staff {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+/* Schedule Day */
+.schedule-cell {
+  padding: 0.75rem;
+}
+
+.schedule-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.working-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.working-toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  width: 50px;
+  height: 24px;
+  background: #ddd;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.working-toggle input:checked + .toggle-slider {
+  background: #28a745;
+}
+
+.working-toggle input:checked + .toggle-slider::before {
+  transform: translateX(26px);
+}
+
+.time-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.time-input {
+  width: 80px;
+  padding: 0.25rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.time-separator {
+  color: #666;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.off-day {
+  color: #999;
+  font-size: 0.8rem;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .schedule-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .week-navigation {
+    justify-content: center;
+  }
+  
+  .schedule-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-management {
+    border-radius: 8px;
+    margin: 0;
+  }
+  
+  .schedule-header {
+    padding: 1rem;
+  }
+  
+  .schedule-grid {
+    padding: 1rem;
+  }
+  
+  .week-navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .week-nav-btn {
+    padding: 0.75rem 1rem;
+  }
+  
+  .week-display {
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .schedule-actions {
+    flex-direction: column;
+  }
+  
+  .schedule-table th,
+  .schedule-table td {
+    padding: 0.5rem;
+  }
+  
+  .employee-info {
+    gap: 0.5rem;
+  }
+  
+  .employee-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+  
+  .employee-name {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-table {
+    min-width: 800px;
+  }
+  
+  .day-header {
+    width: 100px;
+    min-width: 100px;
+  }
+  
+  .time-input {
+    width: 70px;
+    font-size: 0.75rem;
+  }
+  
+  .day-name {
+    font-size: 0.8rem;
+  }
+  
+  .day-date {
+    font-size: 0.7rem;
+  }
+  
+  .toggle-slider {
+    width: 40px;
+    height: 20px;
+  }
+  
+  .toggle-slider::before {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .working-toggle input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+  }
+}
