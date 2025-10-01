@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './ScheduleManagement.css'
+import '../../../styles/ScheduleManagement.css'
 
 const ScheduleManagement = () => {
   const [employees, setEmployees] = useState([])

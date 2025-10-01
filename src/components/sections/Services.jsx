@@ -1,4 +1,4 @@
-import './Services.css'
+import '../../styles/Services.css'
 
 const Services = () => {
   const services = [

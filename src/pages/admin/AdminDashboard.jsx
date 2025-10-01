@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import EmployeeManagement from './components/EmployeeManagement'
 import ScheduleManagement from './components/ScheduleManagement'
-import './AdminDashboard.css'
+import '../../styles/AdminDashboard.css'
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('employees')

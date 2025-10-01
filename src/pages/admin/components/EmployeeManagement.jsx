@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './EmployeeManagement.css'
+import '../../../styles/EmployeeManagement.css'
 
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([])

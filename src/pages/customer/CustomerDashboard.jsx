@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './CustomerDashboard.css'
+import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)

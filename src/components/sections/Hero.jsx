@@ -1,4 +1,4 @@
-import './Hero.css'
+import '../../styles/Hero.css'
 
 const Hero = () => {
   const handleBookingClick = () => {
