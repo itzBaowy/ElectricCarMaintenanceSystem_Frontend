@@ -83,7 +83,8 @@ const Header = () => {
               className="nav-link"
               onClick={(e) => {
                 e.preventDefault()
-                handleNavClick('contact')
+                navigate('/contact')
+                setIsMenuOpen(false)
               }}
             >
               Contact
