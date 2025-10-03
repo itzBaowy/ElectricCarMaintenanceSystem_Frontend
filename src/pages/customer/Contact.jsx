@@ -59,8 +59,8 @@ const Contact = () => {
         {/* Hero Section */}
         <section className="contact-hero">
           <div className="contact-hero-content">
-            <h1>Liên Hệ Với Chúng Tôi</h1>
-            <p>Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn</p>
+            <h1>Contact Us</h1>
+            <p>We are always ready to listen and support you</p>
           </div>
         </section>
 
@@ -68,7 +68,7 @@ const Contact = () => {
         <section className="company-info-section">
           <div className="container">
             <div className="section-header">
-              <h2>Thông Tin Doanh Nghiệp</h2>
+              <h2>Company Information</h2>
               <div className="section-divider"></div>
             </div>
             
@@ -77,23 +77,23 @@ const Contact = () => {
                 <div className="info-icon">
                   <i className="fas fa-building"></i>
                 </div>
-                <h3>Công Ty TNHH ElectricCare</h3>
-                <p>Hệ thống bảo dưỡng xe điện hàng đầu Việt Nam</p>
+                <h3>ElectricCare Co., Ltd.</h3>
+                <p>Vietnam's leading electric vehicle maintenance system</p>
               </div>
 
               <div className="company-info-card">
                 <div className="info-icon">
                   <i className="fas fa-map-marker-alt"></i>
                 </div>
-                <h3>Địa Chỉ</h3>
-                <p>123 Đường Lê Lợi, Quận 1<br/>Thành phố Hồ Chí Minh, Việt Nam</p>
+                <h3>Address</h3>
+                <p>123 Le Loi Street, District 1<br/>Ho Chi Minh City, Vietnam</p>
               </div>
 
               <div className="company-info-card">
                 <div className="info-icon">
                   <i className="fas fa-phone"></i>
                 </div>
-                <h3>Điện Thoại</h3>
+                <h3>Phone</h3>
                 <p>Hotline: 1900-xxxx<br/>Tel: (028) 1234-5678</p>
               </div>
 
@@ -109,15 +109,15 @@ const Contact = () => {
                 <div className="info-icon">
                   <i className="fas fa-clock"></i>
                 </div>
-                <h3>Giờ Làm Việc</h3>
-                <p>Thứ 2 - Thứ 6: 8:00 - 18:00<br/>Thứ 7: 8:00 - 12:00<br/>Chủ Nhật: Nghỉ</p>
+                <h3>Working Hours</h3>
+                <p>Monday - Friday: 8:00 AM - 6:00 PM<br/>Saturday: 8:00 AM - 12:00 PM<br/>Sunday: Closed</p>
               </div>
 
               <div className="company-info-card">
                 <div className="info-icon">
                   <i className="fas fa-globe"></i>
                 </div>
-                <h3>Website & Mạng Xã Hội</h3>
+                <h3>Website & Social Media</h3>
                 <p>
                   www.electriccare.vn<br/>
                   <div className="social-links">
@@ -132,16 +132,16 @@ const Contact = () => {
             {/* Additional Info */}
             <div className="additional-info">
               <div className="info-box">
-                <h4>Mã Số Thuế</h4>
+                <h4>Tax Code</h4>
                 <p>0123456789</p>
               </div>
               <div className="info-box">
-                <h4>Giấy Phép Kinh Doanh</h4>
-                <p>Số: 0123456789 do Sở KH&ĐT TP.HCM cấp ngày 01/01/2020</p>
+                <h4>Business License</h4>
+                <p>No: 0123456789 issued by HCMC Department of Planning and Investment on 01/01/2020</p>
               </div>
               <div className="info-box">
-                <h4>Người Đại Diện</h4>
-                <p>Nguyễn Văn A - Giám Đốc</p>
+                <h4>Legal Representative</h4>
+                <p>Nguyen Van A - Director</p>
               </div>
             </div>
           </div>
@@ -151,8 +151,8 @@ const Contact = () => {
         <section className="feedback-section">
           <div className="container">
             <div className="section-header">
-              <h2>Gửi Phản Hồi</h2>
-              <p>Vui lòng để lại thông tin, chúng tôi sẽ liên hệ với bạn sớm nhất</p>
+              <h2>Send Feedback</h2>
+              <p>Please leave your information, we will contact you as soon as possible</p>
               <div className="section-divider"></div>
             </div>
 
@@ -161,7 +161,7 @@ const Contact = () => {
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="name">
-                      <i className="fas fa-user"></i> Họ và Tên *
+                      <i className="fas fa-user"></i> Full Name *
                     </label>
                     <input
                       type="text"
@@ -169,7 +169,7 @@ const Contact = () => {
                       name="name"
                       value={feedback.name}
                       onChange={handleInputChange}
-                      placeholder="Nhập họ và tên của bạn"
+                      placeholder="Enter your full name"
                       required
                     />
                   </div>
@@ -192,7 +192,7 @@ const Contact = () => {
 
                 <div className="form-group">
                   <label htmlFor="subject">
-                    <i className="fas fa-tag"></i> Chủ Đề *
+                    <i className="fas fa-tag"></i> Subject *
                   </label>
                   <input
                     type="text"
@@ -200,67 +200,67 @@ const Contact = () => {
                     name="subject"
                     value={feedback.subject}
                     onChange={handleInputChange}
-                    placeholder="Tiêu đề phản hồi của bạn"
+                    placeholder="Your feedback title"
                     required
                   />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="message">
-                    <i className="fas fa-comment"></i> Nội Dung *
+                    <i className="fas fa-comment"></i> Message *
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     value={feedback.message}
                     onChange={handleInputChange}
-                    placeholder="Nhập nội dung phản hồi của bạn..."
+                    placeholder="Enter your feedback message..."
                     rows="6"
                     required
                   ></textarea>
                 </div>
 
                 <button type="submit" className="submit-btn">
-                  <i className="fas fa-paper-plane"></i> Gửi Phản Hồi
+                  <i className="fas fa-paper-plane"></i> Send Feedback
                 </button>
 
                 {submitStatus === 'success' && (
                   <div className="alert alert-success">
-                    <i className="fas fa-check-circle"></i> Cảm ơn bạn! Phản hồi của bạn đã được gửi thành công.
+                    <i className="fas fa-check-circle"></i> Thank you! Your feedback has been sent successfully.
                   </div>
                 )}
 
                 {submitStatus === 'error' && (
                   <div className="alert alert-error">
-                    <i className="fas fa-exclamation-circle"></i> Có lỗi xảy ra. Vui lòng thử lại sau.
+                    <i className="fas fa-exclamation-circle"></i> An error occurred. Please try again later.
                   </div>
                 )}
               </form>
 
               <div className="feedback-sidebar">
                 <div className="sidebar-card">
-                  <h3><i className="fas fa-question-circle"></i> Câu Hỏi Thường Gặp</h3>
+                  <h3><i className="fas fa-question-circle"></i> Frequently Asked Questions</h3>
                   <ul>
-                    <li><a href="#faq">Làm thế nào để đặt lịch bảo dưỡng?</a></li>
-                    <li><a href="#faq">Chi phí bảo dưỡng xe điện là bao nhiêu?</a></li>
-                    <li><a href="#faq">Thời gian bảo dưỡng mất bao lâu?</a></li>
-                    <li><a href="#faq">Có dịch vụ cứu hộ không?</a></li>
+                    <li><a href="#faq">How to schedule maintenance?</a></li>
+                    <li><a href="#faq">What is the cost of electric vehicle maintenance?</a></li>
+                    <li><a href="#faq">How long does maintenance take?</a></li>
+                    <li><a href="#faq">Do you have roadside assistance service?</a></li>
                   </ul>
                 </div>
 
                 <div className="sidebar-card">
-                  <h3><i className="fas fa-headset"></i> Hỗ Trợ Khẩn Cấp</h3>
-                  <p>Nếu bạn cần hỗ trợ gấp, vui lòng liên hệ:</p>
+                  <h3><i className="fas fa-headset"></i> Emergency Support</h3>
+                  <p>If you need urgent assistance, please contact:</p>
                   <div className="emergency-contact">
                     <div className="emergency-item">
                       <i className="fas fa-phone-volume"></i>
-                      <strong>Hotline 24/7:</strong>
+                      <strong>24/7 Hotline:</strong>
                       <span>1900-xxxx</span>
                     </div>
                     <div className="emergency-item">
                       <i className="fas fa-comments"></i>
                       <strong>Live Chat:</strong>
-                      <button className="chat-btn">Bắt đầu chat</button>
+                      <button className="chat-btn">Start Chat</button>
                     </div>
                   </div>
                 </div>
@@ -273,7 +273,7 @@ const Contact = () => {
         <section className="map-section">
           <div className="container">
             <div className="section-header">
-              <h2>Vị Trí Của Chúng Tôi</h2>
+              <h2>Our Location</h2>
               <div className="section-divider"></div>
             </div>
             <div className="map-container">
