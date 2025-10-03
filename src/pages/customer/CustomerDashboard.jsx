@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import authService from '../../api/authService'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
@@ -6,17 +7,52 @@ const CustomerDashboard = () => {
   const [vehicles, setVehicles] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
 
-  // Mock customer data
+  // Load customer data from auth service
   useEffect(() => {
-    const mockCustomer = {
-      id: 1,
-      fullName: 'Nguyen Van A',
-      username: 'nguyenvana',
-      email: 'nguyenvana@example.com',
-      phone: '0123456789',
-      joinDate: '2024-01-15'
+    const loadCustomerData = async () => {
+      try {
+        // Get user info from token/localStorage
+        const userResult = await authService.getUserProfile()
+        
+        if (userResult.success) {
+          // Mock customer data based on user info - later replace with API call
+          const mockCustomer = {
+            id: userResult.data.userId || 1,
+            fullName: userResult.data.fullName || userResult.data.username || 'Customer',
+            username: userResult.data.username || 'customer',
+            email: userResult.data.email || 'customer@example.com',
+            phone: userResult.data.phone || '0123456789',
+            joinDate: '2024-01-15'
+          }
+          setCustomer(mockCustomer)
+        } else {
+          // Fallback to default data
+          const mockCustomer = {
+            id: 1,
+            fullName: 'Valued Customer',
+            username: 'customer',
+            email: 'customer@example.com',
+            phone: '0123456789',
+            joinDate: '2024-01-15'
+          }
+          setCustomer(mockCustomer)
+        }
+      } catch (error) {
+        console.error('Error loading customer data:', error)
+        // Fallback to default data
+        const mockCustomer = {
+          id: 1,
+          fullName: 'Valued Customer',
+          username: 'customer',
+          email: 'customer@example.com',
+          phone: '0123456789',
+          joinDate: '2024-01-15'
+        }
+        setCustomer(mockCustomer)
+      }
     }
-    setCustomer(mockCustomer)
+
+    loadCustomerData()
 
     // Mock vehicles data
     const mockVehicles = [
@@ -86,6 +122,12 @@ const CustomerDashboard = () => {
     setRecentAppointments(mockAppointments)
   }, [])
 
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      authService.logout()
+    }
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -109,17 +151,46 @@ const CustomerDashboard = () => {
 
   return (
     <div className="customer-dashboard">
+      {/* Navigation Header */}
+      <div className="dashboard-nav">
+        <div className="nav-content">
+          <div className="nav-brand">
+            <h2>⚡ ElectricCare</h2>
+            <span>Customer Portal</span>
+          </div>
+          <div className="nav-actions">
+            <span className="nav-user">Hello, {customer.fullName}</span>
+            <button onClick={handleLogout} className="logout-btn">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Welcome Header */}
       <div className="welcome-header">
         <div className="welcome-content">
           <div className="customer-info">
             <div className="customer-avatar">
-              {customer.fullName.charAt(0)}
+              {customer.fullName.charAt(0).toUpperCase()}
             </div>
             <div className="customer-details">
-              <h1>Welcome, {customer.fullName}! 👋</h1>
-              <p>Have a great day with your electric vehicle</p>
+              <h1>Welcome back, {customer.fullName}! 👋</h1>
+              <p>Ready to take care of your electric vehicle today?</p>
+              <div className="customer-meta">
+                <span>Member since {new Date(customer.joinDate).getFullYear()}</span>
+                <span>•</span>
+                <span>Customer ID: #{customer.id}</span>
+              </div>
             </div>
+          </div>
+          <div className="welcome-actions">
+            <button className="quick-action-btn primary">
+              📅 Book Service
+            </button>
+            <button className="quick-action-btn secondary">
+              🚗 Add Vehicle
+            </button>
           </div>
         </div>
       </div>

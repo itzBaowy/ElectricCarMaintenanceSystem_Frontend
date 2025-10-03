@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import authService from '../../api/authService'
 import '../../styles/Login.css'
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -23,6 +25,10 @@ const Login = () => {
         ...prev,
         [name]: ''
       }))
+    }
+    // Clear success message when user starts typing
+    if (successMessage) {
+      setSuccessMessage('')
     }
   }
 
@@ -59,37 +65,60 @@ const Login = () => {
     try {
       console.log('Login attempt with:', formData)
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      // Call the real API using authService
+      const result = await authService.login({
+        username: formData.username,
+        password: formData.password
+      })
       
-      // Simple validation - you can customize this
-      if (formData.username === 'admin' && formData.password === '123456') {
-        localStorage.setItem('adminToken', 'admin-token-123')
-        localStorage.setItem('currentUser', JSON.stringify({ username: 'admin', role: 'admin' }))
-        alert('Admin login successful!')
-        navigate('/admin') // Redirect to admin dashboard
-      } else if (formData.username === 'customer' && formData.password === '123456') {
-        localStorage.setItem('customerToken', 'customer-token-123')
-        localStorage.setItem('currentUser', JSON.stringify({ username: 'customer', role: 'customer' }))
-        alert('Customer login successful!')
-        navigate('/customer') // Redirect to customer dashboard
-      } else if (formData.username === 'staff' && formData.password === '123456') {
-        localStorage.setItem('staffToken', 'staff-token-123')
-        localStorage.setItem('currentUser', JSON.stringify({ username: 'staff', role: 'staff' }))
-        alert('Staff login successful!')
-        navigate('/admin') // Staff also use admin dashboard
-      } else if (formData.username === 'technician' && formData.password === '123456') {
-        localStorage.setItem('technicianToken', 'technician-token-123')
-        localStorage.setItem('currentUser', JSON.stringify({ username: 'technician', role: 'technician' }))
-        alert('Technician login successful!')
-        navigate('/admin') // Technician also use admin dashboard
+      if (result.success) {
+        // Login successful
+        setSuccessMessage(result.message || 'Login successful! Redirecting...')
+        console.log('Message: ',result.message)
+
+        // Log tokens from localStorage
+        const accessToken = authService.getAccessToken()
+        const refreshToken = authService.getRefreshToken()  
+        console.log('📦 Stored Access Token:', accessToken)
+        console.log('📦 Stored Refresh Token:', refreshToken)
+        
+        // Clear any previous errors
+        setErrors({})
+        
+        // Get user profile to determine role and redirect accordingly
+        const profileResult = await authService.getUserProfile()
+        
+        if (profileResult.success) {
+          const user = profileResult.data
+          console.log('User profile:', user)
+          
+          // Small delay to show success message
+          setTimeout(() => {
+            // Redirect based on user role
+            if (user.role === 'ADMIN') {
+              navigate('/admin')
+            } else if (user.role === 'CUSTOMER') {
+              navigate('/customer')
+            } else {
+              navigate('/admin') // Default for staff, technician
+            }
+          }, 1000)
+        } else {
+          // If can't get profile, redirect to a default dashboard
+          setTimeout(() => {
+            navigate('/customer')
+          }, 1000)
+        }
       } else {
-        setErrors({ general: 'Invalid username or password' })
+        // Login failed
+        setErrors({ general: result.message || 'Invalid username or password' })
+        setSuccessMessage('')
       }
       
     } catch (error) {
       console.error('Login error:', error)
       setErrors({ general: 'Login failed. Please try again.' })
+      setSuccessMessage('')
     } finally {
       setIsLoading(false)
     }
@@ -111,6 +140,12 @@ const Login = () => {
         <div className="login-form-container">
           <h1>Welcome Back</h1>
           <p className="login-subtitle">Sign in to your account</p>
+
+          {successMessage && (
+            <div className="success-message">
+              {successMessage}
+            </div>
+          )}
 
           {errors.general && (
             <div className="error-message general-error">
