@@ -10,7 +10,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     fullName: '',
-    phoneNumber: '',
+    phone: '',
     gender: 'MALE' // Default to male
   })
   const [errors, setErrors] = useState({})
