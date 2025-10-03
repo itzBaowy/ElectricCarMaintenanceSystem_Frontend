@@ -1,7 +1,12 @@
 import axios from 'axios'
 
-// Base URL for the API
-const BASE_URL = 'https://elecleccarmaintenancebackendtest-production.up.railway.app'
+// Base URL for the API from environment variables
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+
+// Log API URL in development (remove in production)
+if (import.meta.env.VITE_APP_ENV === 'development') {
+  console.log('🔗 API Base URL:', BASE_URL)
+}
 
 // Create axios instance with default config
 const api = axios.create({
