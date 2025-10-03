@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import authService from '../../api/authService'
 import '../../styles/Register.css'
 
 const Register = () => {
@@ -10,7 +11,7 @@ const Register = () => {
     confirmPassword: '',
     fullName: '',
     phoneNumber: '',
-    gender: 'male' // Default to male
+    gender: 'MALE' // Default to male
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
@@ -97,12 +98,25 @@ const Register = () => {
         confirmPassword: '[HIDDEN]'
       })
       
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Prepare data for API
+      const apiData = {
+        username: formData.username,
+        password: formData.password,
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone || null,
+        gender: formData.gender
+      }
       
-      // Simple success simulation
-      alert('Registration successful! You can now login.')
-      navigate('/login')
+      // Call register API
+      const result = await authService.register(apiData)
+      
+      if (result.success) {
+        alert('Registration successful! You can now login.')
+        navigate('/login')
+      } else {
+        setErrors({ general: result.message || 'Registration failed. Please try again.' })
+      }
       
     } catch (error) {
       console.error('Registration error:', error)
@@ -199,20 +213,20 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phoneNumber">Phone Number (Optional)</label>
+              <label htmlFor="phone">Phone Number (Optional)</label>
               <input
                 type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
-                value={formData.phoneNumber}
+                id="phone"
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
-                className={errors.phoneNumber ? 'error' : ''}
+                className={errors.phone ? 'error' : ''}
                 placeholder="Enter your phone number"
                 disabled={isLoading}
                 autoComplete="tel"
               />
-              {errors.phoneNumber && (
-                <span className="error-message">{errors.phoneNumber}</span>
+              {errors.phone && (
+                <span className="error-message">{errors.phone}</span>
               )}
             </div>
 
@@ -226,9 +240,9 @@ const Register = () => {
                 className={errors.gender ? 'error' : ''}
                 disabled={isLoading}
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
               </select>
               {errors.gender && (
                 <span className="error-message">{errors.gender}</span>
