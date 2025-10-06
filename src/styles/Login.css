@@ -92,6 +92,38 @@
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  background-color: white;
+  color: #333;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .form-group input {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    border-color: #e1e5e9;
+  }
+  
+  .form-group input:focus {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    border-color: #667eea;
+  }
+  
+  .form-group input::placeholder {
+    color: #999999 !important;
+  }
+}
+
+/* Force light background for all input states */
+.form-group input:autofill,
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #333333 !important;
+  background-color: white !important;
+  color: #333333 !important;
 }
 
 .form-group input:focus {

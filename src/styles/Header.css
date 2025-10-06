@@ -47,10 +47,26 @@
   font-weight: 500;
   transition: color 0.3s ease;
   cursor: pointer;
+  position: relative;
 }
 
 .nav-link:hover {
   color: #64b5f6;
+}
+
+.nav-link.active {
+  color: #64b5f6;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #64b5f6;
+  border-radius: 1px;
 }
 
 .nav-buttons {
