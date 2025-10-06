@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import authService from '../../api/authService'
+import vehicleService from '../../api/vehicleService'
+import AddVehicle from './AddVehicle'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)
   const [vehicles, setVehicles] = useState([])
+  const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
+  const [showAddVehicle, setShowAddVehicle] = useState(false)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -53,35 +57,8 @@ const CustomerDashboard = () => {
     }
 
     loadCustomerData()
-
-    // Mock vehicles data
-    const mockVehicles = [
-      {
-        id: 1,
-        make: 'Tesla',
-        model: 'Model 3',
-        year: 2022,
-        licensePlate: '30A-12345',
-        batteryCapacity: 75,
-        mileage: 25000,
-        lastMaintenance: '2024-08-15',
-        nextMaintenance: '2024-11-15',
-        status: 'active'
-      },
-      {
-        id: 2,
-        make: 'VinFast',
-        model: 'VF8',
-        year: 2023,
-        licensePlate: '30B-67890',
-        batteryCapacity: 90,
-        mileage: 15000,
-        lastMaintenance: '2024-09-01',
-        nextMaintenance: '2024-12-01',
-        status: 'active'
-      }
-    ]
-    setVehicles(mockVehicles)
+    loadVehicleModels()
+    loadVehicles()
 
     // Mock recent appointments
     const mockAppointments = [
@@ -121,6 +98,62 @@ const CustomerDashboard = () => {
     ]
     setRecentAppointments(mockAppointments)
   }, [])
+
+  const loadVehicleModels = async () => {
+    try {
+      const result = await vehicleService.getAllVehicleModels()
+      
+      if (result.success) {
+        setVehicleModels(result.data || [])
+      } else {
+        console.error('Failed to load vehicle models:', result.message)
+        setVehicleModels([])
+      }
+    } catch (error) {
+      console.error('Error loading vehicle models:', error)
+      setVehicleModels([])
+    }
+  }
+
+  const loadVehicles = async () => {
+    try {
+      const userResult = await authService.getUserProfile()
+      const customerId = userResult.data?.userId
+
+      if (customerId) {
+        const result = await vehicleService.getVehiclesByCustomerId(customerId)
+        
+        if (result.success) {
+          setVehicles(result.data || [])
+        } else {
+          console.error('Failed to load vehicles:', result.message)
+          setVehicles([])
+        }
+      }
+    } catch (error) {
+      console.error('Error loading vehicles:', error)
+      setVehicles([])
+    }
+  }
+
+  // Helper function to get vehicle model by ID
+  const getVehicleModel = (modelId) => {
+    return vehicleModels.find(model => model.id === modelId)
+  }
+
+  const handleAddVehicle = () => {
+    setShowAddVehicle(true)
+  }
+
+  const handleCloseAddVehicle = () => {
+    setShowAddVehicle(false)
+  }
+
+  const handleVehicleAdded = (newVehicle) => {
+    // Refresh vehicle list
+    loadVehicles()
+    setShowAddVehicle(false)
+  }
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -188,7 +221,7 @@ const CustomerDashboard = () => {
             <button className="quick-action-btn primary">
               📅 Book Service
             </button>
-            <button className="quick-action-btn secondary">
+            <button className="quick-action-btn secondary" onClick={handleAddVehicle}>
               🚗 Add Vehicle
             </button>
           </div>
@@ -226,39 +259,51 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>🚗 Your Electric Vehicles</h2>
-            <button className="add-btn">+ Add Vehicle</button>
+            <button className="add-btn" onClick={handleAddVehicle}>+ Add Vehicle</button>
           </div>
           <div className="vehicles-grid">
-            {vehicles.map(vehicle => (
-              <div key={vehicle.id} className="vehicle-card">
-                <div className="vehicle-header">
-                  <h3>{vehicle.make} {vehicle.model}</h3>
-                  <span className="vehicle-year">{vehicle.year}</span>
-                </div>
-                <div className="vehicle-details">
-                  <div className="detail-item">
-                    <span className="label">License Plate:</span>
-                    <span className="value">{vehicle.licensePlate}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Battery:</span>
-                    <span className="value">{vehicle.batteryCapacity} kWh</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Mileage:</span>
-                    <span className="value">{vehicle.mileage.toLocaleString()} km</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Next Maintenance:</span>
-                    <span className="value next-maintenance">{vehicle.nextMaintenance}</span>
-                  </div>
-                </div>
-                <div className="vehicle-actions">
-                  <button className="action-btn primary">Book Maintenance</button>
-                  <button className="action-btn secondary">View Details</button>
-                </div>
+            {vehicles.length === 0 ? (
+              <div className="no-vehicles">
+                <p>🚗 You haven't added any vehicles yet.</p>
+                <button className="add-btn-large" onClick={handleAddVehicle}>
+                  + Add Your First Vehicle
+                </button>
               </div>
-            ))}
+            ) : (
+              vehicles.map(vehicle => {
+                const model = getVehicleModel(vehicle.modelId)
+                return (
+                  <div key={vehicle.id} className="vehicle-card">
+                    <div className="vehicle-header">
+                      <h3>{model?.name || 'Unknown Model'}</h3>
+                      <span className="vehicle-year">{model?.modelYear || 'N/A'}</span>
+                    </div>
+                    <div className="vehicle-details">
+                      <div className="detail-item">
+                        <span className="label">License Plate:</span>
+                        <span className="value">{vehicle.licensePlate}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">VIN:</span>
+                        <span className="value">{vehicle.vin}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">Mileage:</span>
+                        <span className="value">{parseInt(vehicle.currentKm).toLocaleString()} km</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">Basic Maintenance:</span>
+                        <span className="value">{model?.basicMaintenance || 'N/A'} km</span>
+                      </div>
+                    </div>
+                    <div className="vehicle-actions">
+                      <button className="action-btn primary">Book Maintenance</button>
+                      <button className="action-btn secondary">View Details</button>
+                    </div>
+                  </div>
+                )
+              })
+            )}
           </div>
         </div>
 
@@ -297,6 +342,14 @@ const CustomerDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Add Vehicle Modal */}
+      {showAddVehicle && (
+        <AddVehicle 
+          onClose={handleCloseAddVehicle}
+          onVehicleAdded={handleVehicleAdded}
+        />
+      )}
     </div>
   )
 }

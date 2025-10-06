@@ -73,10 +73,9 @@ export const authService = {
           const tokenPayload = decodeToken(accessToken)
           if (tokenPayload) {
             const userInfo = {
-              username: tokenPayload.sub || tokenPayload.username,
-              role: tokenPayload.role || tokenPayload.authorities?.[0],
-              userId: tokenPayload.userId || tokenPayload.id,
-              exp: tokenPayload.exp
+              userId: tokenPayload.userId,
+              username: tokenPayload.sub,
+              role: tokenPayload.role
             }
             localStorage.setItem('currentUser', JSON.stringify(userInfo))
           }
@@ -159,8 +158,9 @@ export const authService = {
       if (tokenPayload) {
         // Store user info in localStorage for quick access
         const userInfo = {
-          username: tokenPayload.sub || tokenPayload.username,
-          role: tokenPayload.role || tokenPayload.authorities?.[0],
+          userId: tokenPayload.userId,
+          username: tokenPayload.sub,
+          role: tokenPayload.role,
           exp: tokenPayload.exp
         }
         
