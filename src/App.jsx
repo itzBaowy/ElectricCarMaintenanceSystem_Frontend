@@ -5,6 +5,7 @@ import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
+import Contact from './pages/customer/Contact'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/customer" element={<CustomerDashboard />} />
+          <Route path="/contact" element={<Contact />} />
           {/* TODO: Add more routes for forgot-password, etc. */}
         </Routes>
       </Router>
