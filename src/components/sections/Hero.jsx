@@ -1,9 +1,10 @@
+import logger from '../../utils/logger'
 import '../../styles/Hero.css'
 
 const Hero = () => {
   const handleBookingClick = () => {
     // TODO: Navigate to booking page
-    console.log('Booking clicked')
+    logger.log('Booking clicked')
   }
 
   const handleLearnMoreClick = () => {

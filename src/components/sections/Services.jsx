@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 import '../../styles/Services.css'
 
 const Services = () => {
@@ -36,7 +37,7 @@ const Services = () => {
 
   const handleServiceClick = (serviceName) => {
     // TODO: Navigate to service details or booking page
-    console.log(`${serviceName} service selected`)
+    logger.log(`${serviceName} service selected`)
   }
 
   return (

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
+import logger from '../../utils/logger'
 import '../../styles/Register.css'
 
 const Register = () => {
@@ -92,7 +93,7 @@ const Register = () => {
     setIsLoading(true)
     
     try {
-      console.log('Registration attempt with:', {
+      logger.log('Registration attempt with:', {
         ...formData,
         password: '[HIDDEN]',
         confirmPassword: '[HIDDEN]'
@@ -119,7 +120,7 @@ const Register = () => {
       }
       
     } catch (error) {
-      console.error('Registration error:', error)
+      logger.error('Registration error:', error)
       setErrors({ general: 'Registration failed. Please try again.' })
     } finally {
       setIsLoading(false)

@@ -1,4 +1,5 @@
 import api from './apiConfig'
+import logger from '../utils/logger'
 
 // Helper function to decode JWT token
 const decodeToken = (token) => {
@@ -20,7 +21,7 @@ const decodeToken = (token) => {
     
     return JSON.parse(jsonPayload)
   } catch (error) {
-    console.error('Error decoding token:', error)
+    logger.error('Error decoding token:', error)
     return null
   }
 }
@@ -46,7 +47,7 @@ export const authService = {
         }
       }
     } catch (error) {
-      console.error('Registration error:', error)
+      logger.error('Registration error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Registration failed',
@@ -94,7 +95,7 @@ export const authService = {
         }
       }
     } catch (error) {
-      console.error('Login error:', error)
+      logger.error('Login error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Login failed',
@@ -118,7 +119,7 @@ export const authService = {
       const user = localStorage.getItem('currentUser')
       return user ? JSON.parse(user) : null
     } catch (error) {
-      console.error('Error getting current user:', error)
+      logger.error('Error getting current user:', error)
       return null
     }
   },
@@ -179,7 +180,7 @@ export const authService = {
         }
       }
     } catch (error) {
-      console.error('Get profile error:', error)
+      logger.error('Get profile error:', error)
       return {
         success: false,
         message: 'Failed to get user profile',
@@ -209,7 +210,7 @@ export const authService = {
         }
       }
     } catch (error) {
-      console.error('Get customer profile error:', error)
+      logger.error('Get customer profile error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get customer profile',

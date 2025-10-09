@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import logger from '../../../utils/logger'
 import '../../../styles/ScheduleManagement.css'
 
 const ScheduleManagement = () => {
@@ -104,7 +105,7 @@ const ScheduleManagement = () => {
 
   const saveSchedules = () => {
     // Here you would save to backend
-    console.log('Saving schedules:', schedules)
+    logger.log('Saving schedules:', schedules)
     alert('Schedules saved successfully!')
   }
 

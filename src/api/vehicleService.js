@@ -1,4 +1,5 @@
 import api from './apiConfig'
+import logger from '../utils/logger'
 
 const vehicleService = {
   // ===== VEHICLE APIs =====
@@ -22,7 +23,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Create vehicle error:', error)
+      logger.error('Create vehicle error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to create vehicle',
@@ -50,7 +51,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Get vehicle error:', error)
+      logger.error('Get vehicle error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get vehicle',
@@ -78,7 +79,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Get vehicles error:', error)
+      logger.error('Get vehicles error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get vehicles',
@@ -106,7 +107,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Get all vehicles error:', error)
+      logger.error('Get all vehicles error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get vehicles',
@@ -134,7 +135,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Update vehicle error:', error)
+      logger.error('Update vehicle error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to update vehicle',
@@ -162,7 +163,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Delete vehicle error:', error)
+      logger.error('Delete vehicle error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to delete vehicle',
@@ -192,7 +193,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Create vehicle model error:', error)
+      logger.error('Create vehicle model error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to create vehicle model',
@@ -220,7 +221,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Get vehicle model error:', error)
+      logger.error('Get vehicle model error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get vehicle model',
@@ -248,7 +249,7 @@ const vehicleService = {
         }
       }
     } catch (error) {
-      console.error('Get all vehicle models error:', error)
+      logger.error('Get all vehicle models error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get vehicle models',

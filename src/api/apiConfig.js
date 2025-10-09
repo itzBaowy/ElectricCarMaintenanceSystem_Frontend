@@ -1,12 +1,11 @@
 import axios from 'axios'
+import logger from '../utils/logger'
 
 // Base URL for the API from environment variables
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
-// Log API URL in development (remove in production)
-if (import.meta.env.VITE_APP_ENV === 'development') {
-  console.log('🔗 API Base URL:', BASE_URL)
-}
+// Log API URL in development only
+logger.log('🔗 API Base URL:', BASE_URL)
 
 // Create axios instance with default config
 const api = axios.create({

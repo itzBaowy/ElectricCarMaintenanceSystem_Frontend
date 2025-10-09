@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
+import logger from '../../utils/logger'
 import '../../styles/Login.css'
 
 const Login = () => {
@@ -63,7 +64,7 @@ const Login = () => {
     setIsLoading(true)
     
     try {
-      console.log('Login attempt with:', formData)
+      logger.log('Login attempt with:', formData)
       
       // Call the real API using authService
       const result = await authService.login({
@@ -74,13 +75,13 @@ const Login = () => {
       if (result.success) {
         // Login successful
         setSuccessMessage(result.message || 'Login successful! Redirecting...')
-        console.log('Message: ',result.message)
+        logger.log('Message: ',result.message)
 
         // Log tokens from localStorage
         const accessToken = authService.getAccessToken()
         const refreshToken = authService.getRefreshToken()  
-        console.log('📦 Stored Access Token:', accessToken)
-        console.log('📦 Stored Refresh Token:', refreshToken)
+        logger.log('📦 Stored Access Token:', accessToken)
+        logger.log('📦 Stored Refresh Token:', refreshToken)
         
         // Clear any previous errors
         setErrors({})
@@ -90,7 +91,7 @@ const Login = () => {
         
         if (profileResult.success) {
           const user = profileResult.data
-          console.log('User profile:', user)
+          logger.log('User profile:', user)
           
           // Small delay to show success message
           setTimeout(() => {

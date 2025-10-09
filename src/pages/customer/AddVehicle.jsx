@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import vehicleService from '../../api/vehicleService'
 import authService from '../../api/authService'
+import logger from '../../utils/logger'
 import '../../styles/AddVehicle.css'
 
 const AddVehicle = ({ onClose, onVehicleAdded }) => {
@@ -28,11 +29,11 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
       if (result.success) {
         setVehicleModels(result.data || [])
       } else {
-        console.error('Failed to load vehicle models:', result.message)
+        logger.error('Failed to load vehicle models:', result.message)
         setErrors({ general: 'Failed to load vehicle models. Please try again.' })
       }
     } catch (error) {
-      console.error('Error loading vehicle models:', error)
+      logger.error('Error loading vehicle models:', error)
       setErrors({ general: 'Failed to load vehicle models. Please try again.' })
     } finally {
       setIsLoadingModels(false)
@@ -118,13 +119,13 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
         customerId: customerId
       }
 
-      console.log('Creating vehicle with data:', vehicleData)
+      logger.log('Creating vehicle with data:', vehicleData)
 
       // Call API to create vehicle
       const result = await vehicleService.createVehicle(vehicleData)
 
       if (result.success) {
-        console.log('Vehicle created successfully:', result.data)
+        logger.log('Vehicle created successfully:', result.data)
         
         // Call callback function to refresh vehicle list
         if (onVehicleAdded) {
@@ -139,7 +140,7 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
         setErrors({ general: result.message || 'Failed to add vehicle' })
       }
     } catch (error) {
-      console.error('Error adding vehicle:', error)
+      logger.error('Error adding vehicle:', error)
       setErrors({ general: 'Failed to add vehicle. Please try again.' })
     } finally {
       setIsLoading(false)

@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 import '../../styles/Features.css'
 
 const Features = () => {
@@ -36,7 +37,7 @@ const Features = () => {
 
   const handleFeatureClick = (featureName) => {
     // TODO: Show feature details or navigate to relevant page
-    console.log(`${featureName} feature clicked`)
+    logger.log(`${featureName} feature clicked`)
   }
 
   return (

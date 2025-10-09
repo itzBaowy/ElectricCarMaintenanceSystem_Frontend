@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
+import logger from '../../utils/logger'
 import AddVehicle from './AddVehicle'
 import '../../styles/CustomerDashboard.css'
 
@@ -42,7 +43,7 @@ const CustomerDashboard = () => {
           setCustomer(mockCustomer)
         }
       } catch (error) {
-        console.error('Error loading customer data:', error)
+        logger.error('Error loading customer data:', error)
         // Fallback to default data
         const mockCustomer = {
           id: 1,
@@ -106,11 +107,11 @@ const CustomerDashboard = () => {
       if (result.success) {
         setVehicleModels(result.data || [])
       } else {
-        console.error('Failed to load vehicle models:', result.message)
+        logger.error('Failed to load vehicle models:', result.message)
         setVehicleModels([])
       }
     } catch (error) {
-      console.error('Error loading vehicle models:', error)
+      logger.error('Error loading vehicle models:', error)
       setVehicleModels([])
     }
   }
@@ -126,12 +127,12 @@ const CustomerDashboard = () => {
         if (result.success) {
           setVehicles(result.data || [])
         } else {
-          console.error('Failed to load vehicles:', result.message)
+          logger.error('Failed to load vehicles:', result.message)
           setVehicles([])
         }
       }
     } catch (error) {
-      console.error('Error loading vehicles:', error)
+      logger.error('Error loading vehicles:', error)
       setVehicles([])
     }
   }
@@ -167,7 +168,7 @@ const CustomerDashboard = () => {
           alert(`Failed to delete vehicle: ${result.message}`)
         }
       } catch (error) {
-        console.error('Error deleting vehicle:', error)
+        logger.error('Error deleting vehicle:', error)
         alert('An error occurred while deleting the vehicle')
       }
     }
