@@ -155,6 +155,24 @@ const CustomerDashboard = () => {
     setShowAddVehicle(false)
   }
 
+  const handleDeleteVehicle = async (vehicleId, licensePlate) => {
+    if (window.confirm(`Are you sure you want to delete vehicle ${licensePlate}?`)) {
+      try {
+        const result = await vehicleService.deleteVehicle(vehicleId)
+        
+        if (result.success) {
+          alert('Vehicle deleted successfully!')
+          loadVehicles() // Refresh the vehicle list
+        } else {
+          alert(`Failed to delete vehicle: ${result.message}`)
+        }
+      } catch (error) {
+        console.error('Error deleting vehicle:', error)
+        alert('An error occurred while deleting the vehicle')
+      }
+    }
+  }
+
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       authService.logout()
@@ -298,7 +316,12 @@ const CustomerDashboard = () => {
                     </div>
                     <div className="vehicle-actions">
                       <button className="action-btn primary">Book Maintenance</button>
-                      <button className="action-btn secondary">View Details</button>
+                      <button 
+                        className="action-btn danger" 
+                        onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
+                      >
+                        🗑️ Delete
+                      </button>
                     </div>
                   </div>
                 )

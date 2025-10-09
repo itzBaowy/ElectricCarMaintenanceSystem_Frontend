@@ -391,6 +391,15 @@
   border: 1px solid #e1e5e9;
 }
 
+.action-btn.danger {
+  background: #dc3545;
+  color: white;
+}
+
+.action-btn.danger:hover {
+  background: #c82333;
+}
+
 .action-btn:hover {
   transform: translateY(-1px);
 }
