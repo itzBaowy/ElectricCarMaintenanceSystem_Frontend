@@ -1,17 +1,16 @@
 import { Navigate } from 'react-router-dom'
 import { authService } from '../../api/authService'
 
-// Component để bảo vệ các route yêu cầu đăng nhập
 const ProtectedRoute = ({ children, requireAuth = true }) => {
   const isAuthenticated = authService.isAuthenticated()
 
   if (requireAuth && !isAuthenticated) {
-    // Yêu cầu đăng nhập nhưng chưa đăng nhập -> redirect to login
+    // redirect to login if not authenticated
     return <Navigate to="/login" replace />
   }
 
   if (!requireAuth && isAuthenticated) {
-    // Không yêu cầu đăng nhập (như trang home) nhưng đã đăng nhập -> redirect to customer
+    // redirect to customer if already authenticated
     return <Navigate to="/customer" replace />
   }
 
