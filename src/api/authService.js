@@ -106,10 +106,7 @@ export const authService = {
 
   // Logout user
   logout: () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('currentUser')
+    authService.clearSession()
     window.location.href = '/login'
   },
 
@@ -132,11 +129,47 @@ export const authService = {
     return localStorage.getItem('refreshToken')
   },
 
+  // Check if token is expired
+  isTokenExpired: () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) return true
+
+    try {
+      const tokenPayload = decodeToken(accessToken)
+      if (!tokenPayload || !tokenPayload.exp) return true
+
+      // currentTime in seconds
+      const currentTime = Date.now() / 1000
+      return tokenPayload.exp < currentTime
+    } catch (error) {
+      logger.error('Error checking token expiration:', error)
+      return true
+    }
+  },
+
   // Check if user is authenticated
   isAuthenticated: () => {
     const accessToken = localStorage.getItem('accessToken')
     const isAuth = localStorage.getItem('isAuthenticated')
-    return !!(accessToken && isAuth === 'true')
+    
+    if (!accessToken || isAuth !== 'true') return false
+    
+    // Check if token is expired
+    if (authService.isTokenExpired()) {
+      // Clear expired session
+      authService.clearSession()
+      return false
+    }
+    
+    return true
+  },
+
+  // Clear session data
+  clearSession: () => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('isAuthenticated')
+    localStorage.removeItem('currentUser')
   },
 
   // Get user profile from API
