@@ -3,6 +3,7 @@ import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
 import logger from '../../utils/logger'
 import AddVehicle from './AddVehicle'
+import BookMaintenance from './BookMaintenance'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
@@ -11,6 +12,8 @@ const CustomerDashboard = () => {
   const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
   const [showAddVehicle, setShowAddVehicle] = useState(false)
+  const [showBookMaintenance, setShowBookMaintenance] = useState(false)
+  const [selectedVehicle, setSelectedVehicle] = useState(null)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -154,6 +157,22 @@ const CustomerDashboard = () => {
     // Refresh vehicle list
     loadVehicles()
     setShowAddVehicle(false)
+  }
+
+  const handleBookMaintenance = (vehicle) => {
+    setSelectedVehicle(vehicle)
+    setShowBookMaintenance(true)
+  }
+
+  const handleCloseBookMaintenance = () => {
+    setShowBookMaintenance(false)
+    setSelectedVehicle(null)
+  }
+
+  const handleAppointmentCreated = (appointment) => {
+    // Refresh appointments list or add to recent appointments
+    setRecentAppointments(prev => [appointment, ...prev])
+    logger.log('Appointment created:', appointment)
   }
 
   const handleDeleteVehicle = async (vehicleId, licensePlate) => {
@@ -316,7 +335,12 @@ const CustomerDashboard = () => {
                       </div>
                     </div>
                     <div className="vehicle-actions">
-                      <button className="action-btn primary">Book Maintenance</button>
+                      <button 
+                        className="action-btn primary"
+                        onClick={() => handleBookMaintenance(vehicle)}
+                      >
+                        Book Maintenance
+                      </button>
                       <button 
                         className="action-btn danger" 
                         onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
@@ -372,6 +396,16 @@ const CustomerDashboard = () => {
         <AddVehicle 
           onClose={handleCloseAddVehicle}
           onVehicleAdded={handleVehicleAdded}
+        />
+      )}
+
+      {/* Book Maintenance Modal */}
+      {showBookMaintenance && selectedVehicle && (
+        <BookMaintenance
+          vehicle={selectedVehicle}
+          vehicleModel={getVehicleModel(selectedVehicle.modelId)}
+          onClose={handleCloseBookMaintenance}
+          onAppointmentCreated={handleAppointmentCreated}
         />
       )}
     </div>
