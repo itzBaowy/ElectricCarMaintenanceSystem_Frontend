@@ -9,6 +9,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const [serviceType, setServiceType] = useState('') // 'package', 'individual', 'both'
   const [servicePackages, setServicePackages] = useState([])
   const [individualServices, setIndividualServices] = useState([])
+  const [packageServices, setPackageServices] = useState([]) // Services included in selected package
   const [selectedPackage, setSelectedPackage] = useState(null)
   const [selectedServices, setSelectedServices] = useState([])
   const [appointmentDate, setAppointmentDate] = useState('')
@@ -90,13 +91,39 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
     // Reset selections based on type
     if (type === 'package') {
       setSelectedServices([])
+      setPackageServices([])
     } else if (type === 'individual') {
       setSelectedPackage(null)
+      setPackageServices([])
     }
   }
 
-  const handlePackageSelect = (pkg) => {
+  const handlePackageSelect = async (pkg) => {
     setSelectedPackage(pkg)
+    
+    // Load services in this package to filter them out from individual services
+    if (serviceType === 'both' && vehicle?.modelId) {
+      await loadPackageServices(vehicle.modelId, pkg.id)
+    } else {
+      setPackageServices([])
+    }
+  }
+
+  const loadPackageServices = async (vehicleModelId, packageId) => {
+    try {
+      const result = await appointmentService.getModelPackageItemsByVehicleModelAndPackage(vehicleModelId, packageId)
+      if (result.success) {
+        const services = Array.isArray(result.data) ? result.data : []
+        setPackageServices(services)
+        logger.log('Package services loaded:', services)
+      } else {
+        logger.error('Failed to load package services:', result.message)
+        setPackageServices([])
+      }
+    } catch (error) {
+      logger.error('Error loading package services:', error)
+      setPackageServices([])
+    }
   }
 
   const handleServiceToggle = (serviceItemId) => {
@@ -125,9 +152,23 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       return false
     }
 
-    if ((serviceType === 'individual' || serviceType === 'both') && selectedServices.length === 0) {
+    if (serviceType === 'individual' && selectedServices.length === 0) {
       alert('Please select at least one individual service')
       return false
+    }
+
+    // For "both" mode, check if there are available services to select
+    if (serviceType === 'both' && selectedServices.length === 0) {
+      const availableServices = individualServices.filter(service => 
+        !packageServices.some(ps => ps.serviceItemId === service.serviceItemId)
+      )
+      
+      // Only require selection if there are services available
+      if (availableServices.length > 0) {
+        alert('Please select at least one individual service or switch to "Package Only" mode')
+        return false
+      }
+      // If no services available (all included in package), it's OK to proceed without selection
     }
 
     return true
@@ -339,11 +380,28 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {(serviceType === 'individual' || serviceType === 'both') && (
             <div className="form-section">
               <h3>🔧 Select Individual Services <span className="required">*</span></h3>
+              {serviceType === 'both' && selectedPackage && (
+                <p className="info-text">💡 Services already included in the package are hidden</p>
+              )}
               <div className="individual-services-list">
-                {!Array.isArray(individualServices) || individualServices.length === 0 ? (
-                  <p className="no-data">No individual services available for this vehicle model</p>
-                ) : (
-                  individualServices.map(service => (
+                {(() => {
+                  if (!Array.isArray(individualServices) || individualServices.length === 0) {
+                    return <p className="no-data">No individual services available for this vehicle model</p>
+                  }
+                  
+                  // Filter out services already in package (for "both" mode)
+                  const availableServices = individualServices.filter(service => {
+                    if (serviceType === 'both' && packageServices.length > 0) {
+                      return !packageServices.some(ps => ps.serviceItemId === service.serviceItemId)
+                    }
+                    return true
+                  })
+                  
+                  if (availableServices.length === 0) {
+                    return <p className="no-data">✓ All available services are already included in the selected package</p>
+                  }
+                  
+                  return availableServices.map(service => (
                     <label
                       key={service.id}
                       className={`individual-service-item ${selectedServices.includes(service.serviceItemId) ? 'selected' : ''}`}
@@ -360,7 +418,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                       </div>
                     </label>
                   ))
-                )}
+                })()}
               </div>
             </div>
           )}

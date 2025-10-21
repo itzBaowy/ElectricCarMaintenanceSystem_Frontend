@@ -424,6 +424,20 @@
   font-size: 14px;
 }
 
+/* Info Text */
+.info-text {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 4px solid #1976d2;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .modal-content.book-maintenance-modal {
