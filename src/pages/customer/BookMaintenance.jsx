@@ -132,6 +132,9 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const handlePackageSelect = async (pkg) => {
     setSelectedPackage(pkg)
     
+    // Reset selected individual services when changing package
+    setSelectedServices([])
+    
     // Load services in this package to filter them out from individual services
     if (serviceType === 'both' && vehicle?.modelId) {
       await loadPackageServices(vehicle.modelId, pkg.id)
