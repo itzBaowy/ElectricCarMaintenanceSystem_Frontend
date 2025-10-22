@@ -6,6 +6,7 @@ import logger from '../../utils/logger'
 import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
+import AllAppointments from './AllAppointments'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
@@ -18,6 +19,7 @@ const CustomerDashboard = () => {
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [showAllAppointments, setShowAllAppointments] = useState(false)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -204,6 +206,20 @@ const CustomerDashboard = () => {
     setSelectedAppointment(null)
   }
 
+  const handleViewAllAppointments = () => {
+    setShowAllAppointments(true)
+  }
+
+  const handleCloseAllAppointments = () => {
+    setShowAllAppointments(false)
+  }
+
+  const handleViewDetailFromAll = (appointment) => {
+    setShowAllAppointments(false)
+    setSelectedAppointment(appointment)
+    setShowAppointmentDetail(true)
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -366,7 +382,12 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>📋 Recent Appointments</h2>
-            <button className="view-all-btn">View All</button>
+            <button 
+              className="view-all-btn"
+              onClick={handleViewAllAppointments}
+            >
+              View All
+            </button>
           </div>
           <div className="appointments-list">
             {recentAppointments.length === 0 ? (
@@ -448,6 +469,15 @@ const CustomerDashboard = () => {
         <AppointmentDetail
           appointment={selectedAppointment}
           onClose={handleCloseAppointmentDetail}
+        />
+      )}
+
+      {/* All Appointments Modal */}
+      {showAllAppointments && (
+        <AllAppointments
+          appointments={recentAppointments}
+          onClose={handleCloseAllAppointments}
+          onViewDetail={handleViewDetailFromAll}
         />
       )}
     </div>

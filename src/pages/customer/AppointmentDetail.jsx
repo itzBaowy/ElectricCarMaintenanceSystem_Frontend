@@ -167,9 +167,10 @@ const AppointmentDetail = ({ appointment, onClose }) => {
                     <div key={index} className="service-item individual">
                       <div className="service-icon">🔧</div>
                       <div className="service-info">
-                        <h4>{item.name || `Service ${index + 1}`}</h4>
+                        <h4>{item.name}</h4>
                         <p className="service-type">Individual Service</p>
                       </div>
+                      <div className='cost-value'>{formatCurrency(item.price)}</div>
                     </div>
                   ))}
                 </>
