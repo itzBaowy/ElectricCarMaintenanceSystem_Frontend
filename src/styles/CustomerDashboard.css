@@ -411,6 +411,26 @@
   gap: 1rem;
 }
 
+.no-appointments {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  color: #666;
+}
+
+.no-appointments p:first-child {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.no-appointments p:last-child {
+  font-size: 1rem;
+  color: #888;
+}
+
 .appointment-card {
   display: flex;
   align-items: center;

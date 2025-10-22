@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
+import appointmentService from '../../api/appointmentService'
 import logger from '../../utils/logger'
 import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
@@ -63,45 +64,36 @@ const CustomerDashboard = () => {
     loadCustomerData()
     loadVehicleModels()
     loadVehicles()
-
-    // Mock recent appointments
-    const mockAppointments = [
-      {
-        id: 1,
-        vehicleId: 1,
-        serviceName: 'Battery Health Check',
-        date: '2024-10-05',
-        time: '09:00',
-        status: 'confirmed',
-        technician: 'John Doe',
-        estimatedDuration: 60,
-        price: 500000
-      },
-      {
-        id: 2,
-        vehicleId: 2,
-        serviceName: 'Brake System Inspection',
-        date: '2024-09-28',
-        time: '14:00',
-        status: 'completed',
-        technician: 'Jane Smith',
-        estimatedDuration: 90,
-        price: 750000
-      },
-      {
-        id: 3,
-        vehicleId: 1,
-        serviceName: 'Tire Rotation',
-        date: '2024-09-20',
-        time: '10:30',
-        status: 'completed',
-        technician: 'Mike Johnson',
-        estimatedDuration: 45,
-        price: 300000
-      }
-    ]
-    setRecentAppointments(mockAppointments)
+    loadAppointments()
   }, [])
+
+  const loadAppointments = async () => {
+    try {
+      const result = await appointmentService.getAllAppointments()
+      
+      if (result.success) {
+        const allAppointments = Array.isArray(result.data) ? result.data : []
+        
+        // Get current user info
+        const userResult = await authService.getUserProfile()
+        const customerId = userResult.data?.userId
+        
+        // Filter appointments for current customer and sort by date (newest first)
+        const customerAppointments = allAppointments
+          .filter(apt => apt.customerId === customerId)
+          .sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate))
+        
+        setRecentAppointments(customerAppointments)
+        logger.log('Appointments loaded:', customerAppointments)
+      } else {
+        logger.error('Failed to load appointments:', result.message)
+        setRecentAppointments([])
+      }
+    } catch (error) {
+      logger.error('Error loading appointments:', error)
+      setRecentAppointments([])
+    }
+  }
 
   const loadVehicleModels = async () => {
     try {
@@ -170,8 +162,8 @@ const CustomerDashboard = () => {
   }
 
   const handleAppointmentCreated = (appointment) => {
-    // Refresh appointments list or add to recent appointments
-    setRecentAppointments(prev => [appointment, ...prev])
+    // Refresh appointments list
+    loadAppointments()
     logger.log('Appointment created:', appointment)
   }
 
@@ -208,12 +200,12 @@ const CustomerDashboard = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      confirmed: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
-      completed: { text: 'Completed', class: 'completed', icon: '🟢' },
-      pending: { text: 'Pending', class: 'pending', icon: '🟡' },
-      cancelled: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
+      PENDING: { text: 'Pending', class: 'pending', icon: '🟡' },
+      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
+      COMPLETED: { text: 'Completed', class: 'completed', icon: '🟢' },
+      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
     }
-    return statusMap[status] || statusMap.pending
+    return statusMap[status] || statusMap.PENDING
   }
 
   if (!customer) {
@@ -278,14 +270,16 @@ const CustomerDashboard = () => {
         <div className="stat-card">
           <div className="stat-icon">🔧</div>
           <div className="stat-info">
-            <span className="stat-number">{recentAppointments.filter(a => a.status === 'confirmed').length}</span>
+            <span className="stat-number">
+              {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
+            </span>
             <span className="stat-label">Upcoming Appointments</span>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon">📅</div>
           <div className="stat-info">
-            <span className="stat-number">{recentAppointments.filter(a => a.status === 'completed').length}</span>
+            <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
             <span className="stat-label">Completed Services</span>
           </div>
         </div>
@@ -362,31 +356,55 @@ const CustomerDashboard = () => {
             <button className="view-all-btn">View All</button>
           </div>
           <div className="appointments-list">
-            {recentAppointments.map(appointment => {
-              const vehicle = vehicles.find(v => v.id === appointment.vehicleId)
-              const statusInfo = getStatusBadge(appointment.status)
-              
-              return (
-                <div key={appointment.id} className="appointment-card">
-                  <div className="appointment-date">
-                    <span className="date">{appointment.date}</span>
-                    <span className="time">{appointment.time}</span>
+            {recentAppointments.length === 0 ? (
+              <div className="no-appointments">
+                <p>📅 You don't have any appointments yet.</p>
+                <p>Book your first maintenance service now!</p>
+              </div>
+            ) : (
+              recentAppointments.slice(0, 5).map(appointment => {
+                const statusInfo = getStatusBadge(appointment.status)
+                
+                // Format date and time from appointmentDate
+                const appointmentDateTime = new Date(appointment.appointmentDate)
+                const dateStr = appointmentDateTime.toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })
+                const timeStr = appointmentDateTime.toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: true
+                })
+                
+                return (
+                  <div key={appointment.id} className="appointment-card">
+                    <div className="appointment-date">
+                      <span className="date">{dateStr}</span>
+                      <span className="time">{timeStr}</span>
+                    </div>
+                    <div className="appointment-details">
+                      <h4>
+                        {appointment.servicePackageName || 'Maintenance Service'}
+                        {appointment.serviceItems && appointment.serviceItems.length > 0 && 
+                          ` + ${appointment.serviceItems.length} service(s)`}
+                      </h4>
+                      <p>🚗 {appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
+                      {appointment.technicianName && (
+                        <p>👨‍🔧 Technician: {appointment.technicianName}</p>
+                      )}
+                    </div>
+                    <div className="appointment-status">
+                      <span className={`status-badge ${statusInfo.class}`}>
+                        {statusInfo.icon} {statusInfo.text}
+                      </span>
+                      <span className="price">{formatCurrency(appointment.estimatedCost)}</span>
+                    </div>
                   </div>
-                  <div className="appointment-details">
-                    <h4>{appointment.serviceName}</h4>
-                    <p>🚗 {vehicle?.make} {vehicle?.model} - {vehicle?.licensePlate}</p>
-                    <p>👨‍🔧 Technician: {appointment.technician}</p>
-                    <p>⏱️ Duration: {appointment.estimatedDuration} minutes</p>
-                  </div>
-                  <div className="appointment-status">
-                    <span className={`status-badge ${statusInfo.class}`}>
-                      {statusInfo.icon} {statusInfo.text}
-                    </span>
-                    <span className="price">{formatCurrency(appointment.price)}</span>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })
+            )}
           </div>
         </div>
       </div>
