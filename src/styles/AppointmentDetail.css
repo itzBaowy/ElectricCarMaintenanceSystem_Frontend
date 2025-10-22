@@ -1,0 +1,246 @@
+.appointment-detail-modal {
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.appointment-detail-content {
+  padding: 0;
+}
+
+.detail-section {
+  padding: 24px 30px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status Section */
+.status-section {
+  padding: 0;
+  border: none;
+}
+
+.status-banner {
+  padding: 24px 30px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.status-banner.pending {
+  background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+}
+
+.status-banner.confirmed {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.status-banner.completed {
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+}
+
+.status-banner.cancelled {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+}
+
+.status-icon {
+  font-size: 48px;
+}
+
+.status-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.status-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Info Grid */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.not-assigned {
+  color: #f57c00;
+  font-style: italic;
+}
+
+/* Services List */
+.services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subsection-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  margin: 12px 0 8px 0;
+}
+
+.service-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.service-item.package {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+  border-left-color: #1976d2;
+}
+
+.service-item.individual {
+  background: linear-gradient(135deg, #f3e5f5 0%, #f8f9fa 100%);
+  border-left-color: #7b1fa2;
+}
+
+.service-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.service-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.service-type {
+  margin: 0;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
+}
+
+.no-services {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 20px;
+}
+
+/* Cost Section */
+.cost-section {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  padding: 20px 30px !important;
+}
+
+.cost-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cost-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.cost-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .appointment-detail-modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .detail-section {
+    padding: 20px;
+  }
+
+  .status-banner {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .status-icon {
+    font-size: 36px;
+  }
+
+  .status-info h3 {
+    font-size: 20px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-summary {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .cost-value {
+    font-size: 24px;
+  }
+
+  .modal-footer {
+    padding: 16px 20px;
+  }
+}

@@ -5,6 +5,7 @@ import appointmentService from '../../api/appointmentService'
 import logger from '../../utils/logger'
 import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
+import AppointmentDetail from './AppointmentDetail'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
@@ -15,6 +16,8 @@ const CustomerDashboard = () => {
   const [showAddVehicle, setShowAddVehicle] = useState(false)
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
+  const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -189,6 +192,16 @@ const CustomerDashboard = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       authService.logout()
     }
+  }
+
+  const handleViewAppointment = (appointment) => {
+    setSelectedAppointment(appointment)
+    setShowAppointmentDetail(true)
+  }
+
+  const handleCloseAppointmentDetail = () => {
+    setShowAppointmentDetail(false)
+    setSelectedAppointment(null)
   }
 
   const formatCurrency = (amount) => {
@@ -379,7 +392,12 @@ const CustomerDashboard = () => {
                 })
                 
                 return (
-                  <div key={appointment.id} className="appointment-card">
+                  <div 
+                    key={appointment.id} 
+                    className="appointment-card"
+                    onClick={() => handleViewAppointment(appointment)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className="appointment-date">
                       <span className="date">{dateStr}</span>
                       <span className="time">{timeStr}</span>
@@ -422,6 +440,14 @@ const CustomerDashboard = () => {
           vehicleModel={getVehicleModel(selectedVehicle.modelId)}
           onClose={handleCloseBookMaintenance}
           onAppointmentCreated={handleAppointmentCreated}
+        />
+      )}
+
+      {/* Appointment Detail Modal */}
+      {showAppointmentDetail && selectedAppointment && (
+        <AppointmentDetail
+          appointment={selectedAppointment}
+          onClose={handleCloseAppointmentDetail}
         />
       )}
     </div>
