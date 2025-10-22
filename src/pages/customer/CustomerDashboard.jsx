@@ -391,9 +391,7 @@ const CustomerDashboard = () => {
                           ` + ${appointment.serviceItems.length} service(s)`}
                       </h4>
                       <p>🚗 {appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
-                      {appointment.technicianName && (
-                        <p>👨‍🔧 Technician: {appointment.technicianName}</p>
-                      )}
+                      <p>👨‍🔧 Technician: {appointment.technicianName || 'Not assigned yet'}</p>
                     </div>
                     <div className="appointment-status">
                       <span className={`status-badge ${statusInfo.class}`}>
