@@ -415,12 +415,18 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Individual Services Selection */}
           {(serviceType === 'individual' || serviceType === 'both') && (
             <div className="form-section">
-              <h3>🔧 Select Individual Services <span className="required">*</span></h3>
+              <h3>🔧 Select Individual Services <span className="required">*</span></h3>             
               {serviceType === 'both' && selectedPackage && (
                 <p className="info-text">💡 Services already included in the package are hidden</p>
               )}
-              <div className="individual-services-list">
+              
+              <div className={`individual-services-list ${serviceType === 'both' && !selectedPackage ? 'disabled' : ''}`}>
                 {(() => {
+                  // If in "both" mode and no package selected, show message
+                  if (serviceType === 'both' && !selectedPackage) {
+                    return <p className="no-data">Please select a service package first</p>
+                  }
+                  
                   if (!Array.isArray(individualServices) || individualServices.length === 0) {
                     return <p className="no-data">No individual services available for this vehicle model</p>
                   }

@@ -263,6 +263,13 @@
   max-height: 400px;
   overflow-y: auto;
   padding-right: 8px;
+  position: relative;
+}
+
+.individual-services-list.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
 }
 
 .individual-services-list::-webkit-scrollbar {
@@ -436,6 +443,12 @@
   align-items: center;
   gap: 8px;
   border-left: 4px solid #1976d2;
+}
+
+.info-text.warning {
+  background: #fff3e0;
+  color: #e65100;
+  border-left-color: #e65100;
 }
 
 /* Responsive Design */
