@@ -258,6 +258,34 @@ const appointmentService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Get package price by vehicle model and service package
+  getPackagePriceByModelAndPackage: async (vehicleModelId, servicePackageId) => {
+    try {
+      const response = await api.get(`/api/model-package-items/total/model/${vehicleModelId}/package/${servicePackageId}`)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result, // Price as number
+          message: response.data.message
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to get package price',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get package price error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to get package price',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

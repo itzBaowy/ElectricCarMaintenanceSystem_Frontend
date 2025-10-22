@@ -8,6 +8,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const [loading, setLoading] = useState(false)
   const [serviceType, setServiceType] = useState('') // 'package', 'individual', 'both'
   const [servicePackages, setServicePackages] = useState([])
+  const [packagePrices, setPackagePrices] = useState({}) // Store prices for each package by packageId
   const [individualServices, setIndividualServices] = useState([])
   const [packageServices, setPackageServices] = useState([]) // Services included in selected package
   const [selectedPackage, setSelectedPackage] = useState(null)
@@ -34,6 +35,11 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
         const packages = Array.isArray(result.data?.content) ? result.data.content : []
         setServicePackages(packages)
         logger.log('Service packages loaded:', packages)
+        
+        // Load prices for all packages
+        if (vehicle?.modelId && packages.length > 0) {
+          loadPackagePrices(vehicle.modelId, packages)
+        }
       } else {
         logger.error('Failed to load service packages:', result.message)
         setServicePackages([])
@@ -41,6 +47,30 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
     } catch (error) {
       logger.error('Error loading service packages:', error)
       setServicePackages([])
+    }
+  }
+
+  const loadPackagePrices = async (modelId, packages) => {
+    try {
+      const pricePromises = packages.map(pkg => 
+        appointmentService.getPackagePriceByModelAndPackage(modelId, pkg.id)
+      )
+      
+      const results = await Promise.all(pricePromises)
+      const prices = {}
+      
+      results.forEach((result, index) => {
+        if (result.success) {
+          prices[packages[index].id] = result.data
+        } else {
+          prices[packages[index].id] = 0
+        }
+      })
+      
+      setPackagePrices(prices)
+      logger.log('Package prices loaded:', prices)
+    } catch (error) {
+      logger.error('Error loading package prices:', error)
     }
   }
 
@@ -65,9 +95,10 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const calculateEstimatedCost = () => {
     let total = 0
     
-    // Add package price
+    // Add package price from API
     if (selectedPackage && (serviceType === 'package' || serviceType === 'both')) {
-      total += selectedPackage.price || 0
+      const packagePrice = packagePrices[selectedPackage.id] || 0
+      total += packagePrice
     }
     
     // Add individual service prices
@@ -352,25 +383,30 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 {!Array.isArray(servicePackages) || servicePackages.length === 0 ? (
                   <p className="no-data">No service packages available</p>
                 ) : (
-                  servicePackages.map(pkg => (
-                    <label
-                      key={pkg.id}
-                      className={`service-package-item ${selectedPackage?.id === pkg.id ? 'selected' : ''}`}
-                    >
-                      <input
-                        type="radio"
-                        name="servicePackage"
-                        value={pkg.id}
-                        checked={selectedPackage?.id === pkg.id}
-                        onChange={() => handlePackageSelect(pkg)}
-                      />
-                      <div className="package-info">
-                        <h4>{pkg.name}</h4>
-                        <p className="package-description">{pkg.description}</p>
-                        {pkg.price && <p className="package-price">{formatCurrency(pkg.price)}</p>}
-                      </div>
-                    </label>
-                  ))
+                  servicePackages.map(pkg => {
+                    const packagePrice = packagePrices[pkg.id]
+                    return (
+                      <label
+                        key={pkg.id}
+                        className={`service-package-item ${selectedPackage?.id === pkg.id ? 'selected' : ''}`}
+                      >
+                        <input
+                          type="radio"
+                          name="servicePackage"
+                          value={pkg.id}
+                          checked={selectedPackage?.id === pkg.id}
+                          onChange={() => handlePackageSelect(pkg)}
+                        />
+                        <div className="package-info">
+                          <h4>{pkg.name}</h4>
+                          <p className="package-description">{pkg.description}</p>
+                          {packagePrice !== undefined && (
+                            <p className="package-price">{formatCurrency(packagePrice)}</p>
+                          )}
+                        </div>
+                      </label>
+                    )
+                  })
                 )}
               </div>
             </div>
