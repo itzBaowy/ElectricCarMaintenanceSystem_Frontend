@@ -469,6 +469,7 @@ const CustomerDashboard = () => {
         <AppointmentDetail
           appointment={selectedAppointment}
           onClose={handleCloseAppointmentDetail}
+          onAppointmentUpdated={loadAppointments}
         />
       )}
 

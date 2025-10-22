@@ -260,6 +260,36 @@ const appointmentService = {
     }
   },
 
+  // Update appointment status
+  updateAppointmentStatus: async (appointmentId, status) => {
+    try {
+      const response = await api.put(`/api/appointments/update/${appointmentId}`, {
+        status: status
+      })
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Appointment updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update appointment',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Update appointment error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update appointment',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
   // Get package price by vehicle model and service package
   getPackagePriceByModelAndPackage: async (vehicleModelId, servicePackageId) => {
     try {

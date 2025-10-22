@@ -1,9 +1,43 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import appointmentService from '../../api/appointmentService'
+import logger from '../../utils/logger'
 import '../../styles/AppointmentDetail.css'
 
-const AppointmentDetail = ({ appointment, onClose }) => {
+const AppointmentDetail = ({ appointment, onClose, onAppointmentUpdated }) => {
+  const [canceling, setCanceling] = useState(false)
+
   if (!appointment) return null
+
+  const handleCancelAppointment = async () => {
+    if (!window.confirm('Are you sure you want to cancel this appointment?')) {
+      return
+    }
+
+    setCanceling(true)
+    try {
+      const result = await appointmentService.updateAppointmentStatus(
+        appointment.id,
+        'CANCELLED'
+      )
+
+      if (result.success) {
+        alert('Appointment cancelled successfully!')
+        // Notify parent to refresh appointments list
+        if (onAppointmentUpdated) {
+          onAppointmentUpdated()
+        }
+        onClose()
+      } else {
+        alert(`Failed to cancel appointment: ${result.message}`)
+      }
+    } catch (error) {
+      logger.error('Error canceling appointment:', error)
+      alert('An error occurred while canceling appointment')
+    } finally {
+      setCanceling(false)
+    }
+  }
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -192,6 +226,15 @@ const AppointmentDetail = ({ appointment, onClose }) => {
         </div>
 
         <div className="modal-footer">
+          {appointment.status === 'PENDING' && (
+            <button 
+              className="btn-cancel" 
+              onClick={handleCancelAppointment}
+              disabled={canceling}
+            >
+              {canceling ? 'Canceling...' : '❌ Cancel Appointment'}
+            </button>
+          )}
           <button className="btn-secondary" onClick={onClose}>Close</button>
         </div>
       </div>
@@ -201,7 +244,8 @@ const AppointmentDetail = ({ appointment, onClose }) => {
 
 AppointmentDetail.propTypes = {
   appointment: PropTypes.object,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  onAppointmentUpdated: PropTypes.func
 }
 
 export default AppointmentDetail
