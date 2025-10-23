@@ -1,8 +1,8 @@
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 6rem 0;
-  color: white;
+  background: white;
+  padding: 2rem 0 4rem 0;
+  color: #333;
   overflow: hidden;
 }
 
@@ -12,7 +12,7 @@
   padding: 0 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 3rem;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
@@ -23,17 +23,20 @@
   font-weight: bold;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  color: #1a1a1a;
+  text-transform: uppercase;
 }
 
 .highlight {
-  color: #64b5f6;
+  color: #2E5A88;
+  display: block;
 }
 
 .hero-description {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
-  opacity: 0.9;
+  color: #666;
 }
 
 .hero-buttons {
@@ -42,63 +45,116 @@
 }
 
 .btn-primary, .btn-secondary {
-  padding: 1rem 2rem;
+  padding: 0.9rem 2rem;
   border: none;
-  border-radius: 30px;
-  font-size: 1.1rem;
+  border-radius: 4px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary {
-  background: #ff6b35;
+  background: #2E5A88 !important;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #e55a2b;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+  background: #234669 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.3);
 }
 
 .btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+  background: #2E5A88 !important;
+  color: white !important;
+  border: none !important;
 }
 
 .btn-secondary:hover {
-  background: white;
-  color: #667eea;
+  background: #234669 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.3);
 }
 
 .hero-image {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 0;
 }
 
-.hero-placeholder {
-  width: 300px;
-  height: 300px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+.hero-image-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hero-car-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  transform: translateY(-30px);
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.car-icon {
-  font-size: 4rem;
-  animation: float 3s ease-in-out infinite;
+.hero-car-background {
+  position: absolute;
+  width: 40%;
+  height: 65%;
+  background: #2E5A88;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+.hero-car-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-image-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.hero-image-box {
+  aspect-ratio: 1;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transform: translateY(-20px);
+}
+
+.hero-image-box:hover {
+  border-color: #2E5A88;
+  transform: translateY(-25px);
+  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.2);
+}
+
+.hero-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Responsive Design */
@@ -118,6 +174,22 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 1rem;
+  }
+
+  .hero-image-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-car-container {
+    transform: translateY(-30px);
+  }
+
+  .hero-image-box {
+    transform: translateY(-20px);
+  }
+
+  .hero-image-box:hover {
+    transform: translateY(-25px);
   }
 }
 
@@ -151,12 +223,16 @@
     align-items: center;
   }
 
-  .hero-placeholder {
-    width: 250px;
-    height: 250px;
+  .hero-car-container {
+    max-width: 450px;
+    transform: translateY(-20px);
   }
 
-  .car-icon {
-    font-size: 3rem;
+  .hero-image-box {
+    transform: translateY(-15px);
+  }
+
+  .hero-image-box:hover {
+    transform: translateY(-20px);
   }
 }

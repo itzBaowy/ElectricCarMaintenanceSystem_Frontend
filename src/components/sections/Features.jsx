@@ -2,36 +2,24 @@ import logger from '../../utils/logger'
 import '../../styles/Features.css'
 
 const Features = () => {
-  const features = [
+  const pricingTiers = [
     {
-      icon: "📅",
-      title: "Online Booking",
-      description: "Easily book maintenance appointments through our website or mobile app, saving you time."
+      name: "Basic",
+      price: "20.00$",
+      description: "Keep your car in top shape with our reliable maintenance packages.",
+      icon: "🔧"
     },
     {
-      icon: "📊",
-      title: "Progress Tracking",
-      description: "Track real-time progress of your vehicle maintenance through our intelligent system."
+      name: "Medium",
+      price: "20.00$",
+      description: "Keep your car in top shape with our reliable maintenance packages.",
+      icon: "⚙️"
     },
     {
-      icon: "🔔",
-      title: "Automatic Notifications",
-      description: "Receive automatic notifications when it's time for periodic maintenance."
-    },
-    {
-      icon: "📋",
-      title: "Maintenance History",
-      description: "Complete maintenance history storage to help you manage your vehicle efficiently."
-    },
-    {
-      icon: "💰",
-      title: "Transparent Pricing",
-      description: "Detailed and transparent pricing before performing any service."
-    },
-    {
-      icon: "🎯",
-      title: "Professional Consultation",
-      description: "Experienced technician team providing consultation and 24/7 support."
+      name: "High",
+      price: "20.00$",
+      description: "Keep your car in top shape with our reliable maintenance packages.",
+      icon: "🔩"
     }
   ]
 
@@ -43,22 +31,31 @@ const Features = () => {
   return (
     <section id="features" className="features">
       <div className="container">
-        <h2 className="section-title">Outstanding Features</h2>
-        <p className="section-subtitle">
-          Experience modern service with intelligent features
-        </p>
+        <h2 className="section-title">Service</h2>
+        <div className="section-underline"></div>
         
+        <div className="car-display">
+          <div className="car-placeholder">
+            <i className="fas fa-car"></i>
+          </div>
+        </div>
+
         <div className="features-grid">
-          {features.map((feature, index) => (
+          {pricingTiers.map((tier, index) => (
             <div 
               key={index} 
               className="feature-item"
-              onClick={() => handleFeatureClick(feature.title)}
             >
-              <div className="feature-icon">{feature.icon}</div>
               <div className="feature-content">
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
+                <h3>{tier.name}</h3>
+                <p>{tier.description}</p>
+                <div className="feature-price">{tier.price}</div>
+                <button 
+                  className="feature-btn"
+                  onClick={() => handleMoreInfo(tier.name)}
+                >
+                  More info
+                </button>
               </div>
             </div>
           ))}
