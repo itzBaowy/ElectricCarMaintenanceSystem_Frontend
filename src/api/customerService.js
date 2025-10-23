@@ -1,4 +1,5 @@
 import api from './apiConfig'
+import logger from '../utils/logger'
 
 export const customerService = {
   // Get all customers (admin only)
@@ -21,7 +22,7 @@ export const customerService = {
         }
       }
     } catch (error) {
-      console.error('Get customers error:', error)
+      logger.error('Get customers error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to fetch customers',
@@ -40,7 +41,7 @@ export const customerService = {
         message: 'Customer fetched successfully'
       }
     } catch (error) {
-      console.error('Get customer error:', error)
+      logger.error('Get customer error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to fetch customer',
@@ -59,7 +60,7 @@ export const customerService = {
         message: 'Customer updated successfully'
       }
     } catch (error) {
-      console.error('Update customer error:', error)
+      logger.error('Update customer error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to update customer',
@@ -78,7 +79,7 @@ export const customerService = {
         message: 'Customer deleted successfully'
       }
     } catch (error) {
-      console.error('Delete customer error:', error)
+      logger.error('Delete customer error:', error)
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to delete customer',

@@ -1,90 +1,224 @@
 import { useState, useEffect } from 'react'
+import authService from '../../api/authService'
+import vehicleService from '../../api/vehicleService'
+import appointmentService from '../../api/appointmentService'
+import logger from '../../utils/logger'
+import AddVehicle from './AddVehicle'
+import BookMaintenance from './BookMaintenance'
+import AppointmentDetail from './AppointmentDetail'
+import AllAppointments from './AllAppointments'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)
   const [vehicles, setVehicles] = useState([])
+  const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
+  const [showAddVehicle, setShowAddVehicle] = useState(false)
+  const [showBookMaintenance, setShowBookMaintenance] = useState(false)
+  const [selectedVehicle, setSelectedVehicle] = useState(null)
+  const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [showAllAppointments, setShowAllAppointments] = useState(false)
 
-  // Mock customer data
+  // Load customer data from auth service
   useEffect(() => {
-    const mockCustomer = {
-      id: 1,
-      fullName: 'Nguyen Van A',
-      username: 'nguyenvana',
-      email: 'nguyenvana@example.com',
-      phone: '0123456789',
-      joinDate: '2024-01-15'
+    const loadCustomerData = async () => {
+      try {
+        // Get user info from token/localStorage
+        const userResult = await authService.getUserProfile()
+        
+        if (userResult.success) {
+          // Mock customer data based on user info - later replace with API call
+          const mockCustomer = {
+            id: userResult.data.userId || 1,
+            fullName: userResult.data.fullName || userResult.data.username || 'Customer',
+            username: userResult.data.username || 'customer',
+            email: userResult.data.email || 'customer@example.com',
+            phone: userResult.data.phone || '0123456789',
+            joinDate: '2024-01-15'
+          }
+          setCustomer(mockCustomer)
+        } else {
+          // Fallback to default data
+          const mockCustomer = {
+            id: 1,
+            fullName: 'Valued Customer',
+            username: 'customer',
+            email: 'customer@example.com',
+            phone: '0123456789',
+            joinDate: '2024-01-15'
+          }
+          setCustomer(mockCustomer)
+        }
+      } catch (error) {
+        logger.error('Error loading customer data:', error)
+        // Fallback to default data
+        const mockCustomer = {
+          id: 1,
+          fullName: 'Valued Customer',
+          username: 'customer',
+          email: 'customer@example.com',
+          phone: '0123456789',
+          joinDate: '2024-01-15'
+        }
+        setCustomer(mockCustomer)
+      }
     }
-    setCustomer(mockCustomer)
 
-    // Mock vehicles data
-    const mockVehicles = [
-      {
-        id: 1,
-        make: 'Tesla',
-        model: 'Model 3',
-        year: 2022,
-        licensePlate: '30A-12345',
-        batteryCapacity: 75,
-        mileage: 25000,
-        lastMaintenance: '2024-08-15',
-        nextMaintenance: '2024-11-15',
-        status: 'active'
-      },
-      {
-        id: 2,
-        make: 'VinFast',
-        model: 'VF8',
-        year: 2023,
-        licensePlate: '30B-67890',
-        batteryCapacity: 90,
-        mileage: 15000,
-        lastMaintenance: '2024-09-01',
-        nextMaintenance: '2024-12-01',
-        status: 'active'
-      }
-    ]
-    setVehicles(mockVehicles)
-
-    // Mock recent appointments
-    const mockAppointments = [
-      {
-        id: 1,
-        vehicleId: 1,
-        serviceName: 'Battery Health Check',
-        date: '2024-10-05',
-        time: '09:00',
-        status: 'confirmed',
-        technician: 'John Doe',
-        estimatedDuration: 60,
-        price: 500000
-      },
-      {
-        id: 2,
-        vehicleId: 2,
-        serviceName: 'Brake System Inspection',
-        date: '2024-09-28',
-        time: '14:00',
-        status: 'completed',
-        technician: 'Jane Smith',
-        estimatedDuration: 90,
-        price: 750000
-      },
-      {
-        id: 3,
-        vehicleId: 1,
-        serviceName: 'Tire Rotation',
-        date: '2024-09-20',
-        time: '10:30',
-        status: 'completed',
-        technician: 'Mike Johnson',
-        estimatedDuration: 45,
-        price: 300000
-      }
-    ]
-    setRecentAppointments(mockAppointments)
+    loadCustomerData()
+    loadVehicleModels()
+    loadVehicles()
+    loadAppointments()
   }, [])
+
+  const loadAppointments = async () => {
+    try {
+      const result = await appointmentService.getAllAppointments()
+      
+      if (result.success) {
+        const allAppointments = Array.isArray(result.data) ? result.data : []
+        
+        // Get current user info
+        const userResult = await authService.getUserProfile()
+        const customerId = userResult.data?.userId
+        
+        // Filter appointments for current customer and sort by date (newest first)
+        const customerAppointments = allAppointments
+          .filter(apt => apt.customerId === customerId)
+          .sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate))
+        
+        setRecentAppointments(customerAppointments)
+        logger.log('Appointments loaded:', customerAppointments)
+      } else {
+        logger.error('Failed to load appointments:', result.message)
+        setRecentAppointments([])
+      }
+    } catch (error) {
+      logger.error('Error loading appointments:', error)
+      setRecentAppointments([])
+    }
+  }
+
+  const loadVehicleModels = async () => {
+    try {
+      const result = await vehicleService.getAllVehicleModels()
+      
+      if (result.success) {
+        setVehicleModels(result.data || [])
+      } else {
+        logger.error('Failed to load vehicle models:', result.message)
+        setVehicleModels([])
+      }
+    } catch (error) {
+      logger.error('Error loading vehicle models:', error)
+      setVehicleModels([])
+    }
+  }
+
+  const loadVehicles = async () => {
+    try {
+      const userResult = await authService.getUserProfile()
+      const customerId = userResult.data?.userId
+
+      if (customerId) {
+        const result = await vehicleService.getVehiclesByCustomerId(customerId)
+        
+        if (result.success) {
+          setVehicles(result.data || [])
+        } else {
+          logger.error('Failed to load vehicles:', result.message)
+          setVehicles([])
+        }
+      }
+    } catch (error) {
+      logger.error('Error loading vehicles:', error)
+      setVehicles([])
+    }
+  }
+
+  // Helper function to get vehicle model by ID
+  const getVehicleModel = (modelId) => {
+    return vehicleModels.find(model => model.id === modelId)
+  }
+
+  const handleAddVehicle = () => {
+    setShowAddVehicle(true)
+  }
+
+  const handleCloseAddVehicle = () => {
+    setShowAddVehicle(false)
+  }
+
+  const handleVehicleAdded = (newVehicle) => {
+    // Refresh vehicle list
+    loadVehicles()
+    setShowAddVehicle(false)
+  }
+
+  const handleBookMaintenance = (vehicle) => {
+    setSelectedVehicle(vehicle)
+    setShowBookMaintenance(true)
+  }
+
+  const handleCloseBookMaintenance = () => {
+    setShowBookMaintenance(false)
+    setSelectedVehicle(null)
+  }
+
+  const handleAppointmentCreated = (appointment) => {
+    // Refresh appointments list
+    loadAppointments()
+    logger.log('Appointment created:', appointment)
+  }
+
+  const handleDeleteVehicle = async (vehicleId, licensePlate) => {
+    if (window.confirm(`Are you sure you want to delete vehicle ${licensePlate}?`)) {
+      try {
+        const result = await vehicleService.deleteVehicle(vehicleId)
+        
+        if (result.success) {
+          alert('Vehicle deleted successfully!')
+          loadVehicles() // Refresh the vehicle list
+        } else {
+          alert(`Failed to delete vehicle: ${result.message}`)
+        }
+      } catch (error) {
+        logger.error('Error deleting vehicle:', error)
+        alert('An error occurred while deleting the vehicle')
+      }
+    }
+  }
+
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      authService.logout()
+    }
+  }
+
+  const handleViewAppointment = (appointment) => {
+    setSelectedAppointment(appointment)
+    setShowAppointmentDetail(true)
+  }
+
+  const handleCloseAppointmentDetail = () => {
+    setShowAppointmentDetail(false)
+    setSelectedAppointment(null)
+  }
+
+  const handleViewAllAppointments = () => {
+    setShowAllAppointments(true)
+  }
+
+  const handleCloseAllAppointments = () => {
+    setShowAllAppointments(false)
+  }
+
+  const handleViewDetailFromAll = (appointment) => {
+    setShowAllAppointments(false)
+    setSelectedAppointment(appointment)
+    setShowAppointmentDetail(true)
+  }
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -95,12 +229,12 @@ const CustomerDashboard = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      confirmed: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
-      completed: { text: 'Completed', class: 'completed', icon: '🟢' },
-      pending: { text: 'Pending', class: 'pending', icon: '🟡' },
-      cancelled: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
+      PENDING: { text: 'Pending', class: 'pending', icon: '🟡' },
+      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
+      COMPLETED: { text: 'Completed', class: 'completed', icon: '🟢' },
+      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
     }
-    return statusMap[status] || statusMap.pending
+    return statusMap[status] || statusMap.PENDING
   }
 
   if (!customer) {
@@ -109,17 +243,46 @@ const CustomerDashboard = () => {
 
   return (
     <div className="customer-dashboard">
+      {/* Navigation Header */}
+      <div className="dashboard-nav">
+        <div className="nav-content">
+          <div className="nav-brand">
+            <h2>⚡ ElectricCare</h2>
+            <span>Customer Portal</span>
+          </div>
+          <div className="nav-actions">
+            <span className="nav-user">Hello, {customer.fullName}</span>
+            <button onClick={handleLogout} className="logout-btn">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Welcome Header */}
       <div className="welcome-header">
         <div className="welcome-content">
           <div className="customer-info">
             <div className="customer-avatar">
-              {customer.fullName.charAt(0)}
+              {customer.fullName.charAt(0).toUpperCase()}
             </div>
             <div className="customer-details">
-              <h1>Welcome, {customer.fullName}! 👋</h1>
-              <p>Have a great day with your electric vehicle</p>
+              <h1>Welcome back, {customer.fullName}! 👋</h1>
+              <p>Ready to take care of your electric vehicle today?</p>
+              <div className="customer-meta">
+                <span>Member since {new Date(customer.joinDate).getFullYear()}</span>
+                <span>•</span>
+                <span>Customer ID: #{customer.id}</span>
+              </div>
             </div>
+          </div>
+          <div className="welcome-actions">
+            <button className="quick-action-btn primary">
+              📅 Book Service
+            </button>
+            <button className="quick-action-btn secondary" onClick={handleAddVehicle}>
+              🚗 Add Vehicle
+            </button>
           </div>
         </div>
       </div>
@@ -136,14 +299,16 @@ const CustomerDashboard = () => {
         <div className="stat-card">
           <div className="stat-icon">🔧</div>
           <div className="stat-info">
-            <span className="stat-number">{recentAppointments.filter(a => a.status === 'confirmed').length}</span>
+            <span className="stat-number">
+              {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
+            </span>
             <span className="stat-label">Upcoming Appointments</span>
           </div>
         </div>
         <div className="stat-card">
           <div className="stat-icon">📅</div>
           <div className="stat-info">
-            <span className="stat-number">{recentAppointments.filter(a => a.status === 'completed').length}</span>
+            <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
             <span className="stat-label">Completed Services</span>
           </div>
         </div>
@@ -155,39 +320,61 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>🚗 Your Electric Vehicles</h2>
-            <button className="add-btn">+ Add Vehicle</button>
+            <button className="add-btn" onClick={handleAddVehicle}>+ Add Vehicle</button>
           </div>
           <div className="vehicles-grid">
-            {vehicles.map(vehicle => (
-              <div key={vehicle.id} className="vehicle-card">
-                <div className="vehicle-header">
-                  <h3>{vehicle.make} {vehicle.model}</h3>
-                  <span className="vehicle-year">{vehicle.year}</span>
-                </div>
-                <div className="vehicle-details">
-                  <div className="detail-item">
-                    <span className="label">License Plate:</span>
-                    <span className="value">{vehicle.licensePlate}</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Battery:</span>
-                    <span className="value">{vehicle.batteryCapacity} kWh</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Mileage:</span>
-                    <span className="value">{vehicle.mileage.toLocaleString()} km</span>
-                  </div>
-                  <div className="detail-item">
-                    <span className="label">Next Maintenance:</span>
-                    <span className="value next-maintenance">{vehicle.nextMaintenance}</span>
-                  </div>
-                </div>
-                <div className="vehicle-actions">
-                  <button className="action-btn primary">Book Maintenance</button>
-                  <button className="action-btn secondary">View Details</button>
-                </div>
+            {vehicles.length === 0 ? (
+              <div className="no-vehicles">
+                <p>🚗 You haven't added any vehicles yet.</p>
+                <button className="add-btn-large" onClick={handleAddVehicle}>
+                  + Add Your First Vehicle
+                </button>
               </div>
-            ))}
+            ) : (
+              vehicles.map(vehicle => {
+                const model = getVehicleModel(vehicle.modelId)
+                return (
+                  <div key={vehicle.id} className="vehicle-card">
+                    <div className="vehicle-header">
+                      <h3>{model?.name || 'Unknown Model'}</h3>
+                      <span className="vehicle-year">{model?.modelYear || 'N/A'}</span>
+                    </div>
+                    <div className="vehicle-details">
+                      <div className="detail-item">
+                        <span className="label">License Plate:</span>
+                        <span className="value">{vehicle.licensePlate}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">VIN:</span>
+                        <span className="value">{vehicle.vin}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">Mileage:</span>
+                        <span className="value">{parseInt(vehicle.currentKm).toLocaleString()} km</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">Basic Maintenance:</span>
+                        <span className="value">{model?.basicMaintenance || 'N/A'} km</span>
+                      </div>
+                    </div>
+                    <div className="vehicle-actions">
+                      <button 
+                        className="action-btn primary"
+                        onClick={() => handleBookMaintenance(vehicle)}
+                      >
+                        Book Maintenance
+                      </button>
+                      <button 
+                        className="action-btn danger" 
+                        onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </div>
+                )
+              })
+            )}
           </div>
         </div>
 
@@ -195,37 +382,105 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>📋 Recent Appointments</h2>
-            <button className="view-all-btn">View All</button>
+            <button 
+              className="view-all-btn"
+              onClick={handleViewAllAppointments}
+            >
+              View All
+            </button>
           </div>
           <div className="appointments-list">
-            {recentAppointments.map(appointment => {
-              const vehicle = vehicles.find(v => v.id === appointment.vehicleId)
-              const statusInfo = getStatusBadge(appointment.status)
-              
-              return (
-                <div key={appointment.id} className="appointment-card">
-                  <div className="appointment-date">
-                    <span className="date">{appointment.date}</span>
-                    <span className="time">{appointment.time}</span>
+            {recentAppointments.length === 0 ? (
+              <div className="no-appointments">
+                <p>📅 You don't have any appointments yet.</p>
+                <p>Book your first maintenance service now!</p>
+              </div>
+            ) : (
+              recentAppointments.slice(0, 5).map(appointment => {
+                const statusInfo = getStatusBadge(appointment.status)
+                
+                // Format date and time from appointmentDate
+                const appointmentDateTime = new Date(appointment.appointmentDate)
+                const dateStr = appointmentDateTime.toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'short', 
+                  day: 'numeric' 
+                })
+                const timeStr = appointmentDateTime.toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit',
+                  hour12: true
+                })
+                
+                return (
+                  <div 
+                    key={appointment.id} 
+                    className="appointment-card"
+                    onClick={() => handleViewAppointment(appointment)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="appointment-date">
+                      <span className="date">{dateStr}</span>
+                      <span className="time">{timeStr}</span>
+                    </div>
+                    <div className="appointment-details">
+                      <h4>
+                        {appointment.servicePackageName || 'Maintenance Service'}
+                        {appointment.serviceItems && appointment.serviceItems.length > 0 && 
+                          ` + ${appointment.serviceItems.length} service(s)`}
+                      </h4>
+                      <p>🚗 {appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
+                      <p>👨‍🔧 Technician: {appointment.technicianName || 'Not assigned yet'}</p>
+                    </div>
+                    <div className="appointment-status">
+                      <span className={`status-badge ${statusInfo.class}`}>
+                        {statusInfo.icon} {statusInfo.text}
+                      </span>
+                      <span className="price">{formatCurrency(appointment.estimatedCost)}</span>
+                    </div>
                   </div>
-                  <div className="appointment-details">
-                    <h4>{appointment.serviceName}</h4>
-                    <p>🚗 {vehicle?.make} {vehicle?.model} - {vehicle?.licensePlate}</p>
-                    <p>👨‍🔧 Technician: {appointment.technician}</p>
-                    <p>⏱️ Duration: {appointment.estimatedDuration} minutes</p>
-                  </div>
-                  <div className="appointment-status">
-                    <span className={`status-badge ${statusInfo.class}`}>
-                      {statusInfo.icon} {statusInfo.text}
-                    </span>
-                    <span className="price">{formatCurrency(appointment.price)}</span>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })
+            )}
           </div>
         </div>
       </div>
+
+      {/* Add Vehicle Modal */}
+      {showAddVehicle && (
+        <AddVehicle 
+          onClose={handleCloseAddVehicle}
+          onVehicleAdded={handleVehicleAdded}
+        />
+      )}
+
+      {/* Book Maintenance Modal */}
+      {showBookMaintenance && selectedVehicle && (
+        <BookMaintenance
+          vehicle={selectedVehicle}
+          vehicleModel={getVehicleModel(selectedVehicle.modelId)}
+          onClose={handleCloseBookMaintenance}
+          onAppointmentCreated={handleAppointmentCreated}
+        />
+      )}
+
+      {/* Appointment Detail Modal */}
+      {showAppointmentDetail && selectedAppointment && (
+        <AppointmentDetail
+          appointment={selectedAppointment}
+          onClose={handleCloseAppointmentDetail}
+          onAppointmentUpdated={loadAppointments}
+        />
+      )}
+
+      {/* All Appointments Modal */}
+      {showAllAppointments && (
+        <AllAppointments
+          appointments={recentAppointments}
+          onClose={handleCloseAllAppointments}
+          onViewDetail={handleViewDetailFromAll}
+        />
+      )}
     </div>
   )
 }

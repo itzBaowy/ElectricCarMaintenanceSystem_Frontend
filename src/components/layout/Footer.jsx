@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 import '../../styles/Footer.css'
 
 const Footer = () => {
@@ -5,12 +6,12 @@ const Footer = () => {
 
   const handleSocialClick = (platform) => {
     // TODO: Navigate to social media links
-    console.log(`${platform} social link clicked`)
+    logger.log(`${platform} social link clicked`)
   }
 
   const handleLinkClick = (link) => {
     // TODO: Navigate to internal pages or sections
-    console.log(`${link} link clicked`)
+    logger.log(`${link} link clicked`)
   }
 
   return (

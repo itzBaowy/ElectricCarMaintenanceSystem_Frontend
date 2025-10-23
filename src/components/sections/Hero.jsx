@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 import '../../styles/Hero.css'
 import carImage from '../../assets/ba4007af-a864-474d-860a-70fd92cc726d.png'
 import image1 from '../../assets/download (1).jpeg'
@@ -8,7 +9,7 @@ import image4 from '../../assets/istockphoto-1347150429-612x612.jpg'
 const Hero = () => {
   const handleBookingClick = () => {
     // TODO: Navigate to booking page
-    console.log('Booking clicked')
+    logger.log('Booking clicked')
   }
 
   const handleLearnMoreClick = () => {

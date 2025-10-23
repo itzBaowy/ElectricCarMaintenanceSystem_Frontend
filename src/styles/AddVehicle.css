@@ -1,0 +1,259 @@
+/* Add Vehicle Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  color: #333;
+  background: #f5f5f5;
+}
+
+/* Form Styles */
+.add-vehicle-form {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: #dc3545;
+}
+
+.form-group input:disabled,
+.form-group select:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.general-error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #f5c6cb;
+}
+
+.field-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.loading-models {
+  padding: 0.75rem;
+  text-align: center;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid #e1e5e9;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.form-actions button {
+  flex: 1;
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.btn-cancel {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 2px solid #dee2e6;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .add-vehicle-form {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+/* Scrollbar Styling */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 import '../../styles/Features.css'
 
 const Features = () => {
@@ -22,8 +23,9 @@ const Features = () => {
     }
   ]
 
-  const handleMoreInfo = (tierName) => {
-    console.log(`${tierName} tier More Info clicked`)
+  const handleFeatureClick = (featureName) => {
+    // TODO: Show feature details or navigate to relevant page
+    logger.log(`${featureName} feature clicked`)
   }
 
   return (
