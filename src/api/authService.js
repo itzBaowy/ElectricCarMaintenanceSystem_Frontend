@@ -164,6 +164,18 @@ export const authService = {
     return true
   },
 
+  // Get current user from localStorage
+  getCurrentUser: () => {
+    try {
+      const userStr = localStorage.getItem('currentUser')
+      if (!userStr) return null
+      return JSON.parse(userStr)
+    } catch (error) {
+      logger.error('Error getting current user:', error)
+      return null
+    }
+  },
+
   // Clear session data
   clearSession: () => {
     localStorage.removeItem('accessToken')

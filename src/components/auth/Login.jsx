@@ -100,8 +100,10 @@ const Login = () => {
               navigate('/admin')
             } else if (user.role === 'CUSTOMER') {
               navigate('/customer')
-            } else {
-              navigate('/admin') // Default for staff, technician
+            } else if (user.role === 'STAFF') {
+              navigate('/staff')
+            } else if (user.role === 'TECHNICIAN') {
+              navigate('/technician')
             }
           }, 1000)
         } else {

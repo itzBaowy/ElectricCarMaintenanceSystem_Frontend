@@ -6,6 +6,7 @@ import Register from './components/auth/Register'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
+import StaffDashboard from './pages/staff/StaffDashboard'
 import Contact from './pages/customer/Contact'
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
           <Route 
             path="/admin" 
             element={
-              <ProtectedRoute requireAuth={true}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['ADMIN']}>
                 <AdminDashboard />
               </ProtectedRoute>
             } 
@@ -48,15 +49,23 @@ function App() {
           <Route 
             path="/customer" 
             element={
-              <ProtectedRoute requireAuth={true}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['CUSTOMER']}>
                 <CustomerDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/staff" 
+            element={
+              <ProtectedRoute requireAuth={true} allowedRoles={['STAFF']}>
+                <StaffDashboard />
               </ProtectedRoute>
             } 
           />
           <Route 
             path="/contact" 
             element={
-              <ProtectedRoute requireAuth={true}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['CUSTOMER']}>
                 <Contact />
               </ProtectedRoute>
             } 

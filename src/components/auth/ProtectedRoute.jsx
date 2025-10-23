@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom'
 import { authService } from '../../api/authService'
 import { useEffect, useState } from 'react'
 
-const ProtectedRoute = ({ children, requireAuth = true }) => {
+const ProtectedRoute = ({ children, requireAuth = true, allowedRoles = [] }) => {
   const [isChecking, setIsChecking] = useState(true)
   const isAuthenticated = authService.isAuthenticated()
 
@@ -28,8 +28,43 @@ const ProtectedRoute = ({ children, requireAuth = true }) => {
   }
 
   if (!requireAuth && isAuthenticated) {
-    // redirect to customer if already authenticated
+    // Get user info to redirect to correct dashboard
+    const currentUser = authService.getCurrentUser()
+    if (currentUser && currentUser.role) {
+      const roleMap = {
+        'ADMIN': '/admin',
+        'CUSTOMER': '/customer',
+        'STAFF': '/staff',
+        'TECHNICIAN': '/technician'
+      }
+      return <Navigate to={roleMap[currentUser.role] || '/customer'} replace />
+    }
     return <Navigate to="/customer" replace />
+  }
+
+  // Check role-based access if allowedRoles is specified
+  if (requireAuth && allowedRoles.length > 0) {
+    const currentUser = authService.getCurrentUser()
+    
+    if (!currentUser || !currentUser.role) {
+      // If we can't get user role, clear session and redirect to login
+      authService.clearSession()
+      return <Navigate to="/login" replace />
+    }
+
+    // Check if user's role is in the allowed roles list
+    if (!allowedRoles.includes(currentUser.role)) {
+      // Redirect to appropriate dashboard based on user's role
+      const roleMap = {
+        'ADMIN': '/admin',
+        'CUSTOMER': '/customer',
+        'STAFF': '/staff',
+        'TECHNICIAN': '/technician'
+      }
+      
+      alert(`Access denied. You don't have permission to access this page.`)
+      return <Navigate to={roleMap[currentUser.role] || '/customer'} replace />
+    }
   }
 
   return children
