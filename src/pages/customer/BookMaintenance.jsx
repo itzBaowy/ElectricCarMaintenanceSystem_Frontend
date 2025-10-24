@@ -388,26 +388,43 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 ) : (
                   servicePackages.map(pkg => {
                     const packagePrice = packagePrices[pkg.id]
+                    const isSelected = selectedPackage?.id === pkg.id
                     return (
-                      <label
-                        key={pkg.id}
-                        className={`service-package-item ${selectedPackage?.id === pkg.id ? 'selected' : ''}`}
-                      >
-                        <input
-                          type="radio"
-                          name="servicePackage"
-                          value={pkg.id}
-                          checked={selectedPackage?.id === pkg.id}
-                          onChange={() => handlePackageSelect(pkg)}
-                        />
-                        <div className="package-info">
-                          <h4>{pkg.name}</h4>
-                          <p className="package-description">{pkg.description}</p>
-                          {packagePrice !== undefined && (
-                            <p className="package-price">{formatCurrency(packagePrice)}</p>
-                          )}
-                        </div>
-                      </label>
+                      <div key={pkg.id} className="package-wrapper">
+                        <label
+                          className={`service-package-item ${isSelected ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="radio"
+                            name="servicePackage"
+                            value={pkg.id}
+                            checked={isSelected}
+                            onChange={() => handlePackageSelect(pkg)}
+                          />
+                          <div className="package-info">
+                            <h4>{pkg.name}</h4>
+                            <p className="package-description">{pkg.description}</p>
+                            {packagePrice !== undefined && (
+                              <p className="package-price">{formatCurrency(packagePrice)}</p>
+                            )}
+                          </div>
+                        </label>
+                        
+                        {/* Show included items when package is selected */}
+                        {isSelected && packageServices.length > 0 && (
+                          <div className="package-items-detail">
+                            <h5 className="package-items-title">✓ Included Services:</h5>
+                            <div className="package-items-grid">
+                              {packageServices.map((item, index) => (
+                                <div key={index} className="package-item">
+                                  <span className="item-icon">✓</span>
+                                  <span className="item-name">{item.serviceItemName}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )
                   })
                 )}
