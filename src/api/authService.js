@@ -206,7 +206,7 @@ export const authService = {
         const userInfo = {
           userId: tokenPayload.userId,
           username: tokenPayload.sub,
-          role: tokenPayload.role,
+          role: tokenPayload.scope,
           exp: tokenPayload.exp
         }
         

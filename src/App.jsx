@@ -7,6 +7,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
 import StaffDashboard from './pages/staff/StaffDashboard'
+import TechnicianDashboard from './pages/technician/TechnicianDashboard'
 import Contact from './pages/customer/Contact'
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
           <Route 
             path="/admin" 
             element={
-              <ProtectedRoute requireAuth={true} allowedRoles={['ADMIN']}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_ADMIN']}>
                 <AdminDashboard />
               </ProtectedRoute>
             } 
@@ -49,7 +50,7 @@ function App() {
           <Route 
             path="/customer" 
             element={
-              <ProtectedRoute requireAuth={true} allowedRoles={['CUSTOMER']}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_CUSTOMER']}>
                 <CustomerDashboard />
               </ProtectedRoute>
             } 
@@ -57,15 +58,23 @@ function App() {
           <Route 
             path="/staff" 
             element={
-              <ProtectedRoute requireAuth={true} allowedRoles={['STAFF']}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_STAFF']}>
                 <StaffDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/technician" 
+            element={
+              <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_TECHNICIAN']}>
+                <TechnicianDashboard />
               </ProtectedRoute>
             } 
           />
           <Route 
             path="/contact" 
             element={
-              <ProtectedRoute requireAuth={true} allowedRoles={['CUSTOMER']}>
+              <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_CUSTOMER']}>
                 <Contact />
               </ProtectedRoute>
             } 

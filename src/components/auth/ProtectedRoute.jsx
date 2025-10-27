@@ -32,10 +32,10 @@ const ProtectedRoute = ({ children, requireAuth = true, allowedRoles = [] }) => 
     const currentUser = authService.getCurrentUser()
     if (currentUser && currentUser.role) {
       const roleMap = {
-        'ADMIN': '/admin',
-        'CUSTOMER': '/customer',
-        'STAFF': '/staff',
-        'TECHNICIAN': '/technician'
+        'ROLE_ADMIN': '/admin',
+        'ROLE_CUSTOMER': '/customer',
+        'ROLE_STAFF': '/staff',
+        'ROLE_TECHNICIAN': '/technician'
       }
       return <Navigate to={roleMap[currentUser.role] || '/customer'} replace />
     }
@@ -56,10 +56,10 @@ const ProtectedRoute = ({ children, requireAuth = true, allowedRoles = [] }) => 
     if (!allowedRoles.includes(currentUser.role)) {
       // Redirect to appropriate dashboard based on user's role
       const roleMap = {
-        'ADMIN': '/admin',
-        'CUSTOMER': '/customer',
-        'STAFF': '/staff',
-        'TECHNICIAN': '/technician'
+        'ROLE_ADMIN': '/admin',
+        'ROLE_CUSTOMER': '/customer',
+        'ROLE_STAFF': '/staff',
+        'ROLE_TECHNICIAN': '/technician'
       }
       
       alert(`Access denied. You don't have permission to access this page.`)

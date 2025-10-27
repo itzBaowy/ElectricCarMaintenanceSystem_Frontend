@@ -263,7 +263,7 @@ const appointmentService = {
   // Update appointment status
   updateAppointmentStatus: async (appointmentId, status) => {
     try {
-      const response = await api.put(`/api/appointments/update/${appointmentId}`, {
+      const response = await api.put(`/api/appointments/setStatus/${appointmentId}`, {
         status: status
       })
       

@@ -96,16 +96,16 @@ const Login = () => {
           // Small delay to show success message
           setTimeout(() => {
             // Redirect based on user role
-            if (user.role === 'ADMIN') {
+            if (user.role === 'ROLE_ADMIN') {
               navigate('/admin')
-            } else if (user.role === 'CUSTOMER') {
+            } else if (user.role === 'ROLE_CUSTOMER') {
               navigate('/customer')
-            } else if (user.role === 'STAFF') {
+            } else if (user.role === 'ROLE_STAFF') {
               navigate('/staff')
-            } else if (user.role === 'TECHNICIAN') {
+            } else if (user.role === 'ROLE_TECHNICIAN') {
               navigate('/technician')
             }
-          }, 1000)
+          }, 1000)  
         } else {
           // If can't get profile, redirect to a default dashboard
           setTimeout(() => {
