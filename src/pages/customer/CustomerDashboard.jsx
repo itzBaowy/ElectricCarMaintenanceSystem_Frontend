@@ -74,22 +74,28 @@ const CustomerDashboard = () => {
 
   const loadAppointments = async () => {
     try {
-      const result = await appointmentService.getAllAppointments()
+      // Get current user info first
+      const userResult = await authService.getUserProfile()
+      const customerId = userResult.data?.userId
+      
+      if (!customerId) {
+        logger.error('No customer ID found')
+        setRecentAppointments([])
+        return
+      }
+      
+      // Get appointments for this customer only
+      const result = await appointmentService.getAppointmentsByCustomerId(customerId)
       
       if (result.success) {
-        const allAppointments = Array.isArray(result.data) ? result.data : []
+        const customerAppointments = Array.isArray(result.data) ? result.data : []
         
-        // Get current user info
-        const userResult = await authService.getUserProfile()
-        const customerId = userResult.data?.userId
-        
-        // Filter appointments for current customer and sort by date (newest first)
-        const customerAppointments = allAppointments
-          .filter(apt => apt.customerId === customerId)
+        // Sort by date (newest first)
+        const sortedAppointments = customerAppointments
           .sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate))
         
-        setRecentAppointments(customerAppointments)
-        logger.log('Appointments loaded:', customerAppointments)
+        setRecentAppointments(sortedAppointments)
+        logger.log('Customer appointments loaded:', sortedAppointments)
       } else {
         logger.error('Failed to load appointments:', result.message)
         setRecentAppointments([])

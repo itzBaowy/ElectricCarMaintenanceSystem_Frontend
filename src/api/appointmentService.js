@@ -33,7 +33,7 @@ const appointmentService = {
     }
   },
 
-  // Get all appointments
+  // Get all appointments (admin/staff only)
   getAllAppointments: async () => {
     try {
       const response = await api.get('/api/appointments')
@@ -56,6 +56,34 @@ const appointmentService = {
       return {
         success: false,
         message: error.response?.data?.message || 'Failed to get appointments',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
+  // Get appointments by customer ID
+  getAppointmentsByCustomerId: async (customerId) => {
+    try {
+      const response = await api.get(`/api/appointments/customer/${customerId}`)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to get customer appointments',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get customer appointments error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to get customer appointments',
         error: error.response?.data || error.message
       }
     }
