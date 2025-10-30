@@ -224,6 +224,15 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                   className="disabled-input"
                 />
               </div>
+              <div className="form-group">
+                <label>Ngày Mua</label>
+                <input
+                  type="text"
+                  value={vehicle?.purchaseYear ? new Date(vehicle.purchaseYear).toLocaleDateString() : 'N/A'}
+                  disabled
+                  className="disabled-input"
+                />
+              </div>
             </div>
           </div>
 
