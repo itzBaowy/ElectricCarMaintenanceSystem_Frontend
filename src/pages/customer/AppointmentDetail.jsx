@@ -16,10 +16,7 @@ const AppointmentDetail = ({ appointment, onClose, onAppointmentUpdated }) => {
 
     setCanceling(true)
     try {
-      const result = await appointmentService.updateAppointmentStatus(
-        appointment.id,
-        'CANCELLED'
-      )
+      const result = await appointmentService.cancelAppointment(appointment.id)
 
       if (result.success) {
         alert('Appointment cancelled successfully!')
