@@ -317,6 +317,23 @@
   color: #7b1fa2;
 }
 
+.center-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #e8f5e9;
+  color: #2e7d32;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.not-assigned {
+  color: #999;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;

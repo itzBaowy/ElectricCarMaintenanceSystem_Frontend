@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import technicianService from '../../../api/technicianService'
 import staffService from '../../../api/staffService'
+import centerService from '../../../api/centerService'
 import logger from '../../../utils/logger'
 import '../../../styles/EmployeeManagement.css'
 
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([])
+  const [centers, setCenters] = useState([])
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingEmployee, setEditingEmployee] = useState(null)
   const [formData, setFormData] = useState({
@@ -16,17 +18,38 @@ const EmployeeManagement = () => {
     password: '',
     phone: '',
     role: 'TECHNICIAN', // TECHNICIAN or STAFF
-    gender: 'MALE'
+    gender: 'MALE',
+    serviceCenterId: null
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingCenters, setIsLoadingCenters] = useState(false)
 
-  // Load employees from API
+  // Load employees and centers from API
   useEffect(() => {
     loadEmployees()
+    loadCenters()
   }, [])
+
+  const loadCenters = async () => {
+    setIsLoadingCenters(true)
+    try {
+      const result = await centerService.getAllCenters()
+      
+      if (result.success && result.data) {
+        setCenters(result.data)
+        logger.log('Loaded service centers:', result.data)
+      } else {
+        logger.error('Failed to load centers:', result.message)
+      }
+    } catch (error) {
+      logger.error('Error loading centers:', error)
+    } finally {
+      setIsLoadingCenters(false)
+    }
+  }
 
   const loadEmployees = async () => {
     setIsLoading(true)
@@ -78,9 +101,16 @@ const EmployeeManagement = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
+    
+    // Convert serviceCenterId from string to number or null
+    let processedValue = value
+    if (name === 'serviceCenterId') {
+      processedValue = value === '' ? null : Number(value)
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }))
   }
 
@@ -93,7 +123,8 @@ const EmployeeManagement = () => {
       password: '',
       phone: '',
       role: 'TECHNICIAN',
-      gender: 'MALE'
+      gender: 'MALE',
+      serviceCenterId: null
     })
     setEditingEmployee(null)
     setShowAddForm(false)
@@ -109,8 +140,11 @@ const EmployeeManagement = () => {
         const updateData = {
           fullName: formData.fullName,
           email: formData.email,
-          phone: formData.phone
+          phone: formData.phone,
+          gender: formData.gender,
+          serviceCenterId: formData.serviceCenterId
         }
+        logger.log('Updating employee with data:', updateData)
 
         let result
         
@@ -143,7 +177,8 @@ const EmployeeManagement = () => {
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-          gender: formData.gender
+          gender: formData.gender,
+          serviceCenterId: formData.serviceCenterId
         }
 
         let result
@@ -168,6 +203,12 @@ const EmployeeManagement = () => {
         alert('An error occurred while registering employee')
       }
     }
+  }
+
+  const getCenterName = (serviceCenterId) => {
+    if (!serviceCenterId) return null
+    const center = centers.find(c => c.id === serviceCenterId)
+    return center ? center.name : `Center #${serviceCenterId}`
   }
 
   const handleEdit = (employee) => {
@@ -369,8 +410,8 @@ const EmployeeManagement = () => {
                 </div>
               </div>
 
-              {!editingEmployee && (
-                <div className="form-row">
+              <div className="form-row">
+                {!editingEmployee && (
                   <div className="form-group">
                     <label htmlFor="role">Role *</label>
                     <select
@@ -384,11 +425,9 @@ const EmployeeManagement = () => {
                       <option value="STAFF">Staff</option>
                     </select>
                   </div>
-                </div>
-              )}
+                )}
 
-              {editingEmployee && (
-                <div className="form-row">
+                {editingEmployee && (
                   <div className="form-group">
                     <label htmlFor="currentRole">Current Role</label>
                     <input
@@ -403,8 +442,32 @@ const EmployeeManagement = () => {
                       Role cannot be changed after creation
                     </small>
                   </div>
+                )}
+
+                <div className="form-group">
+                  <label htmlFor="serviceCenterId">Service Center</label>
+                  {isLoadingCenters ? (
+                    <div style={{ padding: '0.75rem', color: '#666' }}>Loading centers...</div>
+                  ) : (
+                    <select
+                      id="serviceCenterId"
+                      name="serviceCenterId"
+                      value={formData.serviceCenterId || ''}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">-- Not assigned --</option>
+                      {centers.map(center => (
+                        <option key={center.id} value={center.id}>
+                          {center.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>
+                    Select a service center or leave unassigned
+                  </small>
                 </div>
-              )}
+              </div>
 
               <div className="form-actions">
                 <button type="button" onClick={resetForm} className="cancel-btn">
@@ -438,6 +501,7 @@ const EmployeeManagement = () => {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Service Center</th>
                 <th>Join Date</th>
                 <th>Actions</th>
               </tr>
@@ -459,6 +523,15 @@ const EmployeeManagement = () => {
                     <span className={`role-badge ${employee.role.toLowerCase()}`}>
                       {employee.role === 'TECHNICIAN' ? '🔧 Technician' : '👥 Staff'}
                     </span>
+                  </td>
+                  <td>
+                    {employee.serviceCenterId ? (
+                      <span className="center-badge">
+                        🏢 {getCenterName(employee.serviceCenterId)}
+                      </span>
+                    ) : (
+                      <span className="not-assigned">Not assigned</span>
+                    )}
                   </td>
                   <td>{employee.joinDate}</td>
                   <td>
