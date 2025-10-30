@@ -82,14 +82,23 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
       newErrors.currentKm = 'Mileage must be a positive number'
     }
 
-    // Purchase year validation
+    // Purchase year validation (YYYY-MM format)
     if (!formData.purchaseYear) {
-      newErrors.purchaseYear = 'Purchase year is required'
+      newErrors.purchaseYear = 'Purchase year and month are required'
     } else {
-      const selectedDate = new Date(formData.purchaseYear)
-      const currentDate = new Date()
-      if (selectedDate > currentDate) {
-        newErrors.purchaseYear = 'Purchase date cannot be in the future'
+      // Check if format is YYYY-MM
+      if (!/^\d{4}-\d{2}$/.test(formData.purchaseYear)) {
+        newErrors.purchaseYear = 'Invalid format. Must be YYYY-MM'
+      } else {
+        // Check if not in the future
+        const [year, month] = formData.purchaseYear.split('-').map(Number)
+        const selectedDate = new Date(year, month - 1) // month is 0-indexed
+        const currentDate = new Date()
+        const currentYearMonth = new Date(currentDate.getFullYear(), currentDate.getMonth())
+        
+        if (selectedDate > currentYearMonth) {
+          newErrors.purchaseYear = 'Purchase date cannot be in the future'
+        }
       }
     }
 
@@ -239,22 +248,22 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
 
           <div className="form-group">
             <label htmlFor="purchaseYear">
-              Purchase Date <span className="required">*</span>
+              Purchase Year & Month <span className="required">*</span>
             </label>
             <input
-              type="date"
+              type="month"
               id="purchaseYear"
               name="purchaseYear"
               value={formData.purchaseYear}
               onChange={handleChange}
               className={errors.purchaseYear ? 'error' : ''}
               disabled={isLoading}
-              max={new Date().toISOString().split('T')[0]}
+              max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
             />
             {errors.purchaseYear && (
               <span className="error-message">{errors.purchaseYear}</span>
             )}
-            <span className="field-hint">Date when the vehicle was purchased</span>
+            <span className="field-hint">Month and year when the vehicle was purchased (e.g., 2025-11)</span>
           </div>
 
           <div className="form-group">
