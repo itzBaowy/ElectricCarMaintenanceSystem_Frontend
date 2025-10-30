@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import EmployeeManagement from './components/EmployeeManagement'
 import ScheduleManagement from './components/ScheduleManagement'
 import '../../styles/AdminDashboard.css'
+import authService from '../../api/authService'
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('employees')
@@ -10,10 +11,9 @@ const AdminDashboard = () => {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    // Clear any stored admin session
-    localStorage.removeItem('adminToken')
-    localStorage.removeItem('adminUser')
-    navigate('/login')
+      if (window.confirm('Are you sure you want to logout?')) {
+          authService.logout()
+      }
   }
 
   const menuItems = [
