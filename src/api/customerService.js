@@ -142,6 +142,33 @@ export const customerService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Change password (current logged-in customer)
+  changePassword: async (passwordData) => {
+    try {
+      const response = await api.put('/api/customers/change-password', passwordData)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          message: response.data.message || 'Password updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to change password',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Change password error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to change password',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

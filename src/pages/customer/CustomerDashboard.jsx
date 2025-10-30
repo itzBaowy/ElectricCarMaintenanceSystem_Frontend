@@ -8,8 +8,8 @@ import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
+import ChangePassword from './ChangePassword'
 import '../../styles/CustomerDashboard.css'
-import customerService from '../../api/customerService'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)
@@ -23,22 +23,23 @@ const CustomerDashboard = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null)
   const [showAllAppointments, setShowAllAppointments] = useState(false)
   const [showEditProfile, setShowEditProfile] = useState(false)
+  const [showChangePassword, setShowChangePassword] = useState(false)
 
   // Load customer data from auth service
   useEffect(() => {
     const loadCustomerData = async () => {
       try {
         // Get user info from token/localStorage
-        const userResult = await customerService.getMyInfo()
+        const userResult = await authService.getUserProfile()
         
         if (userResult.success) {
           // Mock customer data based on user info - later replace with API call
           const mockCustomer = {
-            id: userResult.data.id,
-            fullName: userResult.data.fullName,
-            username: userResult.data.username,
-            email: userResult.data.email,
-            phone: userResult.data.phone,
+            id: userResult.data.userId || 1,
+            fullName: userResult.data.fullName || userResult.data.username || 'Customer',
+            username: userResult.data.username || 'customer',
+            email: userResult.data.email || 'customer@example.com',
+            phone: userResult.data.phone || '0123456789',
             joinDate: '2024-01-15'
           }
           setCustomer(mockCustomer)
@@ -248,6 +249,19 @@ const CustomerDashboard = () => {
     }))
   }
 
+  const handleChangePassword = () => {
+    setShowChangePassword(true)
+  }
+
+  const handleCloseChangePassword = () => {
+    setShowChangePassword(false)
+  }
+
+  const handlePasswordChanged = () => {
+    // Optional: Could show a success notification or log out user
+    logger.log('Password changed successfully')
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -282,6 +296,9 @@ const CustomerDashboard = () => {
             <span className="nav-user">Hello, {customer.fullName}</span>
             <button onClick={handleEditProfile} className="edit-profile-btn">
               ✏️ Edit Profile
+            </button>
+            <button onClick={handleChangePassword} className="change-password-btn">
+              🔒 Change Password
             </button>
             <button onClick={handleLogout} className="logout-btn">
               🚪 Logout
@@ -518,6 +535,14 @@ const CustomerDashboard = () => {
         <EditProfile
           onClose={handleCloseEditProfile}
           onProfileUpdated={handleProfileUpdated}
+        />
+      )}
+
+      {/* Change Password Modal */}
+      {showChangePassword && (
+        <ChangePassword
+          onClose={handleCloseChangePassword}
+          onPasswordChanged={handlePasswordChanged}
         />
       )}
     </div>
