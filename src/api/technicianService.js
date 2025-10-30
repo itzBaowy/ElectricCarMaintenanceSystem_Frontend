@@ -2,6 +2,34 @@ import api from './apiConfig'
 import logger from '../utils/logger'
 
 const technicianService = {
+  // Register new technician
+  registerTechnician: async (technicianData) => {
+    try {
+      const response = await api.post('/api/technicians/register', technicianData)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Technician registered successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to register technician',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Register technician error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to register technician',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
   // Get all technicians
   getAllTechnicians: async () => {
     try {

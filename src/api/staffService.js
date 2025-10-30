@@ -2,6 +2,34 @@ import api from './apiConfig'
 import logger from '../utils/logger'
 
 const staffService = {
+  // Register new staff member
+  registerStaff: async (staffData) => {
+    try {
+      const response = await api.post('/api/staffs/register', staffData)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Staff registered successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to register staff',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Register staff error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to register staff',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
   // Get all staff members
   getAllStaff: async () => {
     try {

@@ -134,9 +134,39 @@ const EmployeeManagement = () => {
         alert('An error occurred while updating employee')
       }
     } else {
-      // Add new employee - will implement later with backend API
-      alert('Add employee feature will be implemented with backend API')
-      resetForm()
+      // Add new employee
+      try {
+        // Prepare registration data
+        const registrationData = {
+          username: formData.username,
+          password: formData.password,
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          gender: formData.gender
+        }
+
+        let result
+        
+        // Call appropriate register API based on role
+        if (formData.role === 'TECHNICIAN') {
+          result = await technicianService.registerTechnician(registrationData)
+        } else if (formData.role === 'STAFF') {
+          result = await staffService.registerStaff(registrationData)
+        }
+
+        if (result && result.success) {
+          alert(`${formData.fullName} registered successfully!`)
+          resetForm()
+          // Refresh the employee list
+          loadEmployees()
+        } else {
+          alert(`Failed to register employee: ${result?.message || 'Unknown error'}`)
+        }
+      } catch (error) {
+        logger.error('Error registering employee:', error)
+        alert('An error occurred while registering employee')
+      }
     }
   }
 
