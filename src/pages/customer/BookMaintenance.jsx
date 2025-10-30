@@ -1,208 +1,105 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import appointmentService from '../../api/appointmentService'
+import maintenanceService from '../../api/maintenanceService'
+import centerService from '../../api/centerService'
 import logger from '../../utils/logger'
 import '../../styles/BookMaintenance.css'
 
 const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated }) => {
   const [loading, setLoading] = useState(false)
-  const [serviceType, setServiceType] = useState('') // 'package', 'individual', 'both'
-  const [servicePackages, setServicePackages] = useState([])
-  const [packagePrices, setPackagePrices] = useState({}) // Store prices for each package by packageId
-  const [individualServices, setIndividualServices] = useState([])
-  const [packageServices, setPackageServices] = useState([]) // Services included in selected package
-  const [selectedPackage, setSelectedPackage] = useState(null)
-  const [selectedServices, setSelectedServices] = useState([])
+  const [loadingRecommendations, setLoadingRecommendations] = useState(false)
+  const [centers, setCenters] = useState([])
+  const [selectedCenter, setSelectedCenter] = useState(null)
+  const [recommendations, setRecommendations] = useState([])
+  const [selectedRecommendation, setSelectedRecommendation] = useState(null)
+  const [showItemsDetail, setShowItemsDetail] = useState(false)
   const [appointmentDate, setAppointmentDate] = useState('')
-  const [estimatedCost, setEstimatedCost] = useState(0)
 
+  // Load centers when component mounts
   useEffect(() => {
-    loadServicePackages()
-    if (vehicle?.modelId) {
-      loadIndividualServices(vehicle.modelId)
+    loadCenters()
+  }, [])
+
+  // Load recommendations when center is selected
+  useEffect(() => {
+    if (selectedCenter && vehicle?.id) {
+      loadMaintenanceRecommendations()
     }
-  }, [vehicle])
+  }, [selectedCenter, vehicle])
 
-  useEffect(() => {
-    calculateEstimatedCost()
-  }, [selectedPackage, selectedServices])
-
-  const loadServicePackages = async () => {
+  const loadCenters = async () => {
     try {
-      const result = await appointmentService.getAllServicePackages()
+      const result = await centerService.getAllCenters()
       if (result.success) {
-        // API returns result.content array
-        const packages = Array.isArray(result.data?.content) ? result.data.content : []
-        setServicePackages(packages)
-        logger.log('Service packages loaded:', packages)
+        const centerList = Array.isArray(result.data) ? result.data : []
+        setCenters(centerList)
+        logger.log('Centers loaded:', centerList)
+      } else {
+        logger.error('Failed to load centers:', result.message)
+        setCenters([])
+      }
+    } catch (error) {
+      logger.error('Error loading centers:', error)
+      setCenters([])
+    }
+  }
+
+  const loadMaintenanceRecommendations = async () => {
+    setLoadingRecommendations(true)
+    try {
+      const result = await maintenanceService.getMaintenanceRecommendations(vehicle.id)
+      
+      if (result.success) {
+        const recommendationList = Array.isArray(result.data) ? result.data : []
+        setRecommendations(recommendationList)
+        logger.log('Maintenance recommendations loaded:', recommendationList)
         
-        // Load prices for all packages
-        if (vehicle?.modelId && packages.length > 0) {
-          loadPackagePrices(vehicle.modelId, packages)
-        }
-      } else {
-        logger.error('Failed to load service packages:', result.message)
-        setServicePackages([])
-      }
-    } catch (error) {
-      logger.error('Error loading service packages:', error)
-      setServicePackages([])
-    }
-  }
-
-  const loadPackagePrices = async (modelId, packages) => {
-    try {
-      const pricePromises = packages.map(pkg => 
-        appointmentService.getPackagePriceByModelAndPackage(modelId, pkg.id)
-      )
-      
-      const results = await Promise.all(pricePromises)
-      const prices = {}
-      
-      results.forEach((result, index) => {
-        if (result.success) {
-          prices[packages[index].id] = result.data
+        // Auto-select first recommendation if available
+        if (recommendationList.length > 0) {
+          setSelectedRecommendation(recommendationList[0])
         } else {
-          prices[packages[index].id] = 0
+          setSelectedRecommendation(null)
+          alert('Xe chưa đến hạn bảo dưỡng')
         }
-      })
-      
-      setPackagePrices(prices)
-      logger.log('Package prices loaded:', prices)
-    } catch (error) {
-      logger.error('Error loading package prices:', error)
-    }
-  }
-
-  const loadIndividualServices = async (modelId) => {
-    try {
-      const result = await appointmentService.getIndividualServicesByVehicleModel(modelId)
-      if (result.success) {
-        // Ensure result.data is an array
-        const services = Array.isArray(result.data) ? result.data : []
-        setIndividualServices(services)
-        logger.log('Individual services loaded:', services)
       } else {
-        logger.error('Failed to load individual services:', result.message)
-        setIndividualServices([])
+        logger.error('Failed to load recommendations:', result.message)
+        setRecommendations([])
+        setSelectedRecommendation(null)
+        alert(result.message || 'Xe chưa đến hạn bảo dưỡng')
       }
     } catch (error) {
-      logger.error('Error loading individual services:', error)
-      setIndividualServices([])
+      logger.error('Error loading recommendations:', error)
+      setRecommendations([])
+      setSelectedRecommendation(null)
+      alert('Không thể tải đề xuất bảo dưỡng')
+    } finally {
+      setLoadingRecommendations(false)
     }
   }
 
-  const calculateEstimatedCost = () => {
-    let total = 0
-    
-    // Add package price from API
-    if (selectedPackage && (serviceType === 'package' || serviceType === 'both')) {
-      const packagePrice = packagePrices[selectedPackage.id] || 0
-      total += packagePrice
-    }
-    
-    // Add individual service prices
-    if ((serviceType === 'individual' || serviceType === 'both') && 
-        Array.isArray(selectedServices) && selectedServices.length > 0 &&
-        Array.isArray(individualServices)) {
-      selectedServices.forEach(serviceItemId => {
-        const service = individualServices.find(s => s.serviceItemId === serviceItemId)
-        if (service) {
-          total += service.price || 0
-        }
-      })
-    }
-    
-    setEstimatedCost(total)
-  }
-
-  const handleServiceTypeChange = (type) => {
-    setServiceType(type)
-    
-    // Reset selections based on type
-    if (type === 'package') {
-      setSelectedServices([])
-      setPackageServices([])
-    } else if (type === 'individual') {
-      setSelectedPackage(null)
-      setPackageServices([])
-    }
-  }
-
-  const handlePackageSelect = async (pkg) => {
-    setSelectedPackage(pkg)
-    
-    // Reset selected individual services when changing package
-    setSelectedServices([])
-    
-    // Load services in this package to filter them out from individual services
-    if (serviceType === 'both' && vehicle?.modelId) {
-      await loadPackageServices(vehicle.modelId, pkg.id)
-    } else {
-      setPackageServices([])
-    }
-  }
-
-  const loadPackageServices = async (vehicleModelId, packageId) => {
-    try {
-      const result = await appointmentService.getModelPackageItemsByVehicleModelAndPackage(vehicleModelId, packageId)
-      if (result.success) {
-        const services = Array.isArray(result.data) ? result.data : []
-        setPackageServices(services)
-        logger.log('Package services loaded:', services)
-      } else {
-        logger.error('Failed to load package services:', result.message)
-        setPackageServices([])
-      }
-    } catch (error) {
-      logger.error('Error loading package services:', error)
-      setPackageServices([])
-    }
-  }
-
-  const handleServiceToggle = (serviceItemId) => {
-    setSelectedServices(prev => {
-      if (prev.includes(serviceItemId)) {
-        return prev.filter(id => id !== serviceItemId)
-      } else {
-        return [...prev, serviceItemId]
-      }
-    })
+  const handleCenterSelect = (center) => {
+    setSelectedCenter(center)
+    // Reset recommendations when changing center
+    setRecommendations([])
+    setSelectedRecommendation(null)
+    setShowItemsDetail(false)
   }
 
   const validateForm = () => {
+    if (!selectedCenter) {
+      alert('Vui lòng chọn trung tâm bảo dưỡng')
+      return false
+    }
+
+    if (!selectedRecommendation) {
+      alert('Không có gói bảo dưỡng được đề xuất cho xe này')
+      return false
+    }
+
     if (!appointmentDate) {
-      alert('Please select appointment date and time')
+      alert('Vui lòng chọn ngày và giờ hẹn')
       return false
-    }
-
-    if (!serviceType) {
-      alert('Please select service type')
-      return false
-    }
-
-    if ((serviceType === 'package' || serviceType === 'both') && !selectedPackage) {
-      alert('Please select a service package')
-      return false
-    }
-
-    if (serviceType === 'individual' && selectedServices.length === 0) {
-      alert('Please select at least one individual service')
-      return false
-    }
-
-    // For "both" mode, check if there are available services to select
-    if (serviceType === 'both' && selectedServices.length === 0) {
-      const availableServices = individualServices.filter(service => 
-        !packageServices.some(ps => ps.serviceItemId === service.serviceItemId)
-      )
-      
-      // Only require selection if there are services available
-      if (availableServices.length > 0) {
-        alert('Please select at least one individual service or switch to "Package Only" mode')
-        return false
-      }
-      // If no services available (all included in package), it's OK to proceed without selection
     }
 
     return true
@@ -220,35 +117,28 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       // Format datetime: "YYYY-MM-DD HH:mm" (remove T and seconds)
       const formattedDate = appointmentDate.replace('T', ' ')
       
-      // Prepare appointment data
+      // Prepare appointment data according to new API format
       const appointmentData = {
         appointmentDate: formattedDate,
-        vehicleId: parseInt(vehicle.id), // Convert to number
-        servicePackageId: (serviceType === 'package' || serviceType === 'both') ? selectedPackage?.id : null,
-        serviceItemIds: (serviceType === 'individual' || serviceType === 'both') ? selectedServices : []
-      }
-
-      // Remove null fields
-      if (!appointmentData.servicePackageId) {
-        delete appointmentData.servicePackageId
-      }
-      if (appointmentData.serviceItemIds.length === 0) {
-        delete appointmentData.serviceItemIds
+        vehicleId: parseInt(vehicle.id),
+        centerId: selectedCenter.id
       }
 
       logger.log('Submitting appointment data:', appointmentData)
       const result = await appointmentService.createAppointment(appointmentData)
       
       if (result.success) {
-        alert('Appointment booked successfully!')
-        onAppointmentCreated(result.data)
+        alert('✅ Đặt lịch bảo dưỡng thành công! Trạng thái: PENDING')
+        if (onAppointmentCreated) {
+          onAppointmentCreated(result.data)
+        }
         onClose()
       } else {
-        alert(`Failed to book appointment: ${result.message}`)
+        alert(`❌ Đặt lịch thất bại: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error creating appointment:', error)
-      alert('An error occurred while booking appointment')
+      alert('❌ Có lỗi xảy ra khi đặt lịch bảo dưỡng')
     } finally {
       setLoading(false)
     }
@@ -268,21 +158,38 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
     return now.toISOString().slice(0, 16)
   }
 
+  const getReasonText = (reason) => {
+    switch (reason) {
+      case 'MISSED_MILESTONES_KM_TIME':
+        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo KM và thời gian)'
+      case 'MISSED_MILESTONES_KM':
+        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo KM)'
+      case 'MISSED_MILESTONES_TIME':
+        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo thời gian)'
+      case 'DUE_BY_KM':
+        return '🔧 Đến hạn bảo dưỡng theo KM'
+      case 'DUE_BY_TIME':
+        return '📅 Đến hạn bảo dưỡng theo thời gian'
+      default:
+        return '🔧 Đề xuất bảo dưỡng'
+    }
+  }
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content book-maintenance-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📅 Book Maintenance Appointment</h2>
+          <h2>📅 Đặt Lịch Bảo Dưỡng</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="book-maintenance-form">
           {/* Vehicle Information */}
           <div className="form-section">
-            <h3>🚗 Vehicle Information</h3>
+            <h3>🚗 Thông Tin Xe</h3>
             <div className="vehicle-info-grid">
               <div className="form-group">
-                <label>Model</label>
+                <label>Dòng Xe</label>
                 <input
                   type="text"
                   value={vehicleModel?.name || 'N/A'}
@@ -291,7 +198,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>License Plate</label>
+                <label>Biển Số</label>
                 <input
                   type="text"
                   value={vehicle?.licensePlate || 'N/A'}
@@ -300,7 +207,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>VIN Number</label>
+                <label>Số VIN</label>
                 <input
                   type="text"
                   value={vehicle?.vin || 'N/A'}
@@ -309,7 +216,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Current Mileage</label>
+                <label>Số KM Hiện Tại</label>
                 <input
                   type="text"
                   value={vehicle?.currentKm ? parseInt(vehicle.currentKm).toLocaleString() + ' km' : 'N/A'}
@@ -320,177 +227,138 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
             </div>
           </div>
 
-          {/* Appointment Date */}
+          {/* Center Selection */}
           <div className="form-section">
-            <h3>📅 Appointment Date & Time</h3>
-            <div className="form-group">
-              <label>Date and Time <span className="required">*</span></label>
-              <input
-                type="datetime-local"
-                value={appointmentDate}
-                onChange={(e) => setAppointmentDate(e.target.value)}
-                min={getMinDateTime()}
-                required
-                className="datetime-input"
-              />
-            </div>
-          </div>
-
-          {/* Service Type Selection */}
-          <div className="form-section">
-            <h3>🔧 Service Type <span className="required">*</span></h3>
-            <div className="service-type-options">
-              <label className={`service-type-option ${serviceType === 'package' ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="serviceType"
-                  value="package"
-                  checked={serviceType === 'package'}
-                  onChange={() => handleServiceTypeChange('package')}
-                />
-                <span className="option-icon">📦</span>
-                <span className="option-text">Package Only</span>
-              </label>
-              
-              <label className={`service-type-option ${serviceType === 'individual' ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="serviceType"
-                  value="individual"
-                  checked={serviceType === 'individual'}
-                  onChange={() => handleServiceTypeChange('individual')}
-                />
-                <span className="option-icon">🔧</span>
-                <span className="option-text">Individual Services Only</span>
-              </label>
-              
-              <label className={`service-type-option ${serviceType === 'both' ? 'selected' : ''}`}>
-                <input
-                  type="radio"
-                  name="serviceType"
-                  value="both"
-                  checked={serviceType === 'both'}
-                  onChange={() => handleServiceTypeChange('both')}
-                />
-                <span className="option-icon">🎁</span>
-                <span className="option-text">Package + Individual Services</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Service Package Selection */}
-          {(serviceType === 'package' || serviceType === 'both') && (
-            <div className="form-section">
-              <h3>📦 Select Service Package <span className="required">*</span></h3>
-              <div className="service-packages-list">
-                {!Array.isArray(servicePackages) || servicePackages.length === 0 ? (
-                  <p className="no-data">No service packages available</p>
-                ) : (
-                  servicePackages.map(pkg => {
-                    const packagePrice = packagePrices[pkg.id]
-                    const isSelected = selectedPackage?.id === pkg.id
-                    return (
-                      <div key={pkg.id} className="package-wrapper">
-                        <label
-                          className={`service-package-item ${isSelected ? 'selected' : ''}`}
-                        >
-                          <input
-                            type="radio"
-                            name="servicePackage"
-                            value={pkg.id}
-                            checked={isSelected}
-                            onChange={() => handlePackageSelect(pkg)}
-                          />
-                          <div className="package-info">
-                            <h4>{pkg.name}</h4>
-                            <p className="package-description">{pkg.description}</p>
-                            {packagePrice !== undefined && (
-                              <p className="package-price">{formatCurrency(packagePrice)}</p>
-                            )}
-                          </div>
-                        </label>
-                        
-                        {/* Show included items when package is selected */}
-                        {isSelected && packageServices.length > 0 && (
-                          <div className="package-items-detail">
-                            <h5 className="package-items-title">✓ Included Services:</h5>
-                            <div className="package-items-grid">
-                              {packageServices.map((item, index) => (
-                                <div key={index} className="package-item">
-                                  <span className="item-icon">✓</span>
-                                  <span className="item-name">{item.serviceItemName}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Individual Services Selection */}
-          {(serviceType === 'individual' || serviceType === 'both') && (
-            <div className="form-section">
-              <h3>🔧 Select Individual Services <span className="required">*</span></h3>             
-              {serviceType === 'both' && selectedPackage && (
-                <p className="info-text">💡 Services already included in the package are hidden</p>
+            <h3>🏢 Chọn Trung Tâm Bảo Dưỡng <span className="required">*</span></h3>
+            <div className="centers-list">
+              {centers.length === 0 ? (
+                <p className="no-data">Không có trung tâm nào</p>
+              ) : (
+                centers.map(center => (
+                  <label
+                    key={center.id}
+                    className={`center-item ${selectedCenter?.id === center.id ? 'selected' : ''}`}
+                  >
+                    <input
+                      type="radio"
+                      name="center"
+                      value={center.id}
+                      checked={selectedCenter?.id === center.id}
+                      onChange={() => handleCenterSelect(center)}
+                    />
+                    <div className="center-info">
+                      <h4>{center.name}</h4>
+                      <p className="center-address">📍 {center.address}</p>
+                      {center.district && <p className="center-district">{center.district}</p>}
+                    </div>
+                  </label>
+                ))
               )}
+            </div>
+          </div>
+
+          {/* Maintenance Recommendations */}
+          {selectedCenter && (
+            <div className="form-section">
+              <h3>🔧 Gói Bảo Dưỡng Đề Xuất</h3>
               
-              <div className={`individual-services-list ${serviceType === 'both' && !selectedPackage ? 'disabled' : ''}`}>
-                {(() => {
-                  // If in "both" mode and no package selected, show message
-                  if (serviceType === 'both' && !selectedPackage) {
-                    return <p className="no-data">Please select a service package first</p>
-                  }
-                  
-                  if (!Array.isArray(individualServices) || individualServices.length === 0) {
-                    return <p className="no-data">No individual services available for this vehicle model</p>
-                  }
-                  
-                  // Filter out services already in package (for "both" mode)
-                  const availableServices = individualServices.filter(service => {
-                    if (serviceType === 'both' && packageServices.length > 0) {
-                      return !packageServices.some(ps => ps.serviceItemId === service.serviceItemId)
-                    }
-                    return true
-                  })
-                  
-                  if (availableServices.length === 0) {
-                    return <p className="no-data">✓ All available services are already included in the selected package</p>
-                  }
-                  
-                  return availableServices.map(service => (
-                    <label
-                      key={service.id}
-                      className={`individual-service-item ${selectedServices.includes(service.serviceItemId) ? 'selected' : ''}`}
-                    >
-                      <input
-                        type="checkbox"
-                        value={service.serviceItemId}
-                        checked={selectedServices.includes(service.serviceItemId)}
-                        onChange={() => handleServiceToggle(service.serviceItemId)}
-                      />
-                      <div className="service-info">
-                        <h4>{service.serviceItemName}</h4>
-                        {service.price && <p className="service-price">{formatCurrency(service.price)}</p>}
+              {loadingRecommendations ? (
+                <p className="loading-text">⏳ Đang tải đề xuất bảo dưỡng...</p>
+              ) : recommendations.length === 0 ? (
+                <p className="no-data">❌ Xe chưa đến hạn bảo dưỡng</p>
+              ) : (
+                <div className="recommendations-list">
+                  {recommendations.map((rec, index) => (
+                    <div key={index} className="recommendation-item">
+                      <div className="recommendation-header">
+                        <h4>📦 Gói bảo dưỡng mốc {rec.milestoneKm.toLocaleString()} km</h4>
+                        <p className="recommendation-reason">{getReasonText(rec.reason)}</p>
                       </div>
-                    </label>
-                  ))
-                })()}
+                      
+                      <div className="recommendation-details">
+                        {rec.dueAtKm > 0 && (
+                          <p className="due-info">🚗 Đến hạn sau: <strong>{rec.dueAtKm.toLocaleString()} km</strong></p>
+                        )}
+                        {rec.dueAtMonths > 0 && (
+                          <p className="due-info">📅 Đến hạn sau: <strong>{rec.dueAtMonths} tháng</strong></p>
+                        )}
+                        <p className="estimated-total">💰 Tổng chi phí ước tính: <strong>{formatCurrency(rec.estimatedTotal)}</strong></p>
+                        <p className="items-count">📋 Gồm <strong>{rec.items.length}</strong> hạng mục</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn-view-details"
+                        onClick={() => setShowItemsDetail(!showItemsDetail)}
+                      >
+                        {showItemsDetail ? '▼ Ẩn chi tiết' : '▶ Xem chi tiết các hạng mục'}
+                      </button>
+
+                      {showItemsDetail && (
+                        <div className="items-detail">
+                          <h5>Chi Tiết Các Hạng Mục Bảo Dưỡng:</h5>
+                          <div className="items-grid">
+                            {rec.items.map((item, idx) => (
+                              <div key={idx} className="service-item-card">
+                                <div className="item-header">
+                                  <span className={`action-badge ${item.actionType.toLowerCase()}`}>
+                                    {item.actionType === 'REPLACE' ? '🔄 Thay thế' : '🔍 Kiểm tra'}
+                                  </span>
+                                  <span className="item-price">{formatCurrency(item.price)}</span>
+                                </div>
+                                <h6>{item.serviceItem.name}</h6>
+                                <p className="item-description">{item.serviceItem.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Appointment Date */}
+          {selectedRecommendation && (
+            <div className="form-section">
+              <h3>� Chọn Ngày & Giờ Hẹn <span className="required">*</span></h3>
+              <div className="form-group">
+                <label>Ngày và Giờ <span className="required">*</span></label>
+                <input
+                  type="datetime-local"
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  min={getMinDateTime()}
+                  required
+                  className="datetime-input"
+                />
               </div>
             </div>
           )}
 
-          {/* Estimated Cost */}
-          {serviceType && (
-            <div className="form-section estimated-cost-section">
-              <div className="estimated-cost">
-                <span>Estimated Total Cost:</span>
-                <span className="cost-amount">{formatCurrency(estimatedCost)}</span>
+          {/* Summary */}
+          {selectedRecommendation && (
+            <div className="form-section summary-section">
+              <h3>📝 Tóm Tắt Đặt Lịch</h3>
+              <div className="summary-content">
+                <div className="summary-row">
+                  <span className="summary-label">Trung tâm:</span>
+                  <span className="summary-value">{selectedCenter?.name}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Xe:</span>
+                  <span className="summary-value">{vehicle?.licensePlate} - {vehicleModel?.name}</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Gói bảo dưỡng:</span>
+                  <span className="summary-value">Mốc {selectedRecommendation.milestoneKm.toLocaleString()} km</span>
+                </div>
+                <div className="summary-row">
+                  <span className="summary-label">Tổng chi phí:</span>
+                  <span className="summary-value cost">{formatCurrency(selectedRecommendation.estimatedTotal)}</span>
+                </div>
               </div>
             </div>
           )}
@@ -498,10 +366,14 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Form Actions */}
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn-secondary" disabled={loading}>
-              Cancel
+              ✕ Hủy
             </button>
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Processing...' : '✓ Confirm Booking'}
+            <button 
+              type="submit" 
+              className="btn-primary" 
+              disabled={loading || !selectedCenter || !selectedRecommendation || !appointmentDate}
+            >
+              {loading ? '⏳ Đang xử lý...' : '✓ Xác Nhận Đặt Lịch'}
             </button>
           </div>
         </form>

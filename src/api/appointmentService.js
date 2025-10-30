@@ -4,9 +4,10 @@ import logger from '../utils/logger'
 const appointmentService = {
   // ===== APPOINTMENT APIs =====
   
-  // Create new appointment (customer)
+  // Create new appointment (customer) - New flow with center selection
   createAppointment: async (appointmentData) => {
     try {
+      // appointmentData format: { appointmentDate, vehicleId, centerId }
       const response = await api.post('/api/appointments/customer', appointmentData)
       
       if (response.data.code === 1000) {
