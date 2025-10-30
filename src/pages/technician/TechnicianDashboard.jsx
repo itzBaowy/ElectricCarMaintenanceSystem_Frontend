@@ -125,6 +125,14 @@ const TechnicianDashboard = () => {
     return timeString.substring(0, 5) // HH:mm
   }
 
+  const formatTimeFromDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    // Extract time from ISO format "2025-11-01T14:36:00"
+    const timePart = dateString.split('T')[1]
+    if (!timePart) return 'N/A'
+    return timePart.substring(0, 5) // HH:mm (14:36)
+  }
+
   const formatCurrency = (amount) => {
     if (!amount) return '0 VND'
     return new Intl.NumberFormat('vi-VN', {
@@ -234,13 +242,13 @@ const TechnicianDashboard = () => {
                       <td>{appointment.customerName || 'N/A'}</td>
                       <td>
                         <div className="vehicle-info">
-                          <div>{appointment.vehicleLicensePlate || 'N/A'}</div>
-                          <small>{appointment.vehicleModelName || ''}</small>
+                          <div>{appointment.vehicleLicensePlate}</div>
+                          <small>{appointment.vehicleModel}</small>
                         </div>
                       </td>
-                      <td>{appointment.servicePackageName || 'N/A'}</td>
+                      <td>{appointment.servicePackageName}</td>
                       <td>{formatDate(appointment.appointmentDate)}</td>
-                      <td>{formatTime(appointment.appointmentTime)}</td>
+                      <td>{formatTimeFromDate(appointment.appointmentDate)}</td>
                       <td>
                         <span className={`status-badge ${getStatusBadgeClass(appointment.status)}`}>
                           {appointment.status || 'UNKNOWN'}
@@ -298,7 +306,7 @@ const TechnicianDashboard = () => {
                   </div>
                   <div className="detail-item">
                     <label>Time:</label>
-                    <span>{formatTime(selectedAppointment.appointmentTime)}</span>
+                    <span>{formatTimeFromDate(selectedAppointment.appointmentDate)}</span>
                   </div>
                 </div>
               </div>
@@ -326,11 +334,11 @@ const TechnicianDashboard = () => {
                   </div>
                   <div className="detail-item">
                     <label>Model:</label>
-                    <span>{selectedAppointment.vehicleModelName || 'N/A'}</span>
+                    <span>{selectedAppointment.vehicleModel}</span>
                   </div>
                   <div className="detail-item">
                     <label>Brand:</label>
-                    <span>{selectedAppointment.vehicleBrand || 'N/A'}</span>
+                    <span>Vinfast</span>
                   </div>
                 </div>
               </div>
