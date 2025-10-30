@@ -99,25 +99,45 @@ const EmployeeManagement = () => {
     setShowAddForm(false)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     
     if (editingEmployee) {
       // Update existing employee
-      setEmployees(prev => prev.map(emp => 
-        emp.id === editingEmployee.id ? { ...formData, id: editingEmployee.id } : emp
-      ))
-    } else {
-      // Add new employee
-      const newEmployee = {
-        ...formData,
-        id: Date.now(), // Simple ID generation
-        joinDate: new Date().toISOString().split('T')[0] // Current date
+      try {
+        // Prepare update data (only editable fields)
+        const updateData = {
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone
+        }
+
+        let result
+        
+        // Call appropriate update API based on role
+        if (editingEmployee.role === 'TECHNICIAN') {
+          result = await technicianService.updateTechnician(editingEmployee.id, updateData)
+        } else if (editingEmployee.role === 'STAFF') {
+          result = await staffService.updateStaff(editingEmployee.id, updateData)
+        }
+
+        if (result && result.success) {
+          alert(`${formData.fullName} updated successfully!`)
+          resetForm()
+          // Refresh the employee list
+          loadEmployees()
+        } else {
+          alert(`Failed to update employee: ${result?.message || 'Unknown error'}`)
+        }
+      } catch (error) {
+        logger.error('Error updating employee:', error)
+        alert('An error occurred while updating employee')
       }
-      setEmployees(prev => [...prev, newEmployee])
+    } else {
+      // Add new employee - will implement later with backend API
+      alert('Add employee feature will be implemented with backend API')
+      resetForm()
     }
-    
-    resetForm()
   }
 
   const handleEdit = (employee) => {
@@ -239,7 +259,14 @@ const EmployeeManagement = () => {
                     onChange={handleInputChange}
                     required
                     placeholder="Enter username"
+                    disabled={editingEmployee}
+                    style={editingEmployee ? { background: '#f0f4f8', cursor: 'not-allowed' } : {}}
                   />
+                  {editingEmployee && (
+                    <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>
+                      Username cannot be changed
+                    </small>
+                  )}
                 </div>
               </div>
 
@@ -257,27 +284,29 @@ const EmployeeManagement = () => {
                   />
                 </div>
                 
-                <div className="form-group">
-                  <label htmlFor="password">Password *</label>
-                  <div className="password-input-wrapper">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      name="password"
-                      value={formData.password}
-                      onChange={handleInputChange}
-                      required
-                      placeholder="Enter password"
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle-btn"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? '👁️' : '👁️‍🗨️'}
-                    </button>
+                {!editingEmployee && (
+                  <div className="form-group">
+                    <label htmlFor="password">Password *</label>
+                    <div className="password-input-wrapper">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        required
+                        placeholder="Enter password"
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? '👁️' : '👁️‍🗨️'}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className="form-row">

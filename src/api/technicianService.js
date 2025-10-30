@@ -86,6 +86,34 @@ const technicianService = {
     }
   },
 
+  // Update technician
+  updateTechnician: async (technicianId, technicianData) => {
+    try {
+      const response = await api.put(`/api/technicians/${technicianId}`, technicianData)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Technician updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update technician',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Update technician error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update technician',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
   // Delete technician
   deleteTechnician: async (technicianId) => {
     try {
