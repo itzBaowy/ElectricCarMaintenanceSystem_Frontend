@@ -310,23 +310,42 @@ const EmployeeManagement = () => {
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="role">Role *</label>
-                  <select
-                    id="role"
-                    name="role"
-                    value={formData.role}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="TECHNICIAN">Technician</option>
-                    <option value="STAFF">Staff</option>
-                  </select>
+              {!editingEmployee && (
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="role">Role *</label>
+                    <select
+                      id="role"
+                      name="role"
+                      value={formData.role}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="TECHNICIAN">Technician</option>
+                      <option value="STAFF">Staff</option>
+                    </select>
+                  </div>
                 </div>
-                
+              )}
 
-              </div>
+              {editingEmployee && (
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="currentRole">Current Role</label>
+                    <input
+                      type="text"
+                      id="currentRole"
+                      value={formData.role === 'TECHNICIAN' ? '🔧 Technician' : '👥 Staff'}
+                      disabled
+                      className="disabled-input"
+                      style={{ background: '#f0f4f8', cursor: 'not-allowed' }}
+                    />
+                    <small style={{ color: '#666', fontSize: '0.85rem' }}>
+                      Role cannot be changed after creation
+                    </small>
+                  </div>
+                </div>
+              )}
 
               <div className="form-actions">
                 <button type="button" onClick={resetForm} className="cancel-btn">
