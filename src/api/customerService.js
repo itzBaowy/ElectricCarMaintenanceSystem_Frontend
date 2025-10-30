@@ -86,6 +86,62 @@ export const customerService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Update my info (current logged-in customer)
+  updateMyInfo: async (customerData) => {
+    try {
+      const response = await api.put('/api/customers/my-info', customerData)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Customer info updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update customer info',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Update my info error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update customer info',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
+  // Get my info (current logged-in customer)
+  getMyInfo: async () => {
+    try {
+      const response = await api.get('/api/customers/my-info')
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Customer info fetched successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to fetch customer info',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get my info error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to fetch customer info',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

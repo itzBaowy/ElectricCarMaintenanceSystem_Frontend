@@ -9,6 +9,7 @@ lerna-debug.log*
 SECURITY_IMPROVEMENTS.md
 BOOKING_FLOW.md
 AUTH_REFRESH_TOKEN.md
+EDIT_PROFILE_FEATURE.md
 
 node_modules
 dist

@@ -7,6 +7,7 @@ import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
+import EditProfile from './EditProfile'
 import '../../styles/CustomerDashboard.css'
 
 const CustomerDashboard = () => {
@@ -20,6 +21,7 @@ const CustomerDashboard = () => {
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState(null)
   const [showAllAppointments, setShowAllAppointments] = useState(false)
+  const [showEditProfile, setShowEditProfile] = useState(false)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -226,6 +228,25 @@ const CustomerDashboard = () => {
     setShowAppointmentDetail(true)
   }
 
+  const handleEditProfile = () => {
+    setShowEditProfile(true)
+  }
+
+  const handleCloseEditProfile = () => {
+    setShowEditProfile(false)
+  }
+
+  const handleProfileUpdated = (updatedProfile) => {
+    // Update customer state with new info
+    setCustomer(prev => ({
+      ...prev,
+      fullName: updatedProfile.fullName,
+      email: updatedProfile.email,
+      phone: updatedProfile.phone,
+      gender: updatedProfile.gender
+    }))
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -258,6 +279,9 @@ const CustomerDashboard = () => {
           </div>
           <div className="nav-actions">
             <span className="nav-user">Hello, {customer.fullName}</span>
+            <button onClick={handleEditProfile} className="edit-profile-btn">
+              ✏️ Edit Profile
+            </button>
             <button onClick={handleLogout} className="logout-btn">
               🚪 Logout
             </button>
@@ -485,6 +509,14 @@ const CustomerDashboard = () => {
           appointments={recentAppointments}
           onClose={handleCloseAllAppointments}
           onViewDetail={handleViewDetailFromAll}
+        />
+      )}
+
+      {/* Edit Profile Modal */}
+      {showEditProfile && (
+        <EditProfile
+          onClose={handleCloseEditProfile}
+          onProfileUpdated={handleProfileUpdated}
         />
       )}
     </div>
