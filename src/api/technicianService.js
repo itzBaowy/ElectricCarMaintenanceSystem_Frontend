@@ -84,6 +84,34 @@ const technicianService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Delete technician
+  deleteTechnician: async (technicianId) => {
+    try {
+      const response = await api.delete(`/api/technicians/${technicianId}`)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Technician deleted successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to delete technician',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Delete technician error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to delete technician',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

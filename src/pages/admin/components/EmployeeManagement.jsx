@@ -126,9 +126,31 @@ const EmployeeManagement = () => {
     setShowAddForm(true)
   }
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this employee?')) {
-      setEmployees(prev => prev.filter(emp => emp.id !== id))
+  const handleDelete = async (employee) => {
+    if (!window.confirm(`Are you sure you want to delete ${employee.fullName}?`)) {
+      return
+    }
+
+    try {
+      let result
+      
+      // Call appropriate delete API based on role
+      if (employee.role === 'TECHNICIAN') {
+        result = await technicianService.deleteTechnician(employee.id)
+      } else if (employee.role === 'STAFF') {
+        result = await staffService.deleteStaff(employee.id)
+      }
+
+      if (result && result.success) {
+        alert(`${employee.fullName} deleted successfully!`)
+        // Refresh the employee list
+        loadEmployees()
+      } else {
+        alert(`Failed to delete employee: ${result?.message || 'Unknown error'}`)
+      }
+    } catch (error) {
+      logger.error('Error deleting employee:', error)
+      alert('An error occurred while deleting employee')
     }
   }
 
@@ -372,7 +394,7 @@ const EmployeeManagement = () => {
                       </button>
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(employee.id)}
+                        onClick={() => handleDelete(employee)}
                         title="Delete Employee"
                       >
                         🗑️
