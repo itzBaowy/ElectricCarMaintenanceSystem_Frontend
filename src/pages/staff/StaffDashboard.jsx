@@ -350,7 +350,7 @@ const StaffDashboard = () => {
                     const techId = tech.technicianId || tech.id || tech.technicianID
                     return (
                       <option key={techId} value={techId}>
-                        {tech.name || tech.username} - {tech.specialization || 'General'}
+                        {tech.fullName}
                       </option>
                     )
                   })}
