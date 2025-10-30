@@ -262,9 +262,69 @@ export const authService = {
         error: error.response?.data || error.message
       }
     }
-  }
+  },
 
-  
+  // Refresh access token using refresh token
+  refreshAccessToken: async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken')
+      
+      if (!refreshToken) {
+        return {
+          success: false,
+          message: 'No refresh token found',
+          error: 'No refresh token'
+        }
+      }
+
+      const response = await api.post('/api/auth/refresh', {
+        refreshToken: refreshToken
+      })
+      
+      if (response.data.code === 1000 && response.data.result) {
+        const { accessToken, refreshToken: newRefreshToken } = response.data.result
+        
+        if (accessToken) {
+          // Update tokens in localStorage
+          localStorage.setItem('accessToken', accessToken)
+          if (newRefreshToken) {
+            localStorage.setItem('refreshToken', newRefreshToken)
+          }
+          
+          // Decode and update user info
+          const tokenPayload = decodeToken(accessToken)
+          if (tokenPayload) {
+            const userInfo = {
+              userId: tokenPayload.userId,
+              username: tokenPayload.sub,
+              role: tokenPayload.role
+            }
+            localStorage.setItem('currentUser', JSON.stringify(userInfo))
+          }
+          
+          logger.log('Access token refreshed successfully')
+          return {
+            success: true,
+            data: response.data.result,
+            message: 'Token refreshed successfully'
+          }
+        }
+      }
+      
+      return {
+        success: false,
+        message: response.data.message || 'Failed to refresh token',
+        error: response.data
+      }
+    } catch (error) {
+      logger.error('Refresh token error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to refresh token',
+        error: error.response?.data || error.message
+      }
+    }
+  }
 }
 
 export default authService
