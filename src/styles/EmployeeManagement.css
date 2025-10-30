@@ -45,6 +45,27 @@
   cursor: pointer;
 }
 
+.refresh-btn {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #f0f4f8;
+  border-color: #667eea;
+  transform: rotate(180deg);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .add-employee-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -354,6 +375,27 @@
 .empty-state p {
   margin: 0;
   font-size: 1rem;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.loading-state p {
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Responsive Design */

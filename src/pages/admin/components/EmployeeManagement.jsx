@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import technicianService from '../../../api/technicianService'
+import staffService from '../../../api/staffService'
+import logger from '../../../utils/logger'
 import '../../../styles/EmployeeManagement.css'
 
 const EmployeeManagement = () => {
@@ -12,39 +15,69 @@ const EmployeeManagement = () => {
     email: '',
     password: '',
     phone: '',
-    role: 'technician', // technician or staff
+    role: 'TECHNICIAN', // TECHNICIAN or STAFF
+    gender: 'MALE',
     status: 'active'
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  // Mock data - replace with API call
+  // Load employees from API
   useEffect(() => {
-    const mockEmployees = [
-      {
-        id: 1,
-        fullName: 'John Doe',
-        username: 'johndoe',
-        email: 'john@electriccare.com',
-        phone: '0123456789',
-        role: 'technician',
-        joinDate: '2024-01-15',
-        status: 'active'
-      },
-      {
-        id: 2,
-        fullName: 'Jane Smith',
-        username: 'janesmith',
-        email: 'jane@electriccare.com',
-        phone: '0987654321',
-        role: 'staff',
-        joinDate: '2024-02-01',
-        status: 'active'
-      }
-    ]
-    setEmployees(mockEmployees)
+    loadEmployees()
   }, [])
+
+  const loadEmployees = async () => {
+    setIsLoading(true)
+    try {
+      // Fetch both technicians and staff in parallel
+      const [techniciansResult, staffResult] = await Promise.all([
+        technicianService.getAllTechnicians(),
+        staffService.getAllStaff()
+      ])
+
+      const allEmployees = []
+
+      // Add technicians
+      if (techniciansResult.success && techniciansResult.data) {
+        const technicians = techniciansResult.data.map(tech => ({
+          ...tech,
+          role: 'TECHNICIAN',
+          joinDate: new Date(tech.createdAt).toISOString().split('T')[0],
+          status: 'active' // Default status, adjust based on your backend
+        }))
+        allEmployees.push(...technicians)
+      } else {
+        logger.error('Failed to load technicians:', techniciansResult.message)
+      }
+
+      // Add staff
+      if (staffResult.success && staffResult.data) {
+        const staff = staffResult.data.map(s => ({
+          ...s,
+          role: 'STAFF',
+          joinDate: new Date(s.createdAt).toISOString().split('T')[0],
+          status: 'active' // Default status, adjust based on your backend
+        }))
+        allEmployees.push(...staff)
+      } else {
+        logger.error('Failed to load staff:', staffResult.message)
+      }
+
+      // Sort by creation date (newest first)
+      allEmployees.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
+      setEmployees(allEmployees)
+      logger.log('Loaded employees:', allEmployees)
+    } catch (error) {
+      logger.error('Error loading employees:', error)
+      alert('Failed to load employees. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -62,7 +95,8 @@ const EmployeeManagement = () => {
       email: '',
       password: '',
       phone: '',
-      role: 'technician',
+      role: 'TECHNICIAN',
+      gender: 'MALE',
       status: 'active'
     })
     setEditingEmployee(null)
@@ -115,7 +149,7 @@ const EmployeeManagement = () => {
     const matchesSearch = emp.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          emp.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          emp.email.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = filterRole === 'all' || emp.role === filterRole
+    const matchesRole = filterRole === 'all' || emp.role === filterRole.toUpperCase()
     return matchesSearch && matchesRole
   })
 
@@ -140,6 +174,15 @@ const EmployeeManagement = () => {
             <option value="technician">Technicians</option>
             <option value="staff">Staff</option>
           </select>
+          
+          <button
+            className="refresh-btn"
+            onClick={loadEmployees}
+            disabled={isLoading}
+            title="Refresh employee list"
+          >
+            {isLoading ? '⏳' : '🔄'}
+          </button>
         </div>
         
         <button
@@ -227,15 +270,31 @@ const EmployeeManagement = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="phone">Phone Number *</label>
                   <input
                     type="tel"
                     id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
+                    required
                     placeholder="Enter phone number"
                   />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="gender">Gender *</label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                  </select>
                 </div>
               </div>
 
@@ -249,8 +308,8 @@ const EmployeeManagement = () => {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="technician">Technician</option>
-                    <option value="staff">Staff</option>
+                    <option value="TECHNICIAN">Technician</option>
+                    <option value="STAFF">Staff</option>
                   </select>
                 </div>
                 
@@ -291,7 +350,12 @@ const EmployeeManagement = () => {
           <h3>Employees ({filteredEmployees.length})</h3>
         </div>
 
-        <div className="employee-table">
+        {isLoading ? (
+          <div className="loading-state">
+            <p>⏳ Loading employees...</p>
+          </div>
+        ) : (
+          <div className="employee-table">
           <table>
             <thead>
               <tr>
@@ -318,8 +382,8 @@ const EmployeeManagement = () => {
                   <td>{employee.username}</td>
                   <td>{employee.email}</td>
                   <td>
-                    <span className={`role-badge ${employee.role}`}>
-                      {employee.role === 'technician' ? '🔧 Technician' : '👥 Staff'}
+                    <span className={`role-badge ${employee.role.toLowerCase()}`}>
+                      {employee.role === 'TECHNICIAN' ? '🔧 Technician' : '👥 Staff'}
                     </span>
                   </td>
                   <td>{employee.joinDate}</td>
@@ -359,7 +423,8 @@ const EmployeeManagement = () => {
               <p>No employees found matching your criteria.</p>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
