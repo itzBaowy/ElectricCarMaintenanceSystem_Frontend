@@ -135,7 +135,6 @@ const TechnicianDashboard = () => {
 
   return (
     <div className="technician-dashboard">
-      <Header />
       
       <div className="dashboard-container">
         <div className="dashboard-header">
