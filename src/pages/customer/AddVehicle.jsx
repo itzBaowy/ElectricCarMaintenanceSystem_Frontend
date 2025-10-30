@@ -9,6 +9,7 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
     licensePlate: '',
     vin: '',
     currentKm: '',
+    purchaseYear: '',
     modelId: ''
   })
   const [vehicleModels, setVehicleModels] = useState([])
@@ -81,6 +82,17 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
       newErrors.currentKm = 'Mileage must be a positive number'
     }
 
+    // Purchase year validation
+    if (!formData.purchaseYear) {
+      newErrors.purchaseYear = 'Purchase year is required'
+    } else {
+      const selectedDate = new Date(formData.purchaseYear)
+      const currentDate = new Date()
+      if (selectedDate > currentDate) {
+        newErrors.purchaseYear = 'Purchase date cannot be in the future'
+      }
+    }
+
     // Model ID validation
     if (!formData.modelId) {
       newErrors.modelId = 'Vehicle model is required'
@@ -114,8 +126,9 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
       const vehicleData = {
         licensePlate: formData.licensePlate.toUpperCase(),
         vin: formData.vin.toUpperCase(),
-        currentKm: formData.currentKm,
-        modelId: formData.modelId,
+        currentKm: parseInt(formData.currentKm),
+        purchaseYear: formData.purchaseYear,
+        modelId: parseInt(formData.modelId),
         customerId: customerId
       }
 
@@ -222,6 +235,26 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
             {errors.currentKm && (
               <span className="error-message">{errors.currentKm}</span>
             )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="purchaseYear">
+              Purchase Date <span className="required">*</span>
+            </label>
+            <input
+              type="date"
+              id="purchaseYear"
+              name="purchaseYear"
+              value={formData.purchaseYear}
+              onChange={handleChange}
+              className={errors.purchaseYear ? 'error' : ''}
+              disabled={isLoading}
+              max={new Date().toISOString().split('T')[0]}
+            />
+            {errors.purchaseYear && (
+              <span className="error-message">{errors.purchaseYear}</span>
+            )}
+            <span className="field-hint">Date when the vehicle was purchased</span>
           </div>
 
           <div className="form-group">
