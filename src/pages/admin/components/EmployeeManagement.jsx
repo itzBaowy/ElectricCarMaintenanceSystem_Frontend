@@ -16,8 +16,7 @@ const EmployeeManagement = () => {
     password: '',
     phone: '',
     role: 'TECHNICIAN', // TECHNICIAN or STAFF
-    gender: 'MALE',
-    status: 'active'
+    gender: 'MALE'
   })
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState('all')
@@ -45,8 +44,7 @@ const EmployeeManagement = () => {
         const technicians = techniciansResult.data.map(tech => ({
           ...tech,
           role: 'TECHNICIAN',
-          joinDate: new Date(tech.createdAt).toISOString().split('T')[0],
-          status: 'active' // Default status, adjust based on your backend
+          joinDate: new Date(tech.createdAt).toISOString().split('T')[0]
         }))
         allEmployees.push(...technicians)
       } else {
@@ -58,8 +56,7 @@ const EmployeeManagement = () => {
         const staff = staffResult.data.map(s => ({
           ...s,
           role: 'STAFF',
-          joinDate: new Date(s.createdAt).toISOString().split('T')[0],
-          status: 'active' // Default status, adjust based on your backend
+          joinDate: new Date(s.createdAt).toISOString().split('T')[0]
         }))
         allEmployees.push(...staff)
       } else {
@@ -96,8 +93,7 @@ const EmployeeManagement = () => {
       password: '',
       phone: '',
       role: 'TECHNICIAN',
-      gender: 'MALE',
-      status: 'active'
+      gender: 'MALE'
     })
     setEditingEmployee(null)
     setShowAddForm(false)
@@ -136,13 +132,7 @@ const EmployeeManagement = () => {
     }
   }
 
-  const handleStatusToggle = (id) => {
-    setEmployees(prev => prev.map(emp => 
-      emp.id === id 
-        ? { ...emp, status: emp.status === 'active' ? 'inactive' : 'active' }
-        : emp
-    ))
-  }
+
 
   // Filter employees
   const filteredEmployees = employees.filter(emp => {
@@ -316,21 +306,6 @@ const EmployeeManagement = () => {
 
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="status">Status</label>
-                  <select
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-
               <div className="form-actions">
                 <button type="button" onClick={resetForm} className="cancel-btn">
                   Cancel
@@ -364,7 +339,6 @@ const EmployeeManagement = () => {
                 <th>Email</th>
                 <th>Role</th>
                 <th>Join Date</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -387,14 +361,6 @@ const EmployeeManagement = () => {
                     </span>
                   </td>
                   <td>{employee.joinDate}</td>
-                  <td>
-                    <button
-                      className={`status-badge ${employee.status}`}
-                      onClick={() => handleStatusToggle(employee.id)}
-                    >
-                      {employee.status === 'active' ? '✅ Active' : '❌ Inactive'}
-                    </button>
-                  </td>
                   <td>
                     <div className="action-buttons">
                       <button
