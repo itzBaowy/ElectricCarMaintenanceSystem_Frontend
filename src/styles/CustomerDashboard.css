@@ -1,7 +1,7 @@
 /* Customer Dashboard Styles */
 .customer-dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #f5f7fa;
 }
 
 /* Navigation Header */
@@ -23,10 +23,7 @@
 .nav-brand h2 {
   margin: 0;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000000;
 }
 
 .nav-brand span {
@@ -44,6 +41,42 @@
 .nav-user {
   color: #666;
   font-weight: 500;
+}
+
+.edit-profile-btn {
+  background: #000000;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.edit-profile-btn:hover {
+  background: #333333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.change-password-btn {
+  background: #000000;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.change-password-btn:hover {
+  background: #333333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .logout-btn {
@@ -105,7 +138,7 @@
 .customer-avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -118,10 +151,7 @@
 .customer-details h1 {
   margin: 0;
   font-size: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000000;
 }
 
 .customer-details p {
@@ -159,14 +189,14 @@
 }
 
 .quick-action-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
 }
 
 .quick-action-btn.secondary {
   background: #f8f9fa;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .quick-action-btn:hover {
@@ -175,11 +205,12 @@
 }
 
 .quick-action-btn.primary:hover {
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  background: #333333;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .quick-action-btn.secondary:hover {
-  background: #667eea;
+  background: #000000;
   color: white;
 }
 
@@ -253,17 +284,18 @@
 }
 
 .add-btn, .view-all-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .add-btn:hover, .view-all-btn:hover {
+  background: #333333;
   transform: translateY(-1px);
 }
 
@@ -290,7 +322,7 @@
 }
 
 .add-btn-large {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -302,8 +334,9 @@
 }
 
 .add-btn-large:hover {
+  background: #333333;
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .vehicle-card {
@@ -314,8 +347,8 @@
 }
 
 .vehicle-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
+  border-color: #000000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .vehicle-header {
@@ -381,8 +414,12 @@
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
+}
+
+.action-btn.primary:hover {
+  background: #333333;
 }
 
 .action-btn.secondary {
@@ -442,8 +479,8 @@
 }
 
 .appointment-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .appointment-date {

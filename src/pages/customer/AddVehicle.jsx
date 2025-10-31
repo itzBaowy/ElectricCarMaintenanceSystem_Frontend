@@ -149,9 +149,9 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content add-vehicle-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>🚗 Add New Vehicle</h2>
+          <h2>Add New Vehicle</h2>
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
 

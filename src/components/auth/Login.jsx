@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
 import logger from '../../utils/logger'
 import '../../styles/Login.css'
+import loginImage from '../../assets/photo-1541348263662-e068662d82af.jpeg'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -128,99 +129,128 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <div className="login-header">
-          <Link to="/" className="back-link">
-            ← Back to Home
-          </Link>
-          <div className="logo">
-            <h2>ElectricCare</h2>
-            <p>Electric Vehicle Maintenance System</p>
+        {/* Left side - Image */}
+        <div className="login-image-section">
+          <img src={loginImage} alt="Electric Vehicle" className="login-bg-image" />
+          <div className="login-image-overlay">
+            <div className="login-image-content">
+              <div className="logo-section">
+                <h2>ElectricCare</h2>
+                <p>Electric Vehicle Maintenance System</p>
+              </div>
+              <h1>Care for your car, confidence for your drive</h1>
+              <p>Schedule visit in just a few clicks</p>
+            </div>
           </div>
         </div>
 
-        <div className="login-form-container">
-          <h1>Welcome Back</h1>
-          <p className="login-subtitle">Sign in to your account</p>
+        {/* Right side - Form */}
+        <div className="login-form-section">
+          <div className="login-form-header">
+            <Link to="/" className="back-link">
+              ← Back
+            </Link>
+            <button className="sign-in-btn-header">Sign in</button>
+          </div>
 
-          {successMessage && (
-            <div className="success-message">
-              {successMessage}
-            </div>
-          )}
+          <div className="login-form-container">
+            <h1>Welcome Back to ElectricCare!</h1>
+            <p className="login-subtitle">Sign in your account</p>
 
-          {errors.general && (
-            <div className="error-message general-error">
-              {errors.general}
-            </div>
-          )}
+            {successMessage && (
+              <div className="success-message">
+                {successMessage}
+              </div>
+            )}
 
-          <form onSubmit={handleSubmit} className="login-form">
-            <div className="form-group">
-              <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                className={errors.username ? 'error' : ''}
-                placeholder="Enter your username"
+            {errors.general && (
+              <div className="error-message general-error">
+                {errors.general}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="login-form">
+              <div className="form-group">
+                <label htmlFor="username">Your Email</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className={errors.username ? 'error' : ''}
+                  placeholder="info.madhu786@gmail.com"
+                  disabled={isLoading}
+                  autoComplete="username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck="false"
+                />
+                {errors.username && (
+                  <span className="error-message">{errors.username}</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={errors.password ? 'error' : ''}
+                  placeholder="••••••••"
+                  disabled={isLoading}
+                  autoComplete="current-password"
+                />
+                {errors.password && (
+                  <span className="error-message">{errors.password}</span>
+                )}
+              </div>
+
+              <div className="form-options">
+                <label className="checkbox-container">
+                  <input type="checkbox" />
+                  Remember Me
+                </label>
+                <Link to="/forgot-password" className="forgot-link">
+                  Forgot Password?
+                </Link>
+              </div>
+
+              <button 
+                type="submit" 
+                className="login-btn"
                 disabled={isLoading}
-                autoComplete="username"
-                autoCapitalize="none"
-                autoCorrect="off"
-                spellCheck="false"
-              />
-              {errors.username && (
-                <span className="error-message">{errors.username}</span>
-              )}
+              >
+                {isLoading ? 'Logging in...' : 'Login'}
+              </button>
+
+              <div className="divider">
+                <span>or</span>
+              </div>
+
+              <div className="social-login">
+                <button type="button" className="social-btn google-btn">
+                  <span className="social-icon">G</span>
+                  Continue with Google
+                </button>
+                <button type="button" className="social-btn facebook-btn">
+                  <span className="social-icon">f</span>
+                  Continue with Facebook
+                </button>
+              </div>
+            </form>
+
+            <div className="login-footer">
+              <p>
+                Don't have any account? 
+                <Link to="/register" className="register-link">
+                  Register
+                </Link>
+              </p>
             </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-                placeholder="Enter your password"
-                disabled={isLoading}
-                autoComplete="current-password"
-              />
-              {errors.password && (
-                <span className="error-message">{errors.password}</span>
-              )}
-            </div>
-
-            <div className="form-options">
-              <label className="checkbox-container">
-                <input type="checkbox" tabIndex="-1" />
-                <span className="checkmark"></span>
-                Remember me
-              </label>
-              <Link to="/forgot-password" className="forgot-link" tabIndex="-1">
-                Forgot Password?
-              </Link>
-            </div>
-
-            <button 
-              type="submit" 
-              className="login-btn"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Signing In...' : 'Sign In'}
-            </button>
-          </form>
-
-          <div className="login-footer">
-            <p>
-              Don't have an account? 
-              <Link to="/register" className="register-link">
-                Sign up here
-              </Link>
-            </p>
           </div>
         </div>
       </div>

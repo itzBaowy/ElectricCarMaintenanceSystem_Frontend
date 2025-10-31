@@ -89,7 +89,7 @@ const AllAppointments = ({ appointments, onClose, onViewDetail }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content all-appointments-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📋 All Appointments</h2>
+          <h2>All Appointments</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 

@@ -6,6 +6,8 @@ import Register from './components/auth/Register'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
+import StaffDashboard from './pages/staff/StaffDashboard'
+import TechnicianDashboard from './pages/technician/TechnicianDashboard'
 import Contact from './pages/customer/Contact'
 
 function App() {
@@ -54,9 +56,25 @@ function App() {
             } 
           />
           <Route 
-            path="/contact" 
+            path="/staff" 
             element={
               <ProtectedRoute requireAuth={true}>
+                <StaffDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/technician" 
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <TechnicianDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/contact" 
+            element={
+              <ProtectedRoute requireAuth={false}>
                 <Contact />
               </ProtectedRoute>
             } 

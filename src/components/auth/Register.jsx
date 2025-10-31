@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
 import logger from '../../utils/logger'
 import '../../styles/Register.css'
+import registerImage from '../../assets/photo-1541348263662-e068662d82af.jpeg'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -130,180 +131,214 @@ const Register = () => {
   return (
     <div className="register-page">
       <div className="register-container">
-        <div className="register-header">
-          <Link to="/" className="back-link">
-            ← Back to Home
-          </Link>
-          <div className="logo">
-            <h2>ElectricCare</h2>
-            <p>Electric Vehicle Maintenance System</p>
+        {/* Left side - Image */}
+        <div className="register-image-section">
+          <img src={registerImage} alt="Electric Vehicle" className="register-bg-image" />
+          <div className="register-image-overlay">
+            <div className="register-image-content">
+              <div className="logo-section">
+                <h2>ElectricCare</h2>
+                <p>Electric Vehicle Maintenance System</p>
+              </div>
+              <h1>Care for your car, confidence for your drive</h1>
+              <p>Join us and experience premium service</p>
+            </div>
           </div>
         </div>
 
-        <div className="register-form-container">
-          <h1>Create Account</h1>
-          <p className="register-subtitle">Join ElectricCare today</p>
+        {/* Right side - Form */}
+        <div className="register-form-section">
+          <div className="register-form-header">
+            <Link to="/" className="back-link">
+              ← Back
+            </Link>
+            <Link to="/login" className="sign-in-btn-header">
+              Sign in
+            </Link>
+          </div>
 
-          {errors.general && (
-            <div className="error-message general-error">
-              {errors.general}
-            </div>
-          )}
+          <div className="register-form-container">
+            <h1>Create Your Account!</h1>
+            <p className="register-subtitle">Join ElectricCare today</p>
 
-          <form onSubmit={handleSubmit} className="register-form">
-            <div className="form-group">
-              <label htmlFor="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                className={errors.fullName ? 'error' : ''}
-                placeholder="Enter your full name"
-                disabled={isLoading}
-                autoComplete="name"
-              />
-              {errors.fullName && (
-                <span className="error-message">{errors.fullName}</span>
-              )}
-            </div>
+            {errors.general && (
+              <div className="error-message general-error">
+                {errors.general}
+              </div>
+            )}
 
-            <div className="form-row">
+            <form onSubmit={handleSubmit} className="register-form">
               <div className="form-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="fullName">Full Name</label>
                 <input
                   type="text"
-                  id="username"
-                  name="username"
-                  value={formData.username}
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
                   onChange={handleChange}
-                  className={errors.username ? 'error' : ''}
-                  placeholder="Choose a username"
+                  className={errors.fullName ? 'error' : ''}
+                  placeholder="Enter your full name"
                   disabled={isLoading}
-                  autoComplete="username"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck="false"
+                  autoComplete="name"
                 />
-                {errors.username && (
-                  <span className="error-message">{errors.username}</span>
+                {errors.fullName && (
+                  <span className="error-message">{errors.fullName}</span>
                 )}
               </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={errors.email ? 'error' : ''}
-                  placeholder="Enter your email"
-                  disabled={isLoading}
-                  autoComplete="email"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                  spellCheck="false"
-                />
-                {errors.email && (
-                  <span className="error-message">{errors.email}</span>
-                )}
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className={errors.username ? 'error' : ''}
+                    placeholder="Choose a username"
+                    disabled={isLoading}
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck="false"
+                  />
+                  {errors.username && (
+                    <span className="error-message">{errors.username}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={errors.email ? 'error' : ''}
+                    placeholder="Enter your email"
+                    disabled={isLoading}
+                    autoComplete="email"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck="false"
+                  />
+                  {errors.email && (
+                    <span className="error-message">{errors.email}</span>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="phone">Phone Number (Optional)</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={errors.phone ? 'error' : ''}
-                placeholder="Enter your phone number"
-                disabled={isLoading}
-                autoComplete="tel"
-              />
-              {errors.phone && (
-                <span className="error-message">{errors.phone}</span>
-              )}
-            </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="phone">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={errors.phone ? 'error' : ''}
+                    placeholder="Enter phone number"
+                    disabled={isLoading}
+                    autoComplete="tel"
+                  />
+                  {errors.phone && (
+                    <span className="error-message">{errors.phone}</span>
+                  )}
+                </div>
 
-            <div className="form-group">
-              <label htmlFor="gender">Gender</label>
-              <select
-                id="gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className={errors.gender ? 'error' : ''}
+                <div className="form-group">
+                  <label htmlFor="gender">Gender</label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className={errors.gender ? 'error' : ''}
+                    disabled={isLoading}
+                  >
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                  {errors.gender && (
+                    <span className="error-message">{errors.gender}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={errors.password ? 'error' : ''}
+                    placeholder="Create a password"
+                    disabled={isLoading}
+                    autoComplete="new-password"
+                  />
+                  {errors.password && (
+                    <span className="error-message">{errors.password}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={errors.confirmPassword ? 'error' : ''}
+                    placeholder="Confirm password"
+                    disabled={isLoading}
+                    autoComplete="new-password"
+                  />
+                  {errors.confirmPassword && (
+                    <span className="error-message">{errors.confirmPassword}</span>
+                  )}
+                </div>
+              </div>
+
+              <button 
+                type="submit" 
+                className="register-btn"
                 disabled={isLoading}
               >
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-                <option value="OTHER">Other</option>
-              </select>
-              {errors.gender && (
-                <span className="error-message">{errors.gender}</span>
-              )}
-            </div>
+                {isLoading ? 'Creating Account...' : 'Register'}
+              </button>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? 'error' : ''}
-                  placeholder="Create a password"
-                  disabled={isLoading}
-                  autoComplete="new-password"
-                />
-                {errors.password && (
-                  <span className="error-message">{errors.password}</span>
-                )}
+              <div className="divider">
+                <span>or</span>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? 'error' : ''}
-                  placeholder="Confirm your password"
-                  disabled={isLoading}
-                  autoComplete="new-password"
-                />
-                {errors.confirmPassword && (
-                  <span className="error-message">{errors.confirmPassword}</span>
-                )}
+              <div className="social-login">
+                <button type="button" className="social-btn google-btn">
+                  <span className="social-icon">G</span>
+                  Continue with Google
+                </button>
+                <button type="button" className="social-btn facebook-btn">
+                  <span className="social-icon">f</span>
+                  Continue with Facebook
+                </button>
               </div>
+            </form>
+
+            <div className="register-footer">
+              <p>
+                Already have an account? 
+                <Link to="/login" className="login-link">
+                  Sign in
+                </Link>
+              </p>
             </div>
-
-            <button 
-              type="submit" 
-              className="register-btn"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
-            </button>
-          </form>
-
-          <div className="register-footer">
-            <p>
-              Already have an account? 
-              <Link to="/login" className="login-link">
-                Sign in here
-              </Link>
-            </p>
           </div>
         </div>
       </div>

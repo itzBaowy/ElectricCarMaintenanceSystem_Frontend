@@ -29,11 +29,27 @@
   border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.3s ease;
+  background-color: white;
+  color: #333;
+}
+
+.search-input:-webkit-autofill,
+.search-input:-webkit-autofill:hover,
+.search-input:-webkit-autofill:focus,
+.search-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #333 !important;
+  caret-color: #333 !important;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #000;
+}
+
+.search-input:focus:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  border-color: #000;
 }
 
 .role-filter {
@@ -45,9 +61,30 @@
   cursor: pointer;
 }
 
+.refresh-btn {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #f0f4f8;
+  border-color: #000000;
+  transform: rotate(180deg);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .add-employee-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #000000 !important;
+  color: white !important;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -58,8 +95,9 @@
 }
 
 .add-employee-btn:hover {
+  background: #333333 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Modal Styles */
@@ -89,15 +127,17 @@
 
 .modal-header {
   padding: 1.5rem;
+  background: #000000;
   border-bottom: 1px solid #e1e5e9;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 12px 12px 0 0;
 }
 
 .modal-header h3 {
   margin: 0;
-  color: #333;
+  color: #ffffff;
   font-size: 1.25rem;
 }
 
@@ -106,14 +146,14 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
+  color: #ffffff;
   padding: 0.25rem;
   border-radius: 4px;
   transition: background 0.3s ease;
 }
 
 .close-btn:hover {
-  background: #f0f0f0;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .employee-form {
@@ -146,12 +186,36 @@
   border-radius: 6px;
   font-size: 0.9rem;
   transition: border-color 0.3s ease;
+  background-color: white;
+  color: #333;
+}
+
+/* Fix autofill styles */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #333 !important;
+  caret-color: #333 !important;
+}
+
+.form-group select:-webkit-autofill,
+.form-group select:-webkit-autofill:hover,
+.form-group select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #333 !important;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #000;
+}
+
+.form-group input:focus:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  border-color: #000;
 }
 
 /* Password Input Wrapper */
@@ -208,8 +272,8 @@
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #000000 !important;
+  color: white !important;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -219,8 +283,9 @@
 }
 
 .submit-btn:hover {
+  background: #333333 !important;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Employee List Styles */
@@ -268,7 +333,7 @@
 .employee-avatar {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #000000;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -294,6 +359,23 @@
 .role-badge.staff {
   background: #f3e5f5;
   color: #7b1fa2;
+}
+
+.center-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #e8f5e9;
+  color: #2e7d32;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.not-assigned {
+  color: #999;
+  font-style: italic;
+  font-size: 0.85rem;
 }
 
 .status-badge {
@@ -354,6 +436,37 @@
 .empty-state p {
   margin: 0;
   font-size: 1rem;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #000000;
+  font-size: 1.1rem;
+}
+
+.loading-state p {
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Strong override to ensure modal header uses black for this modal only */
+.employee-form-modal .modal-header {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+.employee-form-modal .modal-header h3 {
+  color: #ffffff !important;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Responsive Design */

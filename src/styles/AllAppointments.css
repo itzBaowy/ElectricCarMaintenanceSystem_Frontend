@@ -8,6 +8,40 @@
   flex-direction: column;
 }
 
+.all-appointments-modal .modal-header {
+  background: #000000 !important;
+  padding: 1.5rem 2rem;
+  border-radius: 16px 16px 0 0;
+  border-bottom: none;
+}
+
+.all-appointments-modal .modal-header h2 {
+  color: #ffffff !important;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.all-appointments-modal .close-btn {
+  color: #ffffff !important;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.all-appointments-modal .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
 .all-appointments-content {
   flex: 1;
   overflow-y: auto;
@@ -46,12 +80,29 @@
   border-radius: 10px;
   font-size: 15px;
   transition: all 0.3s ease;
+  background-color: white;
+  color: #333;
+}
+
+/* Fix autofill styles for search */
+.search-input:-webkit-autofill,
+.search-input:-webkit-autofill:hover,
+.search-input:-webkit-autofill:focus,
+.search-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #333 !important;
+  caret-color: #333 !important;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  border-color: #000000;
 }
 
 .clear-search {
@@ -93,13 +144,13 @@
 }
 
 .status-tab:hover {
-  border-color: #667eea;
+  border-color: #000000;
   transform: translateY(-2px);
 }
 
 .status-tab.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: #000000 !important;
+  border-color: #000000;
   color: white;
 }
 
@@ -124,11 +175,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: white;
+  color: #333;
 }
 
 .sort-select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #000000;
 }
 
 /* Results Info */
@@ -160,8 +212,8 @@
 }
 
 .appointment-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  border-color: #000000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transform: translateY(-5px);
 }
 
@@ -284,7 +336,7 @@
 
 .additional-services {
   font-size: 12px;
-  color: #667eea;
+  color: #000000;
   font-weight: 600;
 }
 
@@ -300,7 +352,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   margin-bottom: 10px;
 }
@@ -314,7 +366,7 @@
 .cost-value {
   font-size: 16px;
   font-weight: 700;
-  color: #667eea;
+  color: #000000;
 }
 
 /* View Detail Hint */

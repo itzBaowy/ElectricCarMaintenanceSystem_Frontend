@@ -16,7 +16,7 @@
 .section-underline {
   width: 80px;
   height: 3px;
-  background-color: #2E5A88;
+  background-color: #000000; /* underline: black */
   margin: 0 auto 2rem;
 }
 
@@ -38,7 +38,7 @@
 
 .car-placeholder i {
   font-size: 4rem;
-  color: #2E5A88;
+  color: #000000; /* car icon: black */
 }
 
 .features-grid {
@@ -73,7 +73,7 @@
 .feature-item h3 {
   font-size: 1.4rem;
   margin-bottom: 1rem;
-  color: #2E5A88;
+  color: #000000; /* feature title: black */
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -93,7 +93,7 @@
 }
 
 .feature-btn {
-  background: #2E5A88;
+  background: #000000; /* More Info button: black */
   color: white;
   border: none;
   padding: 0.8rem 2rem;
@@ -107,7 +107,7 @@
 }
 
 .feature-btn:hover {
-  background: #234669;
+  background: #1a1a1a;
   transform: translateY(-2px);
 }
 
