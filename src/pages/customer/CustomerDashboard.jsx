@@ -10,6 +10,7 @@ import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
 import '../../styles/CustomerDashboard.css'
+import customerService from '../../api/customerService'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)
@@ -30,16 +31,16 @@ const CustomerDashboard = () => {
     const loadCustomerData = async () => {
       try {
         // Get user info from token/localStorage
-        const userResult = await authService.getUserProfile()
-        
+        const userResult = await customerService.getMyInfo()
+
         if (userResult.success) {
           // Mock customer data based on user info - later replace with API call
           const mockCustomer = {
-            id: userResult.data.userId || 1,
-            fullName: userResult.data.fullName || userResult.data.username || 'Customer',
-            username: userResult.data.username || 'customer',
-            email: userResult.data.email || 'customer@example.com',
-            phone: userResult.data.phone || '0123456789',
+            id: userResult.data.id,
+            fullName: userResult.data.fullName,
+            username: userResult.data.username,
+            email: userResult.data.email,
+            phone: userResult.data.phone,
             joinDate: '2024-01-15'
           }
           setCustomer(mockCustomer)
