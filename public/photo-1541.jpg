@@ -1,0 +1,5 @@
+This is a placeholder file. Please replace this with your actual photo-1541.jpg image file.
+To add the real image:
+1. Find or download photo-1541.jpg (the architectural image with the building)
+2. Replace this file at: public/photo-1541.jpg
+3. The CSS already references it at url('/photo-1541.jpg')
