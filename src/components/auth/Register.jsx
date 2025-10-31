@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
 import logger from '../../utils/logger'
 import '../../styles/Register.css'
+import loginImage from '../../assets/photo-1541348263662-e068662d82af.jpeg'
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -129,20 +130,34 @@ const Register = () => {
 
   return (
     <div className="register-page">
-      <div className="register-container">
-        <div className="register-header">
-          <Link to="/" className="back-link">
-            ← Back to Home
-          </Link>
-          <div className="logo">
-            <h2>ElectricCare</h2>
-            <p>Electric Vehicle Maintenance System</p>
+      <div className="register-container auth-split">
+        <div className="auth-left" aria-hidden="true" style={{ backgroundImage: `url(${loginImage})` }}>
+          <div className="left-overlay">
+            <div className="left-brand">
+              <div className="left-logo">ElectricCare</div>
+            </div>
+            <div className="left-hero">
+              <h2>Every check, a safer journey.</h2>
+              <p>Schedule visits in just a few clicks</p>
+              <div className="hero-dots">• • •</div>
+            </div>
           </div>
         </div>
 
-        <div className="register-form-container">
-          <h1>Create Account</h1>
-          <p className="register-subtitle">Join ElectricCare today</p>
+        <div className="auth-right">
+          <div className="register-header">
+            <Link to="/" className="back-link">
+              ← Back to Home
+            </Link>
+            <div className="logo">
+              <h2>ElectricCare</h2>
+              <p>Electric Vehicle Maintenance System</p>
+            </div>
+          </div>
+
+          <div className="register-form-container">
+            <h1>Create Account</h1>
+            <p className="register-subtitle">Join us today</p>
 
           {errors.general && (
             <div className="error-message general-error">
@@ -304,6 +319,7 @@ const Register = () => {
                 Sign in here
               </Link>
             </p>
+          </div>
           </div>
         </div>
       </div>

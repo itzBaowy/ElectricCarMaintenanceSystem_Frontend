@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import authService from '../../api/authService'
 import logger from '../../utils/logger'
 import '../../styles/Login.css'
-
+import loginImage from '../../assets/photo-1541348263662-e068662d82af.jpeg'
 const Login = () => {
   const [formData, setFormData] = useState({
     username: '',
@@ -129,20 +129,34 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <div className="login-container">
-        <div className="login-header">
-          <Link to="/" className="back-link">
-            ← Back to Home
-          </Link>
-          <div className="logo">
-            <h2>ElectricCare</h2>
-            <p>Electric Vehicle Maintenance System</p>
+      <div className="login-container auth-split">
+        <div className="auth-left" aria-hidden="true" style={{ backgroundImage: `url(${loginImage})` }}>
+          <div className="left-overlay">
+            <div className="left-brand">
+              <div className="left-logo">ElectricCare</div>
+            </div>
+            <div className="left-hero">
+              <h2>Every check, a safer journey.</h2>
+              <p>Schedule visits in just a few clicks</p>
+              <div className="hero-dots">• • •</div>
+            </div>
           </div>
         </div>
 
-        <div className="login-form-container">
-          <h1>Welcome Back</h1>
-          <p className="login-subtitle">Sign in to your account</p>
+        <div className="auth-right">
+          <div className="login-header">
+            <Link to="/" className="back-link">
+              ← Back to Home
+            </Link>
+            <div className="logo">
+              <h2>ElectricCare</h2>
+              <p>Electric Vehicle Maintenance System</p>
+            </div>
+          </div>
+
+          <div className="login-form-container">
+            <h1>Welcome Back to ElectricCare!</h1>
+            <p className="login-subtitle">Sign in your account</p>
 
           {successMessage && (
             <div className="success-message">
@@ -158,7 +172,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">Your Email</label>
               <input
                 type="text"
                 id="username"
@@ -166,7 +180,7 @@ const Login = () => {
                 value={formData.username}
                 onChange={handleChange}
                 className={errors.username ? 'error' : ''}
-                placeholder="Enter your username"
+                placeholder="info.madhu786@gmail.com"
                 disabled={isLoading}
                 autoComplete="username"
                 autoCapitalize="none"
@@ -187,7 +201,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className={errors.password ? 'error' : ''}
-                placeholder="Enter your password"
+                placeholder="••••••••••"
                 disabled={isLoading}
                 autoComplete="current-password"
               />
@@ -200,7 +214,7 @@ const Login = () => {
               <label className="checkbox-container">
                 <input type="checkbox" tabIndex="-1" />
                 <span className="checkmark"></span>
-                Remember me
+                Remember Me
               </label>
               <Link to="/forgot-password" className="forgot-link" tabIndex="-1">
                 Forgot Password?
@@ -212,17 +226,18 @@ const Login = () => {
               className="login-btn"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? 'Signing In...' : 'Login'}
             </button>
           </form>
 
           <div className="login-footer">
             <p>
-              Don't have an account? 
+              Don't have any account? 
               <Link to="/register" className="register-link">
-                Sign up here
+                Register
               </Link>
             </p>
+          </div>
           </div>
         </div>
       </div>

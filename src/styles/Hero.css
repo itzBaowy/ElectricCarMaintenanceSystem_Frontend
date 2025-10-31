@@ -57,26 +57,26 @@
 }
 
 .btn-primary {
-  background: #2E5A88 !important;
+  background: #000 !important;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #234669 !important;
+  background: #1f2937 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .btn-secondary {
-  background: #2E5A88 !important;
+  background: #000 !important;
   color: white !important;
   border: none !important;
 }
 
 .btn-secondary:hover {
-  background: #234669 !important;
+  background: #1f2937 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(46, 90, 136, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .hero-image {
