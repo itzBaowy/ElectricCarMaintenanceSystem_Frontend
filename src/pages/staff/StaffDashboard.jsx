@@ -103,6 +103,13 @@ const StaffDashboard = () => {
     }
   }
 
+  const formatTimeFromDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    // Extract time from ISO format "2025-11-01T14:36:00"
+    const timePart = dateString.split('T')[1]
+    return timePart.substring(0, 5) // HH:mm (14:36)
+  }
+
   const getStatusBadgeClass = (status) => {
     const statusMap = {
       PENDING: 'status-pending',
@@ -242,7 +249,7 @@ const StaffDashboard = () => {
                       <td>{appointment.vehicleLicensePlate || 'N/A'}</td>
                       <td>{appointment.vehicleModel || 'N/A'}</td>
                       <td>{new Date(appointment.appointmentDate).toLocaleDateString('vi-VN')}</td>
-                      <td>{appointment.appointmentTime}</td>
+                      <td>{formatTimeFromDate(appointment.appointmentDate)}</td>
                       <td>
                         <div className="service-info">
                           {appointment.servicePackageName || 'Individual Service'}
@@ -332,7 +339,7 @@ const StaffDashboard = () => {
                 <p><strong>License Plate:</strong> {selectedAppointment?.vehicleLicensePlate || selectedAppointment?.vehiclePlate}</p>
                 <p><strong>Model:</strong> {selectedAppointment?.vehicleModel || 'N/A'}</p>
                 <p><strong>Date:</strong> {new Date(selectedAppointment?.appointmentDate).toLocaleDateString('en-US')}</p>
-                <p><strong>Time:</strong> {selectedAppointment?.appointmentTime}</p>
+                <p><strong>Time:</strong> {formatTimeFromDate(selectedAppointment?.appointmentDate)}</p>
                 {selectedAppointment?.technicianName && (
                   <p><strong>Current Technician:</strong> {selectedAppointment.technicianName}</p>
                 )}
