@@ -11,11 +11,9 @@ const ServiceCenterManagement = () => {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
-    phone: '',
-    email: '',
-    description: '',
-    openTime: '',
-    closeTime: ''
+    district: '',
+    city: '',
+    phone: ''
   })
 
   useEffect(() => {
@@ -46,22 +44,18 @@ const ServiceCenterManagement = () => {
       setFormData({
         name: center.name || '',
         address: center.address || '',
-        phone: center.phone || '',
-        email: center.email || '',
-        description: center.description || '',
-        openTime: center.openTime || '',
-        closeTime: center.closeTime || ''
+        district: center.district || '',
+        city: center.city || '',
+        phone: center.phone || ''
       })
     } else {
       setEditingCenter(null)
       setFormData({
         name: '',
         address: '',
-        phone: '',
-        email: '',
-        description: '',
-        openTime: '',
-        closeTime: ''
+        district: '',
+        city: '',
+        phone: ''
       })
     }
     setShowModal(true)
@@ -73,11 +67,9 @@ const ServiceCenterManagement = () => {
     setFormData({
       name: '',
       address: '',
-      phone: '',
-      email: '',
-      description: '',
-      openTime: '',
-      closeTime: ''
+      district: '',
+      city: '',
+      phone: ''
     })
   }
 
@@ -92,7 +84,7 @@ const ServiceCenterManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.name || !formData.address || !formData.phone) {
+    if (!formData.name || !formData.address || !formData.district || !formData.city || !formData.phone) {
       alert('Vui lòng điền đầy đủ thông tin bắt buộc!')
       return
     }
@@ -199,27 +191,22 @@ const ServiceCenterManagement = () => {
                   <span className="info-icon">📍</span>
                   <span>{center.address}</span>
                 </div>
+                {center.district && (
+                  <div className="info-row">
+                    <span className="info-icon">🏘️</span>
+                    <span>{center.district}</span>
+                  </div>
+                )}
+                {center.city && (
+                  <div className="info-row">
+                    <span className="info-icon">🏙️</span>
+                    <span>{center.city}</span>
+                  </div>
+                )}
                 <div className="info-row">
                   <span className="info-icon">📞</span>
                   <span>{center.phone}</span>
                 </div>
-                {center.email && (
-                  <div className="info-row">
-                    <span className="info-icon">✉️</span>
-                    <span>{center.email}</span>
-                  </div>
-                )}
-                {center.openTime && center.closeTime && (
-                  <div className="info-row">
-                    <span className="info-icon">🕒</span>
-                    <span>{center.openTime} - {center.closeTime}</span>
-                  </div>
-                )}
-                {center.description && (
-                  <div className="center-description">
-                    <p>{center.description}</p>
-                  </div>
-                )}
               </div>
             </div>
           ))
@@ -257,71 +244,49 @@ const ServiceCenterManagement = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="123 Đường ABC, Quận 1, TP.HCM"
+                  placeholder="166 Ly Thuong Kiet, Quarter 3, Hoc Mon Town"
                   required
                 />
               </div>
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="phone">Số Điện Thoại *</label>
+                  <label htmlFor="district">Quận/Huyện *</label>
                   <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
+                    type="text"
+                    id="district"
+                    name="district"
+                    value={formData.district}
                     onChange={handleInputChange}
-                    placeholder="0123456789"
+                    placeholder="Hoc Mon District"
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="city">Thành Phố *</label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
+                    type="text"
+                    id="city"
+                    name="city"
+                    value={formData.city}
                     onChange={handleInputChange}
-                    placeholder="center@example.com"
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="openTime">Giờ Mở Cửa</label>
-                  <input
-                    type="time"
-                    id="openTime"
-                    name="openTime"
-                    value={formData.openTime}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="closeTime">Giờ Đóng Cửa</label>
-                  <input
-                    type="time"
-                    id="closeTime"
-                    name="closeTime"
-                    value={formData.closeTime}
-                    onChange={handleInputChange}
+                    placeholder="Ho Chi Minh City"
+                    required
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">Mô Tả</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
+                <label htmlFor="phone">Số Điện Thoại *</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="Mô tả về trung tâm dịch vụ..."
-                  rows="4"
+                  placeholder="0762718718"
+                  required
                 />
               </div>
 
