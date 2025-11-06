@@ -328,9 +328,6 @@ const CustomerDashboard = () => {
             <button className="quick-action-btn primary">
               Book Service
             </button>
-            <button className="quick-action-btn secondary" onClick={handleAddVehicle}>
-              Add Vehicle
-            </button>
           </div>
         </div>
       </div>
@@ -365,15 +362,11 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>Your Electric Vehicles</h2>
-            <button className="add-btn" onClick={handleAddVehicle}>+ Add Vehicle</button>
           </div>
           <div className="vehicles-grid">
             {vehicles.length === 0 ? (
               <div className="no-vehicles">
                 <p>You haven't added any vehicles yet.</p>
-                <button className="add-btn-large" onClick={handleAddVehicle}>
-                  + Add Your First Vehicle
-                </button>
               </div>
             ) : (
               vehicles.map(vehicle => {
