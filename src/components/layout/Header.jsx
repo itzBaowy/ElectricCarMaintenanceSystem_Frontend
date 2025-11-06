@@ -35,9 +35,6 @@ const Header = () => {
   const handleAuthClick = (action) => {
     if (action === 'login') {
       navigate('/login')
-    } else if (action === 'register') {
-      // TODO: Navigate to register page when created
-      navigate('/register')
     }
     setIsMenuOpen(false) // Close mobile menu after clicking
   }

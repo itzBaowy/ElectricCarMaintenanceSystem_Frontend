@@ -320,9 +320,7 @@ const appointmentService = {
   // Update appointment status (admin/staff only)
   updateAppointmentStatus: async (appointmentId, status) => {
     try {
-      const response = await api.put(`/api/appointments/setStatus/${appointmentId}`, {
-        status: status
-      })
+      const response = await api.put(`/api/appointments/setStatus/${appointmentId}`, status)
       
       if (response.data.code === 1000) {
         return {

@@ -3,20 +3,19 @@ import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
 import appointmentService from '../../api/appointmentService'
 import logger from '../../utils/logger'
-import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
 import '../../styles/CustomerDashboard.css'
+import customerService from '../../api/customerService'
 
 const CustomerDashboard = () => {
   const [customer, setCustomer] = useState(null)
   const [vehicles, setVehicles] = useState([])
   const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
-  const [showAddVehicle, setShowAddVehicle] = useState(false)
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
@@ -30,16 +29,16 @@ const CustomerDashboard = () => {
     const loadCustomerData = async () => {
       try {
         // Get user info from token/localStorage
-        const userResult = await authService.getUserProfile()
-        
+        const userResult = await customerService.getMyInfo()
+
         if (userResult.success) {
           // Mock customer data based on user info - later replace with API call
           const mockCustomer = {
-            id: userResult.data.userId || 1,
-            fullName: userResult.data.fullName || userResult.data.username || 'Customer',
-            username: userResult.data.username || 'customer',
-            email: userResult.data.email || 'customer@example.com',
-            phone: userResult.data.phone || '0123456789',
+            id: userResult.data.id,
+            fullName: userResult.data.fullName,
+            username: userResult.data.username,
+            email: userResult.data.email,
+            phone: userResult.data.phone,
             joinDate: '2024-01-15'
           }
           setCustomer(mockCustomer)
@@ -150,20 +149,6 @@ const CustomerDashboard = () => {
   // Helper function to get vehicle model by ID
   const getVehicleModel = (modelId) => {
     return vehicleModels.find(model => model.id === modelId)
-  }
-
-  const handleAddVehicle = () => {
-    setShowAddVehicle(true)
-  }
-
-  const handleCloseAddVehicle = () => {
-    setShowAddVehicle(false)
-  }
-
-  const handleVehicleAdded = (newVehicle) => {
-    // Refresh vehicle list
-    loadVehicles()
-    setShowAddVehicle(false)
   }
 
   const handleBookMaintenance = (vehicle) => {
@@ -483,14 +468,6 @@ const CustomerDashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Add Vehicle Modal */}
-      {showAddVehicle && (
-        <AddVehicle 
-          onClose={handleCloseAddVehicle}
-          onVehicleAdded={handleVehicleAdded}
-        />
-      )}
 
       {/* Book Maintenance Modal */}
       {showBookMaintenance && selectedVehicle && (

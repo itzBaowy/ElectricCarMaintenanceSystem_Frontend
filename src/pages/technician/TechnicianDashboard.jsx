@@ -120,16 +120,10 @@ const TechnicianDashboard = () => {
     })
   }
 
-  const formatTime = (timeString) => {
-    if (!timeString) return 'N/A'
-    return timeString.substring(0, 5) // HH:mm
-  }
-
   const formatTimeFromDate = (dateString) => {
     if (!dateString) return 'N/A'
     // Extract time from ISO format "2025-11-01T14:36:00"
     const timePart = dateString.split('T')[1]
-    if (!timePart) return 'N/A'
     return timePart.substring(0, 5) // HH:mm (14:36)
   }
 

@@ -74,7 +74,7 @@ const Login = () => {
       
       if (result.success) {
         // Login successful
-        setSuccessMessage(result.message || 'Login successful! Redirecting...')
+        setSuccessMessage(result.message)
         logger.log('Message: ',result.message)
 
         // Log tokens from localStorage
@@ -114,7 +114,7 @@ const Login = () => {
         }
       } else {
         // Login failed
-        setErrors({ general: result.message || 'Invalid username or password' })
+        setErrors({ general: 'Invalid username or password !!' })
         setSuccessMessage('')
       }
       
@@ -231,11 +231,8 @@ const Login = () => {
           </form>
 
           <div className="login-footer">
-            <p>
-              Don't have any account? 
-              <Link to="/register" className="register-link">
-                Register
-              </Link>
+            <p className="info-text">
+              New customers can register through our staff at the service center.
             </p>
           </div>
           </div>
