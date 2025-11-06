@@ -28,7 +28,7 @@
 }
 
 .dashboard-header h1 {
-  color: #333;
+  color: #000000;
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
@@ -41,7 +41,7 @@
 }
 
 .welcome-text {
-  color: #666;
+  color: #000000;
   font-size: 1rem;
   font-weight: 500;
 }
@@ -85,7 +85,7 @@
 }
 
 .stat-card h3 {
-  color: #666;
+  color: #000000;
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
@@ -97,19 +97,19 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
-  color: #333;
+  color: #000000 !important;
 }
 
 .stat-number.pending {
-  color: #f59e0b;
+  color: #000000 !important;
 }
 
 .stat-number.confirmed {
-  color: #10b981;
+  color: #000000 !important;
 }
 
 .stat-number.completed {
-  color: #8b5cf6;
+  color: #000000 !important;
 }
 
 /* Filters */
@@ -132,7 +132,7 @@
 
 .filter-group label {
   display: block;
-  color: #666;
+  color: #000000;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -163,7 +163,7 @@
 }
 
 .appointments-section h2 {
-  color: #333;
+  color: #000000;
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: 700;
@@ -210,7 +210,7 @@
 }
 
 .vehicle-info small {
-  color: #666;
+  color: #666666;
   font-size: 0.85rem;
 }
 
@@ -336,7 +336,7 @@
 }
 
 .detail-section h3 {
-  color: #333;
+  color: #000000;
   font-size: 1.2rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
@@ -357,13 +357,13 @@
 }
 
 .detail-item label {
-  color: #666;
+  color: #666666;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .detail-item span {
-  color: #333;
+  color: #000000;
   font-size: 1rem;
 }
 
@@ -374,7 +374,7 @@
 }
 
 .notes-content {
-  color: #666;
+  color: #000000;
   line-height: 1.6;
   padding: 1rem;
   background: #f9fafb;

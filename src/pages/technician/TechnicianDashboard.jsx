@@ -148,7 +148,7 @@ const TechnicianDashboard = () => {
         <div className="dashboard-header">
           <h1>Technician Dashboard</h1>
           <div className="header-actions">
-            <span className="welcome-text">Welcome, {currentUser?.username || 'Technician'}</span>
+            <span className="welcome-text">Welcome {currentUser?.username || 'Technician'}, Have a productive and successful day at work</span>
             <button onClick={handleLogout} className="btn-logout">
               Logout
             </button>
