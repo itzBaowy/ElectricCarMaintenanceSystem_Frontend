@@ -6,6 +6,46 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 2px solid #000000;
+}
+
+/* Custom Header for All Appointments */
+.all-appointments-header-custom {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+
+.all-appointments-header-custom h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff !important;
+}
+
+.all-appointments-close-btn {
+  background: none !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.all-appointments-close-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: rotate(90deg);
 }
 
 .all-appointments-content {
@@ -29,6 +69,23 @@
 .search-bar {
   position: relative;
   margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #000000 !important;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #333333 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .search-icon {

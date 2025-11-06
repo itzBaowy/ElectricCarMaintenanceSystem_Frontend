@@ -330,13 +330,14 @@
   padding: 3rem 2rem;
   background: #ffffff;
   border-radius: 12px;
-  border: 2px dashed #000000;
+  border: 2px solid #000000;
 }
 
 .no-vehicles p {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: #000000;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 .add-btn-large {
