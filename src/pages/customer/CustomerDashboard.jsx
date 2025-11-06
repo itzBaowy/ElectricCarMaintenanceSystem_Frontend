@@ -271,10 +271,10 @@ const CustomerDashboard = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      PENDING: { text: 'Pending', class: 'pending', icon: '🟡' },
-      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
-      COMPLETED: { text: 'Completed', class: 'completed', icon: '🟢' },
-      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
+      PENDING: { text: 'Pending', class: 'pending', icon: '' },
+      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '' },
+      COMPLETED: { text: 'Completed', class: 'completed', icon: '' },
+      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '' }
     }
     return statusMap[status] || statusMap.PENDING
   }
@@ -289,19 +289,19 @@ const CustomerDashboard = () => {
       <div className="dashboard-nav">
         <div className="nav-content">
           <div className="nav-brand">
-            <h2>⚡ ElectricCare</h2>
+            <h2>ElectricCare</h2>
             <span>Customer Portal</span>
           </div>
           <div className="nav-actions">
-            <span className="nav-user">Hello, {customer.fullName}</span>
+            <span className="nav-user">Hello {customer.fullName}, How's your day?</span>
             <button onClick={handleEditProfile} className="edit-profile-btn">
-              ✏️ Edit Profile
+              Edit Profile
             </button>
             <button onClick={handleChangePassword} className="change-password-btn">
-              🔒 Change Password
+              Change Password
             </button>
             <button onClick={handleLogout} className="logout-btn">
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
@@ -315,7 +315,7 @@ const CustomerDashboard = () => {
               {customer.fullName.charAt(0).toUpperCase()}
             </div>
             <div className="customer-details">
-              <h1>Welcome back, {customer.fullName}! 👋</h1>
+              <h1>Welcome back, {customer.fullName}!</h1>
               <p>Ready to take care of your electric vehicle today?</p>
               <div className="customer-meta">
                 <span>Member since {new Date(customer.joinDate).getFullYear()}</span>
@@ -326,10 +326,10 @@ const CustomerDashboard = () => {
           </div>
           <div className="welcome-actions">
             <button className="quick-action-btn primary">
-              📅 Book Service
+              Book Service
             </button>
             <button className="quick-action-btn secondary" onClick={handleAddVehicle}>
-              🚗 Add Vehicle
+              Add Vehicle
             </button>
           </div>
         </div>
@@ -338,14 +338,12 @@ const CustomerDashboard = () => {
       {/* Quick Stats */}
       <div className="quick-stats">
         <div className="stat-card">
-          <div className="stat-icon">🚗</div>
           <div className="stat-info">
             <span className="stat-number">{vehicles.length}</span>
             <span className="stat-label">Your Vehicles</span>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">🔧</div>
           <div className="stat-info">
             <span className="stat-number">
               {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
@@ -354,7 +352,6 @@ const CustomerDashboard = () => {
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">📅</div>
           <div className="stat-info">
             <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
             <span className="stat-label">Completed Services</span>
@@ -367,13 +364,13 @@ const CustomerDashboard = () => {
         {/* Vehicles Section */}
         <div className="section">
           <div className="section-header">
-            <h2>🚗 Your Electric Vehicles</h2>
+            <h2>Your Electric Vehicles</h2>
             <button className="add-btn" onClick={handleAddVehicle}>+ Add Vehicle</button>
           </div>
           <div className="vehicles-grid">
             {vehicles.length === 0 ? (
               <div className="no-vehicles">
-                <p>🚗 You haven't added any vehicles yet.</p>
+                <p>You haven't added any vehicles yet.</p>
                 <button className="add-btn-large" onClick={handleAddVehicle}>
                   + Add Your First Vehicle
                 </button>
@@ -416,7 +413,7 @@ const CustomerDashboard = () => {
                         className="action-btn danger" 
                         onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
                       >
-                        🗑️ Delete
+                        Delete
                       </button>
                     </div>
                   </div>
@@ -429,7 +426,7 @@ const CustomerDashboard = () => {
         {/* Recent Appointments */}
         <div className="section">
           <div className="section-header">
-            <h2>📋 Recent Appointments</h2>
+            <h2>Recent Appointments</h2>
             <button 
               className="view-all-btn"
               onClick={handleViewAllAppointments}
@@ -440,7 +437,7 @@ const CustomerDashboard = () => {
           <div className="appointments-list">
             {recentAppointments.length === 0 ? (
               <div className="no-appointments">
-                <p>📅 You don't have any appointments yet.</p>
+                <p>You don't have any appointments yet.</p>
                 <p>Book your first maintenance service now!</p>
               </div>
             ) : (
@@ -477,8 +474,8 @@ const CustomerDashboard = () => {
                         {appointment.serviceItems && appointment.serviceItems.length > 0 && 
                           ` + ${appointment.serviceItems.length} service(s)`}
                       </h4>
-                      <p>🚗 {appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
-                      <p>👨‍🔧 Technician: {appointment.technicianName || 'Not assigned yet'}</p>
+                      <p>{appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
+                      <p>Technician: {appointment.technicianName || 'Not assigned yet'}</p>
                     </div>
                     <div className="appointment-status">
                       <span className={`status-badge ${statusInfo.class}`}>
