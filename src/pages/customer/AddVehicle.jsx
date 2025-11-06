@@ -170,11 +170,11 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} data-component="add-vehicle">
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>🚗 Add New Vehicle</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+        <div className="add-vehicle-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+          <h2>Add New Vehicle</h2>
+          <button className="add-vehicle-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>×</button>
         </div>
 
         <form onSubmit={handleSubmit} className="add-vehicle-form">
