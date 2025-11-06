@@ -174,7 +174,7 @@ const AddVehicle = ({ onClose, onVehicleAdded }) => {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="add-vehicle-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
           <h2>Add New Vehicle</h2>
-          <button className="add-vehicle-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>×</button>
+          <button className="add-vehicle-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="add-vehicle-form">
