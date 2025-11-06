@@ -802,6 +802,7 @@ const StaffDashboard = () => {
                   value={vehicleForm.vinNumber}
                   onChange={(e) => setVehicleForm({...vehicleForm, vinNumber: e.target.value})}
                   placeholder="VF12345678901234"
+                  maxLength={17}
                   required
                 />
               </div>
@@ -814,6 +815,7 @@ const StaffDashboard = () => {
                   value={vehicleForm.licensePlate}
                   onChange={(e) => setVehicleForm({...vehicleForm, licensePlate: e.target.value})}
                   placeholder="29A-12345"
+                  maxLength={10}
                   required
                 />
               </div>
