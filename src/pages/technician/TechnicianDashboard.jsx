@@ -156,28 +156,33 @@ const TechnicianDashboard = () => {
         </div>
 
         {/* Statistics */}
-        <div className="stats-container">
-          <div className="stat-card">
-            <h3>Total Assigned</h3>
-            <p className="stat-number">{appointments.length}</p>
+        <div className="stats-section">
+          <div className="stats-header">
+            <h2>Appointment Statistics</h2>
           </div>
-          <div className="stat-card">
-            <h3>Pending</h3>
-            <p className="stat-number pending">
-              {appointments.filter(a => a.status === 'PENDING').length}
-            </p>
-          </div>
-          <div className="stat-card">
-            <h3>Confirmed</h3>
-            <p className="stat-number confirmed">
-              {appointments.filter(a => a.status === 'CONFIRMED').length}
-            </p>
-          </div>
-          <div className="stat-card">
-            <h3>Completed</h3>
-            <p className="stat-number completed">
-              {appointments.filter(a => a.status === 'COMPLETED').length}
-            </p>
+          <div className="stats-container">
+            <div className="stat-card">
+              <h3>TOTAL ASSIGNED</h3>
+              <p className="stat-number">{appointments.length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>PENDING</h3>
+              <p className="stat-number pending">
+                {appointments.filter(a => a.status === 'PENDING').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>CONFIRMED</h3>
+              <p className="stat-number confirmed">
+                {appointments.filter(a => a.status === 'CONFIRMED').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>COMPLETED</h3>
+              <p className="stat-number completed">
+                {appointments.filter(a => a.status === 'COMPLETED').length}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -199,9 +204,10 @@ const TechnicianDashboard = () => {
           </div>
 
           <div className="search-group">
+            <label>Search:</label>
             <input
               type="text"
-              placeholder="Search by customer name, license plate, or ID..."
+              placeholder="Search by customer name, license plate..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
