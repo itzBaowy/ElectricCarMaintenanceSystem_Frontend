@@ -35,7 +35,9 @@ const StaffDashboard = () => {
   const [customerForm, setCustomerForm] = useState({
     fullName: '',
     phoneNumber: '',
-    dateOfBirth: ''
+    dateOfBirth: '',
+    email: '',
+    gender: 'MALE'
   })
   const [vehicleForm, setVehicleForm] = useState({
     customerId: '',
@@ -97,25 +99,34 @@ const StaffDashboard = () => {
   const handleCreateCustomer = async (e) => {
     e.preventDefault()
     
-    if (!customerForm.fullName || !customerForm.phoneNumber || !customerForm.dateOfBirth) {
+    if (!customerForm.fullName || !customerForm.phoneNumber || !customerForm.dateOfBirth || !customerForm.email) {
       alert('Vui lòng điền đầy đủ thông tin khách hàng!')
       return
     }
 
     try {
-      // Create customer account with phone number as username
-      const result = await customerService.createCustomer({
-        fullName: customerForm.fullName,
-        phoneNumber: customerForm.phoneNumber,
-        dateOfBirth: customerForm.dateOfBirth,
+      // Create customer account using register API from authService
+      const registerData = {
         username: customerForm.phoneNumber, // Phone number as username
-        password: customerForm.phoneNumber  // Default password = phone number
-      })
+        password: customerForm.phoneNumber, // Default password = phone number
+        fullName: customerForm.fullName,
+        email: customerForm.email,
+        phone: customerForm.phoneNumber,
+        gender: customerForm.gender
+      }
+
+      const result = await authService.register(registerData)
 
       if (result.success) {
         alert(`Tài khoản đã được tạo thành công!\nUsername: ${customerForm.phoneNumber}\nPassword: ${customerForm.phoneNumber}\n\nVui lòng thông báo cho khách hàng.`)
         setShowCreateCustomerModal(false)
-        setCustomerForm({ fullName: '', phoneNumber: '', dateOfBirth: '' })
+        setCustomerForm({ 
+          fullName: '', 
+          phoneNumber: '', 
+          dateOfBirth: '',
+          email: '',
+          gender: 'MALE'
+        })
         fetchData()
       } else {
         alert(`Lỗi: ${result.message}`)
@@ -709,6 +720,18 @@ const StaffDashboard = () => {
               </div>
 
               <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={customerForm.email}
+                  onChange={(e) => setCustomerForm({...customerForm, email: e.target.value})}
+                  placeholder="email@example.com"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="dateOfBirth">Ngày Sinh *</label>
                 <input
                   type="date"
@@ -717,6 +740,20 @@ const StaffDashboard = () => {
                   onChange={(e) => setCustomerForm({...customerForm, dateOfBirth: e.target.value})}
                   required
                 />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="gender">Giới Tính *</label>
+                <select
+                  id="gender"
+                  value={customerForm.gender}
+                  onChange={(e) => setCustomerForm({...customerForm, gender: e.target.value})}
+                  required
+                >
+                  <option value="MALE">Nam</option>
+                  <option value="FEMALE">Nữ</option>
+                  <option value="OTHER">Khác</option>
+                </select>
               </div>
 
               <div className="modal-footer">
