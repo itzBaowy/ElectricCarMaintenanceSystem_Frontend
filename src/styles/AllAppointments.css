@@ -135,6 +135,7 @@
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 20px;
+  align-items: stretch;
 }
 
 .status-tab {
@@ -148,6 +149,11 @@
   transition: all 0.3s ease;
   white-space: nowrap;
   color: #000000;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .status-tab:hover {

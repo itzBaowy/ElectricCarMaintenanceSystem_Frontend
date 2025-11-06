@@ -115,12 +115,6 @@ const Header = () => {
               >
                 Login
               </button>
-              <button 
-                className="mobile-btn-register"
-                onClick={() => handleAuthClick('register')}
-              >
-                Register
-              </button>
             </div>
           </div>
 
@@ -130,12 +124,6 @@ const Header = () => {
               onClick={() => handleAuthClick('login')}
             >
               Login
-            </button>
-            <button 
-              className="btn-register"
-              onClick={() => handleAuthClick('register')}
-            >
-              Register
             </button>
           </div>
 
