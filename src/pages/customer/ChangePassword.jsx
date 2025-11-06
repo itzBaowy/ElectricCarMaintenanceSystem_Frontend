@@ -120,11 +120,11 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} data-component="change-password">
       <div className="modal-content change-password-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>🔒 Đổi Mật Khẩu</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+        <div className="change-password-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+          <h2>Đổi Mật Khẩu</h2>
+          <button className="change-password-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="change-password-form">
@@ -252,7 +252,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
               className="btn-reset"
               disabled={loading}
             >
-              🔄 Xóa
+              Xóa
             </button>
             <button 
               type="button" 
@@ -267,7 +267,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
               className="btn-primary" 
               disabled={loading}
             >
-              {loading ? '⏳ Đang xử lý...' : '✓ Đổi mật khẩu'}
+              {loading ? 'Đang xử lý...' : 'Đổi mật khẩu'}
             </button>
           </div>
         </form>
