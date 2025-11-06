@@ -129,7 +129,6 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
 
         <form onSubmit={handleSubmit} className="change-password-form">
           <div className="info-message">
-            <span className="info-icon">ℹ️</span>
             <p>Mật khẩu mới phải có ít nhất 6 ký tự và khác với mật khẩu hiện tại</p>
           </div>
 
@@ -202,8 +201,8 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
                   <div className="strength-fill"></div>
                 </div>
                 <span className="strength-text">
-                  {formData.newPassword.length < 6 ? '⚠️ Yếu' :
-                   formData.newPassword.length < 10 ? '✓ Trung bình' : '✓✓ Mạnh'}
+                  {formData.newPassword.length < 6 ? 'Yếu' :
+                   formData.newPassword.length < 10 ? 'Trung bình' : 'Mạnh'}
                 </span>
               </div>
             )}
@@ -240,7 +239,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
             )}
             {formData.confirmPassword && formData.newPassword && 
              formData.confirmPassword === formData.newPassword && (
-              <span className="success-message">✓ Mật khẩu khớp</span>
+              <span className="success-message">Mật khẩu khớp</span>
             )}
           </div>
 
