@@ -358,7 +358,7 @@ const TechnicianDashboard = () => {
                   <div className="detail-item">
                     <label>Total Price:</label>
                     <span className="price-highlight">
-                      {formatCurrency(selectedAppointment.totalPrice)}
+                      {formatCurrency(selectedAppointment.estimatedCost)}
                     </span>
                   </div>
                 </div>
