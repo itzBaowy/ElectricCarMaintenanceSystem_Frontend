@@ -3,7 +3,6 @@ import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
 import appointmentService from '../../api/appointmentService'
 import logger from '../../utils/logger'
-import AddVehicle from './AddVehicle'
 import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
@@ -17,7 +16,6 @@ const CustomerDashboard = () => {
   const [vehicles, setVehicles] = useState([])
   const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
-  const [showAddVehicle, setShowAddVehicle] = useState(false)
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
@@ -151,20 +149,6 @@ const CustomerDashboard = () => {
   // Helper function to get vehicle model by ID
   const getVehicleModel = (modelId) => {
     return vehicleModels.find(model => model.id === modelId)
-  }
-
-  const handleAddVehicle = () => {
-    setShowAddVehicle(true)
-  }
-
-  const handleCloseAddVehicle = () => {
-    setShowAddVehicle(false)
-  }
-
-  const handleVehicleAdded = (newVehicle) => {
-    // Refresh vehicle list
-    loadVehicles()
-    setShowAddVehicle(false)
   }
 
   const handleBookMaintenance = (vehicle) => {
@@ -329,9 +313,6 @@ const CustomerDashboard = () => {
             <button className="quick-action-btn primary">
               📅 Book Service
             </button>
-            <button className="quick-action-btn secondary" onClick={handleAddVehicle}>
-              🚗 Add Vehicle
-            </button>
           </div>
         </div>
       </div>
@@ -369,15 +350,12 @@ const CustomerDashboard = () => {
         <div className="section">
           <div className="section-header">
             <h2>🚗 Your Electric Vehicles</h2>
-            <button className="add-btn" onClick={handleAddVehicle}>+ Add Vehicle</button>
           </div>
           <div className="vehicles-grid">
             {vehicles.length === 0 ? (
               <div className="no-vehicles">
                 <p>🚗 You haven't added any vehicles yet.</p>
-                <button className="add-btn-large" onClick={handleAddVehicle}>
-                  + Add Your First Vehicle
-                </button>
+                <p className="staff-help-text">Please visit our service center or contact our staff to add your vehicle.</p>
               </div>
             ) : (
               vehicles.map(vehicle => {
@@ -494,14 +472,6 @@ const CustomerDashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Add Vehicle Modal */}
-      {showAddVehicle && (
-        <AddVehicle 
-          onClose={handleCloseAddVehicle}
-          onVehicleAdded={handleVehicleAdded}
-        />
-      )}
 
       {/* Book Maintenance Modal */}
       {showBookMaintenance && selectedVehicle && (
