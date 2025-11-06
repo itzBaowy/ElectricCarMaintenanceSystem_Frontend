@@ -484,8 +484,8 @@ const StaffDashboard = () => {
                     <tr key={customer.customerId || customer.id}>
                       <td>#{customer.customerId || customer.id}</td>
                       <td>{customer.fullName}</td>
-                      <td>{customer.phoneNumber}</td>
-                      <td>{customer.email || 'N/A'}</td>
+                      <td>{customer.phone}</td>
+                      <td>{customer.email}</td>
                       <td>{customer.createdAt ? new Date(customer.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                     </tr>
                   ))}
