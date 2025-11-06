@@ -25,6 +25,7 @@
   padding: 1.5rem 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #000000;
 }
 
 .dashboard-header h1 {
@@ -77,6 +78,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease;
+  border: 2px solid #000000;
 }
 
 .stat-card:hover {
@@ -122,6 +124,7 @@
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
+  border: 2px solid #000000;
 }
 
 .filter-group,
@@ -141,7 +144,7 @@
 .search-input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid #000000;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -150,8 +153,8 @@
 .filter-select:focus,
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #333333;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Appointments Section */
@@ -160,6 +163,7 @@
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #000000;
 }
 
 .appointments-section h2 {
@@ -290,6 +294,7 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 2px solid #000000;
 }
 
 .modal-header {
