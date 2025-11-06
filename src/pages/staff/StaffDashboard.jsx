@@ -180,21 +180,26 @@ const StaffDashboard = () => {
     }
 
     try {
-      const result = await vehicleService.addVehicleByStaff({
-        customerId: vehicleForm.customerId,
-        vinNumber: vehicleForm.vinNumber,
+      // Format request body theo API yêu cầu
+      const vehicleData = {
         licensePlate: vehicleForm.licensePlate,
-        model: vehicleForm.model,
-        currentKilometers: vehicleForm.currentKilometers,
-        purchaseYear: vehicleForm.purchaseYear
-      })
+        vin: vehicleForm.vinNumber,
+        currentKm: parseInt(vehicleForm.currentKilometers) || 0,
+        purchaseYear: vehicleForm.purchaseYear,
+        modelId: parseInt(vehicleForm.model), // model ID from select box
+        customerId: parseInt(vehicleForm.customerId)
+      }
+
+      const result = await vehicleService.createVehicle(vehicleData)
 
       if (result.success) {
         alert('Xe đã được thêm thành công!')
         
         // Fetch service recommendations based on km/time
-        const vehicleId = result.data.vehicleId
-        await fetchServiceRecommendations(vehicleId)
+        const vehicleId = result.data.id || result.data.vehicleId
+        if (vehicleId) {
+          await fetchServiceRecommendations(vehicleId)
+        }
         
         setShowAddVehicleModal(false)
         setVehicleForm({
@@ -865,7 +870,7 @@ const StaffDashboard = () => {
                 >
                   <option value="">-- Chọn model xe --</option>
                   {vehicleModels.map((model) => (
-                    <option key={model.id} value={model.name}>
+                    <option key={model.id} value={model.id}>
                       {model.name}
                     </option>
                   ))}
