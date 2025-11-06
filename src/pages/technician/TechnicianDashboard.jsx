@@ -187,31 +187,36 @@ const TechnicianDashboard = () => {
         </div>
 
         {/* Filters */}
-        <div className="filters-container">
-          <div className="filter-group">
-            <label>Filter by Status:</label>
-            <select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="filter-select"
-            >
-              <option value="ALL">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="CONFIRMED">Confirmed</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
+        <div className="filters-section">
+          <div className="filters-header">
+            <h2>Filter & Search Appointments</h2>
           </div>
+          <div className="filters-container">
+            <div className="filter-group">
+              <label>Filter by Status:</label>
+              <select 
+                value={filterStatus} 
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="filter-select"
+              >
+                <option value="ALL">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
 
-          <div className="search-group">
-            <label>Search:</label>
-            <input
-              type="text"
-              placeholder="Search by customer name, license plate..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
+            <div className="search-group">
+              <label>Search:</label>
+              <input
+                type="text"
+                placeholder="Search by customer name, license plate..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
         </div>
 
