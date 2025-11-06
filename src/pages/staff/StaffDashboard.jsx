@@ -41,6 +41,8 @@ const StaffDashboard = () => {
   })
   const [vehicleForm, setVehicleForm] = useState({
     customerId: '',
+    customerUsername: '',
+    customerName: '',
     vinNumber: '',
     licensePlate: '',
     model: '',
@@ -142,6 +144,32 @@ const StaffDashboard = () => {
     }
   }
 
+  // Function to find customer by username
+  const handleCustomerUsernameChange = async (username) => {
+    setVehicleForm({
+      ...vehicleForm,
+      customerUsername: username,
+      customerName: '',
+      customerId: ''
+    })
+
+    if (username.trim() === '') {
+      return
+    }
+
+    // Find customer by username
+    const foundCustomer = customers.find(c => c.username === username.trim())
+    
+    if (foundCustomer) {
+      setVehicleForm({
+        ...vehicleForm,
+        customerUsername: username,
+        customerName: foundCustomer.fullName,
+        customerId: foundCustomer.customerId || foundCustomer.id
+      })
+    }
+  }
+
   // Step 2: Add vehicle for customer (Staff only)
   const handleAddVehicle = async (e) => {
     e.preventDefault()
@@ -171,6 +199,8 @@ const StaffDashboard = () => {
         setShowAddVehicleModal(false)
         setVehicleForm({
           customerId: '',
+          customerUsername: '',
+          customerName: '',
           vinNumber: '',
           licensePlate: '',
           model: '',
@@ -778,20 +808,25 @@ const StaffDashboard = () => {
             
             <form className="modal-body" onSubmit={handleAddVehicle}>
               <div className="form-group">
-                <label htmlFor="customerId">Chọn Khách Hàng *</label>
-                <select
-                  id="customerId"
-                  value={vehicleForm.customerId}
-                  onChange={(e) => setVehicleForm({...vehicleForm, customerId: e.target.value})}
+                <label htmlFor="customerUsername">Username Khách Hàng *</label>
+                <input
+                  type="text"
+                  id="customerUsername"
+                  value={vehicleForm.customerUsername}
+                  onChange={(e) => handleCustomerUsernameChange(e.target.value)}
+                  placeholder="Nhập username (số điện thoại)"
                   required
-                >
-                  <option value="">-- Chọn khách hàng --</option>
-                  {customers.map((customer) => (
-                    <option key={customer.customerId || customer.id} value={customer.customerId || customer.id}>
-                      {customer.fullName} - {customer.phoneNumber}
-                    </option>
-                  ))}
-                </select>
+                />
+                {vehicleForm.customerName && (
+                  <div className="customer-found">
+                    ✓ Khách hàng: <strong>{vehicleForm.customerName}</strong>
+                  </div>
+                )}
+                {vehicleForm.customerUsername && !vehicleForm.customerName && (
+                  <div className="customer-not-found">
+                    ⚠ Không tìm thấy khách hàng với username này
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
