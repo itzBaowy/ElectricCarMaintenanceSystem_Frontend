@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './styles/App.css'
 import LandingPage from './pages/LandingPage'
 import Login from './components/auth/Login'
-import Register from './components/auth/Register'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CustomerDashboard from './pages/customer/CustomerDashboard'
@@ -28,14 +27,6 @@ function App() {
             element={
               <ProtectedRoute requireAuth={false}>
                 <Login />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/register" 
-            element={
-              <ProtectedRoute requireAuth={false}>
-                <Register />
               </ProtectedRoute>
             } 
           />

@@ -35,9 +35,6 @@ const Header = () => {
   const handleAuthClick = (action) => {
     if (action === 'login') {
       navigate('/login')
-    } else if (action === 'register') {
-      // TODO: Navigate to register page when created
-      navigate('/register')
     }
     setIsMenuOpen(false) // Close mobile menu after clicking
   }
@@ -115,12 +112,6 @@ const Header = () => {
               >
                 Login
               </button>
-              <button 
-                className="mobile-btn-register"
-                onClick={() => handleAuthClick('register')}
-              >
-                Register
-              </button>
             </div>
           </div>
 
@@ -130,12 +121,6 @@ const Header = () => {
               onClick={() => handleAuthClick('login')}
             >
               Login
-            </button>
-            <button 
-              className="btn-register"
-              onClick={() => handleAuthClick('register')}
-            >
-              Register
             </button>
           </div>
 

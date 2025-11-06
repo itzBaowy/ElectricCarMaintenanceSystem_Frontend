@@ -231,11 +231,8 @@ const Login = () => {
           </form>
 
           <div className="login-footer">
-            <p>
-              Don't have any account? 
-              <Link to="/register" className="register-link">
-                Register
-              </Link>
+            <p className="info-text">
+              New customers can register through our staff at the service center.
             </p>
           </div>
           </div>
