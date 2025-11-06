@@ -15,6 +15,7 @@ const StaffDashboard = () => {
   const [appointments, setAppointments] = useState([])
   const [technicians, setTechnicians] = useState([])
   const [customers, setCustomers] = useState([])
+  const [vehicleModels, setVehicleModels] = useState([])
   const [loading, setLoading] = useState(true)
   const [assignLoading, setAssignLoading] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState(null)
@@ -43,7 +44,6 @@ const StaffDashboard = () => {
     vinNumber: '',
     licensePlate: '',
     model: '',
-    manufacturer: '',
     currentKilometers: '',
     purchaseDate: ''
   })
@@ -58,10 +58,11 @@ const StaffDashboard = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
-      const [appointmentsResult, techniciansResult, customersResult] = await Promise.all([
+      const [appointmentsResult, techniciansResult, customersResult, vehicleModelsResult] = await Promise.all([
         appointmentService.getAllAppointments(),
         technicianService.getAllTechnicians(),
-        customerService.getAllCustomers()
+        customerService.getAllCustomers(),
+        vehicleService.getAllVehicleModels()
       ])
 
       if (appointmentsResult.success) {
@@ -84,6 +85,12 @@ const StaffDashboard = () => {
         setCustomers(customersResult.data || [])
       } else {
         logger.error('Failed to fetch customers:', customersResult.message)
+      }
+
+      if (vehicleModelsResult.success) {
+        setVehicleModels(vehicleModelsResult.data || [])
+      } else {
+        logger.error('Failed to fetch vehicle models:', vehicleModelsResult.message)
       }
     } catch (error) {
       logger.error('Error fetching data:', error)
@@ -139,7 +146,7 @@ const StaffDashboard = () => {
   const handleAddVehicle = async (e) => {
     e.preventDefault()
     
-    if (!vehicleForm.customerId || !vehicleForm.vinNumber || !vehicleForm.licensePlate) {
+    if (!vehicleForm.customerId || !vehicleForm.vinNumber || !vehicleForm.licensePlate || !vehicleForm.model) {
       alert('Vui lòng điền đầy đủ thông tin xe!')
       return
     }
@@ -150,7 +157,6 @@ const StaffDashboard = () => {
         vinNumber: vehicleForm.vinNumber,
         licensePlate: vehicleForm.licensePlate,
         model: vehicleForm.model,
-        manufacturer: vehicleForm.manufacturer,
         currentKilometers: vehicleForm.currentKilometers,
         purchaseDate: vehicleForm.purchaseDate
       })
@@ -168,7 +174,6 @@ const StaffDashboard = () => {
           vinNumber: '',
           licensePlate: '',
           model: '',
-          manufacturer: '',
           currentKilometers: '',
           purchaseDate: ''
         })
@@ -814,25 +819,20 @@ const StaffDashboard = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="model">Model Xe</label>
-                <input
-                  type="text"
+                <label htmlFor="model">Model Xe *</label>
+                <select
                   id="model"
                   value={vehicleForm.model}
                   onChange={(e) => setVehicleForm({...vehicleForm, model: e.target.value})}
-                  placeholder="VF e34"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="manufacturer">Hãng Xe</label>
-                <input
-                  type="text"
-                  id="manufacturer"
-                  value={vehicleForm.manufacturer}
-                  onChange={(e) => setVehicleForm({...vehicleForm, manufacturer: e.target.value})}
-                  placeholder="VinFast"
-                />
+                  required
+                >
+                  <option value="">-- Chọn model xe --</option>
+                  {vehicleModels.map((model) => (
+                    <option key={model.id} value={model.name}>
+                      {model.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">
