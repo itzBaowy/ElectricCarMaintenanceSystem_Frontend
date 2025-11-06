@@ -6,6 +6,46 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 2px solid #000000;
+}
+
+/* Custom Header for All Appointments */
+.all-appointments-header-custom {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+
+.all-appointments-header-custom h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff !important;
+}
+
+.all-appointments-close-btn {
+  background: none !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.all-appointments-close-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: rotate(90deg);
 }
 
 .all-appointments-content {
@@ -29,6 +69,23 @@
 .search-bar {
   position: relative;
   margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #000000 !important;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #333333 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .search-icon {
@@ -78,11 +135,12 @@
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 20px;
+  align-items: stretch;
 }
 
 .status-tab {
   padding: 10px 18px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #000000;
   background: white;
   border-radius: 25px;
   font-size: 14px;
@@ -90,16 +148,22 @@
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  color: #000000;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 .status-tab:hover {
-  border-color: #667eea;
+  border-color: #333333;
   transform: translateY(-2px);
 }
 
 .status-tab.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: #000000;
+  border-color: #000000;
   color: white;
 }
 
@@ -112,30 +176,31 @@
 
 .sort-section label {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   font-size: 14px;
 }
 
 .sort-select {
   padding: 8px 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #000000;
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   background: white;
+  color: #000000;
 }
 
 .sort-select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #333333;
 }
 
 /* Results Info */
 .results-info {
   padding: 12px 0;
   font-size: 14px;
-  color: #666;
+  color: #000000;
   font-weight: 500;
   border-bottom: 1px solid #f0f0f0;
   margin-bottom: 20px;
@@ -151,7 +216,7 @@
 
 .appointment-item {
   background: white;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #000000;
   border-radius: 15px;
   padding: 20px;
   cursor: pointer;
@@ -160,8 +225,8 @@
 }
 
 .appointment-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  border-color: #333333;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   transform: translateY(-5px);
 }
 
@@ -182,14 +247,14 @@
 
 .id-label {
   font-size: 12px;
-  color: #999;
+  color: #666666;
   font-weight: 600;
 }
 
 .id-value {
   font-size: 14px;
   font-weight: 700;
-  color: #333;
+  color: #000000;
 }
 
 /* Status Badge in Grid */
@@ -254,43 +319,43 @@
 
 .appointment-datetime .date {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   font-size: 14px;
 }
 
 .appointment-datetime .time {
   font-size: 13px;
-  color: #666;
+  color: #666666;
 }
 
 .vehicle-model {
   font-weight: 600;
-  color: #333;
+  color: #000000;
   font-size: 14px;
 }
 
 .vehicle-plate {
   font-size: 13px;
-  color: #666;
+  color: #666666;
   font-weight: 500;
 }
 
 .service-name {
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: #000000;
   flex: 1;
 }
 
 .additional-services {
   font-size: 12px;
-  color: #667eea;
+  color: #000000;
   font-weight: 600;
 }
 
 .technician-name {
   font-size: 14px;
-  color: #333;
+  color: #000000;
   font-weight: 500;
 }
 
@@ -300,28 +365,28 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  background: #f5f5f5;
   border-radius: 8px;
   margin-bottom: 10px;
 }
 
 .cost-label {
   font-size: 13px;
-  color: #666;
+  color: #666666;
   font-weight: 600;
 }
 
 .cost-value {
   font-size: 16px;
   font-weight: 700;
-  color: #667eea;
+  color: #000000;
 }
 
 /* View Detail Hint */
 .view-detail-hint {
   text-align: center;
   font-size: 12px;
-  color: #999;
+  color: #666666;
   font-style: italic;
   padding-top: 8px;
   border-top: 1px solid #f0f0f0;

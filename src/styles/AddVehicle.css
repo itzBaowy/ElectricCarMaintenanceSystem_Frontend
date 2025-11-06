@@ -31,6 +31,7 @@
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
+  border: 2px solid #000000;
 }
 
 @keyframes slideUp {
@@ -50,6 +51,47 @@
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 2px solid #f0f0f0;
+}
+
+/* Custom Header for Add Vehicle */
+.add-vehicle-header-custom {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+
+.add-vehicle-header-custom h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.add-vehicle-close-btn {
+  background: none !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.add-vehicle-close-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: rotate(90deg);
 }
 
 .modal-header h2 {
@@ -94,7 +136,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #333;
+  color: #000000;
   font-size: 0.95rem;
 }
 
@@ -107,18 +149,20 @@
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #000000 !important;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
   box-sizing: border-box;
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #333333 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .form-group input.error,

@@ -86,11 +86,11 @@ const AllAppointments = ({ appointments, onClose, onViewDetail }) => {
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay" onClick={onClose} data-component="all-appointments">
       <div className="modal-content all-appointments-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>📋 All Appointments</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+        <div className="all-appointments-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+          <h2>All Appointments</h2>
+          <button className="all-appointments-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
         </div>
 
         <div className="all-appointments-content">
@@ -98,7 +98,6 @@ const AllAppointments = ({ appointments, onClose, onViewDetail }) => {
           <div className="filters-section">
             {/* Search Bar */}
             <div className="search-bar">
-              <span className="search-icon">🔍</span>
               <input
                 type="text"
                 placeholder="Search by vehicle, service, technician, or ID..."

@@ -8,6 +8,7 @@ import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
+import Footer from '../../components/layout/Footer'
 import '../../styles/CustomerDashboard.css'
 import customerService from '../../api/customerService'
 
@@ -256,10 +257,10 @@ const CustomerDashboard = () => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      PENDING: { text: 'Pending', class: 'pending', icon: '🟡' },
-      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '✅' },
-      COMPLETED: { text: 'Completed', class: 'completed', icon: '🟢' },
-      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '❌' }
+      PENDING: { text: 'Pending', class: 'pending', icon: '' },
+      CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '' },
+      COMPLETED: { text: 'Completed', class: 'completed', icon: '' },
+      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '' }
     }
     return statusMap[status] || statusMap.PENDING
   }
@@ -274,19 +275,19 @@ const CustomerDashboard = () => {
       <div className="dashboard-nav">
         <div className="nav-content">
           <div className="nav-brand">
-            <h2>⚡ ElectricCare</h2>
+            <h2>ElectricCare</h2>
             <span>Customer Portal</span>
           </div>
           <div className="nav-actions">
-            <span className="nav-user">Hello, {customer.fullName}</span>
+            <span className="nav-user">Hello {customer.fullName}, How's your day?</span>
             <button onClick={handleEditProfile} className="edit-profile-btn">
-              ✏️ Edit Profile
+              Edit Profile
             </button>
             <button onClick={handleChangePassword} className="change-password-btn">
-              🔒 Change Password
+              Change Password
             </button>
             <button onClick={handleLogout} className="logout-btn">
-              🚪 Logout
+              Logout
             </button>
           </div>
         </div>
@@ -300,7 +301,7 @@ const CustomerDashboard = () => {
               {customer.fullName.charAt(0).toUpperCase()}
             </div>
             <div className="customer-details">
-              <h1>Welcome back, {customer.fullName}! 👋</h1>
+              <h1>Welcome back, {customer.fullName}!</h1>
               <p>Ready to take care of your electric vehicle today?</p>
               <div className="customer-meta">
                 <span>Member since {new Date(customer.joinDate).getFullYear()}</span>
@@ -310,8 +311,8 @@ const CustomerDashboard = () => {
             </div>
           </div>
           <div className="welcome-actions">
-            <button className="quick-action-btn primary">
-              📅 Book Service
+            <button className="quick-action-btn primary" onClick={() => setShowBookMaintenance(true)}>
+              Book Service
             </button>
           </div>
         </div>
@@ -320,14 +321,12 @@ const CustomerDashboard = () => {
       {/* Quick Stats */}
       <div className="quick-stats">
         <div className="stat-card">
-          <div className="stat-icon">🚗</div>
           <div className="stat-info">
             <span className="stat-number">{vehicles.length}</span>
             <span className="stat-label">Your Vehicles</span>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">🔧</div>
           <div className="stat-info">
             <span className="stat-number">
               {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
@@ -336,7 +335,6 @@ const CustomerDashboard = () => {
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">📅</div>
           <div className="stat-info">
             <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
             <span className="stat-label">Completed Services</span>
@@ -347,17 +345,17 @@ const CustomerDashboard = () => {
       {/* Main Content */}
       <div className="dashboard-content">
         {/* Vehicles Section */}
-        <div className="section">
-          <div className="section-header">
-            <h2>🚗 Your Electric Vehicles</h2>
+        <div className="section vehicles-section">
+          <div className="vehicles-header-black">
+            <h2>Your Electric Vehicles</h2>
           </div>
-          <div className="vehicles-grid">
-            {vehicles.length === 0 ? (
-              <div className="no-vehicles">
-                <p>🚗 You haven't added any vehicles yet.</p>
-                <p className="staff-help-text">Please visit our service center or contact our staff to add your vehicle.</p>
-              </div>
-            ) : (
+          <div className="vehicles-content">
+            <div className="vehicles-grid">
+              {vehicles.length === 0 ? (
+                <div className="no-vehicles">
+                  <p>You haven't added any vehicles yet.</p>
+                </div>
+              ) : (
               vehicles.map(vehicle => {
                 const model = getVehicleModel(vehicle.modelId)
                 return (
@@ -395,20 +393,21 @@ const CustomerDashboard = () => {
                         className="action-btn danger" 
                         onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
                       >
-                        🗑️ Delete
+                        Delete
                       </button>
                     </div>
                   </div>
                 )
               })
             )}
+            </div>
           </div>
         </div>
 
         {/* Recent Appointments */}
         <div className="section">
-          <div className="section-header">
-            <h2>📋 Recent Appointments</h2>
+          <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2>Recent Appointments</h2>
             <button 
               className="view-all-btn"
               onClick={handleViewAllAppointments}
@@ -419,7 +418,7 @@ const CustomerDashboard = () => {
           <div className="appointments-list">
             {recentAppointments.length === 0 ? (
               <div className="no-appointments">
-                <p>📅 You don't have any appointments yet.</p>
+                <p>You don't have any appointments yet.</p>
                 <p>Book your first maintenance service now!</p>
               </div>
             ) : (
@@ -456,8 +455,8 @@ const CustomerDashboard = () => {
                         {appointment.serviceItems && appointment.serviceItems.length > 0 && 
                           ` + ${appointment.serviceItems.length} service(s)`}
                       </h4>
-                      <p>🚗 {appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
-                      <p>👨‍🔧 Technician: {appointment.technicianName || 'Not assigned yet'}</p>
+                      <p>{appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
+                      <p>Technician: {appointment.technicianName || 'Not assigned yet'}</p>
                     </div>
                     <div className="appointment-status">
                       <span className={`status-badge ${statusInfo.class}`}>
@@ -516,6 +515,8 @@ const CustomerDashboard = () => {
           onPasswordChanged={handlePasswordChanged}
         />
       )}
+
+      <Footer />
     </div>
   )
 }

@@ -1,15 +1,17 @@
 /* Customer Dashboard Styles */
 .customer-dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Navigation Header */
 .dashboard-nav {
-  background: white;
-  border-bottom: 1px solid #e1e5e9;
+  background: #000000;
+  border-bottom: 2px solid #000000;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-content {
@@ -23,15 +25,12 @@
 .nav-brand h2 {
   margin: 0;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
 }
 
 .nav-brand span {
   font-size: 0.85rem;
-  color: #666;
+  color: #cccccc;
   margin-left: 0.5rem;
 }
 
@@ -42,67 +41,78 @@
 }
 
 .nav-user {
-  color: #666;
+  color: #ffffff;
   font-weight: 500;
+  white-space: nowrap;
+  min-width: 280px;
 }
 
 .edit-profile-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  padding: 0.65rem 1.3rem !important;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .edit-profile-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  background: #f0f0f0;
 }
 
 .change-password-btn {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  padding: 0.65rem 1.3rem !important;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .change-password-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+  background: #f0f0f0;
 }
 
 .logout-btn {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  color: #6c757d;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  color: #000000 !important;
+  padding: 0.65rem 1.5rem !important;
+  border-radius: 8px !important;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 0.9rem !important;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .logout-btn:hover {
-  background: #e9ecef;
-  border-color: #adb5bd;
+  background: #f0f0f0 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
 }
 
 /* Dashboard Content Container */
-.customer-dashboard > *:not(.dashboard-nav) {
+.customer-dashboard > *:not(.dashboard-nav):not(.welcome-header) {
   padding: 0 2rem;
 }
 
 .customer-dashboard > .welcome-header {
   margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .loading {
@@ -111,16 +121,17 @@
   align-items: center;
   height: 100vh;
   font-size: 1.2rem;
-  color: #666;
+  color: #000000;
 }
 
 /* Welcome Header */
 .welcome-header {
-  background: white;
+  background: #ffffff;
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+  border: 2px solid #000000;
 }
 
 .welcome-content {
@@ -139,28 +150,26 @@
 .customer-avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #000000;
+  color: #ffffff;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
   font-weight: bold;
+  border: 2px solid #000000;
 }
 
 .customer-details h1 {
   margin: 0;
   font-size: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #000000;
 }
 
 .customer-details p {
   margin: 0.5rem 0 0 0;
-  color: #666;
+  color: #333333;
   font-size: 1.1rem;
 }
 
@@ -170,7 +179,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #888;
+  color: #666666;
 }
 
 .customer-meta span {
@@ -184,7 +193,7 @@
 
 .quick-action-btn {
   padding: 0.8rem 1.5rem;
-  border: none;
+  border: 2px solid #000000;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
@@ -193,28 +202,29 @@
 }
 
 .quick-action-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #000000;
+  color: #ffffff;
 }
 
 .quick-action-btn.secondary {
-  background: #f8f9fa;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .quick-action-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .quick-action-btn.primary:hover {
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  background: #333333;
 }
 
 .quick-action-btn.secondary:hover {
-  background: #667eea;
-  color: white;
+  background: #f0f0f0;
+  color: #000000;
 }
 
 /* Quick Stats */
@@ -226,14 +236,18 @@
 }
 
 .stat-card {
-  background: white;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
   transition: transform 0.3s ease;
+  border: 2px solid #000000;
+  text-align: center;
 }
 
 .stat-card:hover {
@@ -247,30 +261,59 @@
 .stat-info {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .stat-number {
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
+  color: #000000;
 }
 
 .stat-label {
-  color: #666;
+  color: #666666;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 /* Dashboard Content */
 .dashboard-content {
   display: grid;
   gap: 2rem;
+  flex: 1;
+  padding-bottom: 2rem;
 }
 
 .section {
-  background: white;
+  background: #ffffff;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+  border: 2px solid #000000;
+}
+
+/* Vehicles Section with Black Header */
+.vehicles-section {
+  padding: 0;
+  overflow: hidden;
+}
+
+.vehicles-header-black {
+  background: #000000;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  margin: 0;
+}
+
+.vehicles-header-black h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.vehicles-content {
+  padding: 2rem;
 }
 
 .section-header {
@@ -278,27 +321,34 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: nowrap;
 }
 
 .section-header h2 {
   margin: 0;
-  color: #333;
+  color: #000000;
   font-size: 1.5rem;
+  flex: 1;
 }
 
 .add-btn, .view-all-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  transition: transform 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .add-btn:hover, .view-all-btn:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  background: #333333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Vehicles Grid */
@@ -312,21 +362,22 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 3rem 2rem;
-  background: white;
+  background: #ffffff;
   border-radius: 12px;
-  border: 2px dashed #dee2e6;
+  border: 2px solid #000000;
 }
 
 .no-vehicles p {
-  font-size: 1.1rem;
-  color: #6c757d;
+  font-size: 1.3rem;
+  color: #000000;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 .add-btn-large {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
+  background: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
   padding: 1rem 2rem;
   border-radius: 10px;
   font-size: 1rem;
@@ -337,19 +388,21 @@
 
 .add-btn-large:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  background: #333333;
 }
 
 .vehicle-card {
-  border: 2px solid #e1e5e9;
+  border: 2px solid #000000;
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.3s ease;
+  background: #ffffff;
 }
 
 .vehicle-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
+  border-color: #333333;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .vehicle-header {
@@ -361,13 +414,13 @@
 
 .vehicle-header h3 {
   margin: 0;
-  color: #333;
+  color: #000000;
   font-size: 1.2rem;
 }
 
 .vehicle-year {
-  background: #f8f9fa;
-  color: #666;
+  background: #000000;
+  color: #ffffff;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -385,17 +438,17 @@
 }
 
 .detail-item .label {
-  color: #666;
+  color: #666666;
   font-size: 0.9rem;
 }
 
 .detail-item .value {
   font-weight: 500;
-  color: #333;
+  color: #000000;
 }
 
 .next-maintenance {
-  color: #f5576c !important;
+  color: #000000 !important;
   font-weight: bold !important;
 }
 
@@ -408,30 +461,31 @@
   flex: 1;
   padding: 0.75rem;
   border-radius: 8px;
-  border: none;
+  border: 2px solid #000000;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #000000;
+  color: #ffffff;
 }
 
 .action-btn.secondary {
-  background: #f8f9fa;
-  color: #666;
-  border: 1px solid #e1e5e9;
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .action-btn.danger {
-  background: #dc3545;
-  color: white;
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .action-btn.danger:hover {
-  background: #c82333;
+  background: #f0f0f0;
 }
 
 .action-btn:hover {
@@ -448,21 +502,22 @@
 .no-appointments {
   text-align: center;
   padding: 3rem 2rem;
-  background: #f8f9fa;
+  background: #ffffff;
   border-radius: 12px;
-  color: #666;
+  color: #000000;
+  border: 2px solid #000000;
 }
 
 .no-appointments p:first-child {
   font-size: 1.2rem;
   font-weight: 500;
-  color: #333;
+  color: #000000;
   margin-bottom: 0.5rem;
 }
 
 .no-appointments p:last-child {
   font-size: 1rem;
-  color: #888;
+  color: #666666;
 }
 
 .appointment-card {
@@ -470,14 +525,15 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1.5rem;
-  border: 1px solid #e1e5e9;
+  border: 2px solid #000000;
   border-radius: 12px;
   transition: all 0.3s ease;
+  background: #ffffff;
 }
 
 .appointment-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: #333333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .appointment-date {
@@ -486,18 +542,18 @@
   align-items: center;
   min-width: 100px;
   padding: 1rem;
-  background: #f8f9fa;
+  background: #000000;
   border-radius: 8px;
 }
 
 .appointment-date .date {
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
   font-size: 0.9rem;
 }
 
 .appointment-date .time {
-  color: #666;
+  color: #cccccc;
   font-size: 0.85rem;
   margin-top: 0.25rem;
 }
@@ -508,13 +564,13 @@
 
 .appointment-details h4 {
   margin: 0 0 0.5rem 0;
-  color: #333;
+  color: #000000;
   font-size: 1.1rem;
 }
 
 .appointment-details p {
   margin: 0.25rem 0;
-  color: #666;
+  color: #666666;
   font-size: 0.9rem;
 }
 
@@ -530,31 +586,33 @@
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
+  border: 2px solid #000000;
 }
 
 .status-badge.confirmed {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #000000;
+  color: #ffffff;
 }
 
 .status-badge.completed {
-  background: #e8f5e8;
-  color: #2e7d32;
+  background: #000000;
+  color: #ffffff;
 }
 
 .status-badge.pending {
-  background: #fff8e1;
-  color: #f57c00;
+  background: #ffffff;
+  color: #000000;
+  border-color: #000000;
 }
 
 .status-badge.cancelled {
-  background: #ffebee;
-  color: #d32f2f;
+  background: #000000;
+  color: #ffffff;
 }
 
 .price {
   font-weight: bold;
-  color: #333;
+  color: #000000;
   font-size: 1.1rem;
 }
 

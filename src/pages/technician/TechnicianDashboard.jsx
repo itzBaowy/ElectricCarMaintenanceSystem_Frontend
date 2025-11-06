@@ -142,7 +142,7 @@ const TechnicianDashboard = () => {
         <div className="dashboard-header">
           <h1>Technician Dashboard</h1>
           <div className="header-actions">
-            <span className="welcome-text">Welcome, {currentUser?.username || 'Technician'}</span>
+            <span className="welcome-text">Welcome {currentUser?.username || 'Technician'}, Have a productive and successful day at work</span>
             <button onClick={handleLogout} className="btn-logout">
               Logout
             </button>
@@ -150,56 +150,67 @@ const TechnicianDashboard = () => {
         </div>
 
         {/* Statistics */}
-        <div className="stats-container">
-          <div className="stat-card">
-            <h3>Total Assigned</h3>
-            <p className="stat-number">{appointments.length}</p>
+        <div className="stats-section">
+          <div className="stats-header">
+            <h2>Appointment Statistics</h2>
           </div>
-          <div className="stat-card">
-            <h3>Pending</h3>
-            <p className="stat-number pending">
-              {appointments.filter(a => a.status === 'PENDING').length}
-            </p>
-          </div>
-          <div className="stat-card">
-            <h3>Confirmed</h3>
-            <p className="stat-number confirmed">
-              {appointments.filter(a => a.status === 'CONFIRMED').length}
-            </p>
-          </div>
-          <div className="stat-card">
-            <h3>Completed</h3>
-            <p className="stat-number completed">
-              {appointments.filter(a => a.status === 'COMPLETED').length}
-            </p>
+          <div className="stats-container">
+            <div className="stat-card">
+              <h3>TOTAL ASSIGNED</h3>
+              <p className="stat-number">{appointments.length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>PENDING</h3>
+              <p className="stat-number pending">
+                {appointments.filter(a => a.status === 'PENDING').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>CONFIRMED</h3>
+              <p className="stat-number confirmed">
+                {appointments.filter(a => a.status === 'CONFIRMED').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>COMPLETED</h3>
+              <p className="stat-number completed">
+                {appointments.filter(a => a.status === 'COMPLETED').length}
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="filters-container">
-          <div className="filter-group">
-            <label>Filter by Status:</label>
-            <select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="filter-select"
-            >
-              <option value="ALL">All Status</option>
-              <option value="PENDING">Pending</option>
-              <option value="CONFIRMED">Confirmed</option>
-              <option value="COMPLETED">Completed</option>
-              <option value="CANCELLED">Cancelled</option>
-            </select>
+        <div className="filters-section">
+          <div className="filters-header">
+            <h2>Filter & Search Appointments</h2>
           </div>
+          <div className="filters-container">
+            <div className="filter-group">
+              <label>Filter by Status:</label>
+              <select 
+                value={filterStatus} 
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="filter-select"
+              >
+                <option value="ALL">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+            </div>
 
-          <div className="search-group">
-            <input
-              type="text"
-              placeholder="Search by customer name, license plate, or ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-            />
+            <div className="search-group">
+              <label>Search:</label>
+              <input
+                type="text"
+                placeholder="Search by customer name, license plate..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
         </div>
 
