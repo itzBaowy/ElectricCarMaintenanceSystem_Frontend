@@ -45,7 +45,7 @@ const StaffDashboard = () => {
     licensePlate: '',
     model: '',
     currentKilometers: '',
-    purchaseDate: ''
+    purchaseYear: ''
   })
   const [selectedVehicleForService, setSelectedVehicleForService] = useState(null)
   const [recommendedServices, setRecommendedServices] = useState([])
@@ -158,7 +158,7 @@ const StaffDashboard = () => {
         licensePlate: vehicleForm.licensePlate,
         model: vehicleForm.model,
         currentKilometers: vehicleForm.currentKilometers,
-        purchaseDate: vehicleForm.purchaseDate
+        purchaseYear: vehicleForm.purchaseYear
       })
 
       if (result.success) {
@@ -175,7 +175,7 @@ const StaffDashboard = () => {
           licensePlate: '',
           model: '',
           currentKilometers: '',
-          purchaseDate: ''
+          purchaseYear: ''
         })
       } else {
         alert(`Lỗi: ${result.message}`)
@@ -850,13 +850,15 @@ const StaffDashboard = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="purchaseDate">Ngày Mua Xe</label>
+                <label htmlFor="purchaseYear">Ngày Mua Xe</label>
                 <input
-                  type="date"
-                  id="purchaseDate"
-                  value={vehicleForm.purchaseDate}
-                  onChange={(e) => setVehicleForm({...vehicleForm, purchaseDate: e.target.value})}
+                  type="month"
+                  id="purchaseYear"
+                  value={vehicleForm.purchaseYear}
+                  max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
+                  onChange={(e) => setVehicleForm({...vehicleForm, purchaseYear: e.target.value})}
                 />
+                <small className="field-hint">Tháng và năm mua xe (ví dụ: 2025-11)</small>
               </div>
 
               <div className="modal-footer">
