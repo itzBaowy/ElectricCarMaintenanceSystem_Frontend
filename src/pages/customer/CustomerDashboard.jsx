@@ -8,6 +8,7 @@ import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
+import Footer from '../../components/layout/Footer'
 import '../../styles/CustomerDashboard.css'
 import customerService from '../../api/customerService'
 
@@ -344,16 +345,17 @@ const CustomerDashboard = () => {
       {/* Main Content */}
       <div className="dashboard-content">
         {/* Vehicles Section */}
-        <div className="section">
-          <div className="section-header">
+        <div className="section vehicles-section">
+          <div className="vehicles-header-black">
             <h2>Your Electric Vehicles</h2>
           </div>
-          <div className="vehicles-grid">
-            {vehicles.length === 0 ? (
-              <div className="no-vehicles">
-                <p>You haven't added any vehicles yet.</p>
-              </div>
-            ) : (
+          <div className="vehicles-content">
+            <div className="vehicles-grid">
+              {vehicles.length === 0 ? (
+                <div className="no-vehicles">
+                  <p>You haven't added any vehicles yet.</p>
+                </div>
+              ) : (
               vehicles.map(vehicle => {
                 const model = getVehicleModel(vehicle.modelId)
                 return (
@@ -398,12 +400,13 @@ const CustomerDashboard = () => {
                 )
               })
             )}
+            </div>
           </div>
         </div>
 
         {/* Recent Appointments */}
         <div className="section">
-          <div className="section-header">
+          <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2>Recent Appointments</h2>
             <button 
               className="view-all-btn"
@@ -512,6 +515,8 @@ const CustomerDashboard = () => {
           onPasswordChanged={handlePasswordChanged}
         />
       )}
+
+      <Footer />
     </div>
   )
 }
