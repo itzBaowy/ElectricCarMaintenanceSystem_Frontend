@@ -35,7 +35,6 @@ const StaffDashboard = () => {
   const [customerForm, setCustomerForm] = useState({
     fullName: '',
     phoneNumber: '',
-    dateOfBirth: '',
     email: '',
     gender: 'MALE'
   })
@@ -99,7 +98,7 @@ const StaffDashboard = () => {
   const handleCreateCustomer = async (e) => {
     e.preventDefault()
     
-    if (!customerForm.fullName || !customerForm.phoneNumber || !customerForm.dateOfBirth || !customerForm.email) {
+    if (!customerForm.fullName || !customerForm.phoneNumber || !customerForm.email) {
       alert('Vui lòng điền đầy đủ thông tin khách hàng!')
       return
     }
@@ -123,7 +122,6 @@ const StaffDashboard = () => {
         setCustomerForm({ 
           fullName: '', 
           phoneNumber: '', 
-          dateOfBirth: '',
           email: '',
           gender: 'MALE'
         })
@@ -460,7 +458,7 @@ const StaffDashboard = () => {
             <div className="info-card">
               <h3>📌 Quy Trình Tiếp Nhận Khách Walk-in:</h3>
               <ol>
-                <li><strong>Ghi nhận thông tin:</strong> Họ tên, Số điện thoại, Ngày sinh</li>
+                <li><strong>Ghi nhận thông tin:</strong> Họ tên, Số điện thoại, Email, Giới tính</li>
                 <li><strong>Tạo tài khoản:</strong> Username = Số điện thoại, Password = Số điện thoại</li>
                 <li><strong>Kiểm tra xe:</strong> Số VIN, Biển số, Số km hiện tại, Giấy tờ xe</li>
                 <li><strong>Thêm xe:</strong> Staff thêm xe vào tài khoản khách hàng</li>
@@ -477,7 +475,7 @@ const StaffDashboard = () => {
                     <th>ID</th>
                     <th>Họ Tên</th>
                     <th>Số Điện Thoại</th>
-                    <th>Ngày Sinh</th>
+                    <th>Email</th>
                     <th>Ngày Tạo</th>
                   </tr>
                 </thead>
@@ -487,7 +485,7 @@ const StaffDashboard = () => {
                       <td>#{customer.customerId || customer.id}</td>
                       <td>{customer.fullName}</td>
                       <td>{customer.phoneNumber}</td>
-                      <td>{customer.dateOfBirth ? new Date(customer.dateOfBirth).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                      <td>{customer.email || 'N/A'}</td>
                       <td>{customer.createdAt ? new Date(customer.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                     </tr>
                   ))}
@@ -727,17 +725,6 @@ const StaffDashboard = () => {
                   value={customerForm.email}
                   onChange={(e) => setCustomerForm({...customerForm, email: e.target.value})}
                   placeholder="email@example.com"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="dateOfBirth">Ngày Sinh *</label>
-                <input
-                  type="date"
-                  id="dateOfBirth"
-                  value={customerForm.dateOfBirth}
-                  onChange={(e) => setCustomerForm({...customerForm, dateOfBirth: e.target.value})}
                   required
                 />
               </div>
