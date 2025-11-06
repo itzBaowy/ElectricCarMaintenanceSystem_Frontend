@@ -164,9 +164,9 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content edit-profile-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2>✏️ Chỉnh Sửa Thông Tin</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+        <div className="edit-profile-header-custom" data-component="edit-profile" style={{ backgroundColor: '#000000', color: '#ffffff', backgroundImage: 'none' }}>
+          <h2 style={{ color: '#ffffff', margin: 0 }}> Chỉnh Sửa Thông Tin</h2>
+          <button className="edit-profile-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'transparent' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="edit-profile-form">
