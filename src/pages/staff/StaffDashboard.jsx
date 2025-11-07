@@ -442,7 +442,7 @@ const StaffDashboard = () => {
       <div className="staff-container">
         <div className="staff-header">
           <div className="header-content">
-            <h1>🔧 Staff Dashboard - Quản Lý Bảo Dưỡng</h1>
+            <h1> Staff Dashboard - Quản Lý Bảo Dưỡng</h1>
             <p>Quản lý khách hàng walk-in, xe, appointment và hoá đơn</p>
           </div>
           <button className="logout-btn" onClick={handleLogout}>
