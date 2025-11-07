@@ -763,24 +763,27 @@
 }
 
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 2rem;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  font-size: 1.5rem;
   color: #000000;
   cursor: pointer;
   line-height: 1;
   padding: 0;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  font-weight: bold;
 }
 
 .close-btn:hover {
-  color: #666666;
-  transform: rotate(90deg);
+  background: #000000;
+  color: #ffffff;
+  transform: scale(1.1);
 }
 
 .modal-body {
