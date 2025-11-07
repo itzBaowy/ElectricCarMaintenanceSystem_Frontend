@@ -446,7 +446,7 @@ const StaffDashboard = () => {
             <p>Quản lý khách hàng walk-in, xe, appointment và hoá đơn</p>
           </div>
           <button className="logout-btn" onClick={handleLogout}>
-            Đăng xuất
+            Logout
           </button>
         </div>
 
