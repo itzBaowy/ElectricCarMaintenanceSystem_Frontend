@@ -466,19 +466,19 @@ const StaffDashboard = () => {
             className={`tab-btn ${activeTab === 'walk-in' ? 'active' : ''}`}
             onClick={() => setActiveTab('walk-in')}
           >
-             Khách Hàng Walk-in
+            Khách Hàng Walk-in
           </button>
           <button 
             className={`tab-btn ${activeTab === 'appointments' ? 'active' : ''}`}
             onClick={() => setActiveTab('appointments')}
           >
-             Quản Lý Appointments
+            Quản Lý Appointments
           </button>
           <button 
             className={`tab-btn ${activeTab === 'invoices' ? 'active' : ''}`}
             onClick={() => setActiveTab('invoices')}
           >
-             Hoá Đơn & Thanh Toán
+            Hoá Đơn & Thanh Toán
           </button>
         </div>
 
@@ -486,7 +486,7 @@ const StaffDashboard = () => {
         {activeTab === 'walk-in' && (
           <div className="walk-in-section">
             <div className="section-header">
-              <h2> Đăng Ký Khách Hàng Walk-in</h2>
+              <h2>Đăng Ký Khách Hàng Walk-in</h2>
               <p>Khách hàng đến trực tiếp trung tâm, ghi nhận thông tin và tạo tài khoản</p>
             </div>
 
@@ -645,7 +645,6 @@ const StaffDashboard = () => {
                           <td>
                             {appointment.technicianName ? (
                               <div className="technician-assigned">
-                                <span className="tech-icon">👨‍🔧</span>
                                 {appointment.technicianName}
                               </div>
                             ) : (
@@ -691,35 +690,35 @@ const StaffDashboard = () => {
             {/* Statistics */}
             <div className="statistics-section">
               <div className="stat-card">
-                <div className="stat-icon">📋</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{appointments.length}</h3>
                   <p>Tổng Appointments</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">⏳</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{appointments.filter(a => a.status === 'PENDING').length}</h3>
                   <p>Chờ xử lý</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">⚠️</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{appointments.filter(a => a.status === 'INCOMPLETED').length}</h3>
                   <p>Cần bổ sung</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">✅</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{appointments.filter(a => a.status === 'COMPLETED').length}</h3>
                   <p>Hoàn thành</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">👨‍🔧</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{technicians.length}</h3>
                   <p>Kỹ Thuật Viên</p>
