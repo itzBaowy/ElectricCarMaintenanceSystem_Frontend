@@ -33,6 +33,10 @@ const StaffDashboard = () => {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [activeTab, setActiveTab] = useState('appointments') // appointments, walk-ins, invoices
   
+  // Approval state for service items
+  const [serviceItemApprovals, setServiceItemApprovals] = useState({}) // { [detailId]: boolean }
+  const [approvingItems, setApprovingItems] = useState(false)
+  
   // Form states
   const [customerForm, setCustomerForm] = useState({
     fullName: '',
@@ -311,14 +315,81 @@ const StaffDashboard = () => {
   }
 
   // View appointment details
-  const handleViewDetails = (appointment) => {
+  const handleViewDetails = async (appointment) => {
     setSelectedAppointment(appointment)
     setShowDetailModal(true)
+    
+    // If appointment is WAITING_FOR_APPROVAL, fetch detailed service items with technician notes
+    if (appointment.status === 'WAITING_FOR_APPROVAL') {
+      try {
+        const result = await appointmentService.getAppointmentDetails(appointment.id)
+        if (result.success) {
+          // Store the detailed service items in the appointment object
+          setSelectedAppointment({
+            ...appointment,
+            detailedServiceItems: result.data
+          })
+          
+          // Initialize approval state - default all customerApproved=true items to checked
+          const initialApprovals = {}
+          result.data.forEach(item => {
+            initialApprovals[item.id] = item.customerApproved
+          })
+          setServiceItemApprovals(initialApprovals)
+        } else {
+          logger.error('Failed to fetch appointment details:', result.message)
+        }
+      } catch (error) {
+        logger.error('Error fetching appointment details:', error)
+      }
+    }
   }
 
   const handleCloseDetailModal = () => {
     setShowDetailModal(false)
     setSelectedAppointment(null)
+    setServiceItemApprovals({}) // Reset approvals
+  }
+
+  // Toggle service item approval
+  const handleToggleServiceItemApproval = (detailId) => {
+    setServiceItemApprovals(prev => ({
+      ...prev,
+      [detailId]: !prev[detailId]
+    }))
+  }
+
+  // Submit service item approvals
+  const handleSubmitApprovals = async () => {
+    if (!selectedAppointment) return
+
+    setApprovingItems(true)
+    try {
+      // Build approval items array
+      const approvalItems = selectedAppointment.detailedServiceItems.map(item => ({
+        appointmentServiceDetailId: item.id,
+        approved: serviceItemApprovals[item.id] || false
+      }))
+
+      const result = await appointmentService.approveServiceItems(
+        selectedAppointment.id,
+        approvalItems
+      )
+
+      if (result.success) {
+        alert('✅ Đã cập nhật trạng thái duyệt dịch vụ thành công!')
+        handleCloseDetailModal()
+        // Refresh appointments list
+        fetchData()
+      } else {
+        alert('❌ Lỗi: ' + result.message)
+      }
+    } catch (error) {
+      logger.error('Error submitting approvals:', error)
+      alert('❌ Có lỗi xảy ra khi duyệt dịch vụ')
+    } finally {
+      setApprovingItems(false)
+    }
   }
 
   // Step 6: Handle INCOMPLETED appointments (need additional services)
@@ -1265,6 +1336,54 @@ const StaffDashboard = () => {
                 </div>
               )}
 
+              {/* Detailed Service Items for WAITING_FOR_APPROVAL status */}
+              {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && 
+               selectedAppointment.detailedServiceItems && 
+               selectedAppointment.detailedServiceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>⚠️ Duyệt Dịch Vụ Bổ Sung</h3>
+                  <p style={{ marginBottom: '15px', color: '#e67e22', fontWeight: '600' }}>
+                    Kỹ thuật viên đã đề xuất thay thế một số hạng mục. Vui lòng kiểm tra và duyệt:
+                  </p>
+                  <div className="approval-items-container">
+                    {selectedAppointment.detailedServiceItems
+                      .filter(item => item.technicianNotes) // Chỉ hiển thị những item có ghi chú
+                      .map((item) => (
+                        <div key={item.id} className={`approval-item ${item.actionType === 'REPLACE' ? 'needs-approval' : ''}`}>
+                          <div className="approval-item-header">
+                            <label className="approval-checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={serviceItemApprovals[item.id] || false}
+                                onChange={() => handleToggleServiceItemApproval(item.id)}
+                                className="approval-checkbox"
+                              />
+                              <span className="approval-item-name">{item.serviceItemName}</span>
+                            </label>
+                            <div className="approval-item-badges">
+                              <span className={`action-type-badge ${item.actionType?.toLowerCase()}`}>
+                                {item.actionType}
+                              </span>
+                              <span className="approval-price">{formatCurrency(item.price)}</span>
+                            </div>
+                          </div>
+                          {item.technicianNotes && (
+                            <div className="technician-notes">
+                              <strong>📝 Ghi chú kỹ thuật viên:</strong> {item.technicianNotes}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                  <div className="approval-summary">
+                    <p>
+                      <strong>Tổng số hạng mục cần duyệt:</strong> {selectedAppointment.detailedServiceItems.filter(item => item.technicianNotes).length} |{' '}
+                      <strong>Đã chọn:</strong> {Object.values(serviceItemApprovals).filter(Boolean).length}
+                    </p>
+                  </div>
+                </div>
+              )}
+
               {/* Timestamps */}
               {(selectedAppointment.createdAt || selectedAppointment.updatedAt) && (
                 <div className="detail-section">
@@ -1300,6 +1419,15 @@ const StaffDashboard = () => {
             </div>
 
             <div className="modal-footer">
+              {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && (
+                <button 
+                  className="approve-btn" 
+                  onClick={handleSubmitApprovals}
+                  disabled={approvingItems}
+                >
+                  {approvingItems ? 'Đang xử lý...' : '✅ Xác Nhận Duyệt'}
+                </button>
+              )}
               <button className="cancel-btn" onClick={handleCloseDetailModal}>
                 Đóng
               </button>

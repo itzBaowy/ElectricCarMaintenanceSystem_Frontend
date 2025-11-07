@@ -400,6 +400,63 @@ const appointmentService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Get appointment details with service items (staff)
+  getAppointmentDetails: async (appointmentId) => {
+    try {
+      const response = await api.get(`/api/appointments/${appointmentId}/details`)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Appointment details fetched successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to get appointment details',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get appointment details error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to get appointment details',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
+  // Approve service items (staff)
+  approveServiceItems: async (appointmentId, approvalItems) => {
+    try {
+      // approvalItems format: [{ appointmentServiceDetailId, approved }]
+      const response = await api.put(`/api/appointments/${appointmentId}/items/approve`, approvalItems)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Service item approval status updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update service item approval',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Approve service items error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update service item approval',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 
