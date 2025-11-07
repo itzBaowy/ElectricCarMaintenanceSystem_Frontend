@@ -30,6 +30,7 @@ const StaffDashboard = () => {
   const [showServiceRecommendationModal, setShowServiceRecommendationModal] = useState(false)
   const [showAdditionalServiceModal, setShowAdditionalServiceModal] = useState(false)
   const [showInvoiceModal, setShowInvoiceModal] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
   const [activeTab, setActiveTab] = useState('appointments') // appointments, walk-ins, invoices
   
   // Form states
@@ -262,6 +263,13 @@ const StaffDashboard = () => {
     setShowAssignModal(true)
   }
 
+  const formatCurrency = (amount) => {
+    if (!amount) return '0 VND'
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount)
+  }
   const handleAssignSubmit = async () => {
     if (!selectedTechnician) {
       alert('Vui lòng chọn kỹ thuật viên!')
@@ -300,6 +308,17 @@ const StaffDashboard = () => {
     } finally {
       setAssignLoading(false)
     }
+  }
+
+  // View appointment details
+  const handleViewDetails = (appointment) => {
+    setSelectedAppointment(appointment)
+    setShowDetailModal(true)
+  }
+
+  const handleCloseDetailModal = () => {
+    setShowDetailModal(false)
+    setSelectedAppointment(null)
   }
 
   // Step 6: Handle INCOMPLETED appointments (need additional services)
@@ -644,6 +663,13 @@ const StaffDashboard = () => {
                           </td>
                           <td>
                             <div className="action-btns">
+                              <button
+                                className="view-detail-btn"
+                                onClick={() => handleViewDetails(appointment)}
+                                title="Xem chi tiết"
+                              >
+                                👁️ Chi tiết
+                              </button>
                               {appointment.status === 'PENDING' && (
                                 <button
                                   className="assign-btn"
@@ -1070,6 +1096,212 @@ const StaffDashboard = () => {
                 onClick={() => handleConfirmAdditionalServices(true)}
               >
                 Khách Đồng Ý
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: Appointment Detail */}
+      {showDetailModal && selectedAppointment && (
+        <div className="modal-overlay" onClick={handleCloseDetailModal}>
+          <div className="modal-content detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>📋 Chi Tiết Appointment</h2>
+              <button className="close-btn" onClick={handleCloseDetailModal}>×</button>
+            </div>
+
+            <div className="modal-body">
+              {/* Appointment Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Appointment</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Mã Appointment:</label>
+                    <span>#{selectedAppointment.id || selectedAppointment.appointmentId}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Trạng Thái:</label>
+                    <span className={`status-badge ${getStatusBadgeClass(selectedAppointment.status)}`}>
+                      {getStatusText(selectedAppointment.status)}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Ngày Hẹn:</label>
+                    <span>{new Date(selectedAppointment.appointmentDate).toLocaleDateString('vi-VN')}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Giờ Hẹn:</label>
+                    <span>{formatTimeFromDate(selectedAppointment.appointmentDate)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Customer Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Khách Hàng</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Tên Khách Hàng:</label>
+                    <span>{selectedAppointment.customerName || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Số Điện Thoại:</label>
+                    <span>{selectedAppointment.customerPhone || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Email:</label>
+                    <span>{selectedAppointment.customerEmail || 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vehicle Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Xe</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Biển Số:</label>
+                    <span>{selectedAppointment.vehicleLicensePlate || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Model:</label>
+                    <span>{selectedAppointment.vehicleModel || 'N/A'}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Hãng:</label>
+                    <span>VinFast</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Dịch Vụ</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Gói Dịch Vụ:</label>
+                    <span>{selectedAppointment.servicePackageName || 'N/A'}</span>
+                  </div>
+                  {selectedAppointment.milestoneKm && (
+                    <div className="detail-item">
+                      <label>Mốc Km:</label>
+                      <span>{selectedAppointment.milestoneKm.toLocaleString('vi-VN')} km</span>
+                    </div>
+                  )}
+                  <div className="detail-item">
+                    <label>Chi Phí Dự Kiến:</label>
+                    <span className="price-highlight">{formatCurrency(selectedAppointment.estimatedCost)}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Technician Information */}
+              {selectedAppointment.technicianName && (
+                <div className="detail-section">
+                  <h3>Kỹ Thuật Viên</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Tên KTV:</label>
+                      <span>👨‍🔧 {selectedAppointment.technicianName}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Service Center Information */}
+              {selectedAppointment.nameCenter && (
+                <div className="detail-section">
+                  <h3>Trung Tâm Dịch Vụ</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Tên Trung Tâm:</label>
+                      <span>{selectedAppointment.nameCenter}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Địa Chỉ:</label>
+                      <span>{selectedAppointment.addressCenter}</span>
+                    </div>
+                    {selectedAppointment.districtCenter && (
+                      <div className="detail-item">
+                        <label>Quận/Huyện:</label>
+                        <span>{selectedAppointment.districtCenter}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Service Items */}
+              {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>Danh Sách Dịch Vụ</h3>
+                  <div className="service-items-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tên Dịch Vụ</th>
+                          <th>Mô Tả</th>
+                          <th>Loại</th>
+                          <th>Giá</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedAppointment.serviceItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.serviceItem?.name || 'N/A'}</td>
+                            <td><small>{item.serviceItem?.description || 'N/A'}</small></td>
+                            <td>
+                              <span className={`action-type-badge ${item.actionType?.toLowerCase()}`}>
+                                {item.actionType}
+                              </span>
+                            </td>
+                            <td className="price-cell">{formatCurrency(item.price)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Timestamps */}
+              {(selectedAppointment.createdAt || selectedAppointment.updatedAt) && (
+                <div className="detail-section">
+                  <h3>Thời Gian</h3>
+                  <div className="detail-grid">
+                    {selectedAppointment.createdAt && (
+                      <div className="detail-item">
+                        <label>Tạo Lúc:</label>
+                        <span>{new Date(selectedAppointment.createdAt).toLocaleString('vi-VN')}</span>
+                      </div>
+                    )}
+                    {selectedAppointment.updatedAt && (
+                      <div className="detail-item">
+                        <label>Cập Nhật Lúc:</label>
+                        <span>{new Date(selectedAppointment.updatedAt).toLocaleString('vi-VN')}</span>
+                      </div>
+                    )}
+                    {selectedAppointment.createdBy && (
+                      <div className="detail-item">
+                        <label>Người Tạo:</label>
+                        <span>{selectedAppointment.createdBy}</span>
+                      </div>
+                    )}
+                    {selectedAppointment.updatedBy && (
+                      <div className="detail-item">
+                        <label>Người Cập Nhật:</label>
+                        <span>{selectedAppointment.updatedBy}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={handleCloseDetailModal}>
+                Đóng
               </button>
             </div>
           </div>
