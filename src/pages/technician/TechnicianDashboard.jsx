@@ -18,6 +18,8 @@ const TechnicianDashboard = () => {
   const [showDetailModal, setShowDetailModal] = useState(false)
   const [updateLoading, setUpdateLoading] = useState(false)
   const [currentUser, setCurrentUser] = useState(null)
+  const [requestAdditionalService, setRequestAdditionalService] = useState(false)
+  const [upgradeItems, setUpgradeItems] = useState([]) // [{ serviceItemId, newActionType, notes }]
 
   useEffect(() => {
     initializeUser()
@@ -58,29 +60,98 @@ const TechnicianDashboard = () => {
   const handleViewDetails = (appointment) => {
     setSelectedAppointment(appointment)
     setShowDetailModal(true)
+    setRequestAdditionalService(false)
+    setUpgradeItems([])
   }
 
-  const handleStatusUpdate = async (appointmentId, newStatus) => {
-    if (!window.confirm(`Are you sure you want to update status to ${newStatus}?`)) {
-      return
+  const handleToggleUpgradeItem = (serviceItemId) => {
+    const existingIndex = upgradeItems.findIndex(item => item.serviceItemId === serviceItemId)
+    
+    if (existingIndex >= 0) {
+      // Remove item
+      setUpgradeItems(upgradeItems.filter(item => item.serviceItemId !== serviceItemId))
+    } else {
+      // Add item with default values
+      setUpgradeItems([...upgradeItems, {
+        serviceItemId: serviceItemId,
+        newActionType: 'REPLACE',
+        notes: ''
+      }])
     }
+  }
 
-    setUpdateLoading(true)
-    try {
-      const result = await appointmentService.updateAppointmentStatus(appointmentId, newStatus)
+  const handleUpdateUpgradeItemNote = (serviceItemId, notes) => {
+    setUpgradeItems(upgradeItems.map(item => 
+      item.serviceItemId === serviceItemId 
+        ? { ...item, notes } 
+        : item
+    ))
+  }
 
-      if (result.success) {
-        alert('Status updated successfully!')
-        setShowDetailModal(false)
-        fetchAppointments(currentUser.userId)
-      } else {
-        alert(`Error: ${result.message}`)
+  const handleCompleteService = async () => {
+    if (!selectedAppointment) return
+
+    // If additional service is requested and items are selected
+    if (requestAdditionalService && upgradeItems.length > 0) {
+      // Validate that all selected items have notes
+      const missingNotes = upgradeItems.some(item => !item.notes || item.notes.trim() === '')
+      if (missingNotes) {
+        alert('Vui lòng nhập ghi chú cho tất cả các dịch vụ cần thay thế!')
+        return
       }
-    } catch (error) {
-      logger.error('Error updating status:', error)
-      alert('An error occurred while updating status!')
-    } finally {
-      setUpdateLoading(false)
+
+      if (!window.confirm(`Bạn có chắc chắn muốn yêu cầu thêm ${upgradeItems.length} dịch vụ thay thế?`)) {
+        return
+      }
+
+      setUpdateLoading(true)
+      try {
+        const result = await appointmentService.requestServiceItemUpgrades(
+          selectedAppointment.id,
+          upgradeItems
+        )
+
+        if (result.success) {
+          alert('Yêu cầu dịch vụ thêm đã được gửi! Đang chờ khách hàng xác nhận.')
+          setShowDetailModal(false)
+          setRequestAdditionalService(false)
+          setUpgradeItems([])
+          fetchAppointments(currentUser.userId)
+        } else {
+          alert(`Lỗi: ${result.message}`)
+        }
+      } catch (error) {
+        logger.error('Error requesting upgrades:', error)
+        alert('Có lỗi khi gửi yêu cầu dịch vụ thêm!')
+      } finally {
+        setUpdateLoading(false)
+      }
+    } else {
+      // Normal completion without additional services
+      if (!window.confirm('Xác nhận hoàn thành dịch vụ?')) {
+        return
+      }
+
+      setUpdateLoading(true)
+      try {
+        const result = await appointmentService.updateAppointmentStatus(
+          selectedAppointment.id,
+          'COMPLETED'
+        )
+
+        if (result.success) {
+          alert('Dịch vụ đã hoàn thành!')
+          setShowDetailModal(false)
+          fetchAppointments(currentUser.userId)
+        } else {
+          alert(`Lỗi: ${result.message}`)
+        }
+      } catch (error) {
+        logger.error('Error completing service:', error)
+        alert('Có lỗi khi hoàn thành dịch vụ!')
+      } finally {
+        setUpdateLoading(false)
+      }
     }
   }
 
@@ -364,6 +435,85 @@ const TechnicianDashboard = () => {
                 </div>
               </div>
 
+              {/* Service Items List */}
+              {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>📋 Danh Sách Dịch Vụ</h3>
+                  
+                  {/* Additional Service Option */}
+                  {selectedAppointment.status === 'CONFIRMED' && (
+                    <div className="additional-service-option">
+                      <label className="checkbox-label">
+                        <input
+                          type="checkbox"
+                          checked={requestAdditionalService}
+                          onChange={(e) => {
+                            setRequestAdditionalService(e.target.checked)
+                            if (!e.target.checked) {
+                              setUpgradeItems([])
+                            }
+                          }}
+                        />
+                        <span>Yêu cầu dịch vụ thêm (cần thay thế linh kiện)</span>
+                      </label>
+                    </div>
+                  )}
+
+                  <div className="service-items-list">
+                    {selectedAppointment.serviceItems.map((item, index) => {
+                      const serviceItem = item.serviceItem
+                      const isSelected = upgradeItems.some(u => u.serviceItemId === serviceItem.id)
+                      const upgradeItem = upgradeItems.find(u => u.serviceItemId === serviceItem.id)
+                      
+                      return (
+                        <div key={index} className={`service-item-card ${isSelected ? 'selected' : ''}`}>
+                          <div className="service-item-header">
+                            {requestAdditionalService && item.actionType === 'CHECK' && (
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => handleToggleUpgradeItem(serviceItem.id)}
+                                className="service-item-checkbox"
+                              />
+                            )}
+                            <div className="service-item-info">
+                              <h4>{serviceItem.name}</h4>
+                              <p className="service-description">{serviceItem.description}</p>
+                            </div>
+                            <div className="service-item-meta">
+                              <span className={`action-type-badge ${item.actionType.toLowerCase()}`}>
+                                {item.actionType}
+                              </span>
+                              <span className="service-price">{formatCurrency(item.price)}</span>
+                            </div>
+                          </div>
+                          
+                          {/* Notes input when item is selected */}
+                          {isSelected && (
+                            <div className="service-item-notes">
+                              <label>Ghi chú nguyên nhân cần thay thế: *</label>
+                              <textarea
+                                placeholder="Ví dụ: Má phanh trước mòn quá giới hạn..."
+                                value={upgradeItem?.notes || ''}
+                                onChange={(e) => handleUpdateUpgradeItemNote(serviceItem.id, e.target.value)}
+                                rows="2"
+                                required
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  
+                  {requestAdditionalService && upgradeItems.length > 0 && (
+                    <div className="upgrade-summary">
+                      <strong>Đã chọn {upgradeItems.length} dịch vụ cần thay thế</strong>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {selectedAppointment.notes && (
                 <div className="detail-section">
                   <h3>Notes</h3>
@@ -375,19 +525,26 @@ const TechnicianDashboard = () => {
               <div className="detail-actions">
                 {selectedAppointment.status === 'CONFIRMED' && (
                   <button
-                    onClick={() => handleStatusUpdate(selectedAppointment.id, 'COMPLETED')}
+                    onClick={handleCompleteService}
                     className="btn-action btn-complete"
                     disabled={updateLoading}
                   >
-                    {updateLoading ? 'Updating...' : 'Complete Service'}
+                    {updateLoading ? 'Đang xử lý...' : 
+                      requestAdditionalService && upgradeItems.length > 0 
+                        ? '✅ Gửi yêu cầu dịch vụ thêm' 
+                        : '✅ Hoàn thành dịch vụ'}
                   </button>
                 )}
 
                 <button
-                  onClick={() => setShowDetailModal(false)}
+                  onClick={() => {
+                    setShowDetailModal(false)
+                    setRequestAdditionalService(false)
+                    setUpgradeItems([])
+                  }}
                   className="btn-action btn-cancel"
                 >
-                  Close
+                  Đóng
                 </button>
               </div>
             </div>

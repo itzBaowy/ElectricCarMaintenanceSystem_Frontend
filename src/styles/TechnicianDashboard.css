@@ -623,3 +623,175 @@
     font-size: 1.25rem;
   }
 }
+
+/* Service Items Styles */
+.additional-service-option {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #856404;
+  font-size: 1rem;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.service-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.service-item-card {
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.service-item-card.selected {
+  background: #e7f3ff;
+  border-color: #2196F3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+}
+
+.service-item-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.service-item-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.service-item-info {
+  flex: 1;
+}
+
+.service-item-info h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1rem;
+}
+
+.service-description {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.service-item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.action-type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.action-type-badge.check {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.action-type-badge.replace {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.service-price {
+  color: #2e7d32;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.service-item-notes {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.service-item-notes label {
+  display: block;
+  margin-bottom: 8px;
+  color: #d32f2f;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.service-item-notes textarea {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.service-item-notes textarea:focus {
+  outline: none;
+  border-color: #2196F3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.upgrade-summary {
+  background: #e8f5e9;
+  border: 2px solid #4caf50;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-top: 15px;
+  text-align: center;
+  color: #2e7d32;
+}
+
+/* Scrollbar for service items list */
+.service-items-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.service-items-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.service-items-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.service-items-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

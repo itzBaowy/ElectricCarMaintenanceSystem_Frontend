@@ -371,6 +371,35 @@ const appointmentService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Request service item upgrades (technician)
+  requestServiceItemUpgrades: async (appointmentId, upgradeItems) => {
+    try {
+      // upgradeItems format: [{ serviceItemId, newActionType, notes }]
+      const response = await api.put(`/api/appointments/${appointmentId}/items/upgrade`, upgradeItems)
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Service item upgrade requested successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to request service item upgrades',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Request service item upgrades error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to request service item upgrades',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 
