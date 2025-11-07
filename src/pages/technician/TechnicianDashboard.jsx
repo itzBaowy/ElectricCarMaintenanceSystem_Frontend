@@ -438,7 +438,7 @@ const TechnicianDashboard = () => {
               {/* Service Items List */}
               {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
                 <div className="detail-section">
-                  <h3>📋 Danh Sách Dịch Vụ</h3>
+                  <h3>Danh Sách Dịch Vụ</h3>
                   
                   {/* Additional Service Option */}
                   {selectedAppointment.status === 'CONFIRMED' && (

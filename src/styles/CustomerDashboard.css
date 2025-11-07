@@ -179,11 +179,12 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #666666;
+  color: #000000 !important;
 }
 
 .customer-meta span {
-  opacity: 0.8;
+  opacity: 1 !important;
+  color: #000000 !important;
 }
 
 .welcome-actions {
