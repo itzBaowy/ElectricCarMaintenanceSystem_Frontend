@@ -323,7 +323,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #000000;
+  color: #000000 !important;
   font-size: 0.95rem;
 }
 
@@ -331,20 +331,20 @@
 .form-group select {
   width: 100%;
   padding: 12px 15px;
-  border: 2px solid #000000;
+  border: 2px solid #000000 !important;
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
   box-sizing: border-box;
-  background: #ffffff;
-  color: #000000;
+  background: #ffffff !important;
+  color: #000000 !important;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #000000;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  border-color: #000000 !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
 }
 
 .form-group small {
