@@ -23,6 +23,7 @@ const StaffDashboard = () => {
   const [selectedTechnician, setSelectedTechnician] = useState('')
   const [filterStatus, setFilterStatus] = useState('ALL')
   const [searchTerm, setSearchTerm] = useState('')
+  const [staffName, setStaffName] = useState('')
   
   // Modal states for new workflows
   const [showCreateCustomerModal, setShowCreateCustomerModal] = useState(false)
@@ -60,6 +61,10 @@ const StaffDashboard = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
+      // Get staff name from localStorage
+      const user = JSON.parse(localStorage.getItem('user') || '{}')
+      setStaffName(user.fullName || 'Staff')
+      
       const [appointmentsResult, techniciansResult, customersResult, vehicleModelsResult] = await Promise.all([
         appointmentService.getAllAppointments(),
         technicianService.getAllTechnicians(),
@@ -445,9 +450,14 @@ const StaffDashboard = () => {
             <h1> Staff Dashboard - Quản Lý Bảo Dưỡng</h1>
             <p>Quản lý khách hàng walk-in, xe, appointment và hoá đơn</p>
           </div>
-          <button className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <span style={{ color: '#ffffff', fontSize: '0.95rem' }}>
+              Hi {staffName}, Hope you find your day!
+            </span>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}
@@ -456,19 +466,19 @@ const StaffDashboard = () => {
             className={`tab-btn ${activeTab === 'walk-in' ? 'active' : ''}`}
             onClick={() => setActiveTab('walk-in')}
           >
-            👤 Khách Hàng Walk-in
+             Khách Hàng Walk-in
           </button>
           <button 
             className={`tab-btn ${activeTab === 'appointments' ? 'active' : ''}`}
             onClick={() => setActiveTab('appointments')}
           >
-            📋 Quản Lý Appointments
+             Quản Lý Appointments
           </button>
           <button 
             className={`tab-btn ${activeTab === 'invoices' ? 'active' : ''}`}
             onClick={() => setActiveTab('invoices')}
           >
-            💰 Hoá Đơn & Thanh Toán
+             Hoá Đơn & Thanh Toán
           </button>
         </div>
 
@@ -476,7 +486,7 @@ const StaffDashboard = () => {
         {activeTab === 'walk-in' && (
           <div className="walk-in-section">
             <div className="section-header">
-              <h2>📝 Đăng Ký Khách Hàng Walk-in</h2>
+              <h2> Đăng Ký Khách Hàng Walk-in</h2>
               <p>Khách hàng đến trực tiếp trung tâm, ghi nhận thông tin và tạo tài khoản</p>
             </div>
 
@@ -485,18 +495,18 @@ const StaffDashboard = () => {
                 className="primary-btn"
                 onClick={() => setShowCreateCustomerModal(true)}
               >
-                ➕ Tạo Tài Khoản Khách Hàng
+                 Tạo Tài Khoản Khách Hàng
               </button>
               <button 
                 className="secondary-btn"
                 onClick={() => setShowAddVehicleModal(true)}
               >
-                🚗 Thêm Xe Cho Khách Hàng
+                 Thêm Xe Cho Khách Hàng
               </button>
             </div>
 
             <div className="info-card">
-              <h3>📌 Quy Trình Tiếp Nhận Khách Walk-in:</h3>
+              <h3> Quy Trình Tiếp Nhận Khách Walk-in:</h3>
               <ol>
                 <li><strong>Ghi nhận thông tin:</strong> Họ tên, Số điện thoại, Email, Giới tính</li>
                 <li><strong>Tạo tài khoản:</strong> Username = Số điện thoại, Password = Số điện thoại</li>
