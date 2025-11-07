@@ -444,6 +444,7 @@ const StaffDashboard = () => {
 
   return (
     <div className="staff-dashboard">
+      <Header />
       <div className="staff-container">
         <div className="staff-header">
           <div className="header-content">
