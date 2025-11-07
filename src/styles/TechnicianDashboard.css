@@ -377,6 +377,26 @@
   border: 2px solid #000000;
 }
 
+/* Custom scrollbar for modal */
+.modal-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 0 10px 10px 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 6px;
+  border: 2px solid #f0f0f0;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
