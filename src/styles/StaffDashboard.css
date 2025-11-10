@@ -861,16 +861,25 @@
   display: flex;
   gap: 15px;
   justify-content: flex-end;
+  align-items: stretch;
 }
 
 .cancel-btn, .submit-btn {
-  padding: 12px 30px;
+  padding: 0 30px;
   border: 2px solid #000000 !important;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1rem !important;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  height: 48px !important;
+  min-width: 120px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box;
+  line-height: normal !important;
+  margin: 0 !important;
 }
 
 .cancel-btn {

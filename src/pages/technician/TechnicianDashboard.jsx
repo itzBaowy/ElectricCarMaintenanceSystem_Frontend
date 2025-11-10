@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../../components/layout/Header'
-import Footer from '../../components/layout/Footer'
 import technicianService from '../../api/technicianService'
 import appointmentService from '../../api/appointmentService'
 import authService from '../../api/authService'
@@ -208,8 +206,26 @@ const TechnicianDashboard = () => {
 
   return (
     <div className="technician-dashboard">
-      <Header />
-      <div className="dashboard-container">
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="logo">
+            <span className="logo-icon"></span>
+            <span className="logo-text">Technician Dashboard</span>
+          </div>
+        </div>
+        
+        <nav className="sidebar-nav">
+          <a href="#" className="nav-item active">
+            <span className="nav-icon"></span>
+            <span className="nav-text">Dashboard</span>
+          </a>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <div className="dashboard-container">
         <div className="dashboard-header">
           <h1>Technician Dashboard</h1>
           <div className="header-actions">
@@ -551,8 +567,7 @@ const TechnicianDashboard = () => {
           </div>
         </div>
       )}
-
-      <Footer />
+      </div>
     </div>
   )
 }
