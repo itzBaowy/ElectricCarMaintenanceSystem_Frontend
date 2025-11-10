@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import sparePartService from '../../../api/sparePartService'
+import EditSparePartModal from './EditSparePartModal'
 import '../../../styles/SparePartManagement.css'
 
 const SparePartManagement = () => {
@@ -7,8 +8,8 @@ const SparePartManagement = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterCategory, setFilterCategory] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
+  const [editingPart, setEditingPart] = useState(null)
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -52,18 +53,13 @@ const SparePartManagement = () => {
     }
   }
 
-  // Get unique categories for filter
-  const categories = [...new Set(spareParts.map(part => part.category.name))]
-
   // Filter spare parts
   const filteredSpareParts = spareParts.filter(part => {
     const matchesSearch = 
       part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       part.partNumber.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesCategory = filterCategory === 'all' || part.category.name === filterCategory
 
-    return matchesSearch && matchesCategory
+    return matchesSearch
   })
 
   // Pagination calculation
@@ -75,7 +71,7 @@ const SparePartManagement = () => {
   // Reset to page 1 when search or filter changes
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchTerm, filterCategory])
+  }, [searchTerm])
 
   // Pagination handlers
   const goToPage = (page) => {
@@ -93,6 +89,24 @@ const SparePartManagement = () => {
     if (currentPage < totalPages) {
       goToPage(currentPage + 1)
     }
+  }
+
+  // Handle edit
+  const handleEdit = (part) => {
+    setEditingPart(part)
+  }
+
+  const handleCloseModal = () => {
+    setEditingPart(null)
+  }
+
+  const handleUpdate = (updatedPart) => {
+    // Update the spare part in the list
+    setSpareParts(prevParts =>
+      prevParts.map(part =>
+        part.id === updatedPart.id ? updatedPart : part
+      )
+    )
   }
 
   // Format price to VND
@@ -166,14 +180,16 @@ const SparePartManagement = () => {
             <span className="stat-label">Total Parts</span>
             <span className="stat-value">{spareParts.length}</span>
           </div>
-          <div className="stat-card">
-            <span className="stat-label">Categories</span>
-            <span className="stat-value">{categories.length}</span>
-          </div>
           <div className="stat-card warning">
             <span className="stat-label">Low Stock</span>
             <span className="stat-value">
               {spareParts.filter(p => p.quantityInStock <= p.minimumStockLevel && p.quantityInStock > 0).length}
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-label">Out of Stock</span>
+            <span className="stat-value">
+              {spareParts.filter(p => p.quantityInStock === 0).length}
             </span>
           </div>
         </div>
@@ -190,23 +206,6 @@ const SparePartManagement = () => {
             className="search-input"
           />
           <span className="search-icon">🔍</span>
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="category-filter">Category:</label>
-          <select
-            id="category-filter"
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="filter-select"
-          >
-            <option value="all">All Categories</option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
         </div>
 
         <button onClick={fetchSpareParts} className="refresh-btn">
@@ -231,7 +230,6 @@ const SparePartManagement = () => {
             <tr>
               <th>Part Number</th>
               <th>Name</th>
-              <th>Category</th>
               <th>Unit Price</th>
               <th>Stock Quantity</th>
               <th>Min. Level</th>
@@ -243,7 +241,7 @@ const SparePartManagement = () => {
           <tbody>
             {currentItems.length === 0 ? (
               <tr>
-                <td colSpan="9" className="no-data">
+                <td colSpan="7" className="no-data">
                   <div className="no-data-message">
                     <span className="no-data-icon">📦</span>
                     <p>No spare parts found</p>
@@ -255,11 +253,6 @@ const SparePartManagement = () => {
                 <tr key={part.id}>
                   <td className="part-number">{part.partNumber}</td>
                   <td className="part-name">{part.name}</td>
-                  <td>
-                    <span className="category-badge">
-                      {part.category.name}
-                    </span>
-                  </td>
                   <td className="price">{formatPrice(part.unitPrice)}</td>
                   <td className="quantity">
                     <span className="quantity-badge">
@@ -284,7 +277,7 @@ const SparePartManagement = () => {
                     <button 
                       className="action-btn edit"
                       title="Edit"
-                      onClick={() => alert(`Edit: ${part.name}\n(Feature coming soon)`)}
+                      onClick={() => handleEdit(part)}
                     >
                       ✏️
                     </button>
@@ -359,6 +352,15 @@ const SparePartManagement = () => {
         <span className="btn-icon">➕</span>
         Add New Spare Part
       </button>
+
+      {/* Edit Modal */}
+      {editingPart && (
+        <EditSparePartModal
+          sparePart={editingPart}
+          onClose={handleCloseModal}
+          onUpdate={handleUpdate}
+        />
+      )}
     </div>
   )
 }
