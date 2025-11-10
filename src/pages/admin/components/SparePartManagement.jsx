@@ -8,12 +8,15 @@ const SparePartManagement = () => {
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
     currentPage: 0,
     size: 1000
   })
+  
+  const ITEMS_PER_PAGE = 15
 
   useEffect(() => {
     fetchSpareParts()
@@ -62,6 +65,35 @@ const SparePartManagement = () => {
 
     return matchesSearch && matchesCategory
   })
+
+  // Pagination calculation
+  const totalPages = Math.ceil(filteredSpareParts.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const endIndex = startIndex + ITEMS_PER_PAGE
+  const currentItems = filteredSpareParts.slice(startIndex, endIndex)
+
+  // Reset to page 1 when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, filterCategory])
+
+  // Pagination handlers
+  const goToPage = (page) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1)
+    }
+  }
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1)
+    }
+  }
 
   // Format price to VND
   const formatPrice = (price) => {
@@ -184,10 +216,10 @@ const SparePartManagement = () => {
 
       {/* Results Count */}
       <div className="results-info">
-        Showing {filteredSpareParts.length} of {spareParts.length} spare parts
-        {pagination.totalElements > 0 && spareParts.length < pagination.totalElements && (
-          <span className="pagination-warning">
-            ⚠️ Displaying {spareParts.length} out of {pagination.totalElements} total items
+        Showing {startIndex + 1}-{Math.min(endIndex, filteredSpareParts.length)} of {filteredSpareParts.length} spare parts
+        {filteredSpareParts.length < spareParts.length && (
+          <span className="filter-badge">
+            (Filtered from {spareParts.length} total)
           </span>
         )}
       </div>
@@ -209,7 +241,7 @@ const SparePartManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredSpareParts.length === 0 ? (
+            {currentItems.length === 0 ? (
               <tr>
                 <td colSpan="9" className="no-data">
                   <div className="no-data-message">
@@ -219,7 +251,7 @@ const SparePartManagement = () => {
                 </td>
               </tr>
             ) : (
-              filteredSpareParts.map((part) => (
+              currentItems.map((part) => (
                 <tr key={part.id}>
                   <td className="part-number">{part.partNumber}</td>
                   <td className="part-name">{part.name}</td>
@@ -270,6 +302,57 @@ const SparePartManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="pagination-controls">
+          <button 
+            className="pagination-btn"
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+          >
+            ← Previous
+          </button>
+          
+          <div className="pagination-info">
+            <span className="page-numbers">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter(page => {
+                  // Show first page, last page, current page, and pages around current
+                  return (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  )
+                })
+                .map((page, index, array) => (
+                  <span key={page}>
+                    {index > 0 && array[index - 1] !== page - 1 && (
+                      <span className="pagination-ellipsis">...</span>
+                    )}
+                    <button
+                      className={`page-number ${currentPage === page ? 'active' : ''}`}
+                      onClick={() => goToPage(page)}
+                    >
+                      {page}
+                    </button>
+                  </span>
+                ))}
+            </span>
+            <span className="page-info-text">
+              Page {currentPage} of {totalPages}
+            </span>
+          </div>
+
+          <button 
+            className="pagination-btn"
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next →
+          </button>
+        </div>
+      )}
 
       {/* Add Button (for future use) */}
       <button className="add-spare-part-btn" onClick={() => alert('Add spare part feature coming soon!')}>
