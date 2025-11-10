@@ -8,6 +8,7 @@ import CustomerDashboard from './pages/customer/CustomerDashboard'
 import StaffDashboard from './pages/staff/StaffDashboard'
 import TechnicianDashboard from './pages/technician/TechnicianDashboard'
 import Contact from './pages/customer/Contact'
+import PaymentSuccess from './pages/customer/PaymentSuccess'
 
 function App() {
   return (
@@ -67,6 +68,14 @@ function App() {
             element={
               <ProtectedRoute requireAuth={true} allowedRoles={['ROLE_CUSTOMER']}>
                 <Contact />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/paymentSuccess" 
+            element={
+              <ProtectedRoute requireAuth={false}>
+                <PaymentSuccess />
               </ProtectedRoute>
             } 
           />
