@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import EmployeeManagement from './components/EmployeeManagement'
 import ServiceCenterManagement from './components/ServiceCenterManagement'
+import SparePartManagement from './components/SparePartManagement'
 import '../../styles/AdminDashboard.css'
 import authService from '../../api/authService'
 
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
   const menuItems = [
     { id: 'employees', icon: '👥', label: 'Employee Management', component: EmployeeManagement },
     { id: 'centers', icon: '🏢', label: 'Service Centers', component: ServiceCenterManagement },
+    { id: 'spareParts', icon: '🔧', label: 'Spare Part Management', component: SparePartManagement },
     { id: 'reports', icon: '📊', label: 'Reports', component: null },
     { id: 'settings', icon: '⚙️', label: 'Settings', component: null }
   ]
