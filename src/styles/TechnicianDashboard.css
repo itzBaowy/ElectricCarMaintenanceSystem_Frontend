@@ -25,8 +25,8 @@ html, body {
 /* Sidebar */
 .sidebar {
   width: 240px;
-  background: #5dc9d2;
-  border-right: 1px solid #4ab3bc;
+  background: #ffffff;
+  border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -40,7 +40,7 @@ html, body {
 .sidebar-header {
   padding: 1.5rem 1.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: #ffffff;
+  background: #7ac7d0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,7 +123,7 @@ html, body {
 }
 
 .nav-item.active {
-  background: #ffffff;
+  background: #7ac7d0;
   color: #1a1a1a;
   border-radius: 8px;
   margin: 0 0.75rem;
@@ -197,6 +197,19 @@ html, body {
   border-radius: 10px;
   margin-bottom: 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.page-welcome::after {
+  content: '';
+  position: absolute;
+  bottom: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 2px;
 }
 
 .page-welcome h2 {
