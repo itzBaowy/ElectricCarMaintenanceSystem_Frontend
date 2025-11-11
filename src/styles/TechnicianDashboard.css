@@ -271,21 +271,23 @@ html, body {
   margin: 2rem 0;
   width: calc(100% + 0px);
   overflow-x: hidden;
-  border: none;
+  border: 2px solid #5dc9d2;
+  border-radius: 10px;
   box-shadow: none;
   outline: none;
-  background: transparent;
+  background: #ffffff;
 }
 
 .stats-header {
-  background: #000000;
-  color: #ffffff;
+  background: #5dc9d2;
+  color: #000000;
   padding: 1rem 1.5rem;
   border-radius: 10px 10px 0 0;
-  border: 2px solid #000000;
+  border: 2px solid #5dc9d2;
   border-bottom: none;
   width: 100%;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .stats-header h2 {
@@ -300,7 +302,7 @@ html, body {
   gap: 1.5rem;
   background: #ffffff;
   padding: 1.5rem;
-  border: 2px solid #000000;
+  border: 2px solid #5dc9d2;
   border-radius: 0 0 10px 10px;
   width: 100%;
   box-sizing: border-box;
@@ -313,7 +315,21 @@ html, body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease;
-  border: 2px solid #000000;
+  border: 2px solid #5dc9d2;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 100px;
+  height: 100px;
+  background: #5dc9d2;
+  border-radius: 50%;
+  opacity: 0.3;
 }
 
 .stat-card:hover {
