@@ -215,12 +215,25 @@ const TechnicianDashboard = () => {
           </div>
         </div>
         
+        <div className="sidebar-welcome">
+          <p className="welcome-message">
+            Welcome {currentUser?.fullName || currentUser?.username || 'Technician'}, Have a productive and successful day at work
+          </p>
+        </div>
+
         <nav className="sidebar-nav">
           <a href="#" className="nav-item active">
             <span className="nav-icon"></span>
             <span className="nav-text">Dashboard</span>
           </a>
         </nav>
+
+        <div className="sidebar-footer">
+          <button className="logout-btn" onClick={handleLogout}>
+           
+            <span className="nav-text">Logout</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
@@ -229,7 +242,6 @@ const TechnicianDashboard = () => {
         <div className="dashboard-header">
           <h1>Technician Dashboard</h1>
           <div className="header-actions">
-            <span className="welcome-text">Welcome {currentUser?.username || 'Technician'}, Have a productive and successful day at work</span>
             <button onClick={handleLogout} className="btn-logout">
               Logout
             </button>

@@ -72,6 +72,21 @@ html, body {
   padding: 0;
 }
 
+.sidebar-welcome {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(55, 184, 196, 0.3);
+}
+
+.welcome-message {
+  font-size: 1rem;
+  color: #ffffff;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+  font-weight: 500;
+}
+
 .sidebar-nav {
   flex: 1;
   padding: 1.5rem 0;
@@ -127,10 +142,25 @@ html, body {
 .sidebar-footer {
   padding: 1rem 0.75rem;
   border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logout-btn {
   color: #dc3545;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .logout-btn:hover {
