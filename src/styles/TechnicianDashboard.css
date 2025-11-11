@@ -358,7 +358,7 @@ html, body {
   border-radius: 10px;
   box-shadow: none;
   outline: none;
-  background: transparent;
+  background: #ffffff;
 }
 
 .filters-header {
@@ -370,6 +370,7 @@ html, body {
   border-bottom: none;
   width: 100%;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .filters-header h2 {
@@ -380,7 +381,7 @@ html, body {
 
 /* Filters */
 .filters-container {
-  background: white;
+  background: #ffffff;
   padding: 1.5rem;
   border-radius: 0 0 10px 10px;
   box-shadow: none;
@@ -457,8 +458,8 @@ html, body {
 .filter-select:focus,
 .search-input:focus {
   outline: none;
-  border-color: #37b8c4;
-  box-shadow: 0 0 0 3px rgba(93, 201, 210, 0.2);
+  border-color: #5dc9d2;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
 /* Appointments Section */
