@@ -1,0 +1,62 @@
+import api from './apiConfig'
+import logger from '../utils/logger'
+
+const invoiceService = {
+  // Generate invoice for a completed appointment
+  generateInvoice: async (appointmentId) => {
+    try {
+      const response = await api.post(`/api/invoices/generate/${appointmentId}`)
+      
+      if (response.data.code === 1000 || response.data.code === 0) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Invoice generated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to generate invoice',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Generate invoice error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to generate invoice',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
+  // Get invoice by ID
+  getInvoiceById: async (invoiceId) => {
+    try {
+      const response = await api.get(`/api/invoices/${invoiceId}`)
+      
+      if (response.data.code === 1000 || response.data.code === 0) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to get invoice',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get invoice error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to get invoice',
+        error: error.response?.data || error.message
+      }
+    }
+  }
+}
+
+export default invoiceService
