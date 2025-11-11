@@ -399,6 +399,7 @@ html, body {
   flex-direction: column;
   width: 100%;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .search-group label {
@@ -407,6 +408,7 @@ html, body {
   font-weight: 600;
   margin-bottom: 0.5rem;
   text-align: center;
+  width: 100%;
 }
 
 .filter-group label {
@@ -415,6 +417,7 @@ html, body {
   font-weight: 600;
   margin-bottom: 0.5rem;
   text-align: center;
+  width: 100%;
 }
 
 .filter-select {
