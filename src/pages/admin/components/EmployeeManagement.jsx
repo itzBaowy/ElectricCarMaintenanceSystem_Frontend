@@ -284,7 +284,7 @@ const EmployeeManagement = () => {
             disabled={isLoading}
             title="Refresh employee list"
           >
-            {isLoading ? '⏳' : '🔄'}
+            {isLoading ? '⌛' : '⟳'}
           </button>
         </div>
         

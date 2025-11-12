@@ -109,27 +109,6 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <main className="admin-main">
-        {/* Top Header */}
-        <header className="admin-header">
-          <button
-            className="sidebar-toggle"
-            onClick={() => setSidebarOpen(true)}
-          >
-            ☰
-          </button>
-
-          <div className="header-title">
-            <h1>{menuItems.find((item) => item.id === activeTab)?.label}</h1>
-          </div>
-
-          <div className="header-actions">
-            <div className="admin-profile">
-              <span className="admin-name">Admin User</span>
-              <div className="admin-avatar">A</div>
-            </div>
-          </div>
-        </header>
-
         {/* Content Area */}
         <div className="admin-content">
           {ActiveComponent ? (
