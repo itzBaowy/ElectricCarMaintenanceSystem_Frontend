@@ -8,7 +8,7 @@
 /* Sidebar Styles */
 .admin-sidebar {
   width: 280px;
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: white;
   position: fixed;
   height: 100vh;
@@ -244,13 +244,18 @@
   color: #666;
 }
 
+/* Admin Sidebar Header riêng cho admin */
+.admin-sidebar .sidebar-header {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+}
+
 /* Responsive Design */
 @media (min-width: 1024px) {
   .admin-sidebar {
-    position: fixed;
-    transform: translateX(0);
-    left: 0;
-    top: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translateX(0);
   }
   
   .admin-main {
@@ -278,9 +283,7 @@
   .admin-header {
     padding: 1rem;
   }
-  
-  .admin-content {
-    padding: 1rem;
+
   }
   
   .header-title h1 {
@@ -290,7 +293,7 @@
   .admin-name {
     display: none;
   }
-}
+  
 
 @media (max-width: 768px) {
   .admin-sidebar {
