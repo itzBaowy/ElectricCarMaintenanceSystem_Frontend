@@ -359,3 +359,7 @@
   font-weight: 700;
   border-radius: 16px;
 }
+
+.service-center-header {
+  border-radius: 20px;
+}

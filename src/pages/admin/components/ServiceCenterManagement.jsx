@@ -140,11 +140,11 @@ const ServiceCenterManagement = () => {
     <div className="service-center-management">
       <div className="management-header">
         <div>
-          <h2>🏢 Quản Lý Trung Tâm Dịch Vụ</h2>
+          <h2>Quản Lý Trung Tâm Dịch Vụ</h2>
           <p>Quản lý thông tin các trung tâm bảo dưỡng xe điện</p>
         </div>
         <button className="add-center-btn" onClick={() => handleOpenModal()}>
-          ➕ Thêm Trung Tâm Mới
+           Thêm Trung Tâm Mới
         </button>
       </div>
 
