@@ -352,3 +352,10 @@
     font-size: 0.9rem;
   }
 }
+
+.admin-sidebar .sidebar-nav li.active {
+  background: #fff;
+  color: #00897b;
+  font-weight: 700;
+  border-radius: 16px;
+}

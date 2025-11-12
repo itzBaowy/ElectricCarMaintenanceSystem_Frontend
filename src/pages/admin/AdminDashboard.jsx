@@ -21,30 +21,30 @@ const AdminDashboard = () => {
   const menuItems = [
     {
       id: "employees",
-      icon: "👥",
+      icon: "",
       label: "Employee Management",
       component: EmployeeManagement,
     },
     {
       id: "centers",
-      icon: "🏢",
+      icon: "",
       label: "Service Centers",
       component: ServiceCenterManagement,
     },
     {
       id: "spareParts",
-      icon: "🔧",
+      icon: "",
       label: "Spare Part Management",
       component: SparePartManagement,
     },
     {
       id: "vehicleModels",
-      icon: "🚗",
+      icon: "",
       label: "Vehicle Models",
       component: VehicleModelManagement,
     },
-    { id: "reports", icon: "📊", label: "Reports", component: null },
-    { id: "settings", icon: "⚙️", label: "Settings", component: null },
+    { id: "reports", icon: "", label: "Reports", component: null },
+    { id: "settings", icon: "", label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(
@@ -65,8 +65,8 @@ const AdminDashboard = () => {
       <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="admin-logo">
-            <h3>ElectricCare Admin</h3>
-            <p>Administrator Panel</p>
+            <h3 style={{ color: '#fff' }}>ElectricCare Admin</h3>
+            <p style={{ color: '#fff' }}>Administrator Panel</p>
           </div>
           <button
             className="sidebar-close"
@@ -101,7 +101,7 @@ const AdminDashboard = () => {
 
         <div className="sidebar-footer">
           <button className="logout-btn" onClick={handleLogout}>
-            <span className="nav-icon">🚪</span>
+            <span className="nav-icon"></span>
             <span className="nav-label">Logout</span>
           </button>
         </div>
@@ -110,23 +110,9 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="admin-main">
         {/* Top Header */}
-        <header className="admin-header">
-          <button
-            className="sidebar-toggle"
-            onClick={() => setSidebarOpen(true)}
-          >
-            ☰
-          </button>
-
+        <header className="admin-header" style={{ background: 'linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)', color: '#fff', padding: '2rem 2.5rem' }}>
           <div className="header-title">
-            <h1>{menuItems.find((item) => item.id === activeTab)?.label}</h1>
-          </div>
-
-          <div className="header-actions">
-            <div className="admin-profile">
-              <span className="admin-name">Admin User</span>
-              <div className="admin-avatar">A</div>
-            </div>
+            <h1 style={{ margin: 0, fontWeight: 700, fontSize: '2rem', color: '#fff' }}>Employee Management</h1>
           </div>
         </header>
 
