@@ -1,50 +1,74 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import EmployeeManagement from './components/EmployeeManagement'
-import ServiceCenterManagement from './components/ServiceCenterManagement'
-import SparePartManagement from './components/SparePartManagement'
-import '../../styles/AdminDashboard.css'
-import authService from '../../api/authService'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import EmployeeManagement from "./components/EmployeeManagement";
+import ServiceCenterManagement from "./components/ServiceCenterManagement";
+import SparePartManagement from "./components/SparePartManagement";
+import VehicleModelManagement from "./components/VehicleModelManagement";
+import "../../styles/AdminDashboard.css";
+import authService from "../../api/authService";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('employees')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState("employees");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-      if (window.confirm('Are you sure you want to logout?')) {
-          authService.logout()
-      }
-  }
+    if (window.confirm("Are you sure you want to logout?")) {
+      authService.logout();
+    }
+  };
 
   const menuItems = [
-    { id: 'employees', icon: '👥', label: 'Employee Management', component: EmployeeManagement },
-    { id: 'centers', icon: '🏢', label: 'Service Centers', component: ServiceCenterManagement },
-    { id: 'spareParts', icon: '🔧', label: 'Spare Part Management', component: SparePartManagement },
-    { id: 'reports', icon: '📊', label: 'Reports', component: null },
-    { id: 'settings', icon: '⚙️', label: 'Settings', component: null }
-  ]
+    {
+      id: "employees",
+      icon: "👥",
+      label: "Employee Management",
+      component: EmployeeManagement,
+    },
+    {
+      id: "centers",
+      icon: "🏢",
+      label: "Service Centers",
+      component: ServiceCenterManagement,
+    },
+    {
+      id: "spareParts",
+      icon: "🔧",
+      label: "Spare Part Management",
+      component: SparePartManagement,
+    },
+    {
+      id: "vehicleModels",
+      icon: "🚗",
+      label: "Vehicle Models",
+      component: VehicleModelManagement,
+    },
+    { id: "reports", icon: "📊", label: "Reports", component: null },
+    { id: "settings", icon: "⚙️", label: "Settings", component: null },
+  ];
 
-  const ActiveComponent = menuItems.find(item => item.id === activeTab)?.component
+  const ActiveComponent = menuItems.find(
+    (item) => item.id === activeTab
+  )?.component;
 
   return (
     <div className="admin-dashboard">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="sidebar-overlay"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <aside className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="admin-logo">
             <h3>ElectricCare Admin</h3>
             <p>Administrator Panel</p>
           </div>
-          <button 
+          <button
             className="sidebar-close"
             onClick={() => setSidebarOpen(false)}
           >
@@ -54,13 +78,15 @@ const AdminDashboard = () => {
 
         <nav className="sidebar-nav">
           <ul>
-            {menuItems.map(item => (
+            {menuItems.map((item) => (
               <li key={item.id}>
                 <button
-                  className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
+                  className={`nav-item ${
+                    activeTab === item.id ? "active" : ""
+                  }`}
                   onClick={() => {
-                    setActiveTab(item.id)
-                    setSidebarOpen(false)
+                    setActiveTab(item.id);
+                    setSidebarOpen(false);
                   }}
                   disabled={!item.component}
                 >
@@ -85,15 +111,15 @@ const AdminDashboard = () => {
       <main className="admin-main">
         {/* Top Header */}
         <header className="admin-header">
-          <button 
+          <button
             className="sidebar-toggle"
             onClick={() => setSidebarOpen(true)}
           >
             ☰
           </button>
-          
+
           <div className="header-title">
-            <h1>{menuItems.find(item => item.id === activeTab)?.label}</h1>
+            <h1>{menuItems.find((item) => item.id === activeTab)?.label}</h1>
           </div>
 
           <div className="header-actions">
@@ -118,7 +144,7 @@ const AdminDashboard = () => {
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default AdminDashboard
+export default AdminDashboard;
