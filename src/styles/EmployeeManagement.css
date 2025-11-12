@@ -388,21 +388,38 @@
 
 .edit-btn,
 .delete-btn {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
+  padding: 0.4rem 1rem;
+  border-radius: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
-  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  white-space: nowrap;
+}
+
+.edit-btn {
+  background: #ffe0b2;
+  color: #e65100;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
 }
 
 .edit-btn:hover {
-  background: #e3f2fd;
+  background: #ffcc80;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: #ffcdd2;
+  color: #c62828;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
 }
 
 .delete-btn:hover {
-  background: #ffebee;
+  background: #ef9a9a;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+  transform: translateY(-1px);
 }
 
 .empty-state {

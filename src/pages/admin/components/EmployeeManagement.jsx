@@ -541,14 +541,14 @@ const EmployeeManagement = () => {
                         onClick={() => handleEdit(employee)}
                         title="Edit Employee"
                       >
-                        ✏️
+                        Edit
                       </button>
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(employee)}
                         title="Delete Employee"
                       >
-                        🗑️
+                        Delete
                       </button>
                     </div>
                   </td>
