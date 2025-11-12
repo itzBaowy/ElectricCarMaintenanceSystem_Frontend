@@ -1,6 +1,6 @@
 /* Employee Management Styles */
 .employee-management {
-  background: white;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -8,7 +8,8 @@
 
 .management-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 2px solid #4dd0e1;
+  background: linear-gradient(135deg, #80deea 0%, #81c784 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,29 +26,38 @@
   flex: 1;
   max-width: 300px;
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #4dd0e1;
   border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.3s ease;
+  background: white;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #26c6da;
+  box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.2);
 }
 
 .role-filter {
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #4dd0e1;
   border-radius: 8px;
   font-size: 0.9rem;
   background: white;
   cursor: pointer;
+  min-width: 150px;
+  color: #333;
+}
+
+.role-filter option {
+  color: #333;
+  background: white;
 }
 
 .refresh-btn {
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #4dd0e1;
   border-radius: 8px;
   font-size: 1.2rem;
   background: white;
@@ -56,8 +66,8 @@
 }
 
 .refresh-btn:hover:not(:disabled) {
-  background: #f0f4f8;
-  border-color: #667eea;
+  background: linear-gradient(135deg, #b2ebf2 0%, #c8e6c9 100%);
+  border-color: #26c6da;
   transform: rotate(180deg);
 }
 
@@ -67,7 +77,7 @@
 }
 
 .add-employee-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #26c6da 0%, #66bb6a 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -80,7 +90,8 @@
 
 .add-employee-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(38, 198, 218, 0.4);
+  background: linear-gradient(135deg, #00acc1 0%, #4caf50 100%);
 }
 
 /* Modal Styles */
@@ -210,13 +221,13 @@
   justify-content: flex-end;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #e1e5e9;
+  border-top: 2px solid #4dd0e1;
 }
 
 .cancel-btn {
-  background: #f8f9fa;
-  color: #666;
-  border: 2px solid #e1e5e9;
+  background: white;
+  color: #00838f;
+  border: 2px solid #4dd0e1;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-weight: 600;
@@ -225,11 +236,12 @@
 }
 
 .cancel-btn:hover {
-  background: #e9ecef;
+  background: #e0f7fa;
+  border-color: #26c6da;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #26c6da 0%, #66bb6a 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -241,7 +253,8 @@
 
 .submit-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(38, 198, 218, 0.4);
+  background: linear-gradient(135deg, #00acc1 0%, #4caf50 100%);
 }
 
 /* Employee List Styles */
@@ -273,9 +286,9 @@
 }
 
 .employee-table th {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #b2ebf2 0%, #c8e6c9 100%);
   font-weight: 600;
-  color: #333;
+  color: #00695c;
   font-size: 0.9rem;
   white-space: nowrap;
 }
@@ -429,6 +442,10 @@
   
   .search-input {
     max-width: none;
+  }
+  
+  .role-filter {
+    width: 100%;
   }
 }
 

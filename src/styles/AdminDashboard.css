@@ -247,8 +247,10 @@
 /* Responsive Design */
 @media (min-width: 1024px) {
   .admin-sidebar {
-    position: static;
+    position: fixed;
     transform: translateX(0);
+    left: 0;
+    top: 0;
   }
   
   .admin-main {
