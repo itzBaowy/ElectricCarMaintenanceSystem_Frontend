@@ -50,7 +50,7 @@
   /* stronger selector + !important to override other module CSS that targets nth-child */
   background: #ffffff !important;
   background-image: none !important;
-  color: #111 !important;
+  color: #111;
   /* match the teal accent border of the side cards using provided color */
   border: 3px solid #7ac7d0 !important;
   box-shadow: 0 6px 18px rgba(122,199,208,0.12) !important;
@@ -282,7 +282,12 @@
 .part-number {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  color: #667eea;
+  color: #000000;
+  background: rgba(39, 174, 96, 0.12);
+  padding: 0.2em;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  display: inline-block;
 }
 
 .part-name {

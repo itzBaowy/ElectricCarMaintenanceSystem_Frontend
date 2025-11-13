@@ -276,21 +276,21 @@ const SparePartManagement = () => {
                       title="View Details"
                       onClick={() => alert(`View details for: ${part.name}\n(Feature coming soon)`)}
                     >
-                      👁️
+                      View
                     </button>
                     <button 
                       className="action-btn edit"
                       title="Edit"
                       onClick={() => handleEdit(part)}
                     >
-                      ✏️
+                      Update
                     </button>
                     <button 
                       className="action-btn delete"
                       title="Delete"
                       onClick={() => alert(`Delete: ${part.name}\n(Feature coming soon)`)}
                     >
-                      🗑️
+                      Delete
                     </button>
                   </td>
                 </tr>
