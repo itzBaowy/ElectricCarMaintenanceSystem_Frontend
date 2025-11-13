@@ -833,17 +833,17 @@ const StaffDashboard = () => {
                             )}
                           </td>
                           <td>
-                            <div className="action-btns">
+                            <div className="appointment-action-group">
                               <button
-                                className="view-detail-btn"
+                                className="appointment-action-btn detail"
                                 onClick={() => handleViewDetails(appointment)}
                                 title="Xem chi tiết"
                               >
-                                👁️ Chi tiết
+                                 Chi tiết
                               </button>
                               {appointment.status === "PENDING" && (
                                 <button
-                                  className="assign-btn"
+                                  className="appointment-action-btn assign"
                                   onClick={() => handleAssignClick(appointment)}
                                 >
                                   Assign KTV
@@ -851,7 +851,7 @@ const StaffDashboard = () => {
                               )}
                               {appointment.status === "INCOMPLETED" && (
                                 <button
-                                  className="additional-btn"
+                                  className="appointment-action-btn additional"
                                   onClick={() =>
                                     handleIncompletedAppointment(appointment)
                                   }
@@ -862,7 +862,7 @@ const StaffDashboard = () => {
                               {appointment.status === "COMPLETED" &&
                                 !appointment.invoiceGenerated && (
                                   <button
-                                    className="invoice-btn"
+                                    className="appointment-action-btn invoice"
                                     onClick={() =>
                                       handleGenerateInvoice(appointment)
                                     }

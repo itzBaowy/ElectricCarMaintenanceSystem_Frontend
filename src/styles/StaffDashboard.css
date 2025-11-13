@@ -555,30 +555,34 @@
 
 .appointments-table {
   width: 100%;
-  border-collapse: collapse;
-  border: 2px solid #000000;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.appointments-table th, .appointments-table td {
+  border: none !important;
 }
 
 .appointments-table thead {
-  background: #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%) !important;
+  color: #fff;
 }
 
-.appointments-table thead th {
-  color: #ffffff;
-  padding: 15px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.95rem;
-  white-space: nowrap;
-  border: 1px solid #000000;
+.appointments-table th {
+  color: #fff !important;
+  font-weight: 700;
+  padding: 18px 0;
+  font-size: 1.08rem;
+  letter-spacing: 0.5px;
+  border-radius: 0 !important;
 }
 
-.appointments-table thead th:first-child {
-  border-top-left-radius: 10px;
+.appointments-table th:first-child {
+  border-top-left-radius: 16px !important;
 }
 
-.appointments-table thead th:last-child {
-  border-top-right-radius: 10px;
+.appointments-table th:last-child {
+  border-top-right-radius: 16px !important;
 }
 
 .appointments-table tbody tr {
@@ -1394,4 +1398,63 @@
   background: #e0f7fa;
   color: #222;
   transform: translateY(-2px);
+}
+
+.appointment-action-group {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+}
+
+.appointment-action-btn {
+  padding: 0.4rem 1rem !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.appointment-action-btn.detail {
+  background: #4fc3f7;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.18);
+}
+.appointment-action-btn.detail:hover {
+  background: #29b6f6;
+  box-shadow: 0 0 15px rgba(33, 150, 243, 0.28);
+  transform: translateY(-1px);
+}
+
+.appointment-action-btn.assign {
+  background: #000;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(38, 166, 154, 0.18);
+}
+.appointment-action-btn.assign:hover {
+  background: #26a69a;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(38, 166, 154, 0.28);
+  transform: translateY(-1px);
+}
+
+.appointment-action-btn.invoice {
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+  color: #00897b;
+  border: none;
+  box-shadow: 0 0 10px rgba(38, 166, 154, 0.10);
+  font-weight: 700;
+}
+.appointment-action-btn.invoice:hover {
+  background: linear-gradient(135deg, #b2ebf2 0%, #e0f7fa 100%);
+  color: #00695c;
+  box-shadow: 0 0 15px rgba(38, 166, 154, 0.18);
+  transform: translateY(-1px);
 }
