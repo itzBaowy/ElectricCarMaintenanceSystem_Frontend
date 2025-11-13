@@ -1,3 +1,16 @@
+// Staff Sidebar (no nav buttons yet)
+const StaffSidebar = () => (
+  <aside className="staff-sidebar">
+    <div className="sidebar-header">
+      <h2>ElectricCare Staff</h2>
+      <p className="sidebar-desc">Staff Panel</p>
+    </div>
+    <div className="sidebar-section"></div>
+    <div className="sidebar-footer">
+      <button className="sidebar-logout">Logout</button>
+    </div>
+  </aside>
+);
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import Header from "../../components/layout/Header";
@@ -580,6 +593,7 @@ const StaffDashboard = () => {
 
   return (
     <div className="staff-dashboard">
+      <StaffSidebar />
       {/* Header removed as requested */}
       <div className="staff-container">
         <div className="staff-header">
