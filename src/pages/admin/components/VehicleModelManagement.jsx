@@ -41,17 +41,15 @@ const VehicleModelManagement = () => {
 
   return (
     <div className="vehicle-model-management">
-      <div className="management-header">
-        <div className="header-info">
-          <h2>Vehicle Model Management</h2>
-          <p>View all available vehicle models in the system</p>
-        </div>
+      <div className="vehicle-model-management-header">
+        <h2>Vehicle Model Management</h2>
+        <p>View all available vehicle models in the system</p>
       </div>
 
       {/* Search Bar */}
       <div className="search-section">
         <div className="search-box">
-          <span className="search-icon">🔍</span>
+          <span className="search-icon"></span>
           <input
             type="text"
             placeholder="Search by model name or year..."
@@ -81,14 +79,14 @@ const VehicleModelManagement = () => {
           {/* Statistics */}
           <div className="stats-container">
             <div className="stat-card">
-              <div className="stat-icon">🚗</div>
+              {/* <div className="stat-icon"></div> */}
               <div className="stat-details">
                 <p className="stat-label">Total Models</p>
                 <h3 className="stat-value">{vehicleModels.length}</h3>
               </div>
             </div>
             <div className="stat-card">
-              <div className="stat-icon">🔍</div>
+              {/* <div className="stat-icon"></div> */}
               <div className="stat-details">
                 <p className="stat-label">Filtered Results</p>
                 <h3 className="stat-value">{filteredModels.length}</h3>

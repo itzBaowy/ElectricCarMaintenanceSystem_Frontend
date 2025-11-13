@@ -1,3 +1,16 @@
+.vehicle-model-management-header h2 {
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+.vehicle-model-management-header p {
+  color: #000000;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
 .vehicle-model-management {
   padding: 0;
 }
@@ -9,14 +22,34 @@
   margin-bottom: 2rem;
 }
 
-.header-info h2 {
+.management-header h2 {
   color: #1a1a1a;
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
 }
 
-.header-info p {
-  color: #666;
+.management-header p {
+  color: #000000;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.header-info h2 {
+  color: #1a1a1a;
+  font-size: 2.5rem;
+  opacity: 0.9;
+  background: none !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: none;
+  width: auto;
+  height: auto;
+  border-radius: 0;
   font-size: 0.95rem;
 }
 
