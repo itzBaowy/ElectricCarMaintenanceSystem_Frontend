@@ -272,13 +272,6 @@ const SparePartManagement = () => {
                   <td className="date">{formatDate(part.updatedAt)}</td>
                   <td className="actions">
                     <button 
-                      className="action-btn view"
-                      title="View Details"
-                      onClick={() => alert(`View details for: ${part.name}\n(Feature coming soon)`)}
-                    >
-                      View
-                    </button>
-                    <button 
                       className="action-btn edit"
                       title="Edit"
                       onClick={() => handleEdit(part)}
