@@ -68,6 +68,18 @@
   border: 2px solid #c3e6cb;
 }
 
+.invoice-status-banner.warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 2px solid #ffc107;
+}
+
+.invoice-status-banner.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 2px solid #bee5eb;
+}
+
 .invoice-status-banner .invoice-id {
   font-size: 14px;
   margin-top: 5px;
@@ -272,6 +284,16 @@
 .status-badge.paid {
   background: #d4edda;
   color: #155724;
+}
+
+.status-badge.unpaid {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.not-created {
+  background: #d1ecf1;
+  color: #0c5460;
 }
 
 .status-badge.cancelled {
