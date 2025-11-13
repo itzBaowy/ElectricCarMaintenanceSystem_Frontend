@@ -1,3 +1,12 @@
+.action-btn.view {
+  border: 2px solid #1976d2 !important;
+}
+.action-btn.edit {
+  border: 2px solid #f57c00 !important;
+}
+.action-btn.delete {
+  border: 2px solid #d32f2f !important;
+}
 .spare-part-management {
   padding: 2rem;
   /* page background updated per request */
@@ -381,6 +390,7 @@
   font-size: 1rem;
   background: none !important;
   color: inherit !important;
+  border: 2px solid transparent !important;
 }
 
 .action-btn:hover {
