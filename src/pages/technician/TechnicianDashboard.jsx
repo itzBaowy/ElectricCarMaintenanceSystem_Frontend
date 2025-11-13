@@ -173,6 +173,7 @@ const TechnicianDashboard = () => {
     const statusClasses = {
       'PENDING': 'status-badge-pending',
       'CONFIRMED': 'status-badge-confirmed',
+      'CUSTOMER_APPROVED': 'status-badge-confirmed',
       'COMPLETED': 'status-badge-completed',
       'CANCELLED': 'status-badge-cancelled'
     }
@@ -261,6 +262,7 @@ const TechnicianDashboard = () => {
                 <option value="ALL">All Status</option>
                 <option value="PENDING">Pending</option>
                 <option value="CONFIRMED">Confirmed</option>
+                <option value="CUSTOMER_APPROVED">Customer Approved</option>
                 <option value="COMPLETED">Completed</option>
                 <option value="CANCELLED">Cancelled</option>
               </select>
@@ -466,7 +468,7 @@ const TechnicianDashboard = () => {
                   <h3>Danh Sách Dịch Vụ</h3>
                   
                   {/* Additional Service Option */}
-                  {selectedAppointment.status === 'CONFIRMED' && (
+                  {(selectedAppointment.status === 'CONFIRMED') && (
                     <div className="additional-service-option">
                       <label className="checkbox-label">
                         <input
@@ -548,7 +550,7 @@ const TechnicianDashboard = () => {
 
               {/* Action Buttons */}
               <div className="detail-actions">
-                {selectedAppointment.status === 'CONFIRMED' && (
+                {(selectedAppointment.status === 'CONFIRMED' || selectedAppointment.status === 'CUSTOMER_APPROVED') && (
                   <button
                     onClick={handleCompleteService}
                     className="btn-action btn-complete"
