@@ -94,12 +94,30 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
+.action-btn.view {
+  color: #fff !important;
+  border: 2px solid #1976d2 !important;
+  background: #1976d2 !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
 }
-
-.search-row {
-  display: flex;
-  align-items: center;
+.action-btn.edit {
+  color: #fff !important;
+  border: 2px solid #f57c00 !important;
+  background: #f57c00 !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+.action-btn.delete {
+  color: #fff !important;
+  border: 2px solid #d32f2f !important;
+  background: #d32f2f !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
   gap: 1rem;
   width: 100%;
   justify-content: space-between;
@@ -357,12 +375,12 @@
 
 .action-btn {
   padding: 0.5rem;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 1rem;
-  background: transparent;
+  background: none !important;
+  color: inherit !important;
 }
 
 .action-btn:hover {
