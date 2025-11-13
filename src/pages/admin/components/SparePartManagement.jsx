@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import sparePartService from '../../../api/sparePartService'
 import EditSparePartModal from './EditSparePartModal'
+import UpdateStockModal from './UpdateStockModal'
 import '../../../styles/SparePartManagement.css'
 
 const SparePartManagement = () => {
@@ -10,6 +11,7 @@ const SparePartManagement = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [editingPart, setEditingPart] = useState(null)
+  const [updatingStockPart, setUpdatingStockPart] = useState(null)
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -101,6 +103,24 @@ const SparePartManagement = () => {
   }
 
   const handleUpdate = (updatedPart) => {
+    // Update the spare part in the list
+    setSpareParts(prevParts =>
+      prevParts.map(part =>
+        part.id === updatedPart.id ? updatedPart : part
+      )
+    )
+  }
+
+  // Handle update stock
+  const handleUpdateStock = (part) => {
+    setUpdatingStockPart(part)
+  }
+
+  const handleCloseStockModal = () => {
+    setUpdatingStockPart(null)
+  }
+
+  const handleStockUpdate = (updatedPart) => {
     // Update the spare part in the list
     setSpareParts(prevParts =>
       prevParts.map(part =>
@@ -273,17 +293,24 @@ const SparePartManagement = () => {
                   <td className="actions">
                     <button 
                       className="action-btn edit"
-                      title="Edit"
+                      title="Edit Part Info"
                       onClick={() => handleEdit(part)}
                     >
-                      Update
+                      ✏️ Edit
+                    </button>
+                    <button 
+                      className="action-btn stock"
+                      title="Update Stock"
+                      onClick={() => handleUpdateStock(part)}
+                    >
+                      📦 Stock
                     </button>
                     <button 
                       className="action-btn delete"
                       title="Delete"
                       onClick={() => alert(`Delete: ${part.name}\n(Feature coming soon)`)}
                     >
-                      Delete
+                      🗑️ Delete
                     </button>
                   </td>
                 </tr>
@@ -356,6 +383,15 @@ const SparePartManagement = () => {
           sparePart={editingPart}
           onClose={handleCloseModal}
           onUpdate={handleUpdate}
+        />
+      )}
+
+      {/* Update Stock Modal */}
+      {updatingStockPart && (
+        <UpdateStockModal
+          sparePart={updatingStockPart}
+          onClose={handleCloseStockModal}
+          onUpdate={handleStockUpdate}
         />
       )}
     </div>

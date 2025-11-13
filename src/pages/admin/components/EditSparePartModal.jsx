@@ -7,7 +7,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
     partNumber: '',
     name: '',
     unitPrice: '',
-    quantityInStock: '',
     minimumStockLevel: ''
   })
   const [loading, setLoading] = useState(false)
@@ -20,7 +19,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
         partNumber: sparePart.partNumber || '',
         name: sparePart.name || '',
         unitPrice: sparePart.unitPrice || '',
-        quantityInStock: sparePart.quantityInStock || '',
         minimumStockLevel: sparePart.minimumStockLevel || ''
       })
     }
@@ -56,10 +54,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
       errors.unitPrice = 'Unit price must be greater than 0'
     }
 
-    if (!formData.quantityInStock || formData.quantityInStock < 0) {
-      errors.quantityInStock = 'Quantity must be 0 or greater'
-    }
-
     if (!formData.minimumStockLevel || formData.minimumStockLevel < 0) {
       errors.minimumStockLevel = 'Minimum stock level must be 0 or greater'
     }
@@ -83,7 +77,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
         partNumber: formData.partNumber.trim(),
         name: formData.name.trim(),
         unitPrice: parseFloat(formData.unitPrice),
-        quantityInStock: parseInt(formData.quantityInStock),
         minimumStockLevel: parseInt(formData.minimumStockLevel)
       }
 
@@ -186,26 +179,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                 )}
               </div>
 
-              {/* Quantity In Stock */}
-              <div className="form-group">
-                <label htmlFor="quantityInStock">
-                  Quantity in Stock <span className="required">*</span>
-                </label>
-                <input
-                  type="number"
-                  id="quantityInStock"
-                  name="quantityInStock"
-                  value={formData.quantityInStock}
-                  onChange={handleChange}
-                  className={validationErrors.quantityInStock ? 'error' : ''}
-                  placeholder="0"
-                  min="0"
-                />
-                {validationErrors.quantityInStock && (
-                  <span className="error-text">{validationErrors.quantityInStock}</span>
-                )}
-              </div>
-
               {/* Minimum Stock Level */}
               <div className="form-group">
                 <label htmlFor="minimumStockLevel">
@@ -224,6 +197,17 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                 {validationErrors.minimumStockLevel && (
                   <span className="error-text">{validationErrors.minimumStockLevel}</span>
                 )}
+              </div>
+
+              {/* Current Stock Display */}
+              <div className="form-group full-width">
+                <div className="stock-info-display">
+                  <span className="info-label">Current Stock:</span>
+                  <span className="info-value">{sparePart?.quantityInStock || 0} units</span>
+                  <span className="info-note">
+                    ℹ️ To update stock quantity, use the "Update Stock" button in the table
+                  </span>
+                </div>
               </div>
             </div>
           </div>
