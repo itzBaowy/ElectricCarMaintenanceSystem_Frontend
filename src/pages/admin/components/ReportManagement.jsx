@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reportService from '../../../api/reportService'
 import logger from '../../../utils/logger'
 import '../../../styles/ReportManagement.css'
@@ -8,21 +8,26 @@ const ReportManagement = () => {
   const [error, setError] = useState(null)
   const [reportData, setReportData] = useState(null)
   
-  // Set default date range (current month)
+  // Set default date range (1 month ago to now)
   const getDefaultDates = () => {
     const now = new Date()
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
+    const oneMonthAgo = new Date(now)
+    oneMonthAgo.setMonth(now.getMonth() - 1)
     
     return {
-      start: firstDay.toISOString().slice(0, 16),
-      end: lastDay.toISOString().slice(0, 16)
+      start: oneMonthAgo.toISOString().slice(0, 16),
+      end: now.toISOString().slice(0, 16)
     }
   }
   
   const defaultDates = getDefaultDates()
   const [startDate, setStartDate] = useState(defaultDates.start)
   const [endDate, setEndDate] = useState(defaultDates.end)
+
+  // Auto-load report on component mount
+  useEffect(() => {
+    handleFetchReport()
+  }, [])
 
   const handleFetchReport = async () => {
     if (!startDate || !endDate) {
