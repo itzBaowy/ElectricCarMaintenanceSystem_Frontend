@@ -145,8 +145,8 @@
 }
 
 .vehicle-model-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(90deg, #aee9f7 0%, #98d6b7 100%);
+  color: #222;
 }
 
 .vehicle-model-table th {
@@ -183,14 +183,16 @@
   color: #667eea;
 }
 
-.year-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 0.35rem 0.875rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+.model-year-badge {
+  background: linear-gradient(135deg, #aee9f7 0%, #98d6b7 100%);
+  color: #222;
+  padding: 0.7rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1.2rem;
   font-weight: 600;
   display: inline-block;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(160, 220, 230, 0.12);
 }
 
 /* Loading State */
