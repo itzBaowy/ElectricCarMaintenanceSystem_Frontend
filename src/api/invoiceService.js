@@ -56,6 +56,34 @@ const invoiceService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Get invoice by appointment ID
+  getInvoiceByAppointmentId: async (appointmentId) => {
+    try {
+      const response = await api.get(`/api/invoices/appointment/${appointmentId}`)
+      
+      if (response.data.code === 1000 || response.data.code === 0) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Invoice not found',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get invoice by appointment error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Invoice not found',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 
