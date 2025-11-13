@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/layout/Header";
+// import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import InvoiceDetailModal from "../admin/components/InvoiceDetailModal";
 import appointmentService from "../../api/appointmentService";
@@ -568,7 +568,7 @@ const StaffDashboard = () => {
   if (loading) {
     return (
       <div className="staff-dashboard">
-        <Header />
+        {/* Header removed as requested */}
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Đang tải dữ liệu...</p>
@@ -580,7 +580,7 @@ const StaffDashboard = () => {
 
   return (
     <div className="staff-dashboard">
-      <Header />
+      {/* Header removed as requested */}
       <div className="staff-container">
         <div className="staff-header">
           <div className="header-content">
