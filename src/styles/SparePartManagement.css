@@ -1,11 +1,45 @@
+.action-btn {
+  padding: 0.4rem 1rem !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.06) !important;
+}
 .action-btn.view {
-  border: 2px solid #1976d2 !important;
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+  box-shadow: 0 0 10px rgba(25, 118, 210, 0.12) !important;
+}
+.action-btn.view:hover {
+  background: #bbdefb !important;
+  box-shadow: 0 0 15px rgba(25, 118, 210, 0.18) !important;
+  transform: translateY(-1px);
 }
 .action-btn.edit {
-  border: 2px solid #f57c00 !important;
+  background: #ffe0b2 !important;
+  color: #e65100 !important;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.3) !important;
+}
+.action-btn.edit:hover {
+  background: #ffcc80 !important;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.5) !important;
+  transform: translateY(-1px);
 }
 .action-btn.delete {
-  border: 2px solid #d32f2f !important;
+  background: #ffcdd2 !important;
+  color: #c62828 !important;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3) !important;
+}
+.action-btn.delete:hover {
+  background: #ef9a9a !important;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.5) !important;
+  transform: translateY(-1px);
 }
 .spare-part-management {
   padding: 2rem;
