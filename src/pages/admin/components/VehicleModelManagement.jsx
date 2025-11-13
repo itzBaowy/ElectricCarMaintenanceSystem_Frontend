@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import vehicleModelService from "../../../api/vehicleModelService";
+import ModelPackageConfigModal from "./ModelPackageConfigModal";
 import "../../../styles/VehicleModelManagement.css";
 
 const VehicleModelManagement = () => {
@@ -7,6 +8,11 @@ const VehicleModelManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [formData, setFormData] = useState({ name: "", modelYear: "" });
 
   useEffect(() => {
     fetchVehicleModels();
@@ -33,6 +39,73 @@ const VehicleModelManagement = () => {
     }
   };
 
+  const handleAddModel = () => {
+    setFormData({ name: "", modelYear: "" });
+    setShowAddModal(true);
+  };
+
+  const handleEditModel = (model) => {
+    setSelectedModel(model);
+    setFormData({ name: model.name, modelYear: model.modelYear });
+    setShowEditModal(true);
+  };
+
+  const handleConfigModel = (model) => {
+    setSelectedModel(model);
+    setShowConfigModal(true);
+  };
+
+  const handleDeleteModel = async (model) => {
+    if (window.confirm(`Are you sure you want to delete "${model.name}"?`)) {
+      try {
+        const response = await vehicleModelService.deleteVehicleModel(model.id);
+        if (response.code === 1000) {
+          alert("Vehicle model deleted successfully!");
+          fetchVehicleModels();
+        } else {
+          alert(response.message || "Failed to delete vehicle model");
+        }
+      } catch (err) {
+        alert(err.response?.data?.message || "Failed to delete vehicle model");
+      }
+    }
+  };
+
+  const handleSubmitAdd = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await vehicleModelService.createVehicleModel(formData);
+      if (response.code === 1000) {
+        alert("Vehicle model created successfully!");
+        setShowAddModal(false);
+        fetchVehicleModels();
+      } else {
+        alert(response.message || "Failed to create vehicle model");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to create vehicle model");
+    }
+  };
+
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await vehicleModelService.updateVehicleModel(
+        selectedModel.id,
+        formData
+      );
+      if (response.code === 1000) {
+        alert("Vehicle model updated successfully!");
+        setShowEditModal(false);
+        fetchVehicleModels();
+      } else {
+        alert(response.message || "Failed to update vehicle model");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update vehicle model");
+    }
+  };
+
   const filteredModels = vehicleModels.filter(
     (model) =>
       model.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,10 +116,10 @@ const VehicleModelManagement = () => {
     <div className="vehicle-model-management">
       <div className="vehicle-model-management-header">
         <h2>Vehicle Model Management</h2>
-        <p>View all available vehicle models in the system</p>
+        <p>Manage vehicle models and configure service packages</p>
       </div>
 
-      {/* Search Bar */}
+      {/* Search Bar and Add Button */}
       <div className="search-section">
         <div className="search-box">
           <span className="search-icon"></span>
@@ -58,6 +131,9 @@ const VehicleModelManagement = () => {
             className="search-input"
           />
         </div>
+        <button className="add-model-btn" onClick={handleAddModel}>
+          ➕ Add New Model
+        </button>
       </div>
 
       {/* Error Message */}
@@ -104,8 +180,7 @@ const VehicleModelManagement = () => {
                   <th>Model Year</th>
                   <th>Created At</th>
                   <th>Updated At</th>
-                  <th>Created By</th>
-                  <th>Updated By</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -119,13 +194,34 @@ const VehicleModelManagement = () => {
                       </td>
                       <td>{model.createdAt || "N/A"}</td>
                       <td>{model.updatedAt || "N/A"}</td>
-                      <td>{model.createdBy || "N/A"}</td>
-                      <td>{model.updatedBy || "N/A"}</td>
+                      <td className="actions">
+                        <button
+                          className="action-btn config"
+                          onClick={() => handleConfigModel(model)}
+                          title="Configure Service Packages"
+                        >
+                          ⚙️ Config
+                        </button>
+                        <button
+                          className="action-btn edit"
+                          onClick={() => handleEditModel(model)}
+                          title="Edit Model"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          className="action-btn delete"
+                          onClick={() => handleDeleteModel(model)}
+                          title="Delete Model"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="no-data">
+                    <td colSpan="6" className="no-data">
                       <div className="no-data-content">
                         <span className="no-data-icon">📭</span>
                         <p>No vehicle models found</p>
@@ -137,6 +233,130 @@ const VehicleModelManagement = () => {
             </table>
           </div>
         </>
+      )}
+
+      {/* Add Model Modal */}
+      {showAddModal && (
+        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add New Vehicle Model</h3>
+              <button
+                className="close-btn"
+                onClick={() => setShowAddModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleSubmitAdd} className="model-form">
+              <div className="form-group">
+                <label>Model Name *</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  placeholder="e.g., VF 10"
+                />
+              </div>
+              <div className="form-group">
+                <label>Model Year *</label>
+                <input
+                  type="number"
+                  value={formData.modelYear}
+                  onChange={(e) =>
+                    setFormData({ ...formData, modelYear: e.target.value })
+                  }
+                  required
+                  placeholder="e.g., 2025"
+                  min="2020"
+                  max="2030"
+                />
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  Create Model
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Model Modal */}
+      {showEditModal && (
+        <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Vehicle Model</h3>
+              <button
+                className="close-btn"
+                onClick={() => setShowEditModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleSubmitEdit} className="model-form">
+              <div className="form-group">
+                <label>Model Name *</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  required
+                  placeholder="e.g., VF 10"
+                />
+              </div>
+              <div className="form-group">
+                <label>Model Year *</label>
+                <input
+                  type="number"
+                  value={formData.modelYear}
+                  onChange={(e) =>
+                    setFormData({ ...formData, modelYear: e.target.value })
+                  }
+                  required
+                  placeholder="e.g., 2025"
+                  min="2020"
+                  max="2030"
+                />
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  Update Model
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Config Modal */}
+      {showConfigModal && selectedModel && (
+        <ModelPackageConfigModal
+          model={selectedModel}
+          allModels={vehicleModels}
+          onClose={() => setShowConfigModal(false)}
+          onConfigUpdated={fetchVehicleModels}
+        />
       )}
     </div>
   );

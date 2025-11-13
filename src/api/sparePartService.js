@@ -80,6 +80,18 @@ const sparePartService = {
       logger.error('❌ Error deleting spare part:', error)
       throw error
     }
+  },
+
+  // Get spare parts by vehicle model ID
+  getSparePartsByModel: async (modelId) => {
+    try {
+      const response = await api.get(`/api/spareParts/model/${modelId}`)
+      logger.log('✅ Spare parts by model fetched successfully:', response.data)
+      return response.data
+    } catch (error) {
+      logger.error('❌ Error fetching spare parts by model:', error)
+      throw error
+    }
   }
 }
 
