@@ -249,7 +249,7 @@ const ServiceCenterManagement = () => {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{editingCenter ? '✏️ Chỉnh Sửa Trung Tâm' : ' Thêm Trung Tâm Mới'}</h2>
+              <h2>{editingCenter ? ' Chỉnh Sửa Trung Tâm' : ' Thêm Trung Tâm Mới'}</h2>
               <button className="close-btn" onClick={handleCloseModal}>×</button>
             </div>
 

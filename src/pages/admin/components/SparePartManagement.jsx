@@ -205,11 +205,11 @@ const SparePartManagement = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
-          <span className="search-icon">🔍</span>
+          
         </div>
 
         <button onClick={fetchSpareParts} className="refresh-btn">
-          🔄 Refresh
+           Refresh
         </button>
       </div>
 

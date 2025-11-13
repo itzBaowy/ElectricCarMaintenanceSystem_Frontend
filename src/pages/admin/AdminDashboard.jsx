@@ -110,11 +110,13 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="admin-main">
         {/* Top Header */}
-        <header className="admin-header" style={{ background: 'linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)', color: '#fff', padding: '2rem 2.5rem' }}>
-          <div className="header-title">
-            <h1 style={{ margin: 0, fontWeight: 700, fontSize: '2rem', color: '#fff' }}>Employee Management</h1>
-          </div>
-        </header>
+        {activeTab !== 'centers' && (
+          <header className="admin-header" style={{ background: 'linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)', color: '#fff', padding: '2rem 2.5rem' }}>
+            <div className="header-title">
+              <h1 style={{ margin: 0, fontWeight: 700, fontSize: '2rem', color: '#fff' }}>{menuItems.find(item => item.id === activeTab)?.label || ''}</h1>
+            </div>
+          </header>
+        )}
 
         {/* Content Area */}
         <div className="admin-content">

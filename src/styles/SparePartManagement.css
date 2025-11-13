@@ -1,6 +1,7 @@
 .spare-part-management {
   padding: 2rem;
-  background-color: #f8f9fa;
+  /* page background updated per request */
+  background-color: #e6f6f5;
   min-height: 100vh;
 }
 
@@ -35,16 +36,30 @@
   flex: 1;
   min-width: 150px;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   border-radius: 10px;
   color: white;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.stat-card.warning {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+.spare-part-management .stat-card.warning {
+  /* stronger selector + !important to override other module CSS that targets nth-child */
+  background: #ffffff !important;
+  background-image: none !important;
+  color: #111 !important;
+  /* match the teal accent border of the side cards using provided color */
+  border: 3px solid #7ac7d0 !important;
+  box-shadow: 0 6px 18px rgba(122,199,208,0.12) !important;
+}
+
+/* Ensure the number inside warning card is black and not styled by other rules */
+.spare-part-management .stat-card.warning .stat-value,
+.spare-part-management .stat-card.warning .stat-label {
+  color: #111 !important;
 }
 
 .stat-label {
@@ -55,6 +70,18 @@
 .stat-value {
   font-size: 2rem;
   font-weight: bold;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0.25rem 0 0 0;
+  display: inline-block;
+  color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Force stat text to black for better readability */
+.stat-card .stat-label,
+.stat-card .stat-value {
+  color: #111 !important;
 }
 
 /* Filters Section */
