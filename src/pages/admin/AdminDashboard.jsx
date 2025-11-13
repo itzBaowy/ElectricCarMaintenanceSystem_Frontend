@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeeManagement from "./components/EmployeeManagement";
+import CustomerManagement from "./components/CustomerManagement";
 import ServiceCenterManagement from "./components/ServiceCenterManagement";
 import SparePartManagement from "./components/SparePartManagement";
 import VehicleModelManagement from "./components/VehicleModelManagement";
@@ -22,25 +23,31 @@ const AdminDashboard = () => {
   const menuItems = [
     {
       id: "employees",
-      icon: "",
+      icon: "👥",
       label: "Employee Management",
       component: EmployeeManagement,
     },
     {
+      id: "customers",
+      icon: "👤",
+      label: "Customer Management",
+      component: CustomerManagement,
+    },
+    {
       id: "centers",
-      icon: "",
+      icon: "🏢",
       label: "Service Centers",
       component: ServiceCenterManagement,
     },
     {
       id: "spareParts",
-      icon: "",
+      icon: "🔧",
       label: "Spare Part Management",
       component: SparePartManagement,
     },
     {
       id: "vehicleModels",
-      icon: "",
+      icon: "🚗",
       label: "Vehicle Models",
       component: VehicleModelManagement,
     },
@@ -50,8 +57,8 @@ const AdminDashboard = () => {
       label: "Maintenance Records",
       component: MaintenanceRecordManagement,
     },
-    { id: "reports", icon: "", label: "Reports", component: null },
-    { id: "settings", icon: "", label: "Settings", component: null },
+    { id: "reports", icon: "📊", label: "Reports", component: null },
+    { id: "settings", icon: "⚙️", label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(
