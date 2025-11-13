@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import sparePartService from '../../../api/sparePartService'
 import EditSparePartModal from './EditSparePartModal'
 import UpdateStockModal from './UpdateStockModal'
+import AddSparePartModal from './AddSparePartModal'
 import '../../../styles/SparePartManagement.css'
 
 const SparePartManagement = () => {
@@ -12,6 +13,7 @@ const SparePartManagement = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [editingPart, setEditingPart] = useState(null)
   const [updatingStockPart, setUpdatingStockPart] = useState(null)
+  const [showAddModal, setShowAddModal] = useState(false)
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -127,6 +129,22 @@ const SparePartManagement = () => {
         part.id === updatedPart.id ? updatedPart : part
       )
     )
+  }
+
+  // Handle add new spare part
+  const handleAddNew = () => {
+    setShowAddModal(true)
+  }
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false)
+  }
+
+  const handleAddSparePart = (newPart) => {
+    // Add the new spare part to the list
+    setSpareParts(prevParts => [newPart, ...prevParts])
+    // Reset to page 1 to see the new part
+    setCurrentPage(1)
   }
 
   // Format price to VND
@@ -371,11 +389,19 @@ const SparePartManagement = () => {
         </div>
       )}
 
-      {/* Add Button (for future use) */}
-      <button className="add-spare-part-btn" onClick={() => alert('Add spare part feature coming soon!')}>
-        <span className="btn-icon"></span>
+      {/* Add Button */}
+      <button className="add-spare-part-btn" onClick={handleAddNew}>
+        <span className="btn-icon">➕</span>
         Add New Spare Part
       </button>
+
+      {/* Add Spare Part Modal */}
+      {showAddModal && (
+        <AddSparePartModal
+          onClose={handleCloseAddModal}
+          onAdd={handleAddSparePart}
+        />
+      )}
 
       {/* Edit Modal */}
       {editingPart && (

@@ -31,7 +31,7 @@ const sparePartService = {
     }
   },
 
-  // Create spare part (for future use)
+  // Create spare part
   createSparePart: async (sparePartData) => {
     try {
       const response = await api.post('/api/spareParts/create', sparePartData)
