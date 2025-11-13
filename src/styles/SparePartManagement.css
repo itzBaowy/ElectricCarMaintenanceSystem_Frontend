@@ -1,3 +1,46 @@
+.action-btn {
+  padding: 0.4rem 1rem !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.06) !important;
+}
+.action-btn.view {
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+  box-shadow: 0 0 10px rgba(25, 118, 210, 0.12) !important;
+}
+.action-btn.view:hover {
+  background: #bbdefb !important;
+  box-shadow: 0 0 15px rgba(25, 118, 210, 0.18) !important;
+  transform: translateY(-1px);
+}
+.action-btn.edit {
+  background: #ffe0b2 !important;
+  color: #e65100 !important;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.3) !important;
+}
+.action-btn.edit:hover {
+  background: #ffcc80 !important;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.5) !important;
+  transform: translateY(-1px);
+}
+.action-btn.delete {
+  background: #ffcdd2 !important;
+  color: #c62828 !important;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3) !important;
+}
+.action-btn.delete:hover {
+  background: #ef9a9a !important;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.5) !important;
+  transform: translateY(-1px);
+}
 .spare-part-management {
   padding: 2rem;
   /* page background updated per request */
@@ -50,7 +93,7 @@
   /* stronger selector + !important to override other module CSS that targets nth-child */
   background: #ffffff !important;
   background-image: none !important;
-  color: #111 !important;
+  color: #111;
   /* match the teal accent border of the side cards using provided color */
   border: 3px solid #7ac7d0 !important;
   box-shadow: 0 6px 18px rgba(122,199,208,0.12) !important;
@@ -94,12 +137,30 @@
   display: flex;
   gap: 1rem;
   align-items: center;
-  flex-wrap: wrap;
+.action-btn.view {
+  color: #fff !important;
+  border: 2px solid #1976d2 !important;
+  background: #1976d2 !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
 }
-
-.search-row {
-  display: flex;
-  align-items: center;
+.action-btn.edit {
+  color: #fff !important;
+  border: 2px solid #f57c00 !important;
+  background: #f57c00 !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+.action-btn.delete {
+  color: #fff !important;
+  border: 2px solid #d32f2f !important;
+  background: #d32f2f !important;
+  font-size: 1.1em !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
   gap: 1rem;
   width: 100%;
   justify-content: space-between;
@@ -282,7 +343,10 @@
 .part-number {
   font-family: 'Courier New', monospace;
   font-weight: 600;
-  color: #667eea;
+  color: #000000;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  display: inline-block;
 }
 
 .part-name {
@@ -323,6 +387,7 @@
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
+  border: none !important;
 }
 
 .status-badge.in-stock {
@@ -352,12 +417,13 @@
 
 .action-btn {
   padding: 0.5rem;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 1rem;
-  background: transparent;
+  background: none !important;
+  color: inherit !important;
+  border: 2px solid transparent !important;
 }
 
 .action-btn:hover {
