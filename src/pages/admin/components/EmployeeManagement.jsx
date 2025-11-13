@@ -284,7 +284,7 @@ const EmployeeManagement = () => {
             disabled={isLoading}
             title="Refresh employee list"
           >
-            {isLoading ? '⏳' : '🔄'}
+            {isLoading ? '⌛' : '↻'}
           </button>
         </div>
         
@@ -521,13 +521,13 @@ const EmployeeManagement = () => {
                   <td>{employee.email}</td>
                   <td>
                     <span className={`role-badge ${employee.role.toLowerCase()}`}>
-                      {employee.role === 'TECHNICIAN' ? '🔧 Technician' : '👥 Staff'}
+                      {employee.role === 'TECHNICIAN' ? 'Technician' : 'Staff'}
                     </span>
                   </td>
                   <td>
                     {employee.serviceCenterId ? (
                       <span className="center-badge">
-                        🏢 {getCenterName(employee.serviceCenterId)}
+                        {getCenterName(employee.serviceCenterId)}
                       </span>
                     ) : (
                       <span className="not-assigned">Not assigned</span>
@@ -541,14 +541,14 @@ const EmployeeManagement = () => {
                         onClick={() => handleEdit(employee)}
                         title="Edit Employee"
                       >
-                        ✏️
+                        Edit
                       </button>
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(employee)}
                         title="Delete Employee"
                       >
-                        🗑️
+                        Delete
                       </button>
                     </div>
                   </td>

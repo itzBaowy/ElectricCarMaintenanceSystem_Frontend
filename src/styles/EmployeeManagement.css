@@ -1,6 +1,6 @@
 /* Employee Management Styles */
 .employee-management {
-  background: white;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -8,7 +8,8 @@
 
 .management-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 2px solid #4dd0e1;
+  background: linear-gradient(135deg, #80deea 0%, #81c784 100%);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,40 +26,56 @@
   flex: 1;
   max-width: 300px;
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #4dd0e1;
   border-radius: 8px;
   font-size: 0.9rem;
   transition: border-color 0.3s ease;
+  background: white;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #26c6da;
+  box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.2);
 }
 
 .role-filter {
   padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #4dd0e1;
   border-radius: 8px;
   font-size: 0.9rem;
   background: white;
   cursor: pointer;
+  min-width: 150px;
+  color: #333;
+}
+
+.role-filter option {
+  color: #333;
+  background: white;
 }
 
 .refresh-btn {
-  padding: 0.75rem 1rem;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
-  font-size: 1.2rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 0.75rem 1rem !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 1.2rem !important;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%) !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 45px !important;
+  box-shadow: 0 4px 12px rgba(38, 166, 154, 0.4) !important;
+  font-weight: 700 !important;
 }
 
 .refresh-btn:hover:not(:disabled) {
-  background: #f0f4f8;
-  border-color: #667eea;
-  transform: rotate(180deg);
+  background: linear-gradient(135deg, #00897b 0%, #43a047 100%) !important;
+  box-shadow: 0 6px 16px rgba(38, 166, 154, 0.6) !important;
+  transform: translateY(-2px) !important;
 }
 
 .refresh-btn:disabled {
@@ -66,21 +83,31 @@
   cursor: not-allowed;
 }
 
-.add-employee-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
+.employee-management .add-employee-btn,
+.management-header .add-employee-btn,
+button.add-employee-btn {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%) !important;
+  background-image: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%) !important;
+  background-color: #26a69a !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 12px rgba(38, 166, 154, 0.4) !important;
+  font-size: 1rem !important;
 }
 
-.add-employee-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.employee-management .add-employee-btn:hover,
+.management-header .add-employee-btn:hover,
+button.add-employee-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(38, 166, 154, 0.6) !important;
+  background: linear-gradient(135deg, #00897b 0%, #43a047 100%) !important;
+  background-image: linear-gradient(135deg, #00897b 0%, #43a047 100%) !important;
 }
 
 /* Modal Styles */
@@ -99,42 +126,52 @@
 }
 
 .employee-form-modal {
-  background: white;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: white !important;
+  border-radius: 12px !important;
+  width: 100% !important;
+  max-width: 600px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+  border: none !important;
 }
 
 .modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e1e5e9;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 1.5rem !important;
+  border-bottom: 2px solid #4dd0e1 !important;
+  background: linear-gradient(135deg, #80deea 0%, #81c784 100%) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  border-radius: 10px 10px 0 0 !important;
 }
 
 .modal-header h3 {
-  margin: 0;
-  color: #333;
-  font-size: 1.25rem;
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
 }
 
 .close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #666;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: background 0.3s ease;
+  background: white !important;
+  border: 2px solid #4dd0e1 !important;
+  font-size: 1.5rem !important;
+  cursor: pointer !important;
+  color: #00695c !important;
+  padding: 0.25rem !important;
+  border-radius: 50% !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
 }
 
 .close-btn:hover {
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #b2ebf2 0%, #c8e6c9 100%) !important;
+  transform: rotate(90deg) !important;
 }
 
 .employee-form {
@@ -154,25 +191,26 @@
 }
 
 .form-group label {
-  color: #333;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  color: #00695c !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 0.9rem !important;
 }
 
 .form-group input,
 .form-group select {
-  padding: 0.75rem;
-  border: 2px solid #e1e5e9;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: border-color 0.3s ease;
+  padding: 0.75rem !important;
+  border: 2px solid #4dd0e1 !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  transition: all 0.3s ease !important;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-  outline: none;
-  border-color: #667eea;
+  outline: none !important;
+  border-color: #26c6da !important;
+  box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.2) !important;
 }
 
 /* Password Input Wrapper */
@@ -210,13 +248,13 @@
   justify-content: flex-end;
   margin-top: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #e1e5e9;
+  border-top: 2px solid #4dd0e1;
 }
 
 .cancel-btn {
-  background: #f8f9fa;
-  color: #666;
-  border: 2px solid #e1e5e9;
+  background: white;
+  color: #00838f;
+  border: 2px solid #4dd0e1;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-weight: 600;
@@ -225,11 +263,12 @@
 }
 
 .cancel-btn:hover {
-  background: #e9ecef;
+  background: #e0f7fa;
+  border-color: #26c6da;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #26c6da 0%, #66bb6a 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -241,7 +280,8 @@
 
 .submit-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(38, 198, 218, 0.4);
+  background: linear-gradient(135deg, #00acc1 0%, #4caf50 100%);
 }
 
 /* Employee List Styles */
@@ -270,12 +310,19 @@
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #e1e5e9;
+  vertical-align: middle !important;
+}
+
+.employee-table td:last-child {
+  text-align: center;
+  padding: 0.5rem 1rem !important;
+  vertical-align: middle !important;
 }
 
 .employee-table th {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #b2ebf2 0%, #c8e6c9 100%);
   font-weight: 600;
-  color: #333;
+  color: #00695c;
   font-size: 0.9rem;
   white-space: nowrap;
 }
@@ -329,9 +376,14 @@
 }
 
 .not-assigned {
-  color: #999;
-  font-style: italic;
-  font-size: 0.85rem;
+  background: #ffe0b2;
+  color: #e65100;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .status-badge {
@@ -360,27 +412,50 @@
 }
 
 .action-buttons {
-  display: flex;
-  gap: 0.5rem;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.5rem !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 100% !important;
 }
 
 .edit-btn,
 .delete-btn {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  font-size: 1rem;
+  padding: 0.4rem 1rem !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.edit-btn {
+  background: #ffe0b2;
+  color: #e65100;
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
 }
 
 .edit-btn:hover {
-  background: #e3f2fd;
+  background: #ffcc80;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: #ffcdd2;
+  color: #c62828;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
 }
 
 .delete-btn:hover {
-  background: #ffebee;
+  background: #ef9a9a;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+  transform: translateY(-1px);
 }
 
 .empty-state {
@@ -429,6 +504,10 @@
   
   .search-input {
     max-width: none;
+  }
+  
+  .role-filter {
+    width: 100%;
   }
 }
 

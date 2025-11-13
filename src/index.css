@@ -13,6 +13,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+}
+
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

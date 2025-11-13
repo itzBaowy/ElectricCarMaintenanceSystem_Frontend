@@ -169,6 +169,7 @@ const SparePartManagement = () => {
 
   return (
     <div className="spare-part-management">
+
       {/* Header Section */}
       <div className="spare-part-header">
         <div className="header-info">
@@ -197,20 +198,22 @@ const SparePartManagement = () => {
 
       {/* Filters Section */}
       <div className="spare-part-filters">
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Search by name or part number..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <span className="search-icon">🔍</span>
-        </div>
+        <div className="search-row">
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="Search by name or part number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <span className="search-icon"></span>
+          </div>
 
-        <button onClick={fetchSpareParts} className="refresh-btn">
-          🔄 Refresh
-        </button>
+          <button onClick={fetchSpareParts} className="refresh-btn">
+             Refresh
+          </button>
+        </div>
       </div>
 
       {/* Results Count */}
@@ -222,6 +225,7 @@ const SparePartManagement = () => {
           </span>
         )}
       </div>
+      
 
       {/* Table Section */}
       <div className="table-container">

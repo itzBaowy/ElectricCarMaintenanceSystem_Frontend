@@ -7,6 +7,12 @@ const Header = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
+  // Check if user is on a dashboard page (hide login button)
+  const isDashboardPage = location.pathname.includes('/staff') || 
+                          location.pathname.includes('/technician') || 
+                          location.pathname.includes('/customer') || 
+                          location.pathname.includes('/admin')
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -105,24 +111,28 @@ const Header = () => {
               Contact
             </a>
             {/* Mobile Auth Buttons */}
-            <div className="mobile-auth-buttons">
+            {!isDashboardPage && (
+              <div className="mobile-auth-buttons">
+                <button 
+                  className="mobile-btn-login"
+                  onClick={() => handleAuthClick('login')}
+                >
+                  Login
+                </button>
+              </div>
+            )}
+          </div>
+
+          {!isDashboardPage && (
+            <div className="nav-buttons">
               <button 
-                className="mobile-btn-login"
+                className="btn-login"
                 onClick={() => handleAuthClick('login')}
               >
                 Login
               </button>
             </div>
-          </div>
-
-          <div className="nav-buttons">
-            <button 
-              className="btn-login"
-              onClick={() => handleAuthClick('login')}
-            >
-              Login
-            </button>
-          </div>
+          )}
 
           <div className="hamburger" onClick={toggleMenu}>
             <span className="bar"></span>

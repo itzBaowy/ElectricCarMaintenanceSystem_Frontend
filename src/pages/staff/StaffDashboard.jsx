@@ -1,140 +1,125 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from "../../components/layout/Header";
-import Footer from "../../components/layout/Footer";
-import InvoiceDetailModal from "../admin/components/InvoiceDetailModal";
-import appointmentService from "../../api/appointmentService";
-import technicianService from "../../api/technicianService";
-import customerService from "../../api/customerService";
-import vehicleService from "../../api/vehicleService";
-import logger from "../../utils/logger";
-import "../../styles/StaffDashboard.css";
-import authService from "../../api/authService";
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Header from '../../components/layout/Header'
+import Footer from '../../components/layout/Footer'
+import appointmentService from '../../api/appointmentService'
+import technicianService from '../../api/technicianService'
+import customerService from '../../api/customerService'
+import vehicleService from '../../api/vehicleService'
+import logger from '../../utils/logger'
+import '../../styles/StaffDashboard.css'
+import authService from '../../api/authService'
 
 const StaffDashboard = () => {
-  const navigate = useNavigate();
-  const [appointments, setAppointments] = useState([]);
-  const [technicians, setTechnicians] = useState([]);
-  const [customers, setCustomers] = useState([]);
-  const [vehicleModels, setVehicleModels] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [assignLoading, setAssignLoading] = useState(false);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [showAssignModal, setShowAssignModal] = useState(false);
-  const [selectedTechnician, setSelectedTechnician] = useState("");
-  const [filterStatus, setFilterStatus] = useState("ALL");
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const navigate = useNavigate()
+  const [appointments, setAppointments] = useState([])
+  const [technicians, setTechnicians] = useState([])
+  const [customers, setCustomers] = useState([])
+  const [vehicleModels, setVehicleModels] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [assignLoading, setAssignLoading] = useState(false)
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [showAssignModal, setShowAssignModal] = useState(false)
+  const [selectedTechnician, setSelectedTechnician] = useState('')
+  const [filterStatus, setFilterStatus] = useState('ALL')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [staffName, setStaffName] = useState('')
+  
   // Modal states for new workflows
-  const [showCreateCustomerModal, setShowCreateCustomerModal] = useState(false);
-  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
-  const [showServiceRecommendationModal, setShowServiceRecommendationModal] =
-    useState(false);
-  const [showAdditionalServiceModal, setShowAdditionalServiceModal] =
-    useState(false);
-  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-  const [showDetailModal, setShowDetailModal] = useState(false);
-  const [activeTab, setActiveTab] = useState("appointments"); // appointments, walk-ins, invoices
-  const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
-
+  const [showCreateCustomerModal, setShowCreateCustomerModal] = useState(false)
+  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false)
+  const [showServiceRecommendationModal, setShowServiceRecommendationModal] = useState(false)
+  const [showAdditionalServiceModal, setShowAdditionalServiceModal] = useState(false)
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const [activeTab, setActiveTab] = useState('appointments') // appointments, walk-ins, invoices
+  
   // Approval state for service items
-  const [serviceItemApprovals, setServiceItemApprovals] = useState({}); // { [detailId]: boolean }
-  const [approvingItems, setApprovingItems] = useState(false);
-
+  const [serviceItemApprovals, setServiceItemApprovals] = useState({}) // { [detailId]: boolean }
+  const [approvingItems, setApprovingItems] = useState(false)
+  
   // Form states
   const [customerForm, setCustomerForm] = useState({
-    fullName: "",
-    phoneNumber: "",
-    email: "",
-    gender: "MALE",
-  });
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    gender: 'MALE'
+  })
   const [vehicleForm, setVehicleForm] = useState({
-    customerId: "",
-    customerUsername: "",
-    customerName: "",
-    vinNumber: "",
-    licensePlate: "",
-    model: "",
-    currentKilometers: "",
-    purchaseYear: "",
-  });
-  const [selectedVehicleForService, setSelectedVehicleForService] =
-    useState(null);
-  const [recommendedServices, setRecommendedServices] = useState([]);
-  const [additionalServices, setAdditionalServices] = useState([]);
+    customerId: '',
+    customerUsername: '',
+    customerName: '',
+    vinNumber: '',
+    licensePlate: '',
+    model: '',
+    currentKilometers: '',
+    purchaseYear: ''
+  })
+  const [selectedVehicleForService, setSelectedVehicleForService] = useState(null)
+  const [recommendedServices, setRecommendedServices] = useState([])
+  const [additionalServices, setAdditionalServices] = useState([])
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const fetchData = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const [
-        appointmentsResult,
-        techniciansResult,
-        customersResult,
-        vehicleModelsResult,
-      ] = await Promise.all([
+      // Get staff name from localStorage
+      const user = JSON.parse(localStorage.getItem('user') || '{}')
+      setStaffName(user.fullName || 'Staff')
+      
+      const [appointmentsResult, techniciansResult, customersResult, vehicleModelsResult] = await Promise.all([
         appointmentService.getAllAppointments(),
         technicianService.getAllTechnicians(),
         customerService.getAllCustomers(),
-        vehicleService.getAllVehicleModels(),
-      ]);
+        vehicleService.getAllVehicleModels()
+      ])
 
       if (appointmentsResult.success) {
-        const appointmentsData = appointmentsResult.data || [];
+        const appointmentsData = appointmentsResult.data || []
         if (appointmentsData.length > 0) {
-          logger.log("Sample appointment data:", appointmentsData[0]);
+          logger.log('Sample appointment data:', appointmentsData[0])
         }
-        setAppointments(appointmentsData);
+        setAppointments(appointmentsData)
       } else {
-        logger.error(
-          "Failed to fetch appointments:",
-          appointmentsResult.message
-        );
+        logger.error('Failed to fetch appointments:', appointmentsResult.message)
       }
 
       if (techniciansResult.success) {
-        setTechnicians(techniciansResult.data || []);
+        setTechnicians(techniciansResult.data || [])
       } else {
-        logger.error("Failed to fetch technicians:", techniciansResult.message);
+        logger.error('Failed to fetch technicians:', techniciansResult.message)
       }
 
       if (customersResult.success) {
-        setCustomers(customersResult.data || []);
+        setCustomers(customersResult.data || [])
       } else {
-        logger.error("Failed to fetch customers:", customersResult.message);
+        logger.error('Failed to fetch customers:', customersResult.message)
       }
 
       if (vehicleModelsResult.success) {
-        setVehicleModels(vehicleModelsResult.data || []);
+        setVehicleModels(vehicleModelsResult.data || [])
       } else {
-        logger.error(
-          "Failed to fetch vehicle models:",
-          vehicleModelsResult.message
-        );
+        logger.error('Failed to fetch vehicle models:', vehicleModelsResult.message)
       }
     } catch (error) {
-      logger.error("Error fetching data:", error);
+      logger.error('Error fetching data:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   // ===== NEW WORKFLOW FUNCTIONS =====
-
+  
   // Step 1: Create customer account (walk-in customer)
   const handleCreateCustomer = async (e) => {
-    e.preventDefault();
-
-    if (
-      !customerForm.fullName ||
-      !customerForm.phoneNumber ||
-      !customerForm.email
-    ) {
-      alert("Vui lòng điền đầy đủ thông tin khách hàng!");
-      return;
+    e.preventDefault()
+    
+    if (!customerForm.fullName || !customerForm.phoneNumber || !customerForm.email) {
+      alert('Vui lòng điền đầy đủ thông tin khách hàng!')
+      return
     }
 
     try {
@@ -145,70 +130,63 @@ const StaffDashboard = () => {
         fullName: customerForm.fullName,
         email: customerForm.email,
         phone: customerForm.phoneNumber,
-        gender: customerForm.gender,
-      };
+        gender: customerForm.gender
+      }
 
-      const result = await authService.register(registerData);
+      const result = await authService.register(registerData)
 
       if (result.success) {
-        alert(
-          `Tài khoản đã được tạo thành công!\nUsername: ${customerForm.phoneNumber}\nPassword: ${customerForm.phoneNumber}\n\nVui lòng thông báo cho khách hàng.`
-        );
-        setShowCreateCustomerModal(false);
-        setCustomerForm({
-          fullName: "",
-          phoneNumber: "",
-          email: "",
-          gender: "MALE",
-        });
-        fetchData();
+        alert(`Tài khoản đã được tạo thành công!\nUsername: ${customerForm.phoneNumber}\nPassword: ${customerForm.phoneNumber}\n\nVui lòng thông báo cho khách hàng.`)
+        setShowCreateCustomerModal(false)
+        setCustomerForm({ 
+          fullName: '', 
+          phoneNumber: '', 
+          email: '',
+          gender: 'MALE'
+        })
+        fetchData()
       } else {
-        alert(`Lỗi: ${result.message}`);
+        alert(`Lỗi: ${result.message}`)
       }
     } catch (error) {
-      logger.error("Error creating customer:", error);
-      alert("Có lỗi xảy ra khi tạo tài khoản!");
+      logger.error('Error creating customer:', error)
+      alert('Có lỗi xảy ra khi tạo tài khoản!')
     }
-  };
+  }
 
   // Function to find customer by username
   const handleCustomerUsernameChange = async (username) => {
     setVehicleForm({
       ...vehicleForm,
       customerUsername: username,
-      customerName: "",
-      customerId: "",
-    });
+      customerName: '',
+      customerId: ''
+    })
 
-    if (username.trim() === "") {
-      return;
+    if (username.trim() === '') {
+      return
     }
 
     // Find customer by username
-    const foundCustomer = customers.find((c) => c.username === username.trim());
-
+    const foundCustomer = customers.find(c => c.username === username.trim())
+    
     if (foundCustomer) {
       setVehicleForm({
         ...vehicleForm,
         customerUsername: username,
         customerName: foundCustomer.fullName,
-        customerId: foundCustomer.customerId || foundCustomer.id,
-      });
+        customerId: foundCustomer.customerId || foundCustomer.id
+      })
     }
-  };
+  }
 
   // Step 2: Add vehicle for customer (Staff only)
   const handleAddVehicle = async (e) => {
-    e.preventDefault();
-
-    if (
-      !vehicleForm.customerId ||
-      !vehicleForm.vinNumber ||
-      !vehicleForm.licensePlate ||
-      !vehicleForm.model
-    ) {
-      alert("Vui lòng điền đầy đủ thông tin xe!");
-      return;
+    e.preventDefault()
+    
+    if (!vehicleForm.customerId || !vehicleForm.vinNumber || !vehicleForm.licensePlate || !vehicleForm.model) {
+      alert('Vui lòng điền đầy đủ thông tin xe!')
+      return
     }
 
     try {
@@ -219,251 +197,238 @@ const StaffDashboard = () => {
         currentKm: parseInt(vehicleForm.currentKilometers) || 0,
         purchaseYear: vehicleForm.purchaseYear,
         modelId: parseInt(vehicleForm.model), // model ID from select box
-        customerId: parseInt(vehicleForm.customerId),
-      };
+        customerId: parseInt(vehicleForm.customerId)
+      }
 
-      const result = await vehicleService.createVehicle(vehicleData);
+      const result = await vehicleService.createVehicle(vehicleData)
 
       if (result.success) {
-        alert("Xe đã được thêm thành công!");
-
+        alert('Xe đã được thêm thành công!')
+        
         // Fetch service recommendations based on km/time
-        const vehicleId = result.data.id || result.data.vehicleId;
+        const vehicleId = result.data.id || result.data.vehicleId
         if (vehicleId) {
-          await fetchServiceRecommendations(vehicleId);
+          await fetchServiceRecommendations(vehicleId)
         }
-
-        setShowAddVehicleModal(false);
+        
+        setShowAddVehicleModal(false)
         setVehicleForm({
-          customerId: "",
-          customerUsername: "",
-          customerName: "",
-          vinNumber: "",
-          licensePlate: "",
-          model: "",
-          currentKilometers: "",
-          purchaseYear: "",
-        });
+          customerId: '',
+          customerUsername: '',
+          customerName: '',
+          vinNumber: '',
+          licensePlate: '',
+          model: '',
+          currentKilometers: '',
+          purchaseYear: ''
+        })
       } else {
-        alert(`Lỗi: ${result.message}`);
+        alert(`Lỗi: ${result.message}`)
       }
     } catch (error) {
-      logger.error("Error adding vehicle:", error);
-      alert("Có lỗi xảy ra khi thêm xe!");
+      logger.error('Error adding vehicle:', error)
+      alert('Có lỗi xảy ra khi thêm xe!')
     }
-  };
+  }
 
   // Step 3: Fetch service recommendations
   const fetchServiceRecommendations = async (vehicleId) => {
     try {
-      const result = await vehicleService.getServiceRecommendations(vehicleId);
-
+      const result = await vehicleService.getServiceRecommendations(vehicleId)
+      
       if (result.success) {
-        setRecommendedServices(result.data);
-        setSelectedVehicleForService(vehicleId);
-        setShowServiceRecommendationModal(true);
+        setRecommendedServices(result.data)
+        setSelectedVehicleForService(vehicleId)
+        setShowServiceRecommendationModal(true)
       } else {
-        alert("Không có gói dịch vụ đề xuất cho xe này.");
+        alert('Không có gói dịch vụ đề xuất cho xe này.')
       }
     } catch (error) {
-      logger.error("Error fetching recommendations:", error);
+      logger.error('Error fetching recommendations:', error)
     }
-  };
+  }
 
   // Step 4: Confirm service package
   const handleConfirmServicePackage = async () => {
-    if (!selectedVehicleForService) return;
-
+    if (!selectedVehicleForService) return
+    
     try {
       // Notify customer to login and confirm booking
-      alert(
-        `Vui lòng liên hệ khách hàng:\n\n"Xe của anh/chị sau khi kiểm tra dựa trên số km đi được / thời gian mua xe, bên em có đề xuất gói dịch vụ như đã hiển thị. Anh/chị vui lòng đăng nhập vào hệ thống để xác nhận đặt lịch bảo dưỡng."\n\nUsername: [số điện thoại khách hàng]`
-      );
-
-      setShowServiceRecommendationModal(false);
-      setRecommendedServices([]);
-      setSelectedVehicleForService(null);
+      alert(`Vui lòng liên hệ khách hàng:\n\n"Xe của anh/chị sau khi kiểm tra dựa trên số km đi được / thời gian mua xe, bên em có đề xuất gói dịch vụ như đã hiển thị. Anh/chị vui lòng đăng nhập vào hệ thống để xác nhận đặt lịch bảo dưỡng."\n\nUsername: [số điện thoại khách hàng]`)
+      
+      setShowServiceRecommendationModal(false)
+      setRecommendedServices([])
+      setSelectedVehicleForService(null)
     } catch (error) {
-      logger.error("Error confirming service:", error);
+      logger.error('Error confirming service:', error)
     }
-  };
+  }
 
   // Step 5: Assign technician to appointment
   const handleAssignClick = (appointment) => {
-    logger.log("Selected appointment:", appointment);
-    setSelectedAppointment(appointment);
-    setSelectedTechnician("");
-    setShowAssignModal(true);
-  };
+    logger.log('Selected appointment:', appointment)
+    setSelectedAppointment(appointment)
+    setSelectedTechnician('')
+    setShowAssignModal(true)
+  }
 
   const formatCurrency = (amount) => {
-    if (!amount) return "0 VND";
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
-  };
+    if (!amount) return '0 VND'
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount)
+  }
   const handleAssignSubmit = async () => {
     if (!selectedTechnician) {
-      alert("Vui lòng chọn kỹ thuật viên!");
-      return;
+      alert('Vui lòng chọn kỹ thuật viên!')
+      return
     }
 
-    const appointmentId =
-      selectedAppointment.appointmentId ||
-      selectedAppointment.id ||
-      selectedAppointment.appointmentID;
+    const appointmentId = selectedAppointment.appointmentId || 
+                         selectedAppointment.id || 
+                         selectedAppointment.appointmentID
 
     if (!appointmentId) {
-      logger.error("Appointment ID not found:", selectedAppointment);
-      alert("Lỗi: Không tìm thấy ID appointment");
-      return;
+      logger.error('Appointment ID not found:', selectedAppointment)
+      alert('Lỗi: Không tìm thấy ID appointment')
+      return
     }
 
-    logger.log("Assigning technician:", {
-      appointmentId,
-      technicianId: selectedTechnician,
-    });
+    logger.log('Assigning technician:', { appointmentId, technicianId: selectedTechnician })
 
-    setAssignLoading(true);
+    setAssignLoading(true)
     try {
       const result = await technicianService.assignTechnicianToAppointment(
         appointmentId,
         selectedTechnician
-      );
+      )
 
       if (result.success) {
-        alert(
-          "Đã assign kỹ thuật viên thành công!\nHệ thống sẽ gửi thông báo đến kỹ thuật viên và khách hàng."
-        );
-        setShowAssignModal(false);
-        fetchData();
+        alert('Đã assign kỹ thuật viên thành công!\nHệ thống sẽ gửi thông báo đến kỹ thuật viên và khách hàng.')
+        setShowAssignModal(false)
+        fetchData()
       } else {
-        alert(`Lỗi: ${result.message}`);
+        alert(`Lỗi: ${result.message}`)
       }
     } catch (error) {
-      logger.error("Error assigning technician:", error);
-      alert("Có lỗi xảy ra khi assign kỹ thuật viên!");
+      logger.error('Error assigning technician:', error)
+      alert('Có lỗi xảy ra khi assign kỹ thuật viên!')
     } finally {
-      setAssignLoading(false);
+      setAssignLoading(false)
     }
-  };
+  }
 
   // View appointment details
   const handleViewDetails = async (appointment) => {
-    setSelectedAppointment(appointment);
-    setShowDetailModal(true);
-
+    setSelectedAppointment(appointment)
+    setShowDetailModal(true)
+    
     // If appointment is WAITING_FOR_APPROVAL, fetch detailed service items with technician notes
-    if (appointment.status === "WAITING_FOR_APPROVAL") {
+    if (appointment.status === 'WAITING_FOR_APPROVAL') {
       try {
-        const result = await appointmentService.getAppointmentDetails(
-          appointment.id
-        );
+        const result = await appointmentService.getAppointmentDetails(appointment.id)
         if (result.success) {
           // Store the detailed service items in the appointment object
           setSelectedAppointment({
             ...appointment,
-            detailedServiceItems: result.data,
-          });
-
+            detailedServiceItems: result.data
+          })
+          
           // Initialize approval state - default all customerApproved=true items to checked
-          const initialApprovals = {};
-          result.data.forEach((item) => {
-            initialApprovals[item.id] = item.customerApproved;
-          });
-          setServiceItemApprovals(initialApprovals);
+          const initialApprovals = {}
+          result.data.forEach(item => {
+            initialApprovals[item.id] = item.customerApproved
+          })
+          setServiceItemApprovals(initialApprovals)
         } else {
-          logger.error("Failed to fetch appointment details:", result.message);
+          logger.error('Failed to fetch appointment details:', result.message)
         }
       } catch (error) {
-        logger.error("Error fetching appointment details:", error);
+        logger.error('Error fetching appointment details:', error)
       }
     }
-  };
+  }
 
   const handleCloseDetailModal = () => {
-    setShowDetailModal(false);
-    setSelectedAppointment(null);
-    setServiceItemApprovals({}); // Reset approvals
-  };
+    setShowDetailModal(false)
+    setSelectedAppointment(null)
+    setServiceItemApprovals({}) // Reset approvals
+  }
 
   // Toggle service item approval
   const handleToggleServiceItemApproval = (detailId) => {
-    setServiceItemApprovals((prev) => ({
+    setServiceItemApprovals(prev => ({
       ...prev,
-      [detailId]: !prev[detailId],
-    }));
-  };
+      [detailId]: !prev[detailId]
+    }))
+  }
 
   // Submit service item approvals
   const handleSubmitApprovals = async () => {
-    if (!selectedAppointment) return;
+    if (!selectedAppointment) return
 
-    setApprovingItems(true);
+    setApprovingItems(true)
     try {
       // Build approval items array
-      const approvalItems = selectedAppointment.detailedServiceItems.map(
-        (item) => ({
-          appointmentServiceDetailId: item.id,
-          approved: serviceItemApprovals[item.id] || false,
-        })
-      );
+      const approvalItems = selectedAppointment.detailedServiceItems.map(item => ({
+        appointmentServiceDetailId: item.id,
+        approved: serviceItemApprovals[item.id] || false
+      }))
 
       const result = await appointmentService.approveServiceItems(
         selectedAppointment.id,
         approvalItems
-      );
+      )
 
       if (result.success) {
-        alert("✅ Đã cập nhật trạng thái duyệt dịch vụ thành công!");
-        handleCloseDetailModal();
+        alert('✅ Đã cập nhật trạng thái duyệt dịch vụ thành công!')
+        handleCloseDetailModal()
         // Refresh appointments list
-        fetchData();
+        fetchData()
       } else {
-        alert("❌ Lỗi: " + result.message);
+        alert('❌ Lỗi: ' + result.message)
       }
     } catch (error) {
-      logger.error("Error submitting approvals:", error);
-      alert("❌ Có lỗi xảy ra khi duyệt dịch vụ");
+      logger.error('Error submitting approvals:', error)
+      alert('❌ Có lỗi xảy ra khi duyệt dịch vụ')
     } finally {
-      setApprovingItems(false);
+      setApprovingItems(false)
     }
-  };
+  }
 
   // Step 6: Handle INCOMPLETED appointments (need additional services)
   const handleIncompletedAppointment = (appointment) => {
-    setSelectedAppointment(appointment);
+    setSelectedAppointment(appointment)
     // Fetch additional services needed for this appointment
     // This would typically come from technician's notes
     setAdditionalServices([
-      { name: "Thay phanh", price: 500000 },
-      { name: "Thay lốp", price: 1200000 },
-    ]);
-    setShowAdditionalServiceModal(true);
-  };
+      { name: 'Thay phanh', price: 500000 },
+      { name: 'Thay lốp', price: 1200000 }
+    ])
+    setShowAdditionalServiceModal(true)
+  }
 
   const handleConfirmAdditionalServices = async (approved) => {
-    const appointmentId =
-      selectedAppointment.appointmentId ||
-      selectedAppointment.id ||
-      selectedAppointment.appointmentID;
+    const appointmentId = selectedAppointment.appointmentId || 
+                         selectedAppointment.id || 
+                         selectedAppointment.appointmentID
 
     if (!approved) {
       // Customer declined additional services
       try {
         const result = await appointmentService.updateAppointmentStatus(
           appointmentId,
-          "COMPLETED"
-        );
-
+          'COMPLETED'
+        )
+        
         if (result.success) {
-          alert("Đã cập nhật trạng thái appointment thành COMPLETED.");
-          setShowAdditionalServiceModal(false);
-          fetchData();
+          alert('Đã cập nhật trạng thái appointment thành COMPLETED.')
+          setShowAdditionalServiceModal(false)
+          fetchData()
         }
       } catch (error) {
-        logger.error("Error updating status:", error);
+        logger.error('Error updating status:', error)
       }
     } else {
       // Customer approved - create ticket for technician
@@ -471,94 +436,88 @@ const StaffDashboard = () => {
         const result = await technicianService.createAdditionalServiceTicket({
           appointmentId: appointmentId,
           technicianId: selectedAppointment.technicianId,
-          services: additionalServices,
-        });
-
+          services: additionalServices
+        })
+        
         if (result.success) {
-          alert("Đã tạo ticket cho kỹ thuật viên thực hiện dịch vụ bổ sung.");
-          setShowAdditionalServiceModal(false);
-          fetchData();
+          alert('Đã tạo ticket cho kỹ thuật viên thực hiện dịch vụ bổ sung.')
+          setShowAdditionalServiceModal(false)
+          fetchData()
         } else {
-          alert(`Lỗi: ${result.message}`);
+          alert(`Lỗi: ${result.message}`)
         }
       } catch (error) {
-        logger.error("Error creating ticket:", error);
-        alert("Có lỗi xảy ra khi tạo ticket!");
+        logger.error('Error creating ticket:', error)
+        alert('Có lỗi xảy ra khi tạo ticket!')
       }
     }
-  };
+  }
 
   // Step 7: Generate invoice for completed appointment
-  const handleGenerateInvoice = (appointment) => {
-    const appointmentId =
-      appointment.appointmentId || appointment.id || appointment.appointmentID;
+  const handleGenerateInvoice = async (appointment) => {
+    const appointmentId = appointment.appointmentId || 
+                         appointment.id || 
+                         appointment.appointmentID
 
-    setInvoiceAppointmentId(appointmentId);
-    setShowInvoiceModal(true);
-  };
-
-  const handleInvoiceSuccess = (invoiceData) => {
-    logger.log("Invoice generated successfully:", invoiceData);
-    setShowInvoiceModal(false);
-    setInvoiceAppointmentId(null);
-    fetchData(); // Refresh the appointments list
-  };
-
-  const handleCloseInvoiceModal = () => {
-    setShowInvoiceModal(false);
-    setInvoiceAppointmentId(null);
-  };
+    try {
+      const result = await appointmentService.generateInvoice(appointmentId)
+      
+      if (result.success) {
+        alert(`Hoá đơn đã được tạo thành công!\n\nVui lòng liên hệ khách hàng:\n"Anh/chị vui lòng đăng nhập vào hệ thống, vào phần My Invoice để xem chi tiết và thanh toán."`)
+        fetchData()
+      } else {
+        alert(`Lỗi: ${result.message}`)
+      }
+    } catch (error) {
+      logger.error('Error generating invoice:', error)
+      alert('Có lỗi xảy ra khi tạo hoá đơn!')
+    }
+  }
 
   const formatTimeFromDate = (dateString) => {
-    if (!dateString) return "N/A";
+    if (!dateString) return 'N/A'
     // Extract time from ISO format "2025-11-01T14:36:00"
-    const timePart = dateString.split("T")[1];
-    return timePart.substring(0, 5); // HH:mm (14:36)
-  };
+    const timePart = dateString.split('T')[1]
+    return timePart.substring(0, 5) // HH:mm (14:36)
+  }
 
   const getStatusBadgeClass = (status) => {
     const statusMap = {
-      PENDING: "status-pending",
-      CONFIRMED: "status-confirmed",
-      INCOMPLETED: "status-incompleted",
-      COMPLETED: "status-completed",
-      CANCELLED: "status-cancelled",
-    };
-    return statusMap[status] || "status-default";
-  };
+      PENDING: 'status-pending',
+      CONFIRMED: 'status-confirmed',
+      INCOMPLETED: 'status-incompleted',
+      COMPLETED: 'status-completed',
+      CANCELLED: 'status-cancelled'
+    }
+    return statusMap[status] || 'status-default'
+  }
 
   const getStatusText = (status) => {
     const statusTextMap = {
-      PENDING: "Chờ xử lý",
-      CONFIRMED: "Đã xác nhận",
-      INCOMPLETED: "Cần bổ sung",
-      COMPLETED: "Hoàn thành",
-      CANCELLED: "Đã huỷ",
-    };
-    return statusTextMap[status] || status;
-  };
+      PENDING: 'Chờ xử lý',
+      CONFIRMED: 'Đã xác nhận',
+      INCOMPLETED: 'Cần bổ sung',
+      COMPLETED: 'Hoàn thành',
+      CANCELLED: 'Đã huỷ'
+    }
+    return statusTextMap[status] || status
+  }
 
-  const filteredAppointments = appointments.filter((appointment) => {
-    const matchesStatus =
-      filterStatus === "ALL" || appointment.status === filterStatus;
-    const appointmentId =
-      appointment.appointmentId || appointment.id || appointment.appointmentID;
-    const matchesSearch =
-      appointment.customerName
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      appointment.vehiclePlate
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      appointmentId?.toString().includes(searchTerm);
-    return matchesStatus && matchesSearch;
-  });
+  const filteredAppointments = appointments.filter(appointment => {
+    const matchesStatus = filterStatus === 'ALL' || appointment.status === filterStatus
+    const appointmentId = appointment.appointmentId || appointment.id || appointment.appointmentID
+    const matchesSearch = 
+      appointment.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      appointment.vehiclePlate?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      appointmentId?.toString().includes(searchTerm)
+    return matchesStatus && matchesSearch
+  })
 
   const handleLogout = () => {
-    if (window.confirm("Bạn có chắc muốn đăng xuất?")) {
-      authService.logout();
+    if (window.confirm('Bạn có chắc muốn đăng xuất?')) {
+        authService.logout()
     }
-  };
+  }
 
   if (loading) {
     return (
@@ -570,99 +529,82 @@ const StaffDashboard = () => {
         </div>
         <Footer />
       </div>
-    );
+    )
   }
 
   return (
     <div className="staff-dashboard">
+      <Header />
       <div className="staff-container">
         <div className="staff-header">
           <div className="header-content">
-            <h1>🔧 Staff Dashboard - Quản Lý Bảo Dưỡng</h1>
+            <h1> Staff Dashboard - Quản Lý Bảo Dưỡng</h1>
             <p>Quản lý khách hàng walk-in, xe, appointment và hoá đơn</p>
           </div>
-          <button className="logout-btn" onClick={handleLogout}>
-            Đăng xuất
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <span style={{ color: '#ffffff', fontSize: '0.95rem' }}>
+              Hi {staffName}, Hope you find your day!
+            </span>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Tab Navigation */}
         <div className="tabs-navigation">
-          <button
-            className={`tab-btn ${activeTab === "walk-in" ? "active" : ""}`}
-            onClick={() => setActiveTab("walk-in")}
+          <button 
+            className={`tab-btn ${activeTab === 'walk-in' ? 'active' : ''}`}
+            onClick={() => setActiveTab('walk-in')}
           >
-            👤 Khách Hàng Walk-in
+            Khách Hàng Walk-in
           </button>
-          <button
-            className={`tab-btn ${
-              activeTab === "appointments" ? "active" : ""
-            }`}
-            onClick={() => setActiveTab("appointments")}
+          <button 
+            className={`tab-btn ${activeTab === 'appointments' ? 'active' : ''}`}
+            onClick={() => setActiveTab('appointments')}
           >
-            📋 Quản Lý Appointments
+            Quản Lý Appointments
           </button>
-          <button
-            className={`tab-btn ${activeTab === "invoices" ? "active" : ""}`}
-            onClick={() => setActiveTab("invoices")}
+          <button 
+            className={`tab-btn ${activeTab === 'invoices' ? 'active' : ''}`}
+            onClick={() => setActiveTab('invoices')}
           >
-            💰 Hoá Đơn & Thanh Toán
+            Hoá Đơn & Thanh Toán
           </button>
         </div>
 
         {/* TAB: WALK-IN CUSTOMERS */}
-        {activeTab === "walk-in" && (
+        {activeTab === 'walk-in' && (
           <div className="walk-in-section">
             <div className="section-header">
-              <h2>📝 Đăng Ký Khách Hàng Walk-in</h2>
-              <p>
-                Khách hàng đến trực tiếp trung tâm, ghi nhận thông tin và tạo
-                tài khoản
-              </p>
+              <h2>Đăng Ký Khách Hàng Walk-in</h2>
+              <p>Khách hàng đến trực tiếp trung tâm, ghi nhận thông tin và tạo tài khoản</p>
             </div>
 
             <div className="action-buttons">
-              <button
+              <button 
                 className="primary-btn"
                 onClick={() => setShowCreateCustomerModal(true)}
               >
-                ➕ Tạo Tài Khoản Khách Hàng
+                 Tạo Tài Khoản Khách Hàng
               </button>
-              <button
+              <button 
                 className="secondary-btn"
                 onClick={() => setShowAddVehicleModal(true)}
               >
-                🚗 Thêm Xe Cho Khách Hàng
+                 Thêm Xe Cho Khách Hàng
               </button>
             </div>
 
             <div className="info-card">
-              <h3>📌 Quy Trình Tiếp Nhận Khách Walk-in:</h3>
+              <h3> Quy Trình Tiếp Nhận Khách Walk-in:</h3>
               <ol>
-                <li>
-                  <strong>Ghi nhận thông tin:</strong> Họ tên, Số điện thoại,
-                  Email, Giới tính
-                </li>
-                <li>
-                  <strong>Tạo tài khoản:</strong> Username = Số điện thoại,
-                  Password = Số điện thoại
-                </li>
-                <li>
-                  <strong>Kiểm tra xe:</strong> Số VIN, Biển số, Số km hiện tại,
-                  Giấy tờ xe
-                </li>
-                <li>
-                  <strong>Thêm xe:</strong> Staff thêm xe vào tài khoản khách
-                  hàng
-                </li>
-                <li>
-                  <strong>Đề xuất dịch vụ:</strong> Hệ thống đề xuất gói dịch vụ
-                  dựa trên km/thời gian
-                </li>
-                <li>
-                  <strong>Liên hệ khách:</strong> Thông báo khách đăng nhập và
-                  xác nhận đặt lịch
-                </li>
+                <li><strong>Ghi nhận thông tin:</strong> Họ tên, Số điện thoại, Email, Giới tính</li>
+                <li><strong>Tạo tài khoản:</strong> Username = Số điện thoại, Password = Số điện thoại</li>
+                <li><strong>Kiểm tra xe:</strong> Số VIN, Biển số, Số km hiện tại, Giấy tờ xe</li>
+                <li><strong>Thêm xe:</strong> Staff thêm xe vào tài khoản khách hàng</li>
+                <li><strong>Đề xuất dịch vụ:</strong> Hệ thống đề xuất gói dịch vụ dựa trên km/thời gian</li>
+                <li><strong>Liên hệ khách:</strong> Thông báo khách đăng nhập và xác nhận đặt lịch</li>
               </ol>
             </div>
 
@@ -685,13 +627,7 @@ const StaffDashboard = () => {
                       <td>{customer.fullName}</td>
                       <td>{customer.phone}</td>
                       <td>{customer.email}</td>
-                      <td>
-                        {customer.createdAt
-                          ? new Date(customer.createdAt).toLocaleDateString(
-                              "vi-VN"
-                            )
-                          : "N/A"}
-                      </td>
+                      <td>{customer.createdAt ? new Date(customer.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -701,7 +637,7 @@ const StaffDashboard = () => {
         )}
 
         {/* TAB: APPOINTMENTS MANAGEMENT */}
-        {activeTab === "appointments" && (
+        {activeTab === 'appointments' && (
           <>
             {/* Filters */}
             <div className="filters-section">
@@ -713,64 +649,43 @@ const StaffDashboard = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-
+              
               <div className="status-filters">
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "ALL" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("ALL")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'ALL' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('ALL')}
                 >
                   Tất cả ({appointments.length})
                 </button>
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "PENDING" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("PENDING")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'PENDING' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('PENDING')}
                 >
-                  Chờ xử lý (
-                  {appointments.filter((a) => a.status === "PENDING").length})
+                  Chờ xử lý ({appointments.filter(a => a.status === 'PENDING').length})
                 </button>
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "CONFIRMED" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("CONFIRMED")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'CONFIRMED' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('CONFIRMED')}
                 >
-                  Đã xác nhận (
-                  {appointments.filter((a) => a.status === "CONFIRMED").length})
+                  Đã xác nhận ({appointments.filter(a => a.status === 'CONFIRMED').length})
                 </button>
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "INCOMPLETED" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("INCOMPLETED")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'INCOMPLETED' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('INCOMPLETED')}
                 >
-                  Cần bổ sung (
-                  {
-                    appointments.filter((a) => a.status === "INCOMPLETED")
-                      .length
-                  }
-                  )
+                  Cần bổ sung ({appointments.filter(a => a.status === 'INCOMPLETED').length})
                 </button>
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "COMPLETED" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("COMPLETED")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'COMPLETED' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('COMPLETED')}
                 >
-                  Hoàn thành (
-                  {appointments.filter((a) => a.status === "COMPLETED").length})
+                  Hoàn thành ({appointments.filter(a => a.status === 'COMPLETED').length})
                 </button>
-                <button
-                  className={`filter-btn ${
-                    filterStatus === "CANCELLED" ? "active" : ""
-                  }`}
-                  onClick={() => setFilterStatus("CANCELLED")}
+                <button 
+                  className={`filter-btn ${filterStatus === 'CANCELLED' ? 'active' : ''}`}
+                  onClick={() => setFilterStatus('CANCELLED')}
                 >
-                  Đã huỷ (
-                  {appointments.filter((a) => a.status === "CANCELLED").length})
+                  Đã huỷ ({appointments.filter(a => a.status === 'CANCELLED').length})
                 </button>
               </div>
             </div>
@@ -799,42 +714,28 @@ const StaffDashboard = () => {
                   </thead>
                   <tbody>
                     {filteredAppointments.map((appointment) => {
-                      const appointmentId =
-                        appointment.appointmentId ||
-                        appointment.id ||
-                        appointment.appointmentID;
+                      const appointmentId = appointment.appointmentId || appointment.id || appointment.appointmentID
                       return (
                         <tr key={appointmentId}>
                           <td>#{appointmentId}</td>
-                          <td>{appointment.customerName || "N/A"}</td>
-                          <td>{appointment.vehicleLicensePlate || "N/A"}</td>
-                          <td>{appointment.vehicleModel || "N/A"}</td>
-                          <td>
-                            {new Date(
-                              appointment.appointmentDate
-                            ).toLocaleDateString("vi-VN")}
-                          </td>
-                          <td>
-                            {formatTimeFromDate(appointment.appointmentDate)}
-                          </td>
+                          <td>{appointment.customerName || 'N/A'}</td>  
+                          <td>{appointment.vehicleLicensePlate || 'N/A'}</td>
+                          <td>{appointment.vehicleModel || 'N/A'}</td>
+                          <td>{new Date(appointment.appointmentDate).toLocaleDateString('vi-VN')}</td>
+                          <td>{formatTimeFromDate(appointment.appointmentDate)}</td>
                           <td>
                             <div className="service-info">
-                              {appointment.servicePackageName || "Dịch vụ lẻ"}
+                              {appointment.servicePackageName || 'Dịch vụ lẻ'}
                             </div>
                           </td>
                           <td>
-                            <span
-                              className={`status-badge ${getStatusBadgeClass(
-                                appointment.status
-                              )}`}
-                            >
+                            <span className={`status-badge ${getStatusBadgeClass(appointment.status)}`}>
                               {getStatusText(appointment.status)}
                             </span>
                           </td>
                           <td>
                             {appointment.technicianName ? (
                               <div className="technician-assigned">
-                                <span className="tech-icon">👨‍🔧</span>
                                 {appointment.technicianName}
                               </div>
                             ) : (
@@ -850,7 +751,7 @@ const StaffDashboard = () => {
                               >
                                 👁️ Chi tiết
                               </button>
-                              {appointment.status === "PENDING" && (
+                              {appointment.status === 'PENDING' && (
                                 <button
                                   className="assign-btn"
                                   onClick={() => handleAssignClick(appointment)}
@@ -858,31 +759,26 @@ const StaffDashboard = () => {
                                   Assign KTV
                                 </button>
                               )}
-                              {appointment.status === "INCOMPLETED" && (
+                              {appointment.status === 'INCOMPLETED' && (
                                 <button
                                   className="additional-btn"
-                                  onClick={() =>
-                                    handleIncompletedAppointment(appointment)
-                                  }
+                                  onClick={() => handleIncompletedAppointment(appointment)}
                                 >
                                   Xử lý bổ sung
                                 </button>
                               )}
-                              {appointment.status === "COMPLETED" &&
-                                !appointment.invoiceGenerated && (
-                                  <button
-                                    className="invoice-btn"
-                                    onClick={() =>
-                                      handleGenerateInvoice(appointment)
-                                    }
-                                  >
-                                    Xuất hoá đơn
-                                  </button>
-                                )}
+                              {appointment.status === 'COMPLETED' && !appointment.invoiceGenerated && (
+                                <button
+                                  className="invoice-btn"
+                                  onClick={() => handleGenerateInvoice(appointment)}
+                                >
+                                  Xuất hoá đơn
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>
-                      );
+                      )
                     })}
                   </tbody>
                 </table>
@@ -892,47 +788,35 @@ const StaffDashboard = () => {
             {/* Statistics */}
             <div className="statistics-section">
               <div className="stat-card">
-                <div className="stat-icon">📋</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{appointments.length}</h3>
                   <p>Tổng Appointments</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">⏳</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
-                  <h3>
-                    {appointments.filter((a) => a.status === "PENDING").length}
-                  </h3>
+                  <h3>{appointments.filter(a => a.status === 'PENDING').length}</h3>
                   <p>Chờ xử lý</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">⚠️</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
-                  <h3>
-                    {
-                      appointments.filter((a) => a.status === "INCOMPLETED")
-                        .length
-                    }
-                  </h3>
+                  <h3>{appointments.filter(a => a.status === 'INCOMPLETED').length}</h3>
                   <p>Cần bổ sung</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">✅</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
-                  <h3>
-                    {
-                      appointments.filter((a) => a.status === "COMPLETED")
-                        .length
-                    }
-                  </h3>
+                  <h3>{appointments.filter(a => a.status === 'COMPLETED').length}</h3>
                   <p>Hoàn thành</p>
                 </div>
               </div>
               <div className="stat-card">
-                <div className="stat-icon">👨‍🔧</div>
+                <div className="stat-icon"></div>
                 <div className="stat-info">
                   <h3>{technicians.length}</h3>
                   <p>Kỹ Thuật Viên</p>
@@ -945,21 +829,15 @@ const StaffDashboard = () => {
 
       {/* MODAL: Create Customer */}
       {showCreateCustomerModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowCreateCustomerModal(false)}
-        >
+        <div className="modal-overlay" onClick={() => setShowCreateCustomerModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Tạo Tài Khoản Khách Hàng</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowCreateCustomerModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowCreateCustomerModal(false)}>
                 ×
               </button>
             </div>
-
+            
             <form className="modal-body" onSubmit={handleCreateCustomer}>
               <div className="form-group">
                 <label htmlFor="fullName">Họ và Tên *</label>
@@ -967,12 +845,7 @@ const StaffDashboard = () => {
                   type="text"
                   id="fullName"
                   value={customerForm.fullName}
-                  onChange={(e) =>
-                    setCustomerForm({
-                      ...customerForm,
-                      fullName: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setCustomerForm({...customerForm, fullName: e.target.value})}
                   placeholder="Nguyễn Văn A"
                   required
                 />
@@ -984,18 +857,11 @@ const StaffDashboard = () => {
                   type="tel"
                   id="phoneNumber"
                   value={customerForm.phoneNumber}
-                  onChange={(e) =>
-                    setCustomerForm({
-                      ...customerForm,
-                      phoneNumber: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setCustomerForm({...customerForm, phoneNumber: e.target.value})}
                   placeholder="0123456789"
                   required
                 />
-                <small>
-                  Số điện thoại sẽ được dùng làm Username và Password
-                </small>
+                <small>Số điện thoại sẽ được dùng làm Username và Password</small>
               </div>
 
               <div className="form-group">
@@ -1004,9 +870,7 @@ const StaffDashboard = () => {
                   type="email"
                   id="email"
                   value={customerForm.email}
-                  onChange={(e) =>
-                    setCustomerForm({ ...customerForm, email: e.target.value })
-                  }
+                  onChange={(e) => setCustomerForm({...customerForm, email: e.target.value})}
                   placeholder="email@example.com"
                   required
                 />
@@ -1017,9 +881,7 @@ const StaffDashboard = () => {
                 <select
                   id="gender"
                   value={customerForm.gender}
-                  onChange={(e) =>
-                    setCustomerForm({ ...customerForm, gender: e.target.value })
-                  }
+                  onChange={(e) => setCustomerForm({...customerForm, gender: e.target.value})}
                   required
                 >
                   <option value="MALE">Nam</option>
@@ -1029,9 +891,9 @@ const StaffDashboard = () => {
               </div>
 
               <div className="modal-footer">
-                <button
+                <button 
                   type="button"
-                  className="cancel-btn"
+                  className="cancel-btn" 
                   onClick={() => setShowCreateCustomerModal(false)}
                 >
                   Huỷ
@@ -1047,21 +909,15 @@ const StaffDashboard = () => {
 
       {/* MODAL: Add Vehicle */}
       {showAddVehicleModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowAddVehicleModal(false)}
-        >
+        <div className="modal-overlay" onClick={() => setShowAddVehicleModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Thêm Xe Cho Khách Hàng</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowAddVehicleModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowAddVehicleModal(false)}>
                 ×
               </button>
             </div>
-
+            
             <form className="modal-body" onSubmit={handleAddVehicle}>
               <div className="form-group">
                 <label htmlFor="customerUsername">Username Khách Hàng *</label>
@@ -1091,12 +947,7 @@ const StaffDashboard = () => {
                   type="text"
                   id="vinNumber"
                   value={vehicleForm.vinNumber}
-                  onChange={(e) =>
-                    setVehicleForm({
-                      ...vehicleForm,
-                      vinNumber: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setVehicleForm({...vehicleForm, vinNumber: e.target.value})}
                   placeholder="VF12345678901234"
                   maxLength={17}
                   required
@@ -1109,12 +960,7 @@ const StaffDashboard = () => {
                   type="text"
                   id="licensePlate"
                   value={vehicleForm.licensePlate}
-                  onChange={(e) =>
-                    setVehicleForm({
-                      ...vehicleForm,
-                      licensePlate: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setVehicleForm({...vehicleForm, licensePlate: e.target.value})}
                   placeholder="29A-12345"
                   maxLength={10}
                   required
@@ -1126,9 +972,7 @@ const StaffDashboard = () => {
                 <select
                   id="model"
                   value={vehicleForm.model}
-                  onChange={(e) =>
-                    setVehicleForm({ ...vehicleForm, model: e.target.value })
-                  }
+                  onChange={(e) => setVehicleForm({...vehicleForm, model: e.target.value})}
                   required
                 >
                   <option value="">-- Chọn model xe --</option>
@@ -1146,12 +990,7 @@ const StaffDashboard = () => {
                   type="number"
                   id="currentKilometers"
                   value={vehicleForm.currentKilometers}
-                  onChange={(e) =>
-                    setVehicleForm({
-                      ...vehicleForm,
-                      currentKilometers: e.target.value,
-                    })
-                  }
+                  onChange={(e) => setVehicleForm({...vehicleForm, currentKilometers: e.target.value})}
                   placeholder="5000"
                   required
                 />
@@ -1163,25 +1002,16 @@ const StaffDashboard = () => {
                   type="month"
                   id="purchaseYear"
                   value={vehicleForm.purchaseYear}
-                  max={`${new Date().getFullYear()}-${String(
-                    new Date().getMonth() + 1
-                  ).padStart(2, "0")}`}
-                  onChange={(e) =>
-                    setVehicleForm({
-                      ...vehicleForm,
-                      purchaseYear: e.target.value,
-                    })
-                  }
+                  max={`${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`}
+                  onChange={(e) => setVehicleForm({...vehicleForm, purchaseYear: e.target.value})}
                 />
-                <small className="field-hint">
-                  Tháng và năm mua xe (ví dụ: 2025-11)
-                </small>
+                <small className="field-hint">Tháng và năm mua xe (ví dụ: 2025-11)</small>
               </div>
 
               <div className="modal-footer">
-                <button
+                <button 
                   type="button"
-                  className="cancel-btn"
+                  className="cancel-btn" 
                   onClick={() => setShowAddVehicleModal(false)}
                 >
                   Huỷ
@@ -1197,25 +1027,17 @@ const StaffDashboard = () => {
 
       {/* MODAL: Service Recommendation */}
       {showServiceRecommendationModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowServiceRecommendationModal(false)}
-        >
+        <div className="modal-overlay" onClick={() => setShowServiceRecommendationModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Gói Dịch Vụ Đề Xuất</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowServiceRecommendationModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowServiceRecommendationModal(false)}>
                 ×
               </button>
             </div>
-
+            
             <div className="modal-body">
-              <p>
-                <strong>Hệ thống đề xuất gói dịch vụ dựa trên:</strong>
-              </p>
+              <p><strong>Hệ thống đề xuất gói dịch vụ dựa trên:</strong></p>
               <ul>
                 <li>Số km hiện tại của xe</li>
                 <li>Thời gian từ lần bảo dưỡng cuối (hoặc từ khi mua xe)</li>
@@ -1227,24 +1049,21 @@ const StaffDashboard = () => {
                   <div key={index} className="service-item">
                     <h4>{service.name}</h4>
                     <p>{service.description}</p>
-                    <p>
-                      <strong>Giá:</strong>{" "}
-                      {service.price?.toLocaleString("vi-VN")} VNĐ
-                    </p>
+                    <p><strong>Giá:</strong> {service.price?.toLocaleString('vi-VN')} VNĐ</p>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="modal-footer">
-              <button
-                className="cancel-btn"
+              <button 
+                className="cancel-btn" 
                 onClick={() => setShowServiceRecommendationModal(false)}
               >
                 Đóng
               </button>
-              <button
-                className="submit-btn"
+              <button 
+                className="submit-btn" 
                 onClick={handleConfirmServicePackage}
               >
                 Xác Nhận & Thông Báo Khách
@@ -1256,49 +1075,23 @@ const StaffDashboard = () => {
 
       {/* MODAL: Assign Technician */}
       {showAssignModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowAssignModal(false)}
-        >
+        <div className="modal-overlay" onClick={() => setShowAssignModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Assign Kỹ Thuật Viên</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowAssignModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowAssignModal(false)}>
                 ×
               </button>
             </div>
-
+            
             <div className="modal-body">
               <div className="appointment-info">
                 <h3>Thông Tin Appointment</h3>
-                <p>
-                  <strong>ID:</strong> #
-                  {selectedAppointment?.appointmentId ||
-                    selectedAppointment?.id}
-                </p>
-                <p>
-                  <strong>Khách hàng:</strong>{" "}
-                  {selectedAppointment?.customerName}
-                </p>
-                <p>
-                  <strong>Biển số:</strong>{" "}
-                  {selectedAppointment?.vehicleLicensePlate}
-                </p>
-                <p>
-                  <strong>Xe:</strong>{" "}
-                  {selectedAppointment?.vehicleModel || "N/A"}
-                </p>
-                <p>
-                  <strong>Ngày:</strong>{" "}
-                  {selectedAppointment?.appointmentDate
-                    ? new Date(
-                        selectedAppointment.appointmentDate
-                      ).toLocaleDateString("vi-VN")
-                    : "N/A"}
-                </p>
+                <p><strong>ID:</strong> #{selectedAppointment?.appointmentId || selectedAppointment?.id}</p>
+                <p><strong>Khách hàng:</strong> {selectedAppointment?.customerName}</p>
+                <p><strong>Biển số:</strong> {selectedAppointment?.vehicleLicensePlate}</p>
+                <p><strong>Xe:</strong> {selectedAppointment?.vehicleModel || 'N/A'}</p>
+                <p><strong>Ngày:</strong> {selectedAppointment?.appointmentDate ? new Date(selectedAppointment.appointmentDate).toLocaleDateString('vi-VN') : 'N/A'}</p>
               </div>
 
               <div className="technician-select">
@@ -1310,31 +1103,31 @@ const StaffDashboard = () => {
                 >
                   <option value="">-- Chọn kỹ thuật viên --</option>
                   {technicians.map((tech) => {
-                    const techId = tech.technicianId || tech.id;
+                    const techId = tech.technicianId || tech.id
                     return (
                       <option key={techId} value={techId}>
                         {tech.fullName}
                       </option>
-                    );
+                    )
                   })}
                 </select>
               </div>
             </div>
 
             <div className="modal-footer">
-              <button
-                className="cancel-btn"
+              <button 
+                className="cancel-btn" 
                 onClick={() => setShowAssignModal(false)}
                 disabled={assignLoading}
               >
                 Huỷ
               </button>
-              <button
-                className="submit-btn"
+              <button 
+                className="submit-btn" 
                 onClick={handleAssignSubmit}
                 disabled={assignLoading || !selectedTechnician}
               >
-                {assignLoading ? "Đang xử lý..." : "Xác Nhận"}
+                {assignLoading ? 'Đang xử lý...' : 'Xác Nhận'}
               </button>
             </div>
           </div>
@@ -1343,66 +1136,44 @@ const StaffDashboard = () => {
 
       {/* MODAL: Additional Services */}
       {showAdditionalServiceModal && (
-        <div
-          className="modal-overlay"
-          onClick={() => setShowAdditionalServiceModal(false)}
-        >
+        <div className="modal-overlay" onClick={() => setShowAdditionalServiceModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Xử Lý Dịch Vụ Bổ Sung</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowAdditionalServiceModal(false)}
-              >
+              <button className="close-btn" onClick={() => setShowAdditionalServiceModal(false)}>
                 ×
               </button>
             </div>
-
+            
             <div className="modal-body">
-              <p>
-                <strong>
-                  Appointment #
-                  {selectedAppointment?.appointmentId ||
-                    selectedAppointment?.id}
-                </strong>
-              </p>
-              <p>
-                Kỹ thuật viên đã hoàn thành các quy trình cơ bản nhưng phát hiện
-                các bộ phận cần thay thế:
-              </p>
-
+              <p><strong>Appointment #{selectedAppointment?.appointmentId || selectedAppointment?.id}</strong></p>
+              <p>Kỹ thuật viên đã hoàn thành các quy trình cơ bản nhưng phát hiện các bộ phận cần thay thế:</p>
+              
               <div className="additional-services-list">
                 <h3>Các Dịch Vụ Cần Bổ Sung:</h3>
                 {additionalServices.map((service, index) => (
                   <div key={index} className="service-item">
-                    <p>
-                      <strong>{service.name}</strong>
-                    </p>
-                    <p>Giá: {service.price?.toLocaleString("vi-VN")} VNĐ</p>
+                    <p><strong>{service.name}</strong></p>
+                    <p>Giá: {service.price?.toLocaleString('vi-VN')} VNĐ</p>
                   </div>
                 ))}
               </div>
 
-              <p>
-                <strong>Vui lòng liên hệ khách hàng để xác nhận:</strong>
-              </p>
+              <p><strong>Vui lòng liên hệ khách hàng để xác nhận:</strong></p>
               <div className="contact-message">
-                "Xe của anh/chị đã hoàn thành các quy trình cần thiết. Tuy
-                nhiên, kỹ thuật viên nhận thấy một số bộ phận cần thay thế.
-                Anh/chị có muốn chúng tôi thay thế ngay không? Nếu có, chúng tôi
-                sẽ cộng thêm chi phí vào hoá đơn."
+                "Xe của anh/chị đã hoàn thành các quy trình cần thiết. Tuy nhiên, kỹ thuật viên nhận thấy một số bộ phận cần thay thế. Anh/chị có muốn chúng tôi thay thế ngay không? Nếu có, chúng tôi sẽ cộng thêm chi phí vào hoá đơn."
               </div>
             </div>
 
             <div className="modal-footer">
-              <button
-                className="cancel-btn"
+              <button 
+                className="cancel-btn" 
                 onClick={() => handleConfirmAdditionalServices(false)}
               >
                 Khách Từ Chối
               </button>
-              <button
-                className="submit-btn"
+              <button 
+                className="submit-btn" 
                 onClick={() => handleConfirmAdditionalServices(true)}
               >
                 Khách Đồng Ý
@@ -1415,15 +1186,10 @@ const StaffDashboard = () => {
       {/* MODAL: Appointment Detail */}
       {showDetailModal && selectedAppointment && (
         <div className="modal-overlay" onClick={handleCloseDetailModal}>
-          <div
-            className="modal-content detail-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className="modal-content detail-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>📋 Chi Tiết Appointment</h2>
-              <button className="close-btn" onClick={handleCloseDetailModal}>
-                ×
-              </button>
+              <button className="close-btn" onClick={handleCloseDetailModal}>×</button>
             </div>
 
             <div className="modal-body">
@@ -1433,35 +1199,21 @@ const StaffDashboard = () => {
                 <div className="detail-grid">
                   <div className="detail-item">
                     <label>Mã Appointment:</label>
-                    <span>
-                      #
-                      {selectedAppointment.id ||
-                        selectedAppointment.appointmentId}
-                    </span>
+                    <span>#{selectedAppointment.id || selectedAppointment.appointmentId}</span>
                   </div>
                   <div className="detail-item">
                     <label>Trạng Thái:</label>
-                    <span
-                      className={`status-badge ${getStatusBadgeClass(
-                        selectedAppointment.status
-                      )}`}
-                    >
+                    <span className={`status-badge ${getStatusBadgeClass(selectedAppointment.status)}`}>
                       {getStatusText(selectedAppointment.status)}
                     </span>
                   </div>
                   <div className="detail-item">
                     <label>Ngày Hẹn:</label>
-                    <span>
-                      {new Date(
-                        selectedAppointment.appointmentDate
-                      ).toLocaleDateString("vi-VN")}
-                    </span>
+                    <span>{new Date(selectedAppointment.appointmentDate).toLocaleDateString('vi-VN')}</span>
                   </div>
                   <div className="detail-item">
                     <label>Giờ Hẹn:</label>
-                    <span>
-                      {formatTimeFromDate(selectedAppointment.appointmentDate)}
-                    </span>
+                    <span>{formatTimeFromDate(selectedAppointment.appointmentDate)}</span>
                   </div>
                 </div>
               </div>
@@ -1472,15 +1224,15 @@ const StaffDashboard = () => {
                 <div className="detail-grid">
                   <div className="detail-item">
                     <label>Tên Khách Hàng:</label>
-                    <span>{selectedAppointment.customerName || "N/A"}</span>
+                    <span>{selectedAppointment.customerName || 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <label>Số Điện Thoại:</label>
-                    <span>{selectedAppointment.customerPhone || "N/A"}</span>
+                    <span>{selectedAppointment.customerPhone || 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <label>Email:</label>
-                    <span>{selectedAppointment.customerEmail || "N/A"}</span>
+                    <span>{selectedAppointment.customerEmail || 'N/A'}</span>
                   </div>
                 </div>
               </div>
@@ -1491,13 +1243,11 @@ const StaffDashboard = () => {
                 <div className="detail-grid">
                   <div className="detail-item">
                     <label>Biển Số:</label>
-                    <span>
-                      {selectedAppointment.vehicleLicensePlate || "N/A"}
-                    </span>
+                    <span>{selectedAppointment.vehicleLicensePlate || 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <label>Model:</label>
-                    <span>{selectedAppointment.vehicleModel || "N/A"}</span>
+                    <span>{selectedAppointment.vehicleModel || 'N/A'}</span>
                   </div>
                   <div className="detail-item">
                     <label>Hãng:</label>
@@ -1512,26 +1262,17 @@ const StaffDashboard = () => {
                 <div className="detail-grid">
                   <div className="detail-item">
                     <label>Gói Dịch Vụ:</label>
-                    <span>
-                      {selectedAppointment.servicePackageName || "N/A"}
-                    </span>
+                    <span>{selectedAppointment.servicePackageName || 'N/A'}</span>
                   </div>
                   {selectedAppointment.milestoneKm && (
                     <div className="detail-item">
                       <label>Mốc Km:</label>
-                      <span>
-                        {selectedAppointment.milestoneKm.toLocaleString(
-                          "vi-VN"
-                        )}{" "}
-                        km
-                      </span>
+                      <span>{selectedAppointment.milestoneKm.toLocaleString('vi-VN')} km</span>
                     </div>
                   )}
                   <div className="detail-item">
                     <label>Chi Phí Dự Kiến:</label>
-                    <span className="price-highlight">
-                      {formatCurrency(selectedAppointment.estimatedCost)}
-                    </span>
+                    <span className="price-highlight">{formatCurrency(selectedAppointment.estimatedCost)}</span>
                   </div>
                 </div>
               </div>
@@ -1573,155 +1314,101 @@ const StaffDashboard = () => {
               )}
 
               {/* Service Items */}
-              {selectedAppointment.serviceItems &&
-                selectedAppointment.serviceItems.length > 0 && (
-                  <div className="detail-section">
-                    <h3>Danh Sách Dịch Vụ</h3>
-                    <div className="service-items-table">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Tên Dịch Vụ</th>
-                            <th>Mô Tả</th>
-                            <th>Loại</th>
-                            <th>Giá</th>
+              {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>Danh Sách Dịch Vụ</h3>
+                  <div className="service-items-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tên Dịch Vụ</th>
+                          <th>Mô Tả</th>
+                          <th>Loại</th>
+                          <th>Giá</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedAppointment.serviceItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.serviceItem?.name || 'N/A'}</td>
+                            <td><small>{item.serviceItem?.description || 'N/A'}</small></td>
+                            <td>
+                              <span className={`action-type-badge ${item.actionType?.toLowerCase()}`}>
+                                {item.actionType}
+                              </span>
+                            </td>
+                            <td className="price-cell">{formatCurrency(item.price)}</td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {selectedAppointment.serviceItems.map(
-                            (item, index) => (
-                              <tr key={index}>
-                                <td>{item.serviceItem?.name || "N/A"}</td>
-                                <td>
-                                  <small>
-                                    {item.serviceItem?.description || "N/A"}
-                                  </small>
-                                </td>
-                                <td>
-                                  <span
-                                    className={`action-type-badge ${item.actionType?.toLowerCase()}`}
-                                  >
-                                    {item.actionType}
-                                  </span>
-                                </td>
-                                <td className="price-cell">
-                                  {formatCurrency(item.price)}
-                                </td>
-                              </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
-                )}
+                </div>
+              )}
 
               {/* Detailed Service Items for WAITING_FOR_APPROVAL status */}
-              {selectedAppointment.status === "WAITING_FOR_APPROVAL" &&
-                selectedAppointment.detailedServiceItems &&
-                selectedAppointment.detailedServiceItems.length > 0 && (
-                  <div className="detail-section">
-                    <h3>⚠️ Duyệt Dịch Vụ Bổ Sung</h3>
-                    <p
-                      style={{
-                        marginBottom: "15px",
-                        color: "#e67e22",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Kỹ thuật viên đã đề xuất thay thế một số hạng mục. Vui
-                      lòng kiểm tra và duyệt:
-                    </p>
-                    <div className="approval-items-container">
-                      {selectedAppointment.detailedServiceItems
-                        .filter((item) => item.technicianNotes) // Chỉ hiển thị những item có ghi chú
-                        .map((item) => (
-                          <div
-                            key={item.id}
-                            className={`approval-item ${
-                              item.actionType === "REPLACE"
-                                ? "needs-approval"
-                                : ""
-                            }`}
-                          >
-                            <div className="approval-item-header">
-                              <label className="approval-checkbox-label">
-                                <input
-                                  type="checkbox"
-                                  checked={
-                                    serviceItemApprovals[item.id] || false
-                                  }
-                                  onChange={() =>
-                                    handleToggleServiceItemApproval(item.id)
-                                  }
-                                  className="approval-checkbox"
-                                />
-                                <span className="approval-item-name">
-                                  {item.serviceItemName}
-                                </span>
-                              </label>
-                              <div className="approval-item-badges">
-                                <span
-                                  className={`action-type-badge ${item.actionType?.toLowerCase()}`}
-                                >
-                                  {item.actionType}
-                                </span>
-                                <span className="approval-price">
-                                  {formatCurrency(item.price)}
-                                </span>
-                              </div>
+              {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && 
+               selectedAppointment.detailedServiceItems && 
+               selectedAppointment.detailedServiceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>⚠️ Duyệt Dịch Vụ Bổ Sung</h3>
+                  <p style={{ marginBottom: '15px', color: '#e67e22', fontWeight: '600' }}>
+                    Kỹ thuật viên đã đề xuất thay thế một số hạng mục. Vui lòng kiểm tra và duyệt:
+                  </p>
+                  <div className="approval-items-container">
+                    {selectedAppointment.detailedServiceItems
+                      .filter(item => item.technicianNotes) // Chỉ hiển thị những item có ghi chú
+                      .map((item) => (
+                        <div key={item.id} className={`approval-item ${item.actionType === 'REPLACE' ? 'needs-approval' : ''}`}>
+                          <div className="approval-item-header">
+                            <label className="approval-checkbox-label">
+                              <input
+                                type="checkbox"
+                                checked={serviceItemApprovals[item.id] || false}
+                                onChange={() => handleToggleServiceItemApproval(item.id)}
+                                className="approval-checkbox"
+                              />
+                              <span className="approval-item-name">{item.serviceItemName}</span>
+                            </label>
+                            <div className="approval-item-badges">
+                              <span className={`action-type-badge ${item.actionType?.toLowerCase()}`}>
+                                {item.actionType}
+                              </span>
+                              <span className="approval-price">{formatCurrency(item.price)}</span>
                             </div>
-                            {item.technicianNotes && (
-                              <div className="technician-notes">
-                                <strong>📝 Ghi chú kỹ thuật viên:</strong>{" "}
-                                {item.technicianNotes}
-                              </div>
-                            )}
                           </div>
-                        ))}
-                    </div>
-                    <div className="approval-summary">
-                      <p>
-                        <strong>Tổng số hạng mục cần duyệt:</strong>{" "}
-                        {
-                          selectedAppointment.detailedServiceItems.filter(
-                            (item) => item.technicianNotes
-                          ).length
-                        }{" "}
-                        | <strong>Đã chọn:</strong>{" "}
-                        {
-                          Object.values(serviceItemApprovals).filter(Boolean)
-                            .length
-                        }
-                      </p>
-                    </div>
+                          {item.technicianNotes && (
+                            <div className="technician-notes">
+                              <strong>📝 Ghi chú kỹ thuật viên:</strong> {item.technicianNotes}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                   </div>
-                )}
+                  <div className="approval-summary">
+                    <p>
+                      <strong>Tổng số hạng mục cần duyệt:</strong> {selectedAppointment.detailedServiceItems.filter(item => item.technicianNotes).length} |{' '}
+                      <strong>Đã chọn:</strong> {Object.values(serviceItemApprovals).filter(Boolean).length}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Timestamps */}
-              {(selectedAppointment.createdAt ||
-                selectedAppointment.updatedAt) && (
+              {(selectedAppointment.createdAt || selectedAppointment.updatedAt) && (
                 <div className="detail-section">
                   <h3>Thời Gian</h3>
                   <div className="detail-grid">
                     {selectedAppointment.createdAt && (
                       <div className="detail-item">
                         <label>Tạo Lúc:</label>
-                        <span>
-                          {new Date(
-                            selectedAppointment.createdAt
-                          ).toLocaleString("vi-VN")}
-                        </span>
+                        <span>{new Date(selectedAppointment.createdAt).toLocaleString('vi-VN')}</span>
                       </div>
                     )}
                     {selectedAppointment.updatedAt && (
                       <div className="detail-item">
                         <label>Cập Nhật Lúc:</label>
-                        <span>
-                          {new Date(
-                            selectedAppointment.updatedAt
-                          ).toLocaleString("vi-VN")}
-                        </span>
+                        <span>{new Date(selectedAppointment.updatedAt).toLocaleString('vi-VN')}</span>
                       </div>
                     )}
                     {selectedAppointment.createdBy && (
@@ -1742,13 +1429,13 @@ const StaffDashboard = () => {
             </div>
 
             <div className="modal-footer">
-              {selectedAppointment.status === "WAITING_FOR_APPROVAL" && (
-                <button
-                  className="approve-btn"
+              {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && (
+                <button 
+                  className="approve-btn" 
                   onClick={handleSubmitApprovals}
                   disabled={approvingItems}
                 >
-                  {approvingItems ? "Đang xử lý..." : "✅ Xác Nhận Duyệt"}
+                  {approvingItems ? 'Đang xử lý...' : '✅ Xác Nhận Duyệt'}
                 </button>
               )}
               <button className="cancel-btn" onClick={handleCloseDetailModal}>
@@ -1759,18 +1446,9 @@ const StaffDashboard = () => {
         </div>
       )}
 
-      {/* Invoice Detail Modal */}
-      {showInvoiceModal && invoiceAppointmentId && (
-        <InvoiceDetailModal
-          appointmentId={invoiceAppointmentId}
-          onClose={handleCloseInvoiceModal}
-          onSuccess={handleInvoiceSuccess}
-        />
-      )}
-
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default StaffDashboard;
+export default StaffDashboard

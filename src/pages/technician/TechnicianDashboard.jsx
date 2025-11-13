@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../../components/layout/Header'
-import Footer from '../../components/layout/Footer'
 import technicianService from '../../api/technicianService'
 import appointmentService from '../../api/appointmentService'
 import authService from '../../api/authService'
@@ -208,47 +206,43 @@ const TechnicianDashboard = () => {
 
   return (
     <div className="technician-dashboard">
-      
-      <div className="dashboard-container">
-        <div className="dashboard-header">
-          <h1>Technician Dashboard</h1>
-          <div className="header-actions">
-            <span className="welcome-text">Welcome {currentUser?.username || 'Technician'}, Have a productive and successful day at work</span>
-            <button onClick={handleLogout} className="btn-logout">
-              Logout
-            </button>
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="logo">
+            <span className="logo-icon"></span>
+            <span className="logo-text">Technician Dashboard</span>
           </div>
         </div>
+        
+        <div className="sidebar-welcome">
+          <p className="welcome-message">
+            Welcome {currentUser?.fullName || currentUser?.username || 'Technician'}, Have a productive and successful day at work
+          </p>
+        </div>
 
-        {/* Statistics */}
-        <div className="stats-section">
-          <div className="stats-header">
-            <h2>Appointment Statistics</h2>
-          </div>
-          <div className="stats-container">
-            <div className="stat-card">
-              <h3>TOTAL ASSIGNED</h3>
-              <p className="stat-number">{appointments.length}</p>
-            </div>
-            <div className="stat-card">
-              <h3>PENDING</h3>
-              <p className="stat-number pending">
-                {appointments.filter(a => a.status === 'PENDING').length}
-              </p>
-            </div>
-            <div className="stat-card">
-              <h3>CONFIRMED</h3>
-              <p className="stat-number confirmed">
-                {appointments.filter(a => a.status === 'CONFIRMED').length}
-              </p>
-            </div>
-            <div className="stat-card">
-              <h3>COMPLETED</h3>
-              <p className="stat-number completed">
-                {appointments.filter(a => a.status === 'COMPLETED').length}
-              </p>
-            </div>
-          </div>
+        <nav className="sidebar-nav">
+          <a href="#" className="nav-item active">
+            <span className="nav-icon"></span>
+            <span className="nav-text">Dashboard</span>
+          </a>
+        </nav>
+
+        <div className="sidebar-footer">
+          <button className="logout-btn" onClick={handleLogout}>
+           
+            <span className="nav-text">Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <div className="dashboard-container">
+
+        {/* Welcome Message */}
+        <div className="page-welcome">
+          <h2>Welcome {currentUser?.fullName || currentUser?.username || 'Technician'}, Have a productive and successful day at work</h2>
         </div>
 
         {/* Filters */}
@@ -281,6 +275,37 @@ const TechnicianDashboard = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Statistics */}
+        <div className="stats-section">
+          <div className="stats-header">
+            <h2>Appointment Statistics</h2>
+          </div>
+          <div className="stats-container">
+            <div className="stat-card">
+              <h3>TOTAL ASSIGNED</h3>
+              <p className="stat-number">{appointments.length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>PENDING</h3>
+              <p className="stat-number pending">
+                {appointments.filter(a => a.status === 'PENDING').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>CONFIRMED</h3>
+              <p className="stat-number confirmed">
+                {appointments.filter(a => a.status === 'CONFIRMED').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>COMPLETED</h3>
+              <p className="stat-number completed">
+                {appointments.filter(a => a.status === 'COMPLETED').length}
+              </p>
             </div>
           </div>
         </div>
@@ -438,7 +463,7 @@ const TechnicianDashboard = () => {
               {/* Service Items List */}
               {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
                 <div className="detail-section">
-                  <h3>📋 Danh Sách Dịch Vụ</h3>
+                  <h3>Danh Sách Dịch Vụ</h3>
                   
                   {/* Additional Service Option */}
                   {selectedAppointment.status === 'CONFIRMED' && (
@@ -551,8 +576,7 @@ const TechnicianDashboard = () => {
           </div>
         </div>
       )}
-
-      <Footer />
+      </div>
     </div>
   )
 }
