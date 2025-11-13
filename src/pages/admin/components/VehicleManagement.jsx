@@ -756,16 +756,6 @@ const VehicleManagement = () => {
               {/* Action Buttons */}
               <div className="detail-actions">
                 <button
-                  className="action-edit-btn"
-                  onClick={() => {
-                    handleCloseDetail();
-                    handleEdit(viewingVehicle);
-                  }}
-                >
-                  <span className="btn-icon">✏️</span>
-                  Edit Vehicle
-                </button>
-                <button
                   className="action-close-btn"
                   onClick={handleCloseDetail}
                 >
