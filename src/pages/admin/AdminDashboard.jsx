@@ -4,6 +4,7 @@ import EmployeeManagement from "./components/EmployeeManagement";
 import ServiceCenterManagement from "./components/ServiceCenterManagement";
 import SparePartManagement from "./components/SparePartManagement";
 import VehicleModelManagement from "./components/VehicleModelManagement";
+import MaintenanceRecordManagement from "./components/MaintenanceRecordManagement";
 import "../../styles/AdminDashboard.css";
 import authService from "../../api/authService";
 
@@ -42,6 +43,12 @@ const AdminDashboard = () => {
       icon: "",
       label: "Vehicle Models",
       component: VehicleModelManagement,
+    },
+    {
+      id: "maintenanceRecords",
+      icon: "📋",
+      label: "Maintenance Records",
+      component: MaintenanceRecordManagement,
     },
     { id: "reports", icon: "", label: "Reports", component: null },
     { id: "settings", icon: "", label: "Settings", component: null },
