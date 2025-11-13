@@ -353,7 +353,7 @@ const SparePartManagement = () => {
 
       {/* Add Button (for future use) */}
       <button className="add-spare-part-btn" onClick={() => alert('Add spare part feature coming soon!')}>
-        <span className="btn-icon">➕</span>
+        <span className="btn-icon"></span>
         Add New Spare Part
       </button>
 
