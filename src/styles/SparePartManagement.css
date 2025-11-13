@@ -97,6 +97,40 @@
   flex-wrap: wrap;
 }
 
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.search-row .search-box {
+  /* keep the search box a reasonable width while leaving space for the button */
+  flex: 0 1 55%;
+  min-width: 250px;
+  max-width: 760px;
+}
+
+/* On narrow screens stack search and button */
+@media (max-width: 768px) {
+  .search-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .search-row .search-box {
+    flex: 1 1 auto;
+    max-width: none;
+  }
+
+  .refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .search-box {
   position: relative;
   flex: 1;
@@ -105,7 +139,9 @@
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  /* match the visual height of the Refresh button */
+  height: 48px;
+  padding: 0 2.5rem 0 1rem;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 1rem;
@@ -167,21 +203,25 @@
   gap: 0.5rem;
 }
 
-.refresh-btn:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-/* Results Info */
-.results-info {
-  color: #7f8c8d;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+.refresh-btn {
+  /* make button and input share the same height for perfect alignment */
+  height: 48px;
+  padding: 0 1.5rem;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.refresh-btn:hover {
+  background: linear-gradient(135deg, #00897b 0%, #43a047 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38,166,154,0.28);
 }
 
 .filter-badge {
@@ -209,8 +249,12 @@
 }
 
 .spare-part-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  /* EmployeeManagement table header gradient */
+  background: linear-gradient(135deg, #80deea 0%, #81c784 100%);
+  color: #263238;
+}
+.spare-part-table th {
+  color: #263238;
 }
 
 .spare-part-table th {
