@@ -14,12 +14,38 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .customer-management .search-filters {
   display: flex;
   gap: 1rem;
   flex: 1;
+  min-width: 300px;
+}
+
+.customer-management .add-customer-btn {
+  padding: 0.75rem 1.5rem !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 0.95rem !important;
+  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%) !important;
+  color: white !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4) !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+
+.customer-management .add-customer-btn:hover {
+  background: linear-gradient(135deg, #43a047 0%, #558b2f 100%) !important;
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.6) !important;
+  transform: translateY(-2px) !important;
 }
 
 .customer-management .search-input {
