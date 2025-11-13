@@ -715,73 +715,54 @@ const StaffDashboard = () => {
         {activeTab === "appointments" && (
           <>
             {/* Filters */}
-            <div className="filters-section">
-              <div className="search-box">
-                <input
-                  type="text"
-                  placeholder="Tìm theo tên khách hàng, biển số xe, ID..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+            <div className="search-status-container">
+              <div className="search-bar-row">
+                <div className="search-box">
+                  <input
+                    type="text"
+                    placeholder="Tìm theo tên khách hàng, biển số xe, ID..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                  />
+                </div>
               </div>
-
-              <div className="status-filters">
+              <div className="status-row">
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "ALL" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "ALL" ? "active" : ""}`}
                   onClick={() => setFilterStatus("ALL")}
                 >
                   Tất cả ({appointments.length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "PENDING" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "PENDING" ? "active" : ""}`}
                   onClick={() => setFilterStatus("PENDING")}
                 >
-                  Chờ xử lý (
-                  {appointments.filter((a) => a.status === "PENDING").length})
+                  Chờ xử lý ({appointments.filter((a) => a.status === "PENDING").length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "CONFIRMED" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "CONFIRMED" ? "active" : ""}`}
                   onClick={() => setFilterStatus("CONFIRMED")}
                 >
-                  Đã xác nhận (
-                  {appointments.filter((a) => a.status === "CONFIRMED").length})
+                  Đã xác nhận ({appointments.filter((a) => a.status === "CONFIRMED").length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "INCOMPLETED" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "INCOMPLETED" ? "active" : ""}`}
                   onClick={() => setFilterStatus("INCOMPLETED")}
                 >
-                  Cần bổ sung (
-                  {
-                    appointments.filter((a) => a.status === "INCOMPLETED")
-                      .length
-                  }
-                  )
+                  Cần bổ sung ({appointments.filter((a) => a.status === "INCOMPLETED").length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "COMPLETED" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "COMPLETED" ? "active" : ""}`}
                   onClick={() => setFilterStatus("COMPLETED")}
                 >
-                  Hoàn thành (
-                  {appointments.filter((a) => a.status === "COMPLETED").length})
+                  Hoàn thành ({appointments.filter((a) => a.status === "COMPLETED").length})
                 </button>
                 <button
-                  className={`filter-btn ${
-                    filterStatus === "CANCELLED" ? "active" : ""
-                  }`}
+                  className={`status-btn ${filterStatus === "CANCELLED" ? "active" : ""}`}
                   onClick={() => setFilterStatus("CANCELLED")}
                 >
-                  Đã huỷ (
-                  {appointments.filter((a) => a.status === "CANCELLED").length})
+                  Đã huỷ ({appointments.filter((a) => a.status === "CANCELLED").length})
                 </button>
               </div>
             </div>
@@ -852,17 +833,17 @@ const StaffDashboard = () => {
                             )}
                           </td>
                           <td>
-                            <div className="action-btns">
+                            <div className="appointment-action-group">
                               <button
-                                className="view-detail-btn"
+                                className="appointment-action-btn detail"
                                 onClick={() => handleViewDetails(appointment)}
                                 title="Xem chi tiết"
                               >
-                                👁️ Chi tiết
+                                 Chi tiết
                               </button>
                               {appointment.status === "PENDING" && (
                                 <button
-                                  className="assign-btn"
+                                  className="appointment-action-btn assign"
                                   onClick={() => handleAssignClick(appointment)}
                                 >
                                   Assign KTV
@@ -870,7 +851,7 @@ const StaffDashboard = () => {
                               )}
                               {appointment.status === "INCOMPLETED" && (
                                 <button
-                                  className="additional-btn"
+                                  className="appointment-action-btn additional"
                                   onClick={() =>
                                     handleIncompletedAppointment(appointment)
                                   }
@@ -881,7 +862,7 @@ const StaffDashboard = () => {
                               {appointment.status === "COMPLETED" &&
                                 !appointment.invoiceGenerated && (
                                   <button
-                                    className="invoice-btn"
+                                    className="appointment-action-btn invoice"
                                     onClick={() =>
                                       handleGenerateInvoice(appointment)
                                     }
