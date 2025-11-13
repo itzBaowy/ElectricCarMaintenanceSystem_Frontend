@@ -557,14 +557,7 @@ const EmployeeManagement = () => {
                 {filteredEmployees.map((employee) => (
                   <tr key={employee.id}>
                     <td>{employee.id}</td>
-                    <td>
-                      <div className="employee-name">
-                        <div className="employee-avatar">
-                          {employee.fullName.charAt(0).toUpperCase()}
-                        </div>
-                        <span>{employee.fullName}</span>
-                      </div>
-                    </td>
+                    <td>{employee.fullName}</td>
                     <td>{employee.username}</td>
                     <td>{employee.email}</td>
                     <td>
