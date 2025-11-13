@@ -886,7 +886,7 @@ const StaffDashboard = () => {
                                       handleGenerateInvoice(appointment)
                                     }
                                   >
-                                    Xuất hoá đơn
+                                    View Invoice
                                   </button>
                                 )}
                             </div>
