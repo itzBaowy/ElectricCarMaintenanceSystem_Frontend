@@ -138,10 +138,11 @@
 .center-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f0f0f0;
+  align-items: center; /* center title and actions vertically */
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .center-header h3 {
@@ -156,6 +157,7 @@
 .center-actions {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .center-actions button {
@@ -170,9 +172,8 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 6px 14px rgba(0,0,0,0.06);
-  width: 40px;
+  min-width: 40px;
   height: 40px;
-  padding: 0;
 }
 
 .center-actions .edit-btn {
@@ -195,35 +196,46 @@
 .center-info {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
-
 .info-row {
-  display: flex;
+  /* align icon and text in two columns so rows look neat */
+  display: grid;
+  grid-template-columns: 48px 1fr;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   color: #333;
   font-size: 0.98rem;
 }
 
-.info-icon {
-  font-size: 1.4rem;
-  min-width: 48px;
-  width: 48px;
-  height: 48px;
+.info-icon-plain {
+  font-size: 1.2rem;
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
   text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
-  color: white;
-  box-shadow: 0 8px 22px rgba(38,166,154,0.10);
+  background: transparent !important;
+  color: #111 !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-.info-row span:not(.info-icon) {
+.info-row .info-content {
   flex: 1;
   color: #333;
+}
+
+/* Make inline SVG icons inside .info-icon render as solid black */
+.info-icon svg,
+.info-icon svg path,
+.info-icon svg circle,
+.info-icon svg rect {
+  fill: #111 !important;
+  stroke: none !important;
 }
 
 .center-description {

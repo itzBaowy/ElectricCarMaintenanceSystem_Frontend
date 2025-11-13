@@ -201,42 +201,42 @@ const ServiceCenterManagement = () => {
 
               <div className="center-info">
                 <div className="info-row">
-                  <span className="info-icon" aria-hidden="true">
+                  <span className="info-icon-plain" aria-hidden="true">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" opacity="0.95"/>
-                      <circle cx="12" cy="9" r="2" fill="#26a69a" />
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#111" opacity="0.95"/>
+                      <circle cx="12" cy="9" r="2" fill="#111" />
                     </svg>
                   </span>
-                  <span>{center.address}</span>
+                  <span className="info-content">{center.address}</span>
                 </div>
                 {center.district && (
                   <div className="info-row">
-                    <span className="info-icon" aria-hidden="true">
+                    <span className="info-icon-plain" aria-hidden="true">
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 11l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8z" fill="white" opacity="0.95"/>
+                        <path d="M3 11l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8z" fill="#111" opacity="0.95"/>
                       </svg>
                     </span>
-                    <span>{center.district}</span>
+                    <span className="info-content">{center.district}</span>
                   </div>
                 )}
                 {center.city && (
                   <div className="info-row">
-                    <span className="info-icon" aria-hidden="true">
+                    <span className="info-icon-plain" aria-hidden="true">
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 22h16V8l-4-4H8L4 8v14z" fill="white" opacity="0.95"/>
-                        <path d="M7 10h2v2H7v-2zM11 10h2v2h-2v-2z" fill="#26a69a" />
+                        <path d="M4 22h16V8l-4-4H8L4 8v14z" fill="#111" opacity="0.95"/>
+                        <path d="M7 10h2v2H7v-2zM11 10h2v2h-2v-2z" fill="#111" />
                       </svg>
                     </span>
-                    <span>{center.city}</span>
+                    <span className="info-content">{center.city}</span>
                   </div>
                 )}
                 <div className="info-row">
-                  <span className="info-icon" aria-hidden="true">
+                  <span className="info-icon-plain" aria-hidden="true">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M6.6 10.8a15.05 15.05 0 006.6 6.6l2.2-2.2a1 1 0 011.1-.2c1.2.5 2.5.8 3.9.8a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.4.3 2.7.8 3.9a1 1 0 01-.2 1.1l-2.5 2.8z" fill="white" opacity="0.95"/>
+                      <path d="M6.6 10.8a15.05 15.05 0 006.6 6.6l2.2-2.2a1 1 0 011.1-.2c1.2.5 2.5.8 3.9.8a1 1 0 011 1V20a1 1 0 01-1 1C10.3 21 3 13.7 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.4.3 2.7.8 3.9a1 1 0 01-.2 1.1l-2.5 2.8z" fill="#111" opacity="0.95"/>
                     </svg>
                   </span>
-                  <span>{center.phone}</span>
+                  <span className="info-content">{center.phone}</span>
                 </div>
               </div>
             </div>
