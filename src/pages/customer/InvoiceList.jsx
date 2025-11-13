@@ -1,0 +1,199 @@
+import { useState } from 'react'
+import PropTypes from 'prop-types'
+import '../../styles/InvoiceList.css'
+
+const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
+  const [filterStatus, setFilterStatus] = useState('ALL')
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount)
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    return new Date(dateString).toLocaleDateString('vi-VN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
+  }
+
+  const getStatusBadge = (status) => {
+    const statusMap = {
+      PAID: { text: 'Đã thanh toán', class: 'paid', icon: '✅' },
+      UNPAID: { text: 'Chưa thanh toán', class: 'unpaid', icon: '⏳' }
+    }
+    return statusMap[status] || statusMap.UNPAID
+  }
+
+  // Filter invoices based on status
+  const filteredInvoices = filterStatus === 'ALL' 
+    ? invoices 
+    : invoices.filter(invoice => invoice.status === filterStatus)
+
+  return (
+    <div className="modal-overlay">
+      <div className="invoice-list-modal">
+        <div className="modal-header">
+          <h2>💳 Danh Sách Hoá Đơn</h2>
+          <button className="close-btn" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+
+        {/* Filter Section */}
+        <div className="filter-section">
+          <div className="filter-buttons">
+            <button
+              className={`filter-btn ${filterStatus === 'ALL' ? 'active' : ''}`}
+              onClick={() => setFilterStatus('ALL')}
+            >
+              Tất cả ({invoices.length})
+            </button>
+            <button
+              className={`filter-btn ${filterStatus === 'PAID' ? 'active' : ''}`}
+              onClick={() => setFilterStatus('PAID')}
+            >
+              Đã thanh toán ({invoices.filter(i => i.status === 'PAID').length})
+            </button>
+            <button
+              className={`filter-btn ${filterStatus === 'UNPAID' ? 'active' : ''}`}
+              onClick={() => setFilterStatus('UNPAID')}
+            >
+              Chưa thanh toán ({invoices.filter(i => i.status === 'UNPAID').length})
+            </button>
+          </div>
+        </div>
+
+        <div className="modal-body">
+          {filteredInvoices.length === 0 ? (
+            <div className="no-invoices">
+              <div className="no-invoices-icon">💳</div>
+              <p>
+                {filterStatus === 'ALL' 
+                  ? 'Bạn chưa có hoá đơn nào.' 
+                  : `Không có hoá đơn ${filterStatus === 'PAID' ? 'đã thanh toán' : 'chưa thanh toán'}.`}
+              </p>
+            </div>
+          ) : (
+            <div className="invoices-grid">
+              {filteredInvoices.map(invoice => {
+                const statusInfo = getStatusBadge(invoice.status)
+                const maintenanceRecord = invoice.maintenanceRecord
+
+                return (
+                  <div 
+                    key={invoice.id} 
+                    className="invoice-card"
+                    onClick={() => onViewDetail(invoice)}
+                  >
+                    <div className="invoice-card-header">
+                      <div className="invoice-id">
+                        <span className="label">Mã hoá đơn:</span>
+                        <span className="value">#{invoice.id}</span>
+                      </div>
+                      <span className={`status-badge ${statusInfo.class}`}>
+                        {statusInfo.icon} {statusInfo.text}
+                      </span>
+                    </div>
+
+                    <div className="invoice-card-body">
+                      {/* Vehicle Info */}
+                      <div className="info-row">
+                        <span className="icon">🚗</span>
+                        <div className="info-content">
+                          <span className="info-label">Xe:</span>
+                          <span className="info-value">
+                            {maintenanceRecord?.vehicleModel} - {maintenanceRecord?.vehicleLicensePlate}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Service Center */}
+                      <div className="info-row">
+                        <span className="icon">🏢</span>
+                        <div className="info-content">
+                          <span className="info-label">Trung tâm:</span>
+                          <span className="info-value">{invoice.serviceCenterName}</span>
+                        </div>
+                      </div>
+
+                      {/* Service Package */}
+                      {maintenanceRecord?.servicePackageName && (
+                        <div className="info-row">
+                          <span className="icon">📦</span>
+                          <div className="info-content">
+                            <span className="info-label">Gói dịch vụ:</span>
+                            <span className="info-value">{maintenanceRecord.servicePackageName}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Technician */}
+                      {maintenanceRecord?.technicianName && (
+                        <div className="info-row">
+                          <span className="icon">🔧</span>
+                          <div className="info-content">
+                            <span className="info-label">Kỹ thuật viên:</span>
+                            <span className="info-value">{maintenanceRecord.technicianName}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Service Date */}
+                      <div className="info-row">
+                        <span className="icon">📅</span>
+                        <div className="info-content">
+                          <span className="info-label">Ngày thực hiện:</span>
+                          <span className="info-value">{formatDate(maintenanceRecord?.performedAt)}</span>
+                        </div>
+                      </div>
+
+                      {/* Service Items Count */}
+                      {maintenanceRecord?.serviceItems && maintenanceRecord.serviceItems.length > 0 && (
+                        <div className="info-row">
+                          <span className="icon">🔨</span>
+                          <div className="info-content">
+                            <span className="info-label">Số hạng mục:</span>
+                            <span className="info-value">{maintenanceRecord.serviceItems.length} dịch vụ</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="invoice-card-footer">
+                      <div className="total-amount">
+                        <span className="label">Tổng tiền:</span>
+                        <span className="amount">{formatCurrency(invoice.totalAmount)}</span>
+                      </div>
+                      <button className="view-detail-btn">
+                        Xem chi tiết →
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button className="close-footer-btn" onClick={onClose}>
+            Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+InvoiceList.propTypes = {
+  invoices: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onViewDetail: PropTypes.func.isRequired
+}
+
+export default InvoiceList

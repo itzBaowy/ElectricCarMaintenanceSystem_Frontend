@@ -617,6 +617,143 @@
   font-size: 1.1rem;
 }
 
+/* Invoice Stat Card */
+.stat-card .stat-badge {
+  margin-top: 0.5rem;
+}
+
+.unpaid-badge {
+  background: #fff3cd;
+  color: #856404;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Invoices List */
+.invoices-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.no-invoices {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #dee2e6;
+}
+
+.no-invoices p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.invoice-card {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.invoice-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-color: #000000;
+}
+
+.invoice-header {
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000;
+}
+
+.invoice-id {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.invoice-id .label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.invoice-id .value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.invoice-details {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.invoice-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.invoice-info .info-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.invoice-info .info-value {
+  font-size: 0.85rem;
+  color: #000000;
+  font-weight: 600;
+  text-align: right;
+}
+
+.invoice-footer {
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border-top: 2px solid #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-footer .total-label {
+  font-size: 0.9rem;
+  color: #495057;
+  font-weight: 600;
+}
+
+.invoice-footer .total-amount {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #28a745;
+}
+
+.invoice-card .status-badge.paid {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.invoice-card .status-badge.unpaid {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .customer-dashboard {

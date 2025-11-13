@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import authService from '../../api/authService'
 import vehicleService from '../../api/vehicleService'
 import appointmentService from '../../api/appointmentService'
+import invoiceService from '../../api/invoiceService'
 import logger from '../../utils/logger'
 import BookMaintenance from './BookMaintenance'
 import AppointmentDetail from './AppointmentDetail'
 import AllAppointments from './AllAppointments'
 import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
+import InvoiceList from './InvoiceList'
+import CustomerInvoiceDetail from './CustomerInvoiceDetail'
 import Footer from '../../components/layout/Footer'
 import '../../styles/CustomerDashboard.css'
 import customerService from '../../api/customerService'
@@ -17,6 +20,7 @@ const CustomerDashboard = () => {
   const [vehicles, setVehicles] = useState([])
   const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
+  const [invoices, setInvoices] = useState([])
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
@@ -24,6 +28,9 @@ const CustomerDashboard = () => {
   const [showAllAppointments, setShowAllAppointments] = useState(false)
   const [showEditProfile, setShowEditProfile] = useState(false)
   const [showChangePassword, setShowChangePassword] = useState(false)
+  const [showInvoiceList, setShowInvoiceList] = useState(false)
+  const [showInvoiceDetail, setShowInvoiceDetail] = useState(false)
+  const [selectedInvoice, setSelectedInvoice] = useState(null)
 
   // Load customer data from auth service
   useEffect(() => {
@@ -74,6 +81,7 @@ const CustomerDashboard = () => {
     loadVehicleModels()
     loadVehicles()
     loadAppointments()
+    loadInvoices()
   }, [])
 
   const loadAppointments = async () => {
@@ -107,6 +115,29 @@ const CustomerDashboard = () => {
     } catch (error) {
       logger.error('Error loading appointments:', error)
       setRecentAppointments([])
+    }
+  }
+
+  const loadInvoices = async () => {
+    try {
+      const result = await invoiceService.getMyInvoices()
+      
+      if (result.success) {
+        const customerInvoices = Array.isArray(result.data) ? result.data : []
+        
+        // Sort by date (newest first)
+        const sortedInvoices = customerInvoices
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        
+        setInvoices(sortedInvoices)
+        logger.log('Customer invoices loaded:', sortedInvoices)
+      } else {
+        logger.error('Failed to load invoices:', result.message)
+        setInvoices([])
+      }
+    } catch (error) {
+      logger.error('Error loading invoices:', error)
+      setInvoices([])
     }
   }
 
@@ -248,6 +279,25 @@ const CustomerDashboard = () => {
     logger.log('Password changed successfully')
   }
 
+  const handleViewInvoices = () => {
+    setShowInvoiceList(true)
+  }
+
+  const handleCloseInvoiceList = () => {
+    setShowInvoiceList(false)
+  }
+
+  const handleViewInvoiceDetail = (invoice) => {
+    setSelectedInvoice(invoice)
+    setShowInvoiceList(false)
+    setShowInvoiceDetail(true)
+  }
+
+  const handleCloseInvoiceDetail = () => {
+    setShowInvoiceDetail(false)
+    setSelectedInvoice(null)
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -340,6 +390,17 @@ const CustomerDashboard = () => {
             <span className="stat-label">Completed Services</span>
           </div>
         </div>
+        <div className="stat-card" onClick={handleViewInvoices} style={{ cursor: 'pointer' }}>
+          <div className="stat-info">
+            <span className="stat-number">{invoices.length}</span>
+            <span className="stat-label">Invoices</span>
+          </div>
+          <div className="stat-badge">
+            {invoices.filter(i => i.status === 'UNPAID').length > 0 && (
+              <span className="unpaid-badge">{invoices.filter(i => i.status === 'UNPAID').length} chưa thanh toán</span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -401,6 +462,81 @@ const CustomerDashboard = () => {
               })
             )}
             </div>
+          </div>
+        </div>
+
+        {/* Invoices Section */}
+        <div className="section">
+          <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h2>Hoá Đơn Thanh Toán</h2>
+            <button 
+              className="view-all-btn"
+              onClick={handleViewInvoices}
+            >
+              Xem Tất Cả
+            </button>
+          </div>
+          <div className="invoices-list">
+            {invoices.length === 0 ? (
+              <div className="no-invoices">
+                <p>Bạn chưa có hoá đơn nào.</p>
+              </div>
+            ) : (
+              invoices.slice(0, 3).map(invoice => {
+                const statusInfo = invoice.status === 'PAID' 
+                  ? { text: 'Đã thanh toán', class: 'paid', icon: '✅' }
+                  : { text: 'Chưa thanh toán', class: 'unpaid', icon: '⏳' }
+                
+                const maintenanceRecord = invoice.maintenanceRecord
+                
+                return (
+                  <div 
+                    key={invoice.id} 
+                    className="invoice-card"
+                    onClick={() => handleViewInvoiceDetail(invoice)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="invoice-header">
+                      <div className="invoice-id">
+                        <span className="label">Mã hoá đơn:</span>
+                        <span className="value">#{invoice.id}</span>
+                      </div>
+                      <span className={`status-badge ${statusInfo.class}`}>
+                        {statusInfo.icon} {statusInfo.text}
+                      </span>
+                    </div>
+                    <div className="invoice-details">
+                      <div className="invoice-info">
+                        <span className="info-label">Xe:</span>
+                        <span className="info-value">
+                          {maintenanceRecord?.vehicleModel} - {maintenanceRecord?.vehicleLicensePlate}
+                        </span>
+                      </div>
+                      <div className="invoice-info">
+                        <span className="info-label">Trung tâm:</span>
+                        <span className="info-value">{invoice.serviceCenterName}</span>
+                      </div>
+                      {maintenanceRecord?.servicePackageName && (
+                        <div className="invoice-info">
+                          <span className="info-label">Gói dịch vụ:</span>
+                          <span className="info-value">{maintenanceRecord.servicePackageName}</span>
+                        </div>
+                      )}
+                      <div className="invoice-info">
+                        <span className="info-label">Ngày tạo:</span>
+                        <span className="info-value">
+                          {new Date(invoice.createdAt).toLocaleDateString('vi-VN')}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="invoice-footer">
+                      <span className="total-label">Tổng tiền:</span>
+                      <span className="total-amount">{formatCurrency(invoice.totalAmount)}</span>
+                    </div>
+                  </div>
+                )
+              })
+            )}
           </div>
         </div>
 
@@ -513,6 +649,23 @@ const CustomerDashboard = () => {
         <ChangePassword
           onClose={handleCloseChangePassword}
           onPasswordChanged={handlePasswordChanged}
+        />
+      )}
+
+      {/* Invoice List Modal */}
+      {showInvoiceList && (
+        <InvoiceList
+          invoices={invoices}
+          onClose={handleCloseInvoiceList}
+          onViewDetail={handleViewInvoiceDetail}
+        />
+      )}
+
+      {/* Invoice Detail Modal */}
+      {showInvoiceDetail && selectedInvoice && (
+        <CustomerInvoiceDetail
+          invoice={selectedInvoice}
+          onClose={handleCloseInvoiceDetail}
         />
       )}
 
