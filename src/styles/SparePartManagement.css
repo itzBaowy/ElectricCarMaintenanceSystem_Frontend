@@ -413,33 +413,53 @@
 .actions {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .action-btn {
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 1rem;
-  background: none !important;
-  color: inherit !important;
-  border: 2px solid transparent !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .action-btn:hover {
-  transform: scale(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.action-btn.view:hover {
-  background: #e3f2fd;
+.action-btn.edit {
+  background: #fff3e0;
+  color: #e65100;
+  border: 2px solid #ffb74d;
 }
 
 .action-btn.edit:hover {
-  background: #fff3e0;
+  background: #ffe0b2;
+}
+
+.action-btn.stock {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 2px solid #64b5f6;
+}
+
+.action-btn.stock:hover {
+  background: #bbdefb;
+}
+
+.action-btn.delete {
+  background: #ffebee;
+  color: #c62828;
+  border: 2px solid #e57373;
 }
 
 .action-btn.delete:hover {
-  background: #ffebee;
+  background: #ffcdd2;
 }
 
 /* No Data */

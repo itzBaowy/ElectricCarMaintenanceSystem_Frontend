@@ -1,28 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import sparePartService from '../../../api/sparePartService'
-import '../../../styles/EditSparePartModal.css'
+import '../../../styles/AddSparePartModal.css'
 
-const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
+const CATEGORIES = [
+  { code: 'FILTER', name: 'Filters' },
+  { code: 'LIQUID', name: 'Liquids & Chemicals' },
+  { code: 'ELECTRONIC', name: 'Battery & Electronics' },
+  { code: 'BRAKE', name: 'Brake System' },
+  { code: 'SUSPENSION', name: 'Suspension & Steering' },
+  { code: 'DRIVETRAIN', name: 'Drivetrain' },
+  { code: 'COOLING', name: 'Cooling System' },
+  { code: 'HIGH_VOLTAGE', name: 'High Voltage System' },
+  { code: 'TIRE', name: 'Tires & Wheels' },
+  { code: 'WIPER', name: 'Wipers' }
+]
+
+const AddSparePartModal = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     partNumber: '',
     name: '',
     unitPrice: '',
-    minimumStockLevel: ''
+    quantityInStock: '',
+    minimumStockLevel: '',
+    categoryName: '',
+    categoryCode: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [validationErrors, setValidationErrors] = useState({})
-
-  useEffect(() => {
-    if (sparePart) {
-      setFormData({
-        partNumber: sparePart.partNumber || '',
-        name: sparePart.name || '',
-        unitPrice: sparePart.unitPrice || '',
-        minimumStockLevel: sparePart.minimumStockLevel || ''
-      })
-    }
-  }, [sparePart])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -35,6 +40,26 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
       setValidationErrors(prev => ({
         ...prev,
         [name]: null
+      }))
+    }
+  }
+
+  const handleCategoryChange = (e) => {
+    const categoryCode = e.target.value
+    const category = CATEGORIES.find(cat => cat.code === categoryCode)
+    
+    setFormData(prev => ({
+      ...prev,
+      categoryCode: categoryCode,
+      categoryName: category ? category.name : ''
+    }))
+    
+    // Clear validation errors for category fields
+    if (validationErrors.categoryCode || validationErrors.categoryName) {
+      setValidationErrors(prev => ({
+        ...prev,
+        categoryCode: null,
+        categoryName: null
       }))
     }
   }
@@ -54,8 +79,16 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
       errors.unitPrice = 'Unit price must be greater than 0'
     }
 
-    if (!formData.minimumStockLevel || formData.minimumStockLevel < 0) {
+    if (formData.quantityInStock === '' || formData.quantityInStock < 0) {
+      errors.quantityInStock = 'Quantity must be 0 or greater'
+    }
+
+    if (formData.minimumStockLevel === '' || formData.minimumStockLevel < 0) {
       errors.minimumStockLevel = 'Minimum stock level must be 0 or greater'
+    }
+
+    if (!formData.categoryCode) {
+      errors.categoryCode = 'Category is required'
     }
 
     setValidationErrors(errors)
@@ -73,24 +106,27 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
       setLoading(true)
       setError(null)
 
-      const updateData = {
+      const createData = {
         partNumber: formData.partNumber.trim(),
         name: formData.name.trim(),
         unitPrice: parseFloat(formData.unitPrice),
-        minimumStockLevel: parseInt(formData.minimumStockLevel)
+        quantityInStock: parseInt(formData.quantityInStock),
+        minimumStockLevel: parseInt(formData.minimumStockLevel),
+        categoryName: formData.categoryName,
+        categoryCode: formData.categoryCode
       }
 
-      const response = await sparePartService.updateSparePart(sparePart.id, updateData)
+      const response = await sparePartService.createSparePart(createData)
 
       if (response.code === 1000) {
-        onUpdate(response.result)
+        onAdd(response.result)
         onClose()
       } else {
-        setError(response.message || 'Failed to update spare part')
+        setError(response.message || 'Failed to create spare part')
       }
     } catch (err) {
-      console.error('Error updating spare part:', err)
-      setError(err.response?.data?.message || err.message || 'An error occurred while updating')
+      console.error('Error creating spare part:', err)
+      setError(err.response?.data?.message || err.message || 'An error occurred while creating')
     } finally {
       setLoading(false)
     }
@@ -104,9 +140,9 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal-content edit-spare-part-modal">
+      <div className="modal-content add-spare-part-modal">
         <div className="modal-header">
-          <h2>Edit Spare Part</h2>
+          <h2>Add New Spare Part</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -158,6 +194,37 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                 )}
               </div>
 
+              {/* Category */}
+              <div className="form-group full-width">
+                <label htmlFor="categoryCode">
+                  Category <span className="required">*</span>
+                </label>
+                <select
+                  id="categoryCode"
+                  name="categoryCode"
+                  value={formData.categoryCode}
+                  onChange={handleCategoryChange}
+                  className={validationErrors.categoryCode ? 'error' : ''}
+                >
+                  <option value="">Select a category</option>
+                  {CATEGORIES.map((category) => (
+                    <option key={category.code} value={category.code}>
+                      {category.name} ({category.code})
+                    </option>
+                  ))}
+                </select>
+                {validationErrors.categoryCode && (
+                  <span className="error-text">{validationErrors.categoryCode}</span>
+                )}
+                {formData.categoryCode && (
+                  <div className="category-info">
+                    <span className="info-badge">
+                      📁 {formData.categoryName} - {formData.categoryCode}
+                    </span>
+                  </div>
+                )}
+              </div>
+
               {/* Unit Price */}
               <div className="form-group">
                 <label htmlFor="unitPrice">
@@ -176,6 +243,26 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                 />
                 {validationErrors.unitPrice && (
                   <span className="error-text">{validationErrors.unitPrice}</span>
+                )}
+              </div>
+
+              {/* Quantity In Stock */}
+              <div className="form-group">
+                <label htmlFor="quantityInStock">
+                  Quantity in Stock <span className="required">*</span>
+                </label>
+                <input
+                  type="number"
+                  id="quantityInStock"
+                  name="quantityInStock"
+                  value={formData.quantityInStock}
+                  onChange={handleChange}
+                  className={validationErrors.quantityInStock ? 'error' : ''}
+                  placeholder="0"
+                  min="0"
+                />
+                {validationErrors.quantityInStock && (
+                  <span className="error-text">{validationErrors.quantityInStock}</span>
                 )}
               </div>
 
@@ -198,17 +285,13 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                   <span className="error-text">{validationErrors.minimumStockLevel}</span>
                 )}
               </div>
+            </div>
 
-              {/* Current Stock Display */}
-              <div className="form-group full-width">
-                <div className="stock-info-display">
-                  <span className="info-label">Current Stock:</span>
-                  <span className="info-value">{sparePart?.quantityInStock || 0} units</span>
-                  <span className="info-note">
-                    ℹ️ To update stock quantity, use the "Update Stock" button in the table
-                  </span>
-                </div>
-              </div>
+            <div className="form-note">
+              <span className="note-icon">💡</span>
+              <span className="note-text">
+                All fields are required. Select a category and the name will be auto-filled.
+              </span>
             </div>
           </div>
 
@@ -229,10 +312,10 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
               {loading ? (
                 <>
                   <span className="spinner-small"></span>
-                  Updating...
+                  Creating...
                 </>
               ) : (
-                'Update Spare Part'
+                '✨ Create Spare Part'
               )}
             </button>
           </div>
@@ -242,4 +325,4 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
   )
 }
 
-export default EditSparePartModal
+export default AddSparePartModal

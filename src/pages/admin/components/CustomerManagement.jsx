@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import customerService from "../../../api/customerService";
+import authService from "../../../api/authService";
 import logger from "../../../utils/logger";
 import "../../../styles/CustomerManagement.css";
 
 const CustomerManagement = () => {
   const [customers, setCustomers] = useState([]);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [formData, setFormData] = useState({
     id: "",
@@ -13,6 +15,12 @@ const CustomerManagement = () => {
     username: "",
     email: "",
     phone: "",
+    gender: "MALE",
+  });
+  const [addFormData, setAddFormData] = useState({
+    fullName: "",
+    phoneNumber: "",
+    email: "",
     gender: "MALE",
   });
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,6 +69,14 @@ const CustomerManagement = () => {
     }));
   };
 
+  const handleAddInputChange = (e) => {
+    const { name, value } = e.target;
+    setAddFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const resetForm = () => {
     setFormData({
       id: "",
@@ -72,6 +88,16 @@ const CustomerManagement = () => {
     });
     setEditingCustomer(null);
     setShowEditForm(false);
+  };
+
+  const resetAddForm = () => {
+    setAddFormData({
+      fullName: "",
+      phoneNumber: "",
+      email: "",
+      gender: "MALE",
+    });
+    setShowAddForm(false);
   };
 
   const handleSubmit = async (e) => {
@@ -110,6 +136,48 @@ const CustomerManagement = () => {
     } catch (error) {
       logger.error("Error updating customer:", error);
       alert("An error occurred while updating customer");
+    }
+  };
+
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+
+    if (
+      !addFormData.fullName ||
+      !addFormData.phoneNumber ||
+      !addFormData.email
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin khách hàng!");
+      return;
+    }
+
+    try {
+      // Create customer account using register API from authService
+      const registerData = {
+        username: addFormData.phoneNumber, // Phone number as username
+        password: addFormData.phoneNumber, // Default password = phone number
+        fullName: addFormData.fullName,
+        email: addFormData.email,
+        phone: addFormData.phoneNumber,
+        gender: addFormData.gender,
+      };
+
+      logger.log("Creating customer with data:", registerData);
+      const result = await authService.register(registerData);
+
+      if (result.success) {
+        alert(
+          `Tài khoản đã được tạo thành công!\n\nThông tin đăng nhập:\nUsername: ${addFormData.phoneNumber}\nPassword: ${addFormData.phoneNumber}\n\nVui lòng thông báo cho khách hàng.`
+        );
+        resetAddForm();
+        // Refresh the customer list
+        loadCustomers();
+      } else {
+        alert(`Lỗi: ${result.message}`);
+      }
+    } catch (error) {
+      logger.error("Error creating customer:", error);
+      alert("Có lỗi xảy ra khi tạo tài khoản!");
     }
   };
 
@@ -179,7 +247,117 @@ const CustomerManagement = () => {
             {isLoading ? "⌛" : "↻"}
           </button>
         </div>
+
+        <button
+          className="add-customer-btn"
+          onClick={() => setShowAddForm(true)}
+          title="Add new customer"
+        >
+          + Add Customer
+        </button>
       </div>
+
+      {/* Customer Add Form Modal */}
+      {showAddForm && (
+        <div className="modal-overlay">
+          <div className="customer-form-modal">
+            <div className="modal-header">
+              <h3>Tạo Tài Khoản Khách Hàng</h3>
+              <button className="close-btn" onClick={resetAddForm}>
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleAddSubmit} className="customer-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="add-fullName">Họ và Tên *</label>
+                  <input
+                    type="text"
+                    id="add-fullName"
+                    name="fullName"
+                    value={addFormData.fullName}
+                    onChange={handleAddInputChange}
+                    required
+                    placeholder="Nguyễn Văn A"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="add-phoneNumber">Số Điện Thoại *</label>
+                  <input
+                    type="tel"
+                    id="add-phoneNumber"
+                    name="phoneNumber"
+                    value={addFormData.phoneNumber}
+                    onChange={handleAddInputChange}
+                    required
+                    placeholder="0123456789"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="add-email">Email *</label>
+                  <input
+                    type="email"
+                    id="add-email"
+                    name="email"
+                    value={addFormData.email}
+                    onChange={handleAddInputChange}
+                    required
+                    placeholder="email@example.com"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="add-gender">Giới Tính *</label>
+                  <select
+                    id="add-gender"
+                    name="gender"
+                    value={addFormData.gender}
+                    onChange={handleAddInputChange}
+                    required
+                  >
+                    <option value="MALE">Nam</option>
+                    <option value="FEMALE">Nữ</option>
+                    <option value="OTHER">Khác</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="info-note" style={{ 
+                background: "#e3f2fd", 
+                border: "1px solid #2196f3", 
+                padding: "12px", 
+                borderRadius: "6px",
+                marginBottom: "20px"
+              }}>
+                <p style={{ margin: 0, fontSize: "0.9rem", color: "#1976d2" }}>
+                  <strong>📝 Lưu ý:</strong> Tài khoản sẽ được tạo với thông tin:<br/>
+                  • Username: Số điện thoại<br/>
+                  • Password: Số điện thoại<br/>
+                  • Khách hàng nên đổi mật khẩu sau khi đăng nhập lần đầu
+                </p>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  onClick={resetAddForm}
+                  className="cancel-btn"
+                >
+                  Huỷ
+                </button>
+                <button type="submit" className="submit-btn">
+                  Tạo Tài Khoản
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Customer Edit Form Modal */}
       {showEditForm && editingCustomer && (

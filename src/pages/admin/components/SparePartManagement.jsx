@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import sparePartService from '../../../api/sparePartService'
 import EditSparePartModal from './EditSparePartModal'
+import UpdateStockModal from './UpdateStockModal'
+import AddSparePartModal from './AddSparePartModal'
 import '../../../styles/SparePartManagement.css'
 
 const SparePartManagement = () => {
@@ -10,6 +12,8 @@ const SparePartManagement = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [editingPart, setEditingPart] = useState(null)
+  const [updatingStockPart, setUpdatingStockPart] = useState(null)
+  const [showAddModal, setShowAddModal] = useState(false)
   const [pagination, setPagination] = useState({
     totalElements: 0,
     totalPages: 0,
@@ -107,6 +111,40 @@ const SparePartManagement = () => {
         part.id === updatedPart.id ? updatedPart : part
       )
     )
+  }
+
+  // Handle update stock
+  const handleUpdateStock = (part) => {
+    setUpdatingStockPart(part)
+  }
+
+  const handleCloseStockModal = () => {
+    setUpdatingStockPart(null)
+  }
+
+  const handleStockUpdate = (updatedPart) => {
+    // Update the spare part in the list
+    setSpareParts(prevParts =>
+      prevParts.map(part =>
+        part.id === updatedPart.id ? updatedPart : part
+      )
+    )
+  }
+
+  // Handle add new spare part
+  const handleAddNew = () => {
+    setShowAddModal(true)
+  }
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false)
+  }
+
+  const handleAddSparePart = (newPart) => {
+    // Add the new spare part to the list
+    setSpareParts(prevParts => [newPart, ...prevParts])
+    // Reset to page 1 to see the new part
+    setCurrentPage(1)
   }
 
   // Format price to VND
@@ -272,25 +310,25 @@ const SparePartManagement = () => {
                   <td className="date">{formatDate(part.updatedAt)}</td>
                   <td className="actions">
                     <button 
-                      className="action-btn view"
-                      title="View Details"
-                      onClick={() => alert(`View details for: ${part.name}\n(Feature coming soon)`)}
-                    >
-                      View
-                    </button>
-                    <button 
                       className="action-btn edit"
-                      title="Edit"
+                      title="Edit Part Info"
                       onClick={() => handleEdit(part)}
                     >
-                      Update
+                      ✏️ Edit
+                    </button>
+                    <button 
+                      className="action-btn stock"
+                      title="Update Stock"
+                      onClick={() => handleUpdateStock(part)}
+                    >
+                      📦 Stock
                     </button>
                     <button 
                       className="action-btn delete"
                       title="Delete"
                       onClick={() => alert(`Delete: ${part.name}\n(Feature coming soon)`)}
                     >
-                      Delete
+                      🗑️ Delete
                     </button>
                   </td>
                 </tr>
@@ -351,11 +389,19 @@ const SparePartManagement = () => {
         </div>
       )}
 
-      {/* Add Button (for future use) */}
-      <button className="add-spare-part-btn" onClick={() => alert('Add spare part feature coming soon!')}>
-        <span className="btn-icon"></span>
+      {/* Add Button */}
+      <button className="add-spare-part-btn" onClick={handleAddNew}>
+        <span className="btn-icon">➕</span>
         Add New Spare Part
       </button>
+
+      {/* Add Spare Part Modal */}
+      {showAddModal && (
+        <AddSparePartModal
+          onClose={handleCloseAddModal}
+          onAdd={handleAddSparePart}
+        />
+      )}
 
       {/* Edit Modal */}
       {editingPart && (
@@ -363,6 +409,15 @@ const SparePartManagement = () => {
           sparePart={editingPart}
           onClose={handleCloseModal}
           onUpdate={handleUpdate}
+        />
+      )}
+
+      {/* Update Stock Modal */}
+      {updatingStockPart && (
+        <UpdateStockModal
+          sparePart={updatingStockPart}
+          onClose={handleCloseStockModal}
+          onUpdate={handleStockUpdate}
         />
       )}
     </div>

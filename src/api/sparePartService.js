@@ -31,7 +31,7 @@ const sparePartService = {
     }
   },
 
-  // Create spare part (for future use)
+  // Create spare part
   createSparePart: async (sparePartData) => {
     try {
       const response = await api.post('/api/spareParts/create', sparePartData)
@@ -51,6 +51,21 @@ const sparePartService = {
       return response.data
     } catch (error) {
       logger.error('❌ Error updating spare part:', error)
+      throw error
+    }
+  },
+
+  // Update spare part stock
+  updateSparePartStock: async (id, changeQuantity, reason) => {
+    try {
+      const response = await api.patch(`/api/spareParts/${id}/stock`, {
+        changeQuantity,
+        reason
+      })
+      logger.log('✅ Spare part stock updated successfully:', response.data)
+      return response.data
+    } catch (error) {
+      logger.error('❌ Error updating spare part stock:', error)
       throw error
     }
   },

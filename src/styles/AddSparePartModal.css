@@ -1,0 +1,86 @@
+/* Add Spare Part Modal Specific Styles */
+.add-spare-part-modal {
+  max-width: 700px;
+}
+
+/* Form Note */
+.form-note {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid #64b5f6;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.note-icon {
+  font-size: 1.5rem;
+}
+
+.note-text {
+  color: #1565c0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Additional styles for consistency */
+.add-spare-part-modal .modal-header {
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+}
+
+.add-spare-part-modal .btn-primary {
+  background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+}
+
+.add-spare-part-modal .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Category Info Badge */
+.category-info {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.info-badge {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #2e7d32;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 2px solid #4caf50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Select styling */
+select {
+  cursor: pointer;
+  background-color: white;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* Success animation for form submission */
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.add-spare-part-modal.success {
+  animation: successPulse 0.3s ease;
+}
