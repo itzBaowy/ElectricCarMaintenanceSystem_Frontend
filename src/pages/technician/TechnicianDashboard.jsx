@@ -262,12 +262,6 @@ const TechnicianDashboard = () => {
                 <p className="stat-number">{appointments.length}</p>
               </div>
               <div className="stat-card">
-                <h3>PENDING</h3>
-                <p className="stat-number pending">
-                  {appointments.filter(a => a.status === 'PENDING').length}
-                </p>
-              </div>
-              <div className="stat-card">
                 <h3>CONFIRMED</h3>
                 <p className="stat-number confirmed">
                   {appointments.filter(a => a.status === 'CONFIRMED').length}
@@ -314,7 +308,6 @@ const TechnicianDashboard = () => {
                   className="filter-select"
                 >
                   <option value="ALL">All Status</option>
-                  <option value="PENDING">Pending</option>
                   <option value="CONFIRMED">Confirmed</option>
                   <option value="IN_PROGRESS">In Progress</option>
                   <option value="WAITING_FOR_APPROVAL">Waiting for Approval</option>
