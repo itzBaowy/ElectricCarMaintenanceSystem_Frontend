@@ -1,26 +1,23 @@
 import React from 'react';
 import '../../styles/CustomerSidebar.css';
 
-const CustomerSidebar = ({ active, onNavigate }) => {
+const CustomerSidebar = ({ active, onNavigate, onEditProfile, onChangePassword, onLogout, greeting }) => {
   return (
     <aside className={`customer-sidebar${active ? ' active' : ''}`}>  
-      <div className="sidebar-title">ElectricCare Admin</div>
-      <div className="sidebar-subtitle">Administrator Panel</div>
+      <div className="sidebar-title">Customer Dashboard</div>
+      {greeting && <div className="sidebar-greeting">{greeting}</div>}
+      <div className="sidebar-divider"></div>
       <nav>
         <ul>
-          <li className="active" onClick={() => onNavigate('financial-reports')}>Financial Reports</li>
-          <li onClick={() => onNavigate('customer')}>Customer</li>
-          <li onClick={() => onNavigate('employees')}>Employees</li>
-          <li onClick={() => onNavigate('service-centers')}>Service Centers</li>
-          <li onClick={() => onNavigate('service-items')}>Service Items</li>
-          <li onClick={() => onNavigate('spare-parts')}>Spare Parts</li>
-          <li onClick={() => onNavigate('vehicle-models')}>Vehicle Models</li>
-          <li onClick={() => onNavigate('vehicles')}>Vehicles</li>
-          <li onClick={() => onNavigate('maintenance-records')}>Maintenance Records</li>
+          <li className="active" onClick={() => onNavigate('your-vehicle')}>Your Vehicle</li>
+          <li onClick={() => onNavigate('invoice')}>Invoice</li>
+          <li onClick={() => onNavigate('appointment')}>Appointment</li>
         </ul>
       </nav>
       <div className="sidebar-footer">
-        <button className="logout-btn">Logout</button>
+        <button className="sidebar-btn" onClick={onEditProfile}>Edit Profile</button>
+        <button className="sidebar-btn" onClick={onChangePassword}>Change Password</button>
+        <button className="sidebar-btn" onClick={onLogout}>Logout</button>
       </div>
     </aside>
   );

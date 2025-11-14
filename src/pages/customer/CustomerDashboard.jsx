@@ -322,14 +322,29 @@ const CustomerDashboard = () => {
     // Implement navigation logic here
     // For example, set state or use navigate()
   };
+  const handleSidebarEditProfile = () => setShowEditProfile(true);
+  const handleSidebarChangePassword = () => setShowChangePassword(true);
+  const handleSidebarLogout = () => {
+    authService.logout();
+    window.location.reload();
+  };
 
   if (!customer) {
     return <div className="loading">Loading...</div>
   }
 
+  const customerName = customer?.fullName || 'User';
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
-      <CustomerSidebar active={true} onNavigate={handleSidebarNavigate} />
+      <CustomerSidebar
+        active={true}
+        onNavigate={handleSidebarNavigate}
+        onEditProfile={handleSidebarEditProfile}
+        onChangePassword={handleSidebarChangePassword}
+        onLogout={handleSidebarLogout}
+        greeting={`Hello ${customerName}, How's your day?`}
+      />
       <main style={{ flex: 1, marginLeft: SIDEBAR_WIDTH, padding: '32px 24px 24px 24px', maxWidth: '1800px' }}>
         <div className="customer-dashboard">
           {/* Navigation Header */}
