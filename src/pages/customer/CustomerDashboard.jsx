@@ -319,8 +319,17 @@ const CustomerDashboard = () => {
   }
 
   const handleSidebarNavigate = (section) => {
-    // Implement navigation logic here
-    // For example, set state or use navigate()
+    let el = null;
+    if (section === 'your-vehicle') {
+      el = document.getElementById('your-electric-vehicles');
+    } else if (section === 'invoice') {
+      el = document.getElementById('customer-invoice-section');
+    } else if (section === 'appointment') {
+      el = document.getElementById('view-all-appointments');
+    }
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
   const handleSidebarEditProfile = () => setShowEditProfile(true);
   const handleSidebarChangePassword = () => setShowChangePassword(true);
@@ -428,7 +437,7 @@ const CustomerDashboard = () => {
           {/* Main Content */}
           <div className="dashboard-content">
             {/* Vehicles Section */}
-            <div className="section vehicles-section">
+            <div className="section vehicles-section" id="your-electric-vehicles">
               <div className="vehicles-header-black">
                 <h2>Your Electric Vehicles</h2>
               </div>
@@ -487,8 +496,8 @@ const CustomerDashboard = () => {
               </div>
             </div>
 
-            {/* Invoices Section */}
-            <div className="section">
+            {/* Invoice Section */}
+            <div className="section invoice-section" id="customer-invoice-section">
               <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Hoá Đơn Thanh Toán</h2>
                 <button 
@@ -562,8 +571,8 @@ const CustomerDashboard = () => {
               </div>
             </div>
 
-            {/* Recent Appointments */}
-            <div className="section">
+            {/* View All Appointments Section */}
+            <div className="section appointments-section" id="view-all-appointments">
               <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Recent Appointments</h2>
                 <button 
