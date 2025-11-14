@@ -7,7 +7,6 @@ import '../../../styles/ModelPackageConfigModal.css'
 
 const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated }) => {
   const [loading, setLoading] = useState(true)
-  const [packages, setPackages] = useState([])
   const [groupedPackages, setGroupedPackages] = useState({})
   const [showCloneModal, setShowCloneModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -16,7 +15,6 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
 
   useEffect(() => {
     fetchModelPackages()
-    fetchAllPackages()
   }, [model.id])
 
   const fetchModelPackages = async () => {
@@ -71,16 +69,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     }
   }
 
-  const fetchAllPackages = async () => {
-    try {
-      const result = await modelPackageItemService.getAllServicePackages()
-      if (result.success) {
-        setPackages(result.data || [])
-      }
-    } catch (err) {
-      console.error('Error fetching all packages:', err)
-    }
-  }
+
 
   const handleCloneConfig = () => {
     setShowCloneModal(true)
