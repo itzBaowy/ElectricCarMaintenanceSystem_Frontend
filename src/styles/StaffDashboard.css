@@ -747,6 +747,18 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
+.stat-card.active {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  border-color: #26a69a;
+  box-shadow: 0 8px 30px rgba(38, 166, 154, 0.3);
+  transform: translateY(-5px);
+}
+
+.stat-card.active .stat-info h3,
+.stat-card.active .stat-info p {
+  color: white;
+}
+
 .stat-icon {
   font-size: 3rem;
   width: 70px;

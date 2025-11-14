@@ -81,6 +81,7 @@ const StaffDashboard = () => {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [sidebarTab, setSidebarTab] = useState("appointments"); // appointments, walk-ins, invoices
   const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
+  const [invoiceFilterStatus, setInvoiceFilterStatus] = useState("ALL"); // Filter for invoices: ALL, PAID, UNPAID
 
   // Approval state for service items
   const [serviceItemApprovals, setServiceItemApprovals] = useState({}); // { [detailId]: boolean }
@@ -1015,13 +1016,21 @@ const StaffDashboard = () => {
             </div>
 
             <div className="invoices-stats">
-              <div className="stat-card">
+              <div 
+                className={`stat-card ${invoiceFilterStatus === "ALL" ? "active" : ""}`}
+                onClick={() => setInvoiceFilterStatus("ALL")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="stat-info">
                   <h3>{invoices.length}</h3>
                   <p>Tổng Hoá Đơn</p>
                 </div>
               </div>
-              <div className="stat-card">
+              <div 
+                className={`stat-card ${invoiceFilterStatus === "PAID" ? "active" : ""}`}
+                onClick={() => setInvoiceFilterStatus("PAID")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="stat-info">
                   <h3>
                     {invoices.filter((inv) => inv.status === "PAID").length}
@@ -1029,7 +1038,11 @@ const StaffDashboard = () => {
                   <p>Đã Thanh Toán</p>
                 </div>
               </div>
-              <div className="stat-card">
+              <div 
+                className={`stat-card ${invoiceFilterStatus === "UNPAID" ? "active" : ""}`}
+                onClick={() => setInvoiceFilterStatus("UNPAID")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="stat-info">
                   <h3>
                     {invoices.filter((inv) => inv.status === "UNPAID").length}
@@ -1052,7 +1065,9 @@ const StaffDashboard = () => {
             </div>
 
             <div className="invoices-table-container">
-              {invoices.length === 0 ? (
+              {invoices.filter((inv) => 
+                invoiceFilterStatus === "ALL" || inv.status === invoiceFilterStatus
+              ).length === 0 ? (
                 <div className="no-data">
                   <p>Chưa có hoá đơn nào</p>
                 </div>
@@ -1072,7 +1087,11 @@ const StaffDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {invoices.map((invoice) => (
+                    {invoices
+                      .filter((inv) => 
+                        invoiceFilterStatus === "ALL" || inv.status === invoiceFilterStatus
+                      )
+                      .map((invoice) => (
                       <tr key={invoice.invoiceId || invoice.id}>
                         <td>#{invoice.invoiceId || invoice.id}</td>
                         <td>#{invoice.maintenanceRecord.appointmentId || "N/A"}</td>
