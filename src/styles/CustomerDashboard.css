@@ -1,56 +1,163 @@
+.customer-invoice-header {
+  background: linear-gradient(135deg, #6fcf97 0%, #56b4b4 100%);
+  border-radius: 48px 48px 0 0;
+  padding: 36px 56px 0 56px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  min-height: 110px;
+}
+.customer-invoice-header h1 {
+  color: #fff;
+  font-weight: 800;
+  font-size: 2.4rem;
+  margin: 0;
+  letter-spacing: 1px;
+  flex: 1;
+  text-align: left;
+}
+.customer-invoice-header .view-all-invoices-btn {
+  margin-left: 32px;
+  background: linear-gradient(135deg, #7ecb89 0%, #5cb88a 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border: none;
+  border-radius: 24px;
+  padding: 14px 44px;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  text-align: center;
+}
+.customer-invoice-header .view-all-invoices-btn:hover {
+  background: #56b4b4;
+  color: #eafbe7;
+}
+/* Stat Card for Customer Dashboard */
+.customer-dashboard-stat-card {
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 4px 24px rgba(38, 166, 154, 0.10);
+  border: 2px solid #e0f7fa;
+  padding: 38px 0 32px 0;
+  min-width: 320px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 32px 0 0;
+  position: relative;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.customer-dashboard-stat-card:last-child {
+  margin-right: 0;
+}
+.customer-dashboard-stat-card .stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 18px;
+}
+.customer-dashboard-stat-card .stat-label {
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+.customer-dashboard-stat-card .stat-badge {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+.customer-dashboard-stat-card.stat-appointments {
+  background: #fff;
+  color: #222;
+}
+.customer-dashboard-stat-card.stat-appointments .stat-number,
+.customer-dashboard-stat-card.stat-appointments .stat-label {
+  color: #222;
+}
+.customer-dashboard-stat-card .unpaid-badge {
+  background: linear-gradient(90deg, #e1aaff 0%, #e57373 100%);
+  color: #6d4c41;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 6px 22px;
+  box-shadow: 0 2px 8px rgba(233, 30, 99, 0.10);
+}
+.customer-dashboard-stat-card .unpaid-invoice-badge-custom {
+  background: #e0f7fa !important;
+  color: #1a237e !important;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 6px 22px;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  border: none;
+  display: inline-block;
+}
 /* Welcome Banner for Customer Dashboard */
 .customer-welcome-banner {
   background: linear-gradient(135deg, #7ecb89 0%, #5cb88a 100%);
   color: #222;
   box-shadow: 0 4px 18px rgba(38, 166, 154, 0.10);
-  padding: 36px 48px 28px 48px;
+  padding: 36px 64px 28px 64px;
   margin-bottom: 32px;
-  display: flex;
-  align-items: center;
-  border-radius: 32px;
-  min-height: 120px;
-  max-width: 100%;
-  font-family: 'Inter', Arial, sans-serif;
-  gap: 32px;
-}
-.customer-welcome-banner .customer-avatar {
-  width: 110px;
-  height: 110px;
-  background: linear-gradient(135deg, #222 60%, #444 100%);
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.2rem;
-  font-weight: 700;
-  border: 4px solid #fff;
-  margin-right: 0;
-  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
-}
-.customer-welcome-banner .customer-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  border-radius: 48px;
+  min-height: 120px;
+  max-width: 100%;
+  font-family: 'Inter', 'Roboto', 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+  gap: 32px;
+  box-sizing: border-box;
+  max-width: 98vw;
+}
+.customer-welcome-banner .customer-avatar {
+  display: none;
+}
+.customer-welcome-banner .customer-details {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 0;
+  box-sizing: border-box;
 }
 .customer-welcome-banner .customer-details h1 {
-  margin: 0 0 12px 0;
-  font-size: 2.4rem;
+  margin: 0 0 16px 0;
+  font-size: 2.1rem;
   font-weight: 800;
   color: #fff;
   letter-spacing: 1px;
+  text-align: left;
+  word-break: break-word;
 }
 .customer-welcome-banner .customer-details p {
-  margin: 0 0 10px 0;
-  font-size: 1.25rem;
-  color: #222;
+  margin: 0 0 12px 0;
+  font-size: 1.08rem;
+  color: #fff;
+  text-align: left;
+  word-break: break-word;
 }
 .customer-welcome-banner .customer-meta {
-  margin-top: 8px;
-  font-size: 1.08rem;
-  color: #222;
+  margin-top: 4px;
+  font-size: 1rem;
+  color: #fff;
   font-weight: 500;
+  text-align: left;
+  word-break: break-word;
 }
 /* Customer Dashboard Styles */
 .customer-dashboard {
@@ -71,7 +178,8 @@
 .customer-dashboard-container {
   background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%);
   border-radius: 32px;
-  box-shadow: 0 4px 24px rgba(38, 166, 154, 0.10);
+  border: none !important;
+  box-shadow: none !important;
   padding: 32px 32px 24px 32px;
   margin: 40px 0;
 }
@@ -1010,4 +1118,39 @@
     align-items: flex-start;
     gap: 1rem;
   }
+}
+
+.unpaid-invoice-badge {
+  background: #e0f7fa;
+  color: #1a237e;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 6px 22px;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  border: none;
+  display: inline-block;
+}
+
+.unpaid-invoice-badge-custom {
+  background: #e0f7fa !important;
+  color: #1a237e !important;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 24px;
+  padding: 6px 22px;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  border: none;
+  display: inline-block;
+}
+
+.customer-dashboard-content-bg {
+  background: #e9f5f5;
+  border-radius: 32px;
+  box-shadow: none !important;
+  padding: 32px 32px 24px 32px;
+  margin-bottom: 32px;
+  min-height: 400px;
+  border: none !important;
+  outline: none !important;
 }
