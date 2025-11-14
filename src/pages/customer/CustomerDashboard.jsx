@@ -322,24 +322,22 @@ const CustomerDashboard = () => {
   return (
     <div className="customer-dashboard">
       {/* Navigation Header */}
-      <div className="dashboard-nav">
-        <div className="nav-content">
-          <div className="nav-brand">
-            <h2>ElectricCare</h2>
-            <span>Customer Portal</span>
-          </div>
-          <div className="nav-actions">
-            <span className="nav-user">Hello {customer.fullName}, How's your day?</span>
-            <button onClick={handleEditProfile} className="edit-profile-btn">
-              Edit Profile
-            </button>
-            <button onClick={handleChangePassword} className="change-password-btn">
-              Change Password
-            </button>
-            <button onClick={handleLogout} className="logout-btn">
-              Logout
-            </button>
-          </div>
+      <div className="customer-dashboard-header">
+        <div className="nav-brand">
+          <h2>ElectricCare</h2>
+          <span>Customer Portal</span>
+        </div>
+        <div className="header-actions">
+          <span className="welcome-text">Hello {customer.fullName}, How's your day?</span>
+          <button onClick={handleEditProfile} className="header-btn">
+            Edit Profile
+          </button>
+          <button onClick={handleChangePassword} className="header-btn">
+            Change Password
+          </button>
+          <button onClick={handleLogout} className="header-btn">
+            Logout
+          </button>
         </div>
       </div>
 
@@ -361,9 +359,7 @@ const CustomerDashboard = () => {
             </div>
           </div>
           <div className="welcome-actions">
-            <button className="quick-action-btn primary" onClick={() => setShowBookMaintenance(true)}>
-              Book Service
-            </button>
+            
           </div>
         </div>
       </div>

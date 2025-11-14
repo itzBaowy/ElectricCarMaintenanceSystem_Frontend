@@ -1,3 +1,43 @@
+// Staff Sidebar (no nav buttons yet)
+const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
+  <aside className="staff-sidebar">
+    <div className="sidebar-header">
+      <h2>ElectricCare Staff</h2>
+      <p className="sidebar-desc">Staff Panel</p>
+    </div>
+    <div className="sidebar-section">
+      <nav className="sidebar-tabs">
+        <button
+          className={`sidebar-tab${
+            sidebarTab === "walk-in" ? " active" : ""
+          }`}
+          onClick={() => setSidebarTab("walk-in")}
+        >
+          Khách Hàng Walk-in
+        </button>
+        <button
+          className={`sidebar-tab${
+            sidebarTab === "appointments" ? " active" : ""
+          }`}
+          onClick={() => setSidebarTab("appointments")}
+        >
+          Quản Lý Appointments
+        </button>
+        <button
+          className={`sidebar-tab${
+            sidebarTab === "invoices" ? " active" : ""
+          }`}
+          onClick={() => setSidebarTab("invoices")}
+        >
+          Hoá Đơn & Thanh Toán
+        </button>
+      </nav>
+    </div>
+    <div className="sidebar-footer">
+      <button className="sidebar-logout">Logout</button>
+    </div>
+  </aside>
+);
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import Header from "../../components/layout/Header";
@@ -35,7 +75,7 @@ const StaffDashboard = () => {
     useState(false);
   const [showInvoiceModal, setShowInvoiceModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [activeTab, setActiveTab] = useState("appointments"); // appointments, walk-ins, invoices
+  const [sidebarTab, setSidebarTab] = useState("appointments"); // appointments, walk-ins, invoices
   const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
 
   // Approval state for service items
@@ -580,6 +620,7 @@ const StaffDashboard = () => {
 
   return (
     <div className="staff-dashboard">
+      <StaffSidebar sidebarTab={sidebarTab} setSidebarTab={setSidebarTab} />
       {/* Header removed as requested */}
       <div className="staff-container">
         <div className="staff-header">
@@ -597,32 +638,10 @@ const StaffDashboard = () => {
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="tabs-navigation">
-          <button
-            className={`tab-btn ${activeTab === "walk-in" ? "active" : ""}`}
-            onClick={() => setActiveTab("walk-in")}
-          >
-            Khách Hàng Walk-in
-          </button>
-          <button
-            className={`tab-btn ${
-              activeTab === "appointments" ? "active" : ""
-            }`}
-            onClick={() => setActiveTab("appointments")}
-          >
-            Quản Lý Appointments
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "invoices" ? "active" : ""}`}
-            onClick={() => setActiveTab("invoices")}
-          >
-            Hoá Đơn & Thanh Toán
-          </button>
-        </div>
+        {/* Tabs navigation removed, now handled by sidebar */}
 
         {/* TAB: WALK-IN CUSTOMERS */}
-        {activeTab === "walk-in" && (
+        {sidebarTab === "walk-in" && (
           <div className="walk-in-section">
             <div className="section-header">
               <h2>Đăng Ký Khách Hàng Walk-in</h2>
@@ -712,7 +731,7 @@ const StaffDashboard = () => {
         )}
 
         {/* TAB: APPOINTMENTS MANAGEMENT */}
-        {activeTab === "appointments" && (
+        {sidebarTab === "appointments" && (
           <>
             {/* Filters */}
             <div className="search-status-container">
@@ -931,6 +950,36 @@ const StaffDashboard = () => {
               </div>
             </div>
           </>
+        )}
+
+        {/* TAB: INVOICES */}
+        {sidebarTab === "invoices" && (
+          <div className="invoices-section">
+            <div className="section-header">
+              <h2>Quản Lý Hoá Đơn</h2>
+              <p>Xem và quản lý các hoá đơn đã phát hành</p>
+            </div>
+
+            <div className="invoices-table-container">
+              <table className="invoices-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Khách Hàng</th>
+                    <th>Biển Số</th>
+                    <th>Xe</th>
+                    <th>Ngày Xuất Hoá Đơn</th>
+                    <th>Tổng Tiền</th>
+                    <th>Trạng Thái</th>
+                    <th>Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Render invoices data here */}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
 

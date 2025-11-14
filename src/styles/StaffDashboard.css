@@ -155,26 +155,41 @@
 }
 
 .primary-btn {
-  background: #000000;
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 24px;
+  padding: 1.2rem 0;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 18px;
 }
 
 .primary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
 }
 
 .secondary-btn {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 24px;
+  padding: 1.2rem 0;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 18px;
 }
 
 .secondary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
 }
 
 .info-card {
@@ -227,11 +242,26 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  border: 2px solid #000000;
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
 }
 
 .data-table thead {
-  background: #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+}
+
+.data-table thead tr {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+}
+
+.data-table th {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  padding: 1.1rem 0.5rem;
 }
 
 .data-table thead th {
@@ -1458,3 +1488,113 @@
   box-shadow: 0 0 15px rgba(38, 166, 154, 0.18);
   transform: translateY(-1px);
 }
+
+.staff-sidebar {
+  width: 270px;
+  min-width: 220px;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  box-shadow: 2px 0 16px rgba(38, 166, 154, 0.10);
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.sidebar-header {
+  padding: 2.2rem 1.5rem 1.2rem 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  letter-spacing: 1px;
+}
+
+.sidebar-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.sidebar-desc {
+  margin: 0;
+  color: #e0f7fa;
+  font-size: 1.08rem;
+  font-weight: 500;
+}
+
+.sidebar-section {
+  flex: 1;
+}
+
+.sidebar-footer {
+  padding: 2rem 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-logout {
+  background: #fff;
+  color: #222;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 2.2rem;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-logout:hover {
+  background: #26a69a;
+  color: #fff;
+}
+
+.staff-container {
+  margin-left: 270px;
+}
+
+.sidebar-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 32px 0 0 0;
+  align-items: stretch;
+}
+
+.sidebar-tab {
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 22px 0;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #b2dfdb 0%, #aee9f7 100%);
+  color: #222;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin: 0 12px;
+}
+
+.sidebar-tab.active {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
+}
+
+.sidebar-tab:hover {
+  background: linear-gradient(135deg, #aee9f7 0%, #b2dfdb 100%);
+  color: #222;
+}
+
+.sidebar-tab:active {
+  transform: scale(0.98);
+}
+

@@ -173,7 +173,6 @@ const TechnicianDashboard = () => {
     const statusClasses = {
       'PENDING': 'status-badge-pending',
       'CONFIRMED': 'status-badge-confirmed',
-      'CUSTOMER_APPROVED': 'status-badge-confirmed',
       'COMPLETED': 'status-badge-completed',
       'CANCELLED': 'status-badge-cancelled'
     }
@@ -207,171 +206,145 @@ const TechnicianDashboard = () => {
 
   return (
     <div className="technician-dashboard">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <div className="logo">
-            <span className="logo-icon"></span>
-            <span className="logo-text">Technician Dashboard</span>
-          </div>
-        </div>
-        
-        <div className="sidebar-welcome">
-          <p className="welcome-message">
-            Welcome {currentUser?.fullName || currentUser?.username || 'Technician'}, Have a productive and successful day at work
-          </p>
-        </div>
-
-        <nav className="sidebar-nav">
-          <a href="#" className="nav-item active">
-            <span className="nav-icon"></span>
-            <span className="nav-text">Dashboard</span>
-          </a>
-        </nav>
-
-        <div className="sidebar-footer">
-          <button className="logout-btn" onClick={handleLogout}>
-           
-            <span className="nav-text">Logout</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
+      {/* Main Content Only - Sidebar removed */}
       <div className="main-content">
         <div className="dashboard-container">
-
-        {/* Welcome Message */}
-        <div className="page-welcome">
-          <h2>Welcome {currentUser?.fullName || currentUser?.username || 'Technician'}, Have a productive and successful day at work</h2>
-        </div>
-
-        {/* Filters */}
-        <div className="filters-section">
-          <div className="filters-header">
-            <h2>Filter & Search Appointments</h2>
-          </div>
-          <div className="filters-container">
-            <div className="filter-group">
-              <label>Filter by Status:</label>
-              <select 
-                value={filterStatus} 
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="filter-select"
-              >
-                <option value="ALL">All Status</option>
-                <option value="PENDING">Pending</option>
-                <option value="CONFIRMED">Confirmed</option>
-                <option value="CUSTOMER_APPROVED">Customer Approved</option>
-                <option value="COMPLETED">Completed</option>
-                <option value="CANCELLED">Cancelled</option>
-              </select>
-            </div>
-
-            <div className="search-group">
-              <label>Search:</label>
-              <input
-                type="text"
-                placeholder="Search by customer name, license plate..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
+          <div className="dashboard-header">
+            <h1>Technician Dashboard</h1>
+            <div className="header-actions">
+              <span className="welcome-text">Welcome {currentUser?.username || 'Technician'}, Have a productive and successful day at work</span>
+              <button onClick={handleLogout} className="btn-logout">
+                Logout
+              </button>
             </div>
           </div>
-        </div>
 
-        {/* Statistics */}
-        <div className="stats-section">
-          <div className="stats-header">
-            <h2>Appointment Statistics</h2>
+          {/* Statistics */}
+          <div className="stats-section">
+            <div className="stats-header">
+              <h2>Appointment Statistics</h2>
+            </div>
+            <div className="stats-container">
+              <div className="stat-card">
+                <h3>TOTAL ASSIGNED</h3>
+                <p className="stat-number">{appointments.length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>PENDING</h3>
+                <p className="stat-number pending">
+                  {appointments.filter(a => a.status === 'PENDING').length}
+                </p>
+              </div>
+              <div className="stat-card">
+                <h3>CONFIRMED</h3>
+                <p className="stat-number confirmed">
+                  {appointments.filter(a => a.status === 'CONFIRMED').length}
+                </p>
+              </div>
+              <div className="stat-card">
+                <h3>COMPLETED</h3>
+                <p className="stat-number completed">
+                  {appointments.filter(a => a.status === 'COMPLETED').length}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="stats-container">
-            <div className="stat-card">
-              <h3>TOTAL ASSIGNED</h3>
-              <p className="stat-number">{appointments.length}</p>
-            </div>
-            <div className="stat-card">
-              <h3>PENDING</h3>
-              <p className="stat-number pending">
-                {appointments.filter(a => a.status === 'PENDING').length}
-              </p>
-            </div>
-            <div className="stat-card">
-              <h3>CONFIRMED</h3>
-              <p className="stat-number confirmed">
-                {appointments.filter(a => a.status === 'CONFIRMED').length}
-              </p>
-            </div>
-            <div className="stat-card">
-              <h3>COMPLETED</h3>
-              <p className="stat-number completed">
-                {appointments.filter(a => a.status === 'COMPLETED').length}
-              </p>
-            </div>
-          </div>
-        </div>
 
-        {/* Appointments Table */}
-        <div className="appointments-section">
-          <h2>My Assigned Appointments</h2>
-          
-          {loading ? (
-            <div className="loading-message">Loading appointments...</div>
-          ) : filteredAppointments.length === 0 ? (
-            <div className="empty-message">
-              No appointments found matching your criteria.
+          {/* Filters */}
+          <div className="filters-section">
+            <div className="filters-header">
+              <h2>Filter & Search Appointments</h2>
             </div>
-          ) : (
-            <div className="table-responsive">
-              <table className="appointments-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Customer</th>
-                    <th>Vehicle</th>
-                    <th>Service</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredAppointments.map((appointment) => (
-                    <tr key={appointment.id}>
-                      <td>{appointment.id}</td>
-                      <td>{appointment.customerName || 'N/A'}</td>
-                      <td>
-                        <div className="vehicle-info">
-                          <div>{appointment.vehicleLicensePlate}</div>
-                          <small>{appointment.vehicleModel}</small>
-                        </div>
-                      </td>
-                      <td>{appointment.servicePackageName}</td>
-                      <td>{formatDate(appointment.appointmentDate)}</td>
-                      <td>{formatTimeFromDate(appointment.appointmentDate)}</td>
-                      <td>
-                        <span className={`status-badge ${getStatusBadgeClass(appointment.status)}`}>
-                          {appointment.status || 'UNKNOWN'}
-                        </span>
-                      </td>
-                      <td>{formatCurrency(appointment.totalPrice)}</td>
-                      <td>
-                        <button
-                          onClick={() => handleViewDetails(appointment)}
-                          className="btn-view"
-                        >
-                          View Details
-                        </button>
-                      </td>
+            <div className="filters-container">
+              <div className="filter-group">
+                <label>Filter by Status:</label>
+                <select 
+                  value={filterStatus} 
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="ALL">All Status</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+              </div>
+
+              <div className="search-group">
+                <label>Search:</label>
+                <input
+                  type="text"
+                  placeholder="Search by customer name, license plate..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Appointments Table */}
+          <div className="appointments-section">
+            <h2>My Assigned Appointments</h2>
+            
+            {loading ? (
+              <div className="loading-message">Loading appointments...</div>
+            ) : filteredAppointments.length === 0 ? (
+              <div className="empty-message">
+                No appointments found matching your criteria.
+              </div>
+            ) : (
+              <div className="table-responsive">
+                <table className="appointments-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Customer</th>
+                      <th>Vehicle</th>
+                      <th>Service</th>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                      <th>Price</th>
+                      <th>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {filteredAppointments.map((appointment) => (
+                      <tr key={appointment.id}>
+                        <td>{appointment.id}</td>
+                        <td>{appointment.customerName || 'N/A'}</td>
+                        <td>
+                          <div className="vehicle-info">
+                            <div>{appointment.vehicleLicensePlate}</div>
+                            <small>{appointment.vehicleModel}</small>
+                          </div>
+                        </td>
+                        <td>{appointment.servicePackageName}</td>
+                        <td>{formatDate(appointment.appointmentDate)}</td>
+                        <td>{formatTimeFromDate(appointment.appointmentDate)}</td>
+                        <td>
+                          <span className={`status-badge ${getStatusBadgeClass(appointment.status)}`}>
+                            {appointment.status || 'UNKNOWN'}
+                          </span>
+                        </td>
+                        <td>{formatCurrency(appointment.totalPrice)}</td>
+                        <td>
+                          <button
+                            onClick={() => handleViewDetails(appointment)}
+                            className="btn-view"
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -468,7 +441,7 @@ const TechnicianDashboard = () => {
                   <h3>Danh Sách Dịch Vụ</h3>
                   
                   {/* Additional Service Option */}
-                  {(selectedAppointment.status === 'CONFIRMED') && (
+                  {selectedAppointment.status === 'CONFIRMED' && (
                     <div className="additional-service-option">
                       <label className="checkbox-label">
                         <input
@@ -550,7 +523,7 @@ const TechnicianDashboard = () => {
 
               {/* Action Buttons */}
               <div className="detail-actions">
-                {(selectedAppointment.status === 'CONFIRMED' || selectedAppointment.status === 'CUSTOMER_APPROVED') && (
+                {selectedAppointment.status === 'CONFIRMED' && (
                   <button
                     onClick={handleCompleteService}
                     className="btn-action btn-complete"
@@ -578,9 +551,8 @@ const TechnicianDashboard = () => {
           </div>
         </div>
       )}
-      </div>
     </div>
-  )
+  );
 }
 
-export default TechnicianDashboard
+export default TechnicianDashboard;
