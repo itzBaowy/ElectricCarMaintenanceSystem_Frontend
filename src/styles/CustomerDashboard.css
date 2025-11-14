@@ -150,7 +150,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 0;
+  border-radius: 24px;
 }
 
 .welcome-content {
@@ -305,11 +305,41 @@
 }
 
 .section {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
-  border: 2px solid #000000;
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%) !important;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(38, 166, 154, 0.08);
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+}
+
+.section-header {
+  background: linear-gradient(135deg, #43cea2 0%, #26a69a 100%) !important;
+  color: #fff !important;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  padding: 28px 40px 18px 40px;
+  margin-bottom: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.section-header h2 {
+  color: #fff !important;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.view-all-btn {
+  margin-left: 24px;
+  font-size: 1.15rem;
+  padding: 0.85rem 2.2rem;
 }
 
 /* Vehicles Section with Black Header */
@@ -330,17 +360,21 @@
 }
 
 .vehicles-header-black {
-  background: #000000;
-  color: #ffffff;
-  padding: 1rem 2rem;
-  margin: 0;
+  background: linear-gradient(90deg, #43cea2 0%, #26a69a 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  padding: 18px 32px 12px 32px;
+  margin-bottom: 18px;
+  font-size: 1.7rem;
+  font-weight: 700;
+  border-radius: 24px 24px 0 0;
 }
 
 .vehicles-header-black h2 {
   margin: 0;
-  color: #ffffff;
-  font-size: 1.25rem;
-  font-weight: 600;
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .vehicles-content {
@@ -348,38 +382,44 @@
 }
 
 .section-header {
+  background: linear-gradient(90deg, #43cea2 0%, #26a69a 100%);
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.10);
+  padding: 18px 32px 12px 32px;
+  margin-bottom: 18px;
+  font-size: 1.35rem;
+  font-weight: 700;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  gap: 1rem;
-  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
 .section-header h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
   margin: 0;
-  color: #000000;
-  font-size: 1.5rem;
-  flex: 1;
 }
 
 .add-btn, .view-all-btn {
-  background: #000000;
-  color: #ffffff;
-  border: 2px solid #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background 0.2s, color 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .add-btn:hover, .view-all-btn:hover {
-  transform: translateY(-2px);
-  background: #333333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: #43cea2;
+  color: #fff;
 }
 
 /* Vehicles Grid */
@@ -424,11 +464,15 @@
 }
 
 .vehicle-card {
-  border: 2px solid #000000;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  background: #ffffff;
+  background: linear-gradient(135deg, #d0f5e8 0%, #b2dfdb 100%);
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+  border: 2px solid #222;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 .vehicle-card:hover {
@@ -438,54 +482,65 @@
 
 .vehicle-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1.2rem;
 }
 
 .vehicle-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
   margin: 0;
-  color: #000000;
-  font-size: 1.2rem;
 }
 
 .vehicle-year {
-  background: #000000;
-  color: #ffffff;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  background: #222;
+  color: #fff;
+  border-radius: 16px;
+  padding: 0.3rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .vehicle-details {
-  margin-bottom: 1.5rem;
+  width: 100%;
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #111;
+  text-align: center;
 }
 
 .detail-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 0.5rem;
+  justify-content: center;
+  gap: 0.2rem;
+  font-size: 1.08rem;
+  color: #111;
+  text-align: center;
 }
 
 .detail-item .label {
-  color: #666666;
-  font-size: 0.9rem;
+  color: #111;
+  font-weight: 500;
 }
 
 .detail-item .value {
-  font-weight: 500;
-  color: #000000;
-}
-
-.next-maintenance {
-  color: #000000 !important;
-  font-weight: bold !important;
+  color: #111;
+  font-weight: 600;
 }
 
 .vehicle-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 1.2rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.2rem;
 }
 
 .action-btn {
@@ -527,7 +582,8 @@
 .appointments-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 24px;
+  padding: 24px 0 8px 0;
 }
 
 .no-appointments {
@@ -554,97 +610,82 @@
 .appointment-card {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  border: 2px solid #000000;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  background: #ffffff;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+  border: 2px solid #e0f7fa;
+  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+  margin-bottom: 0;
+  min-height: 90px;
+  gap: 32px;
 }
 
 .appointment-card:hover {
   border-color: #333333;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .appointment-date {
+  background: #222;
+  color: #fff;
+  border-radius: 16px;
+  padding: 0.7rem 1.3rem;
+  font-size: 1.15rem;
+  font-weight: 700;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 100px;
-  padding: 1rem;
-  background: #000000;
-  border-radius: 8px;
-}
-
-.appointment-date .date {
-  font-weight: bold;
-  color: #ffffff;
-  font-size: 0.9rem;
-}
-
-.appointment-date .time {
-  color: #cccccc;
-  font-size: 0.85rem;
-  margin-top: 0.25rem;
+  justify-content: center;
+  min-width: 110px;
+  margin-right: 18px;
 }
 
 .appointment-details {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 1.15rem;
+  color: #222;
 }
 
 .appointment-details h4 {
-  margin: 0 0 0.5rem 0;
-  color: #000000;
-  font-size: 1.1rem;
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin: 0;
+  color: #222;
 }
 
 .appointment-details p {
-  margin: 0.25rem 0;
-  color: #666666;
-  font-size: 0.9rem;
+  margin: 0;
+  color: #444;
+  font-size: 1.08rem;
 }
 
 .appointment-status {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: 0.7rem;
+  min-width: 140px;
 }
 
 .status-badge {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 2px solid #000000;
-}
-
-.status-badge.confirmed {
-  background: #000000;
-  color: #ffffff;
-}
-
-.status-badge.completed {
-  background: #000000;
-  color: #ffffff;
-}
-
-.status-badge.pending {
-  background: #ffffff;
-  color: #000000;
-  border-color: #000000;
-}
-
-.status-badge.cancelled {
-  background: #000000;
-  color: #ffffff;
+  font-size: 1.08rem;
+  font-weight: 700;
+  padding: 0.4rem 1.2rem;
+  border-radius: 16px;
+  background: #e0f7fa;
+  color: #26a69a;
+  margin-left: 0;
+  text-align: right;
 }
 
 .price {
-  font-weight: bold;
-  color: #000000;
-  font-size: 1.1rem;
+  color: #26a69a;
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-align: right;
 }
 
 /* Invoice Stat Card */
@@ -683,11 +724,16 @@
 }
 
 .invoice-card {
-  background: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+  border: 2px solid #e0f7fa;
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  margin-bottom: 24px;
+  max-width: 480px;
 }
 
 .invoice-card:hover {
@@ -697,79 +743,72 @@
 }
 
 .invoice-header {
-  padding: 1rem 1.25rem;
-  background: #f8f9fa;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #000000;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1.2rem;
 }
 
 .invoice-id {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0.7rem;
 }
 
-.invoice-id .label {
-  font-size: 0.75rem;
-  color: #6c757d;
-  font-weight: 500;
-}
-
-.invoice-id .value {
-  font-size: 1.1rem;
+.status-badge {
+  font-size: 1.08rem;
   font-weight: 700;
-  color: #000000;
+  padding: 0.4rem 1.2rem;
+  border-radius: 16px;
+  background: #e0f7fa;
+  color: #26a69a;
+  margin-left: 12px;
 }
 
 .invoice-details {
-  padding: 1.25rem;
+  width: 100%;
+  margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .invoice-info {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.5rem;
+  font-size: 1.08rem;
+  color: #222;
 }
 
-.invoice-info .info-label {
-  font-size: 0.85rem;
-  color: #6c757d;
+.info-label {
+  color: #7cbf8e;
   font-weight: 500;
-  flex-shrink: 0;
 }
 
-.invoice-info .info-value {
-  font-size: 0.85rem;
-  color: #000000;
+.info-value {
+  color: #222;
   font-weight: 600;
-  text-align: right;
 }
 
 .invoice-footer {
-  padding: 1rem 1.25rem;
-  background: #f8f9fa;
-  border-top: 2px solid #000000;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  margin-top: 1.2rem;
 }
 
-.invoice-footer .total-label {
-  font-size: 0.9rem;
-  color: #495057;
-  font-weight: 600;
-}
-
-.invoice-footer .total-amount {
-  font-size: 1.25rem;
+.total-label {
+  color: #7cbf8e;
   font-weight: 700;
-  color: #28a745;
+  font-size: 1.15rem;
+}
+
+.total-amount {
+  color: #26a69a;
+  font-weight: 800;
+  font-size: 1.35rem;
 }
 
 .invoice-card .status-badge.paid {
@@ -788,13 +827,13 @@
 .customer-dashboard-header {
   background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #fff;
-  border-radius: 24px;
   box-shadow: 0 4px 18px rgba(38, 166, 154, 0.12);
   padding: 32px 32px 24px 32px;
   margin-bottom: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 0;
 }
 
 .customer-dashboard-header h1 {

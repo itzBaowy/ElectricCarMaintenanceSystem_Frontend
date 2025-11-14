@@ -198,6 +198,10 @@
   text-align: center;
 }
 
+.maintenance-info-card, .maintenance-info-card * {
+  color: #111 !important;
+}
+
 /* Responsive Design */
 @media (max-width: 1400px) {
   .maintenance-records-table {
