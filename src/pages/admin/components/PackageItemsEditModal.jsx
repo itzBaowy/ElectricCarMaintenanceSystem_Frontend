@@ -2,15 +2,25 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import modelPackageItemService from '../../../api/modelPackageItemService'
 import sparePartService from '../../../api/sparePartService'
+import serviceItemService from '../../../api/serviceItemService'
 import '../../../styles/PackageItemsEditModal.css'
 
 const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
   const [items, setItems] = useState([])
   const [spareParts, setSpareParts] = useState([])
+  const [serviceItems, setServiceItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [editedItems, setEditedItems] = useState({})
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [newItem, setNewItem] = useState({
+    serviceItemId: '',
+    price: 0,
+    actionType: 'CHECK',
+    includedSparePartId: null,
+    includedQuantity: 0
+  })
 
   useEffect(() => {
     fetchData()
@@ -21,10 +31,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       setLoading(true)
       setError('')
       
-      // Fetch package items and spare parts for this model
-      const [itemsResult, partsResult] = await Promise.all([
+      // Fetch package items, spare parts, and all service items
+      const [itemsResult, partsResult, serviceItemsResult] = await Promise.all([
         modelPackageItemService.getByModelAndMilestone(model.id, pkg.milestoneKm || pkg.id),
-        sparePartService.getSparePartsByModel(model.id)
+        sparePartService.getSparePartsByModel(model.id),
+        serviceItemService.getAllServiceItems(0, 1000) // Get all service items
       ])
 
       if (itemsResult.success) {
@@ -36,6 +47,10 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       if (partsResult.code === 1000 && partsResult.result) {
         // If result is array, use it directly; if paginated, use content
         setSpareParts(Array.isArray(partsResult.result) ? partsResult.result : partsResult.result.content || [])
+      }
+
+      if (serviceItemsResult.code === 1000 && serviceItemsResult.result) {
+        setServiceItems(serviceItemsResult.result.content || [])
       }
     } catch (err) {
       setError('An error occurred while loading data')
@@ -179,6 +194,85 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
 
   const changedItemsCount = Object.keys(editedItems).length
 
+  const handleAddItem = async () => {
+    if (!newItem.serviceItemId) {
+      alert('Please select a service item')
+      return
+    }
+
+    if (newItem.price <= 0) {
+      alert('Price must be greater than 0')
+      return
+    }
+
+    try {
+      setSaving(true)
+      
+      const createData = {
+        vehicleModelId: model.id,
+        milestoneKm: pkg.milestoneKm,
+        serviceItemId: parseInt(newItem.serviceItemId),
+        price: parseFloat(newItem.price),
+        actionType: newItem.actionType,
+        includedSparePartId: newItem.includedSparePartId ? parseInt(newItem.includedSparePartId) : null,
+        includedQuantity: newItem.includedQuantity ? parseInt(newItem.includedQuantity) : 0
+      }
+
+      const result = await modelPackageItemService.create(createData)
+
+      if (result.success) {
+        alert('✅ Service item added successfully!')
+        setShowAddModal(false)
+        setNewItem({
+          serviceItemId: '',
+          price: 0,
+          actionType: 'CHECK',
+          includedSparePartId: null,
+          includedQuantity: 0
+        })
+        fetchData()
+        if (onSuccess) onSuccess()
+      } else {
+        alert(result.message || 'Failed to add service item')
+      }
+    } catch (err) {
+      alert('An error occurred while adding service item')
+      console.error('Add error:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDeleteItem = async (item) => {
+    if (!window.confirm(`Are you sure you want to remove "${item.serviceItemName}" from this package?`)) {
+      return
+    }
+
+    try {
+      setSaving(true)
+      
+      const result = await modelPackageItemService.delete(item.id)
+
+      if (result.success) {
+        alert('✅ Service item removed successfully!')
+        fetchData()
+        if (onSuccess) onSuccess()
+      } else {
+        alert(result.message || 'Failed to remove service item')
+      }
+    } catch (err) {
+      alert('An error occurred while removing service item')
+      console.error('Delete error:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const getAvailableServiceItems = () => {
+    const usedServiceItemIds = items.map(item => item.serviceItemId)
+    return serviceItems.filter(si => !usedServiceItemIds.includes(si.id))
+  }
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content package-items-modal" onClick={(e) => e.stopPropagation()}>
@@ -216,6 +310,13 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                     ✏️ <strong>{changedItemsCount}</strong> changes
                   </span>
                 )}
+                <button 
+                  className="btn-add-item"
+                  onClick={() => setShowAddModal(true)}
+                  disabled={saving}
+                >
+                  ➕ Add Service Item
+                </button>
               </div>
 
               {/* Items Table */}
@@ -232,7 +333,14 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {items.map((item) => (
+                    {items.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
+                          No service items yet. Click "Add Service Item" to get started.
+                        </td>
+                      </tr>
+                    ) : (
+                      items.map((item) => (
                       <tr 
                         key={item.id} 
                         className={hasChanges(item.id) ? 'changed-row' : ''}
@@ -306,15 +414,128 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                           >
                             💾 Save
                           </button>
+                          <button
+                            className="btn-delete-item"
+                            onClick={() => handleDeleteItem(item)}
+                            disabled={saving}
+                            title="Remove from package"
+                          >
+                            🗑️
+                          </button>
                         </td>
                       </tr>
-                    ))}
+                    )))}
                   </tbody>
                 </table>
               </div>
             </>
           )}
         </div>
+
+        {/* Add Item Modal */}
+        {showAddModal && (
+          <div className="add-item-overlay">
+            <div className="add-item-modal">
+              <div className="add-item-header">
+                <h4>Add Service Item</h4>
+                <button 
+                  className="close-btn-small"
+                  onClick={() => setShowAddModal(false)}
+                  disabled={saving}
+                >
+                  ✕
+                </button>
+              </div>
+              
+              <div className="add-item-body">
+                <div className="form-group">
+                  <label>Service Item *</label>
+                  <select
+                    value={newItem.serviceItemId}
+                    onChange={(e) => setNewItem({ ...newItem, serviceItemId: e.target.value })}
+                    disabled={saving}
+                  >
+                    <option value="">-- Select Service Item --</option>
+                    {getAvailableServiceItems().map(si => (
+                      <option key={si.id} value={si.id}>
+                        {si.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Action Type *</label>
+                  <select
+                    value={newItem.actionType}
+                    onChange={(e) => setNewItem({ ...newItem, actionType: e.target.value })}
+                    disabled={saving}
+                  >
+                    <option value="CHECK">Check</option>
+                    <option value="REPLACE">Replace</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Price (VND) *</label>
+                  <input
+                    type="number"
+                    value={newItem.price}
+                    onChange={(e) => setNewItem({ ...newItem, price: e.target.value })}
+                    disabled={saving}
+                    min="0"
+                    step="1000"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Spare Part (Optional)</label>
+                  <select
+                    value={newItem.includedSparePartId || ''}
+                    onChange={(e) => setNewItem({ ...newItem, includedSparePartId: e.target.value ? e.target.value : null })}
+                    disabled={saving}
+                  >
+                    <option value="">-- None --</option>
+                    {spareParts.map(part => (
+                      <option key={part.id} value={part.id}>
+                        {part.partNumber} - {part.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Quantity</label>
+                  <input
+                    type="number"
+                    value={newItem.includedQuantity}
+                    onChange={(e) => setNewItem({ ...newItem, includedQuantity: e.target.value })}
+                    disabled={saving}
+                    min="0"
+                    step="1"
+                  />
+                </div>
+              </div>
+
+              <div className="add-item-footer">
+                <button 
+                  className="btn-cancel-add"
+                  onClick={() => setShowAddModal(false)}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="btn-confirm-add"
+                  onClick={handleAddItem}
+                  disabled={saving}
+                >
+                  {saving ? 'Adding...' : '➕ Add'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="modal-footer">
           <button 
