@@ -238,7 +238,24 @@ html, body {
   margin-bottom: 0.5rem;
 }
 
-.filter-select,
+.filter-select {
+  color: #222;
+  background: #fff;
+  font-size: 1.15rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #b2dfdb;
+  outline: none;
+  box-shadow: 0 1px 6px rgba(38, 166, 154, 0.08);
+  transition: border 0.2s;
+  min-width: 180px;
+}
+
+.filter-select option {
+  color: #222;
+  background: #fff;
+}
+
 .search-input {
   font-size: 1.15rem;
   padding: 0.7rem 1.2rem;
