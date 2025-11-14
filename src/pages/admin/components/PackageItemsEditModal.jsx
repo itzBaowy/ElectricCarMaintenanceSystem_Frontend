@@ -66,7 +66,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       setSaving(true)
       
       const updateData = {
+        vehicleModelId: item.vehicleModelId || model.id,
+        milestoneKm: item.milestoneKm || pkg.milestoneKm,
+        serviceItemId: item.serviceItemId,
         price: changes.price !== undefined ? parseFloat(changes.price) : item.price,
+        actionType: changes.actionType !== undefined ? changes.actionType : item.actionType,
         includedSparePartId: changes.includedSparePartId !== undefined ? changes.includedSparePartId : item.includedSparePartId,
         includedQuantity: changes.includedQuantity !== undefined ? parseInt(changes.includedQuantity, 10) : item.includedQuantity
       }
@@ -121,7 +125,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
         const changes = editedItems[itemId]
 
         const updateData = {
+          vehicleModelId: item.vehicleModelId || model.id,
+          milestoneKm: item.milestoneKm || pkg.milestoneKm,
+          serviceItemId: item.serviceItemId,
           price: changes.price !== undefined ? parseFloat(changes.price) : item.price,
+          actionType: changes.actionType !== undefined ? changes.actionType : item.actionType,
           includedSparePartId: changes.includedSparePartId !== undefined ? changes.includedSparePartId : item.includedSparePartId,
           includedQuantity: changes.includedQuantity !== undefined ? parseInt(changes.includedQuantity, 10) : item.includedQuantity
         }
@@ -243,9 +251,15 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                           )}
                         </td>
                         <td>
-                          <span className={`action-badge ${item.actionType?.toLowerCase()}`}>
-                            {item.actionType === 'REPLACE' ? 'Thay' : 'Kiểm tra'}
-                          </span>
+                          <select
+                            className="action-type-select"
+                            value={getDisplayValue(item, 'actionType') || ''}
+                            onChange={(e) => handleFieldChange(item.id, 'actionType', e.target.value)}
+                            disabled={saving}
+                          >
+                            <option value="CHECK">Kiểm tra</option>
+                            <option value="REPLACE">Thay</option>
+                          </select>
                         </td>
                         <td>
                           <input
