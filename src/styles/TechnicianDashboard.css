@@ -29,7 +29,6 @@ html, body {
 
 .dashboard-container {
   background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%);
-  border-radius: 32px;
   box-shadow: 0 4px 24px rgba(38, 166, 154, 0.10);
   padding: 32px 32px 24px 32px;
   margin: 40px 0;
@@ -46,7 +45,6 @@ html, body {
   margin-bottom: 2rem;
   background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #fff;
-  border-radius: 24px;
   box-shadow: 0 4px 18px rgba(38, 166, 154, 0.12);
   padding: 32px 32px 24px 32px;
   margin-bottom: 32px;
@@ -59,6 +57,7 @@ html, body {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
 }
 
 .header-actions {
@@ -105,12 +104,14 @@ html, body {
 .stats-header {
   background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #fff;
-  border-radius: 18px 18px 0 0;
   box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
   padding: 24px 32px 16px 32px;
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .stats-header h2 {
@@ -178,7 +179,6 @@ html, body {
 /* Filters Section */
 .filters-section {
   background: #fff;
-  border-radius: 24px;
   box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
   margin: 32px 0;
   padding: 0;
@@ -189,7 +189,6 @@ html, body {
 .filters-header {
   background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #fff;
-  border-radius: 18px 18px 0 0;
   box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
   padding: 24px 32px 16px 32px;
   font-size: 1.6rem;

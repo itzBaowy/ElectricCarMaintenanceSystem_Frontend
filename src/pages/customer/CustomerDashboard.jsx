@@ -359,9 +359,7 @@ const CustomerDashboard = () => {
             </div>
           </div>
           <div className="welcome-actions">
-            <button className="quick-action-btn primary" onClick={() => setShowBookMaintenance(true)}>
-              Book Service
-            </button>
+            
           </div>
         </div>
       </div>
