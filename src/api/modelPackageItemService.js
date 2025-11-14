@@ -280,38 +280,6 @@ const modelPackageItemService = {
     }
   },
 
-  /**
-   * Get all service packages (milestones) - Using appointmentService
-   * Note: This is actually in appointmentService.js, kept here for convenience
-   */
-  getAllServicePackages: async () => {
-    try {
-      logger.log('📡 Fetching all service packages')
-      const response = await api.get('/api/servicePackage')
-      
-      if (response.data.code === 1000) {
-        logger.log('✅ Service packages fetched successfully')
-        return {
-          success: true,
-          data: response.data.result,
-          message: response.data.message
-        }
-      } else {
-        return {
-          success: false,
-          message: response.data.message || 'Failed to get service packages'
-        }
-      }
-    } catch (error) {
-      logger.error('❌ Error fetching service packages:', error)
-      return {
-        success: false,
-        message: error.response?.data?.message || 'Failed to get service packages',
-        error: error.response?.data || error.message
-      }
-    }
-  },
-
   // ===== DEPRECATED - Kept for backward compatibility =====
   /**
    * @deprecated Use getByModelAndMilestone instead

@@ -324,6 +324,36 @@ export const authService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Forgot password - send reset link to email
+  forgotPassword: async (email) => {
+    try {
+      logger.log('📧 Sending password reset request for:', email)
+      const response = await api.post('/api/auth/forgot-password', { email })
+      
+      if (response.data.code === 1000) {
+        logger.log('✅ Password reset email sent successfully')
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Password reset link has been sent to your email.'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to send password reset link',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('❌ Forgot password error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to send password reset link',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

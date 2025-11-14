@@ -148,10 +148,6 @@ const Login = () => {
             <Link to="/" className="back-link">
               ← Back to Home
             </Link>
-            <div className="logo">
-              <h2>ElectricCare</h2>
-              <p>Electric Vehicle Maintenance System</p>
-            </div>
           </div>
 
           <div className="login-form-container">
@@ -172,7 +168,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label htmlFor="username">Your Email</label>
+              <label htmlFor="username">Your Username</label>
               <input
                 type="text"
                 id="username"
@@ -180,7 +176,6 @@ const Login = () => {
                 value={formData.username}
                 onChange={handleChange}
                 className={errors.username ? 'error' : ''}
-                placeholder="info.madhu786@gmail.com"
                 disabled={isLoading}
                 autoComplete="username"
                 autoCapitalize="none"
@@ -201,7 +196,6 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className={errors.password ? 'error' : ''}
-                placeholder="••••••••••"
                 disabled={isLoading}
                 autoComplete="current-password"
               />
@@ -211,11 +205,6 @@ const Login = () => {
             </div>
 
             <div className="form-options">
-              <label className="checkbox-container">
-                <input type="checkbox" tabIndex="-1" />
-                <span className="checkmark"></span>
-                Remember Me
-              </label>
               <Link to="/forgot-password" className="forgot-link" tabIndex="-1">
                 Forgot Password?
               </Link>
@@ -229,12 +218,6 @@ const Login = () => {
               {isLoading ? 'Signing In...' : 'Login'}
             </button>
           </form>
-
-          <div className="login-footer">
-            <p className="info-text">
-              New customers can register through our staff at the service center.
-            </p>
-          </div>
           </div>
         </div>
       </div>
