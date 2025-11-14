@@ -174,15 +174,22 @@
 }
 
 .secondary-btn {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 24px;
+  padding: 1.2rem 0;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 18px;
 }
 
 .secondary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
 }
 
 .info-card {
