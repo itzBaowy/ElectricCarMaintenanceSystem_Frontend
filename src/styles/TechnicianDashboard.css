@@ -44,21 +44,19 @@ html, body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  background: #000000;
-  padding: 1.5rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 2px solid #000000;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.12);
+  padding: 32px 32px 24px 32px;
+  margin-bottom: 32px;
 }
 
 .dashboard-header h1 {
-  color: #ffffff;
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: 800;
   margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -66,13 +64,12 @@ html, body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
+  gap: 24px;
 }
 
 .welcome-text {
-  color: #ffffff;
-  font-size: 1rem;
+  color: #e0f7fa;
+  font-size: 1.15rem;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -80,20 +77,21 @@ html, body {
 }
 
 .btn-logout {
-  background: #ffffff;
-  color: #000000;
-  border: 2px solid #ffffff;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 2.2rem;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background 0.2s, color 0.2s;
 }
 
 .btn-logout:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
-  background: #f0f0f0;
+  background: #26a69a;
+  color: #fff;
 }
 
 /* Statistics Cards */
