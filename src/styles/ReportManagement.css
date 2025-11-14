@@ -1,3 +1,28 @@
+/* Outermost layout background */
+.financial-report-layout {
+  background: #f5f6fa;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Content wrapper background */
+.financial-report-content {
+  background: #dcf0e8;
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+/* Unique header for ReportManagement */
+.rm-header {
+  text-align: left;
+  margin-bottom: 0;
+  padding: 40px 0 40px 40px;
+  background: linear-gradient(90deg, #5cb88a 0%, #7ecb89 100%);
+  border-radius: 0;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
 /* Report Management Styles */
 .report-management {
   padding: 20px;
@@ -21,10 +46,10 @@
   text-align: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #00897b 0%, #43a047 100%);
+  background: linear-gradient(90deg, #4bb7b7 0%, #7ecb89 100%);
   border-radius: 12px;
   color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  /* box-shadow removed as requested */
 }
 
 .report-header h2 {

@@ -116,158 +116,158 @@ const ReportManagement = () => {
   }
 
   return (
-    <div className="report-management">
-      <div className="report-header">
-        <h2> Financial Report</h2>
-        <p>View revenue overview and business activities</p>
-      </div>
-
-      <div className="report-filters">
-        <div className="date-filters">
-          <div className="filter-group">
-            <label htmlFor="startDate">From date:</label>
-            <input
-              type="datetime-local"
-              id="startDate"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="date-input"
-            />
-          </div>
-
-          <div className="filter-group">
-            <label htmlFor="endDate">To date:</label>
-            <input
-              type="datetime-local"
-              id="endDate"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="date-input"
-            />
-          </div>
-
-          <button
-            onClick={handleFetchReport}
-            disabled={loading}
-            className="btn-generate"
-          >
-            {loading ? ' Loading...' : ' View Report'}
-          </button>
-        </div>
-
-        <div className="quick-select">
-          <span>Quick select:</span>
-          <button onClick={() => handleQuickSelect('today')} className="btn-quick">
-            Today
-          </button>
-          <button onClick={() => handleQuickSelect('thisWeek')} className="btn-quick">
-            This Week
-          </button>
-          <button onClick={() => handleQuickSelect('thisMonth')} className="btn-quick">
-            This Month
-          </button>
-          <button onClick={() => handleQuickSelect('lastMonth')} className="btn-quick">
-            Last Month
-          </button>
-          <button onClick={() => handleQuickSelect('thisYear')} className="btn-quick">
-            This Year
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="error-message">
-          <span> {error}</span>
-        </div>
-      )}
-
-      {reportData && (
-        <div className="report-content">
-          <div className="report-period">
-            <h3>Report Period</h3>
-            <p>
-              <strong>From:</strong> {formatDateTime(reportData.startDate)}
-              {' → '}
-              <strong>To:</strong> {formatDateTime(reportData.endDate)}
-            </p>
-          </div>
-
-          <div className="report-stats">
-            <div className="stat-card stat-revenue">
-              <div className="stat-icon"></div>
-              <div className="stat-details">
-                <h4>Total Revenue</h4>
-                <p className="stat-value">{formatCurrency(reportData.totalRevenue)}</p>
+    <div className="financial-report-layout">
+      <div className="financial-report-content">
+        <div className="report-management">
+          {/* Removed .rm-header section as requested */}
+          <div className="report-filters">
+            <div className="date-filters">
+              <div className="filter-group">
+                <label htmlFor="startDate">From date:</label>
+                <input
+                  type="datetime-local"
+                  id="startDate"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="date-input"
+                />
               </div>
+
+              <div className="filter-group">
+                <label htmlFor="endDate">To date:</label>
+                <input
+                  type="datetime-local"
+                  id="endDate"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="date-input"
+                />
+              </div>
+
+              <button
+                onClick={handleFetchReport}
+                disabled={loading}
+                className="btn-generate"
+              >
+                {loading ? ' Loading...' : ' View Report'}
+              </button>
             </div>
 
-            <div className="stat-card stat-invoices">
-              <div className="stat-icon"></div>
-              <div className="stat-details">
-                <h4>Paid Invoices</h4>
-                <p className="stat-value">{reportData.totalPaidInvoices}</p>
-              </div>
-            </div>
-
-            <div className="stat-card stat-appointments">
-              <div className="stat-icon"></div>
-              <div className="stat-details">
-                <h4>Completed Appointments</h4>
-                <p className="stat-value">{reportData.totalCompletedAppointments}</p>
-              </div>
-            </div>
-
-            <div className="stat-card stat-average">
-              <div className="stat-icon"></div>
-              <div className="stat-details">
-                <h4>Average / Invoice</h4>
-                <p className="stat-value">
-                  {reportData.totalPaidInvoices > 0
-                    ? formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)
-                    : formatCurrency(0)}
-                </p>
-              </div>
+            <div className="quick-select">
+              <span>Quick select:</span>
+              <button onClick={() => handleQuickSelect('today')} className="btn-quick">
+                Today
+              </button>
+              <button onClick={() => handleQuickSelect('thisWeek')} className="btn-quick">
+                This Week
+              </button>
+              <button onClick={() => handleQuickSelect('thisMonth')} className="btn-quick">
+                This Month
+              </button>
+              <button onClick={() => handleQuickSelect('lastMonth')} className="btn-quick">
+                Last Month
+              </button>
+              <button onClick={() => handleQuickSelect('thisYear')} className="btn-quick">
+                This Year
+              </button>
             </div>
           </div>
 
-          {reportData.serviceCenterId && (
-            <div className="report-info">
-              <p>
-                <strong>Service Center:</strong> {reportData.serviceCenterId}
-              </p>
+          {error && (
+            <div className="error-message">
+              <span> {error}</span>
             </div>
           )}
 
-          <div className="report-summary">
-            <h3> Summary</h3>
-            <ul>
-              <li>
-                Total <strong>{reportData.totalCompletedAppointments}</strong> appointments completed in the report period
-              </li>
-              <li>
-                There are <strong>{reportData.totalPaidInvoices}</strong> invoices that have been paid
-              </li>
-              <li>
-                Total revenue achieved: <strong>{formatCurrency(reportData.totalRevenue)}</strong>
-              </li>
-              {reportData.totalPaidInvoices > 0 && (
-                <li>
-                  Average value per invoice:{' '}
-                  <strong>
-                    {formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)}
-                  </strong>
-                </li>
-              )}
-            </ul>
-          </div>
-        </div>
-      )}
+          {reportData && (
+            <div className="report-content">
+              <div className="report-period">
+                <h3>Report Period</h3>
+                <p>
+                  <strong>From:</strong> {formatDateTime(reportData.startDate)}
+                  {' → '}
+                  <strong>To:</strong> {formatDateTime(reportData.endDate)}
+                </p>
+              </div>
 
-      {!reportData && !loading && !error && (
-        <div className="no-data">
-          <p> Select a time period and click "View Report" to see financial data</p>
+              <div className="report-stats">
+                <div className="stat-card stat-revenue">
+                  <div className="stat-icon"></div>
+                  <div className="stat-details">
+                    <h4>Total Revenue</h4>
+                    <p className="stat-value">{formatCurrency(reportData.totalRevenue)}</p>
+                  </div>
+                </div>
+
+                <div className="stat-card stat-invoices">
+                  <div className="stat-icon"></div>
+                  <div className="stat-details">
+                    <h4>Paid Invoices</h4>
+                    <p className="stat-value">{reportData.totalPaidInvoices}</p>
+                  </div>
+                </div>
+
+                <div className="stat-card stat-appointments">
+                  <div className="stat-icon"></div>
+                  <div className="stat-details">
+                    <h4>Completed Appointments</h4>
+                    <p className="stat-value">{reportData.totalCompletedAppointments}</p>
+                  </div>
+                </div>
+
+                <div className="stat-card stat-average">
+                  <div className="stat-icon"></div>
+                  <div className="stat-details">
+                    <h4>Average / Invoice</h4>
+                    <p className="stat-value">
+                      {reportData.totalPaidInvoices > 0
+                        ? formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)
+                        : formatCurrency(0)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {reportData.serviceCenterId && (
+                <div className="report-info">
+                  <p>
+                    <strong>Service Center:</strong> {reportData.serviceCenterId}
+                  </p>
+                </div>
+              )}
+
+              <div className="report-summary">
+                <h3> Summary</h3>
+                <ul>
+                  <li>
+                    Total <strong>{reportData.totalCompletedAppointments}</strong> appointments completed in the report period
+                  </li>
+                  <li>
+                    There are <strong>{reportData.totalPaidInvoices}</strong> invoices that have been paid
+                  </li>
+                  <li>
+                    Total revenue achieved: <strong>{formatCurrency(reportData.totalRevenue)}</strong>
+                  </li>
+                  {reportData.totalPaidInvoices > 0 && (
+                    <li>
+                      Average value per invoice:{' '}
+                      <strong>
+                        {formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)}
+                      </strong>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {!reportData && !loading && !error && (
+            <div className="no-data">
+              <p> Select a time period and click "View Report" to see financial data</p>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

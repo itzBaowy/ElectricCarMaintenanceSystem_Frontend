@@ -244,7 +244,7 @@ const CustomerManagement = () => {
             disabled={isLoading}
             title="Refresh customer list"
           >
-            {isLoading ? "⌛" : "↻"}
+            {isLoading ? "" : "↻"}
           </button>
         </div>
 
@@ -493,7 +493,7 @@ const CustomerManagement = () => {
 
         {isLoading ? (
           <div className="loading-state">
-            <p>⏳ Loading customers...</p>
+            <p> Loading customers...</p>
           </div>
         ) : (
           <div className="customer-table">
@@ -521,10 +521,10 @@ const CustomerManagement = () => {
                     <td>
                       <span className="gender-badge">
                         {customer.gender === "MALE"
-                          ? "👨 Male"
+                          ? " Male"
                           : customer.gender === "FEMALE"
-                          ? "👩 Female"
-                          : "⚧ Other"}
+                          ? " Female"
+                          : " Other"}
                       </span>
                     </td>
                     <td>{customer.joinDate}</td>
