@@ -57,7 +57,7 @@ html, body {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+ 
 }
 
 .header-actions {
