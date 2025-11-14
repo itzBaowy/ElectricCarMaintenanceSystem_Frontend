@@ -129,11 +129,19 @@
 }
 
 .btn-quick {
-  padding: 8px 16px;
+  padding: 10px 32px;
   background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
-  border-radius: 6px;
+  color: #000000;
+  border: none;
+  border-radius: 999px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 2px #43cea2;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  background-clip: padding-box;
+  /* Gradient border effect */
+  box-shadow: 0 0 0 2px #43cea2, 0 0 0 4px #26a69a;
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
@@ -141,7 +149,7 @@
 }
 
 .btn-quick:hover {
-  background: #667eea;
+  background: #106f6f;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);

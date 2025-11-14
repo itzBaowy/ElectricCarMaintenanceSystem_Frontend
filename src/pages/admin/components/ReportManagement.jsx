@@ -52,12 +52,12 @@ const ReportManagement = () => {
       
       if (response.success) {
         setReportData(response.data)
-        logger.log('📊 Report loaded:', response.data)
+        logger.log(' Report loaded:', response.data)
       } else {
         setError(response.message || 'Cannot load report. Please try again.')
       }
     } catch (err) {
-      logger.error('❌ Error loading report:', err)
+      logger.error(' Error loading report:', err)
       setError('Cannot load report. Please try again.')
     } finally {
       setLoading(false)
@@ -118,7 +118,7 @@ const ReportManagement = () => {
   return (
     <div className="report-management">
       <div className="report-header">
-        <h2>📊 Financial Report</h2>
+        <h2> Financial Report</h2>
         <p>View revenue overview and business activities</p>
       </div>
 
@@ -151,7 +151,7 @@ const ReportManagement = () => {
             disabled={loading}
             className="btn-generate"
           >
-            {loading ? '⏳ Loading...' : '📊 View Report'}
+            {loading ? ' Loading...' : ' View Report'}
           </button>
         </div>
 
@@ -177,7 +177,7 @@ const ReportManagement = () => {
 
       {error && (
         <div className="error-message">
-          <span>⚠️ {error}</span>
+          <span> {error}</span>
         </div>
       )}
 
@@ -194,7 +194,7 @@ const ReportManagement = () => {
 
           <div className="report-stats">
             <div className="stat-card stat-revenue">
-              <div className="stat-icon">💰</div>
+              <div className="stat-icon"></div>
               <div className="stat-details">
                 <h4>Total Revenue</h4>
                 <p className="stat-value">{formatCurrency(reportData.totalRevenue)}</p>
@@ -202,7 +202,7 @@ const ReportManagement = () => {
             </div>
 
             <div className="stat-card stat-invoices">
-              <div className="stat-icon">📄</div>
+              <div className="stat-icon"></div>
               <div className="stat-details">
                 <h4>Paid Invoices</h4>
                 <p className="stat-value">{reportData.totalPaidInvoices}</p>
@@ -210,7 +210,7 @@ const ReportManagement = () => {
             </div>
 
             <div className="stat-card stat-appointments">
-              <div className="stat-icon">✅</div>
+              <div className="stat-icon"></div>
               <div className="stat-details">
                 <h4>Completed Appointments</h4>
                 <p className="stat-value">{reportData.totalCompletedAppointments}</p>
@@ -218,7 +218,7 @@ const ReportManagement = () => {
             </div>
 
             <div className="stat-card stat-average">
-              <div className="stat-icon">📈</div>
+              <div className="stat-icon"></div>
               <div className="stat-details">
                 <h4>Average / Invoice</h4>
                 <p className="stat-value">
@@ -239,7 +239,7 @@ const ReportManagement = () => {
           )}
 
           <div className="report-summary">
-            <h3>📝 Summary</h3>
+            <h3> Summary</h3>
             <ul>
               <li>
                 Total <strong>{reportData.totalCompletedAppointments}</strong> appointments completed in the report period
@@ -265,7 +265,7 @@ const ReportManagement = () => {
 
       {!reportData && !loading && !error && (
         <div className="no-data">
-          <p>📊 Select a time period and click "View Report" to see financial data</p>
+          <p> Select a time period and click "View Report" to see financial data</p>
         </div>
       )}
     </div>
