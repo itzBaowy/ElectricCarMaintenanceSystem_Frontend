@@ -21,7 +21,7 @@
   text-align: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #00897b 0%, #43a047 100%);
   border-radius: 12px;
   color: white;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
@@ -345,6 +345,15 @@
   margin: 0;
   color: #999;
   font-size: 1.1rem;
+}
+
+/* Report Management Container */
+.report-management-container {
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%);
+  box-shadow: 0 4px 24px rgba(38, 166, 154, 0.08);
+  border-radius: 32px;
+  padding: 32px 32px 24px 32px;
+  margin: 40px 0;
 }
 
 /* Responsive Design */
