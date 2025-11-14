@@ -420,7 +420,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             disabled={saving}
                             title="Remove from package"
                           >
-                            
+                            Delete
                           </button>
                         </td>
                       </tr>

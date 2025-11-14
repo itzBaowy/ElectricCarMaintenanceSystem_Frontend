@@ -1,8 +1,8 @@
 /* PackageItemsEditModal.css */
 
 .package-items-modal {
-  max-width: 1200px;
-  width: 100%;
+  max-width: 1400px !important;
+  width: 95% !important;
   max-height: 90vh;
 }
 
@@ -68,6 +68,7 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
+  table-layout: auto;
 }
 
 .items-table thead {
@@ -85,6 +86,7 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .items-table tbody tr {
@@ -104,13 +106,11 @@
   padding: 1rem;
   font-size: 0.9rem;
   vertical-align: middle;
-  white-space: nowrap;
 }
 
 .items-table td:first-child {
   white-space: normal;
-  min-width: 200px;
-  max-width: 300px;
+  min-width: 250px;
 }
 
 /* Item Name */
@@ -199,7 +199,7 @@
 /* Spare Part Select */
 .spare-part-select {
   width: 100%;
-  min-width: 200px;
+  min-width: 250px;
   padding: 0.625rem;
   border: 2px solid #e0e0e0;
   border-radius: 6px;
@@ -360,6 +360,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1400px) {
+  .package-items-modal {
+    max-width: 95vw;
+  }
+}
+
 @media (max-width: 1024px) {
   .package-items-modal {
     max-width: 95vw;
@@ -367,6 +373,10 @@
 
   .items-table-container {
     max-height: 400px;
+  }
+  
+  .items-table {
+    min-width: 1200px;
   }
 }
 
@@ -539,7 +549,7 @@
   }
 
   .items-table {
-    min-width: 1100px;
+    min-width: 1200px;
   }
 
   .modal-footer {
