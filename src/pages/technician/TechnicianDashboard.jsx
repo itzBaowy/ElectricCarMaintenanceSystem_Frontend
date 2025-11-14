@@ -10,7 +10,7 @@ const TechnicianDashboard = () => {
   const navigate = useNavigate()
   const [appointments, setAppointments] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filterStatus, setFilterStatus] = useState('CONFIRMED')
+  const [filterStatus, setFilterStatus] = useState('ALL')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedAppointment, setSelectedAppointment] = useState(null)
   const [showDetailModal, setShowDetailModal] = useState(false)
@@ -60,6 +60,35 @@ const TechnicianDashboard = () => {
     setShowDetailModal(true)
     setRequestAdditionalService(false)
     setUpgradeItems([])
+  }
+
+  const handleStartService = async () => {
+    if (!selectedAppointment) return
+
+    if (!window.confirm('Xác nhận bắt đầu làm việc với appointment này?')) {
+      return
+    }
+
+    setUpdateLoading(true)
+    try {
+      const result = await appointmentService.updateAppointmentStatus(
+        selectedAppointment.id,
+        'IN_PROGRESS'
+      )
+
+      if (result.success) {
+        alert('Đã bắt đầu làm việc!')
+        setShowDetailModal(false)
+        fetchAppointments(currentUser.userId)
+      } else {
+        alert(`Lỗi: ${result.message}`)
+      }
+    } catch (error) {
+      logger.error('Error starting service:', error)
+      alert('Có lỗi khi bắt đầu dịch vụ!')
+    } finally {
+      setUpdateLoading(false)
+    }
   }
 
   const handleToggleUpgradeItem = (serviceItemId) => {
@@ -173,6 +202,9 @@ const TechnicianDashboard = () => {
     const statusClasses = {
       'PENDING': 'status-badge-pending',
       'CONFIRMED': 'status-badge-confirmed',
+      'IN_PROGRESS': 'status-badge-in-progress',
+      'WAITING_FOR_APPROVAL': 'status-badge-waiting',
+      'CUSTOMER_APPROVED': 'status-badge-approved',
       'COMPLETED': 'status-badge-completed',
       'CANCELLED': 'status-badge-cancelled'
     }
@@ -242,6 +274,24 @@ const TechnicianDashboard = () => {
                 </p>
               </div>
               <div className="stat-card">
+                <h3>IN PROGRESS</h3>
+                <p className="stat-number in-progress">
+                  {appointments.filter(a => a.status === 'IN_PROGRESS').length}
+                </p>
+              </div>
+              <div className="stat-card">
+                <h3>WAITING APPROVAL</h3>
+                <p className="stat-number waiting">
+                  {appointments.filter(a => a.status === 'WAITING_FOR_APPROVAL').length}
+                </p>
+              </div>
+              <div className="stat-card">
+                <h3>APPROVED</h3>
+                <p className="stat-number approved">
+                  {appointments.filter(a => a.status === 'CUSTOMER_APPROVED').length}
+                </p>
+              </div>
+              <div className="stat-card">
                 <h3>COMPLETED</h3>
                 <p className="stat-number completed">
                   {appointments.filter(a => a.status === 'COMPLETED').length}
@@ -266,6 +316,9 @@ const TechnicianDashboard = () => {
                   <option value="ALL">All Status</option>
                   <option value="PENDING">Pending</option>
                   <option value="CONFIRMED">Confirmed</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="WAITING_FOR_APPROVAL">Waiting for Approval</option>
+                  <option value="CUSTOMER_APPROVED">Customer Approved</option>
                   <option value="COMPLETED">Completed</option>
                   <option value="CANCELLED">Cancelled</option>
                 </select>
@@ -441,7 +494,7 @@ const TechnicianDashboard = () => {
                   <h3>Danh Sách Dịch Vụ</h3>
                   
                   {/* Additional Service Option */}
-                  {selectedAppointment.status === 'CONFIRMED' && (
+                  {selectedAppointment.status === 'IN_PROGRESS' && (
                     <div className="additional-service-option">
                       <label className="checkbox-label">
                         <input
@@ -523,7 +576,17 @@ const TechnicianDashboard = () => {
 
               {/* Action Buttons */}
               <div className="detail-actions">
-                {selectedAppointment.status === 'CONFIRMED' && (
+                {(selectedAppointment.status === 'CONFIRMED' || selectedAppointment.status === 'CUSTOMER_APPROVED') && (
+                  <button
+                    onClick={handleStartService}
+                    className="btn-action btn-start"
+                    disabled={updateLoading}
+                  >
+                    {updateLoading ? 'Đang xử lý...' : '🚀 Bắt đầu làm việc'}
+                  </button>
+                )}
+
+                {selectedAppointment.status === 'IN_PROGRESS' && (
                   <button
                     onClick={handleCompleteService}
                     className="btn-action btn-complete"
@@ -534,6 +597,12 @@ const TechnicianDashboard = () => {
                         ? '✅ Gửi yêu cầu dịch vụ thêm' 
                         : '✅ Hoàn thành dịch vụ'}
                   </button>
+                )}
+
+                {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && (
+                  <div className="waiting-message">
+                    <p>⏳ Đang chờ khách hàng phê duyệt yêu cầu dịch vụ thêm...</p>
+                  </div>
                 )}
 
                 <button

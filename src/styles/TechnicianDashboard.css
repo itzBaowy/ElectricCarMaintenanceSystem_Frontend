@@ -172,6 +172,18 @@ html, body {
   color: #000000 !important;
 }
 
+.stat-number.in-progress {
+  color: #1976d2 !important;
+}
+
+.stat-number.waiting {
+  color: #ff9800 !important;
+}
+
+.stat-number.approved {
+  color: #4caf50 !important;
+}
+
 .stat-number.completed {
   color: #000000 !important;
 }
@@ -382,6 +394,24 @@ html, body {
   background-color: #ffffff;
   color: #000000;
   border: 2px solid #000000;
+}
+
+.status-badge-in-progress {
+  background-color: #1976d2;
+  color: #ffffff;
+  border: 2px solid #1976d2;
+}
+
+.status-badge-waiting {
+  background-color: #ff9800;
+  color: #ffffff;
+  border: 2px solid #ff9800;
+}
+
+.status-badge-approved {
+  background-color: #4caf50;
+  color: #ffffff;
+  border: 2px solid #4caf50;
 }
 
 .status-badge-completed {
@@ -612,6 +642,18 @@ html, body {
   background: #333333;
 }
 
+.btn-start {
+  background: #1976d2;
+  color: #ffffff;
+  border: 2px solid #1976d2;
+}
+
+.btn-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+  background: #1565c0;
+}
+
 .btn-cancel {
   background: #ffffff;
   color: #000000;
@@ -625,6 +667,23 @@ html, body {
 .btn-action:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Waiting Message in Modal */
+.waiting-message {
+  text-align: center;
+  padding: 1.5rem;
+  background: #fff3cd;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.waiting-message p {
+  margin: 0;
+  color: #856404;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 /* Loading and Empty States */
