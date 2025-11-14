@@ -87,6 +87,11 @@ const StaffDashboard = () => {
   const [serviceItemApprovals, setServiceItemApprovals] = useState({}); // { [detailId]: boolean }
   const [approvingItems, setApprovingItems] = useState(false);
 
+  // Pagination and search for customers
+  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
+  const [customerCurrentPage, setCustomerCurrentPage] = useState(1);
+  const [customersPerPage] = useState(10);
+
   // Form states
   const [customerForm, setCustomerForm] = useState({
     fullName: "",
@@ -655,6 +660,30 @@ const StaffDashboard = () => {
     return matchesStatus && matchesSearch;
   });
 
+  // Filter and paginate customers
+  const filteredCustomers = customers.filter((customer) => {
+    const customerId = customer.customerId || customer.id;
+    const matchesSearch =
+      customerId?.toString().includes(customerSearchTerm) ||
+      customer.phone?.toLowerCase().includes(customerSearchTerm.toLowerCase());
+    return matchesSearch;
+  });
+
+  // Calculate pagination for customers
+  const indexOfLastCustomer = customerCurrentPage * customersPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
+  const currentCustomers = filteredCustomers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+  const totalCustomerPages = Math.ceil(filteredCustomers.length / customersPerPage);
+
+  const handleCustomerPageChange = (pageNumber) => {
+    setCustomerCurrentPage(pageNumber);
+  };
+
+  const handleCustomerSearchChange = (searchValue) => {
+    setCustomerSearchTerm(searchValue);
+    setCustomerCurrentPage(1); // Reset to first page when searching
+  };
+
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
       authService.logout();
@@ -753,35 +782,85 @@ const StaffDashboard = () => {
             </div>
 
             <div className="customers-list">
-              <h3>Customer List ({customers.length})</h3>
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Created Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {customers.slice(0, 10).map((customer) => (
-                    <tr key={customer.customerId || customer.id}>
-                      <td>#{customer.customerId || customer.id}</td>
-                      <td>{customer.fullName}</td>
-                      <td>{customer.phone}</td>
-                      <td>{customer.email}</td>
-                      <td>
-                        {customer.createdAt
-                          ? new Date(customer.createdAt).toLocaleDateString(
-                              "vi-VN"
-                            )
-                          : "N/A"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="customers-header">
+                <h3>Customer List ({filteredCustomers.length})</h3>
+                <div className="customer-search-box">
+                  <input
+                    type="text"
+                    placeholder="Search by ID or phone number..."
+                    value={customerSearchTerm}
+                    onChange={(e) => handleCustomerSearchChange(e.target.value)}
+                    className="search-input"
+                  />
+                </div>
+              </div>
+              
+              {currentCustomers.length === 0 ? (
+                <div className="no-data">
+                  <p>No customers found</p>
+                </div>
+              ) : (
+                <>
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Created Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentCustomers.map((customer) => (
+                        <tr key={customer.customerId || customer.id}>
+                          <td>#{customer.customerId || customer.id}</td>
+                          <td>{customer.fullName}</td>
+                          <td>{customer.phone}</td>
+                          <td>{customer.email}</td>
+                          <td>
+                            {customer.createdAt
+                              ? new Date(customer.createdAt).toLocaleDateString(
+                                  "vi-VN"
+                                )
+                              : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  
+                  {/* Pagination Controls */}
+                  {totalCustomerPages > 1 && (
+                    <div className="pagination-container">
+                      <button
+                        className="pagination-btn"
+                        onClick={() => handleCustomerPageChange(customerCurrentPage - 1)}
+                        disabled={customerCurrentPage === 1}
+                      >
+                        ← Previous
+                      </button>
+                      
+                      <div className="pagination-info">
+                        <span>
+                          Page {customerCurrentPage} of {totalCustomerPages}
+                        </span>
+                        <span className="pagination-details">
+                          Showing {indexOfFirstCustomer + 1} - {Math.min(indexOfLastCustomer, filteredCustomers.length)} of {filteredCustomers.length}
+                        </span>
+                      </div>
+                      
+                      <button
+                        className="pagination-btn"
+                        onClick={() => handleCustomerPageChange(customerCurrentPage + 1)}
+                        disabled={customerCurrentPage === totalCustomerPages}
+                      >
+                        Next →
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}

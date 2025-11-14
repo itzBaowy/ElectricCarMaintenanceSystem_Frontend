@@ -232,6 +232,44 @@
   border: 2px solid #000000;
 }
 
+.customers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.customers-header h3 {
+  color: #000000;
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.customer-search-box {
+  flex: 1;
+  max-width: 400px;
+  min-width: 250px;
+}
+
+.customer-search-box .search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #000000;
+}
+
+.customer-search-box .search-input:focus {
+  outline: none;
+  border-color: #26a69a;
+  box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.1);
+}
+
 .customers-list h3 {
   color: #000000;
   margin: 0 0 20px 0;
@@ -1710,5 +1748,84 @@
   border-radius: 12px;
   font-size: 0.85rem;
   font-weight: 500;
+}
+
+/* Pagination Styles */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 10px;
+  border: 2px solid #26a69a;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1e8e7e 0%, #55a559 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(38, 166, 154, 0.3);
+}
+
+.pagination-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+  text-align: center;
+}
+
+.pagination-info span {
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.pagination-details {
+  color: #666666 !important;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+}
+
+@media (max-width: 768px) {
+  .customers-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .customer-search-box {
+    max-width: 100%;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+  }
+
+  .pagination-btn {
+    width: 100%;
+  }
 }
 
