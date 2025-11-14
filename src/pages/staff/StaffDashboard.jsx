@@ -13,7 +13,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("walk-in")}
         >
-          Customer Management
+          Customers
         </button>
         <button
           className={`sidebar-tab${
@@ -21,7 +21,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("appointments")}
         >
-          Appointment Management
+          Appointments
         </button>
         <button
           className={`sidebar-tab${
