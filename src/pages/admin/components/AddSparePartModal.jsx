@@ -219,7 +219,7 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
                 {formData.categoryCode && (
                   <div className="category-info">
                     <span className="info-badge">
-                      📁 {formData.categoryName} - {formData.categoryCode}
+                       {formData.categoryName} - {formData.categoryCode}
                     </span>
                   </div>
                 )}
@@ -288,7 +288,7 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
             </div>
 
             <div className="form-note">
-              <span className="note-icon">💡</span>
+              <span className="note-icon"></span>
               <span className="note-text">
                 All fields are required. Select a category and the name will be auto-filled.
               </span>
@@ -315,7 +315,7 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
                   Creating...
                 </>
               ) : (
-                '✨ Create Spare Part'
+                ' Create Spare Part'
               )}
             </button>
           </div>

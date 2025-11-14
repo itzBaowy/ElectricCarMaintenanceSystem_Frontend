@@ -273,89 +273,232 @@ const EmployeeManagement = () => {
   });
 
   return (
-    <div className="employee-management">
-      {/* Header Actions */}
-      <div className="management-header">
-        <div className="search-filters">
-          <input
-            type="text"
-            placeholder="Search employees..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <select
-            value={filterRole}
-            onChange={(e) => setFilterRole(e.target.value)}
-            className="role-filter"
-          >
-            <option value="all">All Roles</option>
-            <option value="technician">Technicians</option>
-            <option value="staff">Staff</option>
-          </select>
+    <div className="employee-management-layout">
+      <div className="employee-management">
+        {/* Header Actions */}
+        <div className="employee-header-bar">
+          <div className="employee-search-bar">
+            <input
+              type="text"
+              placeholder="Search employees..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <select
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+              className="role-filter"
+            >
+              <option value="all">All Roles</option>
+              <option value="technician">Technicians</option>
+              <option value="staff">Staff</option>
+            </select>
+
+            <button
+              className="refresh-btn"
+              onClick={loadEmployees}
+              disabled={isLoading}
+              title="Refresh employee list"
+            >
+              {isLoading ? "" : "↻"}
+            </button>
+          </div>
 
           <button
-            className="refresh-btn"
-            onClick={loadEmployees}
-            disabled={isLoading}
-            title="Refresh employee list"
+            className="add-employee-btn"
+            onClick={() => setShowAddForm(true)}
           >
-            {isLoading ? "⌛" : "↻"}
+            + Add Employee
           </button>
         </div>
 
-        <button
-          className="add-employee-btn"
-          onClick={() => setShowAddForm(true)}
-        >
-          + Add Employee
-        </button>
-      </div>
+        {/* Employee Form Modal */}
+        {showAddForm && (
+          <div className="modal-overlay">
+            <div className="employee-form-modal">
+              <div className="modal-header">
+                <h3>{editingEmployee ? "Edit Employee" : "Add New Employee"}</h3>
+                <button className="close-btn" onClick={resetForm}>
+                  ✕
+                </button>
+              </div>
 
-      {/* Employee Form Modal */}
-      {showAddForm && (
-        <div className="modal-overlay">
-          <div className="employee-form-modal">
-            <div className="modal-header">
-              <h3>{editingEmployee ? "Edit Employee" : "Add New Employee"}</h3>
-              <button className="close-btn" onClick={resetForm}>
-                ✕
-              </button>
-            </div>
+              <form onSubmit={handleSubmit} className="employee-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="fullName">Full Name *</label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter full name"
+                    />
+                  </div>
 
-            <form onSubmit={handleSubmit} className="employee-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="fullName">Full Name *</label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter full name"
-                  />
+                  <div className="form-group">
+                    <label htmlFor="username">Username *</label>
+                    <input
+                      type="text"
+                      id="username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter username"
+                      disabled={editingEmployee}
+                      style={
+                        editingEmployee
+                          ? { background: "#f0f4f8", cursor: "not-allowed" }
+                          : {}
+                      }
+                    />
+                    {editingEmployee && (
+                      <small
+                        style={{
+                          color: "#666",
+                          fontSize: "0.85rem",
+                          marginTop: "4px",
+                          display: "block",
+                        }}
+                      >
+                        Username cannot be changed
+                      </small>
+                    )}
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="username">Username *</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter username"
-                    disabled={editingEmployee}
-                    style={
-                      editingEmployee
-                        ? { background: "#f0f4f8", cursor: "not-allowed" }
-                        : {}
-                    }
-                  />
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="email">Email *</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter email address"
+                    />
+                  </div>
+
+                  {!editingEmployee && (
+                    <div className="form-group">
+                      <label htmlFor="password">Password *</label>
+                      <div className="password-input-wrapper">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          id="password"
+                          name="password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="Enter password"
+                        />
+                        <button
+                          type="button"
+                          className="password-toggle-btn"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? "👁️" : "👁️‍🗨️"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="phone">Phone Number *</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="gender">Gender *</label>
+                    <select
+                      id="gender"
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                      <option value="OTHER">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  {!editingEmployee && (
+                    <div className="form-group">
+                      <label htmlFor="role">Role *</label>
+                      <select
+                        id="role"
+                        name="role"
+                        value={formData.role}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="TECHNICIAN">Technician</option>
+                        <option value="STAFF">Staff</option>
+                      </select>
+                    </div>
+                  )}
+
                   {editingEmployee && (
+                    <div className="form-group">
+                      <label htmlFor="currentRole">Current Role</label>
+                      <input
+                        type="text"
+                        id="currentRole"
+                        value={
+                          formData.role === "TECHNICIAN"
+                            ? " Technician"
+                            : " Staff"
+                        }
+                        disabled
+                        className="disabled-input"
+                        style={{ background: "#f0f4f8", cursor: "not-allowed" }}
+                      />
+                      <small style={{ color: "#666", fontSize: "0.85rem" }}>
+                        Role cannot be changed after creation
+                      </small>
+                    </div>
+                  )}
+
+                  <div className="form-group">
+                    <label htmlFor="serviceCenterId">Service Center</label>
+                    {isLoadingCenters ? (
+                      <div style={{ padding: "0.75rem", color: "#666" }}>
+                        Loading centers...
+                      </div>
+                    ) : (
+                      <select
+                        id="serviceCenterId"
+                        name="serviceCenterId"
+                        value={formData.serviceCenterId || ""}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">-- Not assigned --</option>
+                        {centers.map((center) => (
+                          <option key={center.id} value={center.id}>
+                            {center.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                     <small
                       style={{
                         color: "#666",
@@ -364,251 +507,110 @@ const EmployeeManagement = () => {
                         display: "block",
                       }}
                     >
-                      Username cannot be changed
-                    </small>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="email">Email *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter email address"
-                  />
-                </div>
-
-                {!editingEmployee && (
-                  <div className="form-group">
-                    <label htmlFor="password">Password *</label>
-                    <div className="password-input-wrapper">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                        placeholder="Enter password"
-                      />
-                      <button
-                        type="button"
-                        className="password-toggle-btn"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? "👁️" : "👁️‍🗨️"}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="phone">Phone Number *</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Enter phone number"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="gender">Gender *</label>
-                  <select
-                    id="gender"
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                    <option value="OTHER">Other</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-row">
-                {!editingEmployee && (
-                  <div className="form-group">
-                    <label htmlFor="role">Role *</label>
-                    <select
-                      id="role"
-                      name="role"
-                      value={formData.role}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="TECHNICIAN">Technician</option>
-                      <option value="STAFF">Staff</option>
-                    </select>
-                  </div>
-                )}
-
-                {editingEmployee && (
-                  <div className="form-group">
-                    <label htmlFor="currentRole">Current Role</label>
-                    <input
-                      type="text"
-                      id="currentRole"
-                      value={
-                        formData.role === "TECHNICIAN"
-                          ? "🔧 Technician"
-                          : "👥 Staff"
-                      }
-                      disabled
-                      className="disabled-input"
-                      style={{ background: "#f0f4f8", cursor: "not-allowed" }}
-                    />
-                    <small style={{ color: "#666", fontSize: "0.85rem" }}>
-                      Role cannot be changed after creation
+                      Select a service center or leave unassigned
                     </small>
                   </div>
-                )}
-
-                <div className="form-group">
-                  <label htmlFor="serviceCenterId">Service Center</label>
-                  {isLoadingCenters ? (
-                    <div style={{ padding: "0.75rem", color: "#666" }}>
-                      Loading centers...
-                    </div>
-                  ) : (
-                    <select
-                      id="serviceCenterId"
-                      name="serviceCenterId"
-                      value={formData.serviceCenterId || ""}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">-- Not assigned --</option>
-                      {centers.map((center) => (
-                        <option key={center.id} value={center.id}>
-                          {center.name}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                  <small
-                    style={{
-                      color: "#666",
-                      fontSize: "0.85rem",
-                      marginTop: "4px",
-                      display: "block",
-                    }}
-                  >
-                    Select a service center or leave unassigned
-                  </small>
                 </div>
-              </div>
 
-              <div className="form-actions">
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  className="cancel-btn"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="submit-btn">
-                  {editingEmployee ? "Update" : "Add"} Employee
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Employee List */}
-      <div className="employee-list">
-        <div className="list-header">
-          <h3>Employees ({filteredEmployees.length})</h3>
-        </div>
-
-        {isLoading ? (
-          <div className="loading-state">
-            <p>⏳ Loading employees...</p>
-          </div>
-        ) : (
-          <div className="employee-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Service Center</th>
-                  <th>Join Date</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredEmployees.map((employee) => (
-                  <tr key={employee.id}>
-                    <td>{employee.id}</td>
-                    <td>{employee.fullName}</td>
-                    <td>{employee.username}</td>
-                    <td>{employee.email}</td>
-                    <td>
-                      <span
-                        className={`role-badge ${employee.role.toLowerCase()}`}
-                      >
-                        {employee.role === "TECHNICIAN"
-                          ? "Technician"
-                          : "Staff"}
-                      </span>
-                    </td>
-                    <td>
-                      {employee.serviceCenterId ? (
-                        <span className="center-badge">
-                          {getCenterName(employee.serviceCenterId)}
-                        </span>
-                      ) : (
-                        <span className="not-assigned">Not assigned</span>
-                      )}
-                    </td>
-                    <td>{employee.joinDate}</td>
-                    <td>
-                      <div className="action-buttons">
-                        <button
-                          className="edit-btn"
-                          onClick={() => handleEdit(employee)}
-                          title="Edit Employee"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDelete(employee)}
-                          title="Delete Employee"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {filteredEmployees.length === 0 && (
-              <div className="empty-state">
-                <p>No employees found matching your criteria.</p>
-              </div>
-            )}
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    onClick={resetForm}
+                    className="cancel-btn"
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="submit-btn">
+                    {editingEmployee ? "Update" : "Add"} Employee
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
+
+        {/* Employee List */}
+        <div className="employee-list">
+          <div className="list-header">
+            <h3>Employees ({filteredEmployees.length})</h3>
+          </div>
+
+          {isLoading ? (
+            <div className="loading-state">
+              <p> Loading employees...</p>
+            </div>
+          ) : (
+            <div className="employee-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Service Center</th>
+                    <th>Join Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredEmployees.map((employee) => (
+                    <tr key={employee.id}>
+                      <td>{employee.id}</td>
+                      <td>{employee.fullName}</td>
+                      <td>{employee.username}</td>
+                      <td>{employee.email}</td>
+                      <td>
+                        <span
+                          className={`role-badge ${employee.role.toLowerCase()}`}
+                        >
+                          {employee.role === "TECHNICIAN"
+                            ? "Technician"
+                            : "Staff"}
+                        </span>
+                      </td>
+                      <td>
+                        {employee.serviceCenterId ? (
+                          <span className="center-badge">
+                            {getCenterName(employee.serviceCenterId)}
+                          </span>
+                        ) : (
+                          <span className="not-assigned">Not assigned</span>
+                        )}
+                      </td>
+                      <td>{employee.joinDate}</td>
+                      <td>
+                        <div className="action-buttons">
+                          <button
+                            className="edit-btn"
+                            onClick={() => handleEdit(employee)}
+                            title="Edit Employee"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(employee)}
+                            title="Delete Employee"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {filteredEmployees.length === 0 && (
+                <div className="empty-state">
+                  <p>No employees found matching your criteria.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

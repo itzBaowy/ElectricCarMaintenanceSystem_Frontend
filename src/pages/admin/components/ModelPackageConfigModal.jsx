@@ -140,7 +140,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
             </div>
           ) : error ? (
             <div className="error-state">
-              <span className="error-icon">⚠️</span>
+              <span className="error-icon"></span>
               <p>{error}</p>
               <button className="btn-retry" onClick={fetchModelPackages}>
                 Retry
@@ -154,7 +154,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                   className="btn-clone"
                   onClick={handleCloneConfig}
                 >
-                  📋 Clone from another model
+                   Clone from another model
                 </button>
                 <div className="config-stats">
                   <span className="stat-badge">
@@ -169,7 +169,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
               {/* Empty State */}
               {hasNoConfig ? (
                 <div className="empty-state">
-                  <div className="empty-icon">📦</div>
+                  <div className="empty-icon"></div>
                   <h4>No configuration yet</h4>
                   <p>This model doesn't have any service package configuration.</p>
                   <p>Click "Clone from another model" to get started.</p>
@@ -193,13 +193,13 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                             className="btn-edit-package"
                             onClick={() => handleEditPackage(pkg)}
                           >
-                            ✏️ Edit
+                             Edit
                           </button>
                         </div>
                       </div>
                       <div className="package-summary">
                         <span className="items-count">
-                          📋 {pkg.items.length} items
+                           {pkg.items.length} items
                         </span>
                         <span className="items-preview">
                           {pkg.items.slice(0, 3).map(item => item.serviceItemName).join(', ')}

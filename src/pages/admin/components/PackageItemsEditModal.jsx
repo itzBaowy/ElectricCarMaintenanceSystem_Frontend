@@ -93,7 +93,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       const result = await modelPackageItemService.update(item.id, updateData)
 
       if (result.success) {
-        alert('✅ Updated successfully!')
+        alert(' Updated successfully!')
         // Update local state
         setItems(prevItems => 
           prevItems.map(i => 
@@ -159,7 +159,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       }
 
       if (errorCount === 0) {
-        alert(`✅ Successfully saved ${successCount} changes!`)
+        alert(` Successfully saved ${successCount} changes!`)
         setEditedItems({})
         fetchData()
         if (onSuccess) onSuccess()
@@ -221,7 +221,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       const result = await modelPackageItemService.create(createData)
 
       if (result.success) {
-        alert('✅ Service item added successfully!')
+        alert(' Service item added successfully!')
         setShowAddModal(false)
         setNewItem({
           serviceItemId: '',
@@ -254,7 +254,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       const result = await modelPackageItemService.delete(item.id)
 
       if (result.success) {
-        alert('✅ Service item removed successfully!')
+        alert(' Service item removed successfully!')
         fetchData()
         if (onSuccess) onSuccess()
       } else {
@@ -294,7 +294,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
             </div>
           ) : error ? (
             <div className="error-state">
-              <span className="error-icon">⚠️</span>
+              <span className="error-icon"></span>
               <p>{error}</p>
               <button className="btn-retry" onClick={fetchData}>Retry</button>
             </div>
@@ -303,11 +303,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
               {/* Summary */}
               <div className="items-summary">
                 <span className="summary-item">
-                  📋 <strong>{items.length}</strong> items
+                   <strong>{items.length}</strong> items
                 </span>
                 {changedItemsCount > 0 && (
                   <span className="summary-item changed">
-                    ✏️ <strong>{changedItemsCount}</strong> changes
+                     <strong>{changedItemsCount}</strong> changes
                   </span>
                 )}
                 <button 
@@ -315,7 +315,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                   onClick={() => setShowAddModal(true)}
                   disabled={saving}
                 >
-                  ➕ Add Service Item
+                   Add Service Item
                 </button>
               </div>
 
@@ -412,7 +412,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             onClick={() => handleSaveItem(item)}
                             disabled={!hasChanges(item.id) || saving}
                           >
-                            💾 Save
+                             Save
                           </button>
                           <button
                             className="btn-delete-item"
@@ -420,7 +420,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             disabled={saving}
                             title="Remove from package"
                           >
-                            🗑️
+                            
                           </button>
                         </td>
                       </tr>
@@ -530,7 +530,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                   onClick={handleAddItem}
                   disabled={saving}
                 >
-                  {saving ? 'Adding...' : '➕ Add'}
+                  {saving ? 'Adding...' : ' Add'}
                 </button>
               </div>
             </div>
@@ -558,7 +558,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                 </>
               ) : (
                 <>
-                  💾 Save All ({changedItemsCount})
+                   Save All ({changedItemsCount})
                 </>
               )}
             </button>

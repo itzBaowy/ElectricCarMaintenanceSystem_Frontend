@@ -155,7 +155,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
     <div className="modal-overlay">
       <div className="invoice-modal">
         <div className="modal-header">
-          <h2>🧾 Chi Tiết Hóa Đơn</h2>
+          <h2> Chi Tiết Hóa Đơn</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -174,7 +174,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           >
             {invoiceData ? (
               <>
-                {invoiceData.status === "PAID" ? "✅" : "⏳"} Hóa đơn:{" "}
+                {invoiceData.status === "PAID" ? "" : ""} Hóa đơn:{" "}
                 {invoiceData.status === "PAID"
                   ? "Đã thanh toán"
                   : "Chưa thanh toán"}
@@ -182,7 +182,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
               </>
             ) : (
               <>
-                📝 Trạng thái hóa đơn: <strong>NOT CREATED</strong>
+                 Trạng thái hóa đơn: <strong>NOT CREATED</strong>
                 <div className="invoice-id">Hóa đơn chưa được tạo</div>
               </>
             )}
@@ -190,7 +190,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
 
           {/* Customer Information */}
           <div className="invoice-section">
-            <h3>👤 Thông Tin Khách Hàng</h3>
+            <h3> Thông Tin Khách Hàng</h3>
             <div className="info-grid">
               <div className="info-item">
                 <label>Tên Khách Hàng:</label>
@@ -213,7 +213,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
 
           {/* Vehicle Information */}
           <div className="invoice-section">
-            <h3>🚗 Thông Tin Xe</h3>
+            <h3> Thông Tin Xe</h3>
             <div className="info-grid">
               <div className="info-item">
                 <label>Biển Số:</label>
@@ -253,7 +253,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
 
           {/* Service Center Information */}
           <div className="invoice-section">
-            <h3>🏢 Thông Tin Appointment & Trung Tâm</h3>
+            <h3> Thông Tin Appointment & Trung Tâm</h3>
             <div className="info-grid">
               <div className="info-item">
                 <label>Mã Appointment:</label>
@@ -298,7 +298,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {(invoiceData?.maintenanceRecord?.technicianName ||
             appointmentData.technicianName) && (
             <div className="invoice-section">
-              <h3>🔧 Kỹ Thuật Viên</h3>
+              <h3> Kỹ Thuật Viên</h3>
               <div className="info-grid">
                 <div className="info-item">
                   <label>Tên Kỹ Thuật Viên:</label>
@@ -323,7 +323,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {(invoiceData?.maintenanceRecord?.servicePackageName ||
             appointmentData.servicePackageName) && (
             <div className="invoice-section">
-              <h3>📦 Gói Dịch Vụ</h3>
+              <h3> Gói Dịch Vụ</h3>
               <div className="info-grid">
                 <div className="info-item">
                   <label>Tên Gói:</label>
@@ -342,7 +342,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
             (appointmentData.serviceItems &&
               appointmentData.serviceItems.length > 0)) && (
             <div className="invoice-section">
-              <h3>🔨 Các Hạng Mục Dịch Vụ</h3>
+              <h3> Các Hạng Mục Dịch Vụ</h3>
               <div className="service-table">
                 <table>
                   <thead>
@@ -390,7 +390,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {/* Notes */}
           {appointmentData.notes && (
             <div className="invoice-section">
-              <h3>📝 Ghi Chú</h3>
+              <h3> Ghi Chú</h3>
               <div className="notes-content">{appointmentData.notes}</div>
             </div>
           )}
@@ -425,7 +425,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
               onClick={handleGenerateInvoice}
               disabled={generating}
             >
-              {generating ? "⏳ Đang tạo..." : "✅ Xác Nhận Tạo Hóa Đơn"}
+              {generating ? " Đang tạo..." : " Xác Nhận Tạo Hóa Đơn"}
             </button>
           )}
           <button className="cancel-btn" onClick={onClose}>

@@ -24,56 +24,56 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { id: "reports", icon: "📊", label: "Financial Reports", component: ReportManagement },
+    { id: "reports", icon: "", label: "Financial Reports", component: ReportManagement },
     {
       id: "customers",
-      icon: "👤",
+      icon: "",
       label: "Customer",
       component: CustomerManagement,
     },
     {
       id: "employees",
-      icon: "👥",
+      icon: "",
       label: "Employees",
       component: EmployeeManagement,
     },
     {
       id: "centers",
-      icon: "🏢",
+      icon: "",
       label: "Service Centers",
       component: ServiceCenterManagement,
     },
     {
       id: "serviceItems",
-      icon: "🔧",
+      icon: "",
       label: "Service Items",
       component: ServiceItemManagement,
     },
     {
       id: "spareParts",
-      icon: "🛠️",
+      icon: "",
       label: "Spare Parts",
       component: SparePartManagement,
     },
     {
       id: "vehicleModels",
-      icon: "🚗",
+      icon: "",
       label: "Vehicle Models",
       component: VehicleModelManagement,
     },
     {
       id: "vehicles",
-      icon: "🚙",
+      icon: "",
       label: "Vehicles",
       component: VehicleManagement,
     },
     {
       id: "maintenanceRecords",
-      icon: "📋",
+      icon: "",
       label: "Maintenance Records",
       component: MaintenanceRecordManagement,
     },
-    // { id: "settings", icon: "⚙️", label: "Settings", component: null },
+    // { id: "settings", icon: "", label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(

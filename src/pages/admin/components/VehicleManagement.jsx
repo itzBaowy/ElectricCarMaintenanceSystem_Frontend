@@ -343,7 +343,7 @@ const VehicleManagement = () => {
             disabled={isLoading}
             title="Refresh vehicle list"
           >
-            {isLoading ? "⌛" : "↻"}
+            {isLoading ? "" : "↻"}
           </button>
         </div>
 
@@ -547,7 +547,7 @@ const VehicleManagement = () => {
 
         {isLoading ? (
           <div className="loading-state">
-            <p>⏳ Loading vehicles...</p>
+            <p> Loading vehicles...</p>
           </div>
         ) : (
           <div className="vehicle-table">
@@ -645,20 +645,20 @@ const VehicleManagement = () => {
                 {/* Vehicle Info Card */}
                 <div className="info-card">
                   <div className="card-header">
-                    <span className="card-icon">🔧</span>
+                    <span className="card-icon"></span>
                     <h4>Vehicle Details</h4>
                   </div>
                   <div className="card-body">
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">🆔</span>
+                        <span className="label-icon"></span>
                         Vehicle ID
                       </span>
                       <span className="info-value">#{viewingVehicle.id}</span>
                     </div>
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">📋</span>
+                        <span className="label-icon"></span>
                         VIN Number
                       </span>
                       <span className="info-value vin-number">
@@ -671,13 +671,13 @@ const VehicleManagement = () => {
                 {/* Owner Info Card */}
                 <div className="info-card">
                   <div className="card-header">
-                    <span className="card-icon">👤</span>
+                    <span className="card-icon"></span>
                     <h4>Owner Information</h4>
                   </div>
                   <div className="card-body">
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">👨‍💼</span>
+                        <span className="label-icon"></span>
                         Customer Name
                       </span>
                       <span className="info-value">
@@ -686,7 +686,7 @@ const VehicleManagement = () => {
                     </div>
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">🔢</span>
+                        <span className="label-icon"></span>
                         Customer ID
                       </span>
                       <span className="info-value">
@@ -699,13 +699,13 @@ const VehicleManagement = () => {
                 {/* Status Info Card */}
                 <div className="info-card full-width">
                   <div className="card-header">
-                    <span className="card-icon">📊</span>
+                    <span className="card-icon"></span>
                     <h4>Vehicle Status</h4>
                   </div>
                   <div className="card-body">
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">🛣️</span>
+                        <span className="label-icon"></span>
                         Current Mileage
                       </span>
                       <span className="info-value">
@@ -718,7 +718,7 @@ const VehicleManagement = () => {
                     </div>
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">📅</span>
+                        <span className="label-icon"></span>
                         Purchase Date
                       </span>
                       <span className="info-value">
@@ -734,7 +734,7 @@ const VehicleManagement = () => {
                     </div>
                     <div className="info-row">
                       <span className="info-label">
-                        <span className="label-icon">⏰</span>
+                        <span className="label-icon"></span>
                         Registered On
                       </span>
                       <span className="info-value">

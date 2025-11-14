@@ -64,15 +64,15 @@ const AddServiceItemModal = ({ onClose, onAdd }) => {
       const response = await serviceItemService.createServiceItem(requestData)
 
       if (response.code === 1000 && response.result) {
-        alert('✅ Service item created successfully!')
+        alert(' Service item created successfully!')
         onAdd(response.result)
         onClose()
       } else {
-        alert(`❌ Failed to create service item: ${response.message}`)
+        alert(` Failed to create service item: ${response.message}`)
       }
     } catch (error) {
       console.error('Error creating service item:', error)
-      alert('❌ An error occurred while creating the service item')
+      alert(' An error occurred while creating the service item')
     } finally {
       setLoading(false)
     }
@@ -90,7 +90,7 @@ const AddServiceItemModal = ({ onClose, onAdd }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content add-service-item-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>➕ Add New Service Item</h2>
+          <h2> Add New Service Item</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -161,7 +161,7 @@ const AddServiceItemModal = ({ onClose, onAdd }) => {
               className="btn-primary"
               disabled={loading}
             >
-              {loading ? '⏳ Creating...' : '✓ Create Service Item'}
+              {loading ? ' Creating...' : '✓ Create Service Item'}
             </button>
           </div>
         </form>

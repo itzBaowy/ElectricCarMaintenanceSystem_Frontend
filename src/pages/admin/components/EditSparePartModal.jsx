@@ -114,7 +114,7 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
           <div className="modal-body">
             {error && (
               <div className="error-alert">
-                <span className="error-icon">⚠️</span>
+                <span className="error-icon"></span>
                 {error}
               </div>
             )}
@@ -205,7 +205,7 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                   <span className="info-label">Current Stock:</span>
                   <span className="info-value">{sparePart?.quantityInStock || 0} units</span>
                   <span className="info-note">
-                    ℹ️ To update stock quantity, use the "Update Stock" button in the table
+                    ℹ To update stock quantity, use the "Update Stock" button in the table
                   </span>
                 </div>
               </div>

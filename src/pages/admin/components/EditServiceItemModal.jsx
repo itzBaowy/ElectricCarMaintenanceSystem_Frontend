@@ -86,15 +86,15 @@ const EditServiceItemModal = ({ serviceItem, onClose, onUpdate }) => {
       const response = await serviceItemService.updateServiceItem(serviceItem.id, requestData)
 
       if (response.code === 1000 && response.result) {
-        alert('✅ Service item updated successfully!')
+        alert(' Service item updated successfully!')
         onUpdate(response.result)
         onClose()
       } else {
-        alert(`❌ Failed to update service item: ${response.message}`)
+        alert(` Failed to update service item: ${response.message}`)
       }
     } catch (error) {
       console.error('Error updating service item:', error)
-      alert('❌ An error occurred while updating the service item')
+      alert(' An error occurred while updating the service item')
     } finally {
       setLoading(false)
     }
@@ -111,7 +111,7 @@ const EditServiceItemModal = ({ serviceItem, onClose, onUpdate }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content edit-service-item-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>✏️ Edit Service Item</h2>
+          <h2> Edit Service Item</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -199,7 +199,7 @@ const EditServiceItemModal = ({ serviceItem, onClose, onUpdate }) => {
               className="btn-primary"
               disabled={loading || !hasChanges()}
             >
-              {loading ? '⏳ Updating...' : '✓ Save Changes'}
+              {loading ? ' Updating...' : '✓ Save Changes'}
             </button>
           </div>
         </form>
