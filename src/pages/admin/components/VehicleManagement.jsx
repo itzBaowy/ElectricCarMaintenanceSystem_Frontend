@@ -28,6 +28,12 @@ const VehicleManagement = () => {
   const [isLoadingCustomers, setIsLoadingCustomers] = useState(false);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
 
+  // Pagination state (backend pagination)
+  const [currentPage, setCurrentPage] = useState(0); // Backend uses 0-based indexing
+  const [pageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+
   // Load vehicles, customers, and models from API
   useEffect(() => {
     loadVehicles();
@@ -35,33 +41,34 @@ const VehicleManagement = () => {
     loadVehicleModels();
   }, []);
 
-  const loadVehicles = async () => {
+  const loadVehicles = async (page = currentPage) => {
     setIsLoading(true);
     try {
-      const result = await vehicleService.getAllVehicles();
+      // Call API with pagination params
+      const result = await vehicleService.getAllVehicles(page, pageSize);
       logger.log("Raw vehicle result:", result);
 
       if (result.success && result.data) {
-        // API returns paginated data with 'content' array
-        let vehiclesArray = [];
+        // API returns paginated data
+        const paginatedData = result.data;
         
-        if (Array.isArray(result.data)) {
-          // If data is directly an array
-          vehiclesArray = result.data;
-        } else if (result.data.content && Array.isArray(result.data.content)) {
-          // If data is paginated object with 'content' array
-          vehiclesArray = result.data.content;
-        }
-        
-        // Sort by creation date (newest first)
-        const sortedVehicles = vehiclesArray.sort(
-          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
-        );
-
-        setVehicles(sortedVehicles);
-        logger.log("Loaded vehicles:", sortedVehicles);
-        if (sortedVehicles.length > 0) {
-          logger.log("Sample vehicle object:", sortedVehicles[0]);
+        if (paginatedData.content && Array.isArray(paginatedData.content)) {
+          // Extract vehicles and pagination info
+          setVehicles(paginatedData.content);
+          setTotalPages(paginatedData.totalPages || 0);
+          setTotalElements(paginatedData.totalElements || 0);
+          
+          logger.log("Loaded vehicles:", paginatedData.content);
+          logger.log("Pagination info:", {
+            page: paginatedData.number,
+            totalPages: paginatedData.totalPages,
+            totalElements: paginatedData.totalElements,
+          });
+        } else if (Array.isArray(result.data)) {
+          // Fallback: if data is directly an array (old API format)
+          setVehicles(result.data);
+          setTotalPages(1);
+          setTotalElements(result.data.length);
         }
       } else {
         logger.log("Failed to load vehicles:", result.message);
@@ -311,18 +318,35 @@ const VehicleManagement = () => {
     }
   };
 
-  // Filter vehicles
+  // Filter vehicles (local filter for current page only)
   const filteredVehicles = vehicles.filter((vehicle) => {
+    if (!searchTerm) return true;
+    
+    const vehicleId = vehicle.id;
     const customerName = getCustomerName(vehicle.customerId);
     const modelName = getVehicleModelName(vehicle);
 
     const matchesSearch =
+      vehicleId?.toString().includes(searchTerm) ||
       vehicle.licensePlate?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vehicle.vin?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       modelName.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesSearch;
   });
+
+  // Pagination handlers
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    loadVehicles(pageNumber);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    // Note: For backend search, you would call API with search param
+    // For now, we only filter locally on current page
+  };
 
   return (
     <div className="vehicle-management">
@@ -331,9 +355,9 @@ const VehicleManagement = () => {
         <div className="search-filters">
           <input
             type="text"
-            placeholder="Search vehicles by license plate, customer, model..."
+            placeholder="Search by ID, license plate, VIN, customer, or model..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="search-input"
           />
 
@@ -542,7 +566,7 @@ const VehicleManagement = () => {
       {/* Vehicle List */}
       <div className="vehicle-list">
         <div className="list-header">
-          <h3>Vehicles ({filteredVehicles.length})</h3>
+          <h3>Vehicles ({totalElements})</h3>
         </div>
 
         {isLoading ? (
@@ -605,6 +629,36 @@ const VehicleManagement = () => {
             {filteredVehicles.length === 0 && (
               <div className="empty-state">
                 <p>No vehicles found matching your criteria.</p>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 0}
+                >
+                  ← Previous
+                </button>
+                
+                <div className="pagination-info">
+                  <span>
+                    Page {currentPage + 1} of {totalPages}
+                  </span>
+                  <span className="pagination-details">
+                    Showing {currentPage * pageSize + 1} - {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements}
+                  </span>
+                </div>
+                
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage >= totalPages - 1}
+                >
+                  Next →
+                </button>
               </div>
             )}
           </div>

@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 import { Client } from '@stomp/stompjs'
 import { BASE_URL } from '../api/apiConfig'
@@ -10,25 +11,38 @@ const ChatContext = createContext()
 export const useChatNotifications = () => {
   const context = useContext(ChatContext)
   if (!context) {
-    throw new Error('useChatNotifications must be used within ChatProvider')
+    // Return default values instead of throwing error - allow components to work without provider
+    return { 
+      unreadCount: 0, 
+      clearUnreadCount: () => {}, 
+      setActiveRoom: () => {} 
+    }
   }
   return context
 }
 
 export const ChatProvider = ({ children, userRole, userId }) => {
   const [unreadCount, setUnreadCount] = useState(0)
+  const location = useLocation()
   const stompClientRef = useRef(null)
   const subscriptionsRef = useRef(new Map())
 
+  // Check if currently on chat page
+  const isOnChatPage = location.pathname.includes('/chat')
+
   useEffect(() => {
-    if (userId && userRole) {
+    if (userId && userRole && !isOnChatPage) {
       connectWebSocket()
+    } else if (isOnChatPage) {
+      // Clear notifications when entering chat page
+      setUnreadCount(0)
+      disconnect()
     }
 
     return () => {
       disconnect()
     }
-  }, [userId, userRole])
+  }, [userId, userRole, isOnChatPage])
 
   const connectWebSocket = () => {
     const token = localStorage.getItem('accessToken')
@@ -107,8 +121,8 @@ export const ChatProvider = ({ children, userRole, userId }) => {
     const subscription = stompClientRef.current.subscribe(`/topic/chat-room/${roomId}`, (message) => {
       const chatMessage = JSON.parse(message.body)
       
-      // Only count messages from others
-      if (chatMessage.senderId !== userId && !chatMessage.type) {
+      // Only count messages from others AND not in currently active room
+      if (chatMessage.senderId !== userId && !chatMessage.type && activeRoomRef.current !== roomId) {
         setUnreadCount(prev => prev + 1)
       }
     })
@@ -120,9 +134,14 @@ export const ChatProvider = ({ children, userRole, userId }) => {
     setUnreadCount(0)
   }
 
+  const setActiveRoom = (roomId) => {
+    activeRoomRef.current = roomId
+  }
+
   const value = {
     unreadCount,
-    clearUnreadCount
+    clearUnreadCount,
+    setActiveRoom
   }
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>

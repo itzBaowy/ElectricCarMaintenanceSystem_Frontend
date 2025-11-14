@@ -89,9 +89,11 @@ const vehicleService = {
   },
 
   // Get all vehicles
-  getAllVehicles: async () => {
+  getAllVehicles: async (page = 0, size = 10) => {
     try {
-      const response = await api.get('/api/vehicles')
+      const response = await api.get('/api/vehicles', {
+        params: { page, size }
+      })
       
       if (response.data.code === 1000) {
         return {

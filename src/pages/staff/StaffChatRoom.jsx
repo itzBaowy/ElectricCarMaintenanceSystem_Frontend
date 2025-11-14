@@ -20,6 +20,8 @@ const StaffChatRoom = () => {
   const lobbySubscriptionRef = useRef(null)
   const activeSubscriptionsRef = useRef(new Map())
   const messagesEndRef = useRef(null)
+  const activeRoomIdRef = useRef(null)
+  const currentUserIdRef = useRef(null)
 
   useEffect(() => {
     initializeConnection()
@@ -31,6 +33,16 @@ const StaffChatRoom = () => {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Update ref when activeRoomId changes
+  useEffect(() => {
+    activeRoomIdRef.current = activeRoomId
+  }, [activeRoomId])
+
+  // Update ref when currentUserId changes
+  useEffect(() => {
+    currentUserIdRef.current = currentUserId
+  }, [currentUserId])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -199,40 +211,39 @@ const StaffChatRoom = () => {
     const subscription = stompClientRef.current.subscribe(roomTopic, (message) => {
       const chatMessage = JSON.parse(message.body)
       logger.log('Received WS message:', chatMessage)
+      logger.log('Current activeRoomId:', activeRoomIdRef.current)
       
-      // Update room status
+      // Handle different message types
       if (chatMessage.type === 'CHAT_ENDED') {
+        // Remove room from active list
         setMyActiveRooms(prevRooms => 
           prevRooms.filter(room => room.id !== chatMessage.roomId)
         )
-      } else if (!chatMessage.type && chatMessage.senderId !== currentUserId) {
-        // New message - mark as unread if not active room
-        if (chatMessage.roomId !== activeRoomId) {
+        // Show system message if in active room
+        if (chatMessage.roomId === activeRoomIdRef.current) {
+          addSystemMessage(`Chat ended by ${chatMessage.endedBy}`)
+        }
+      } else if (chatMessage.type === 'STAFF_JOINED') {
+        // Staff joined notification (ignore for staff)
+        return
+      } else if (!chatMessage.type && chatMessage.senderId !== currentUserIdRef.current) {
+        // Regular message from customer
+        if (chatMessage.roomId === activeRoomIdRef.current) {
+          // Currently viewing this room - display message immediately
+          logger.log('✅ Displaying message in active room')
+          setMessages(prev => [...prev, {
+            ...chatMessage,
+            isOwn: false
+          }])
+        } else {
+          // Different room - mark as unread
+          logger.log('📩 Marking different room as unread')
           setMyActiveRooms(prevRooms => 
             prevRooms.map(room => 
               room.id === chatMessage.roomId ? { ...room, hasNewMessage: true } : room
             )
           )
         }
-      }
-
-      // Only display in active chat
-      if (chatMessage.roomId !== activeRoomId) {
-        return
-      }
-
-      // Handle different message types
-      if (chatMessage.type === 'STAFF_JOINED') {
-        // Staff joined notification (ignore for staff)
-        return
-      } else if (chatMessage.type === 'CHAT_ENDED') {
-        addSystemMessage(`Chat ended by ${chatMessage.endedBy}`)
-      } else if (chatMessage.senderId !== currentUserId) {
-        // Regular message from customer
-        setMessages(prev => [...prev, {
-          ...chatMessage,
-          isOwn: false
-        }])
       }
     })
     
