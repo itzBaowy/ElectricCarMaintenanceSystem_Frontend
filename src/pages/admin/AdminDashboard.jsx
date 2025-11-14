@@ -12,7 +12,7 @@ import "../../styles/AdminDashboard.css";
 import authService from "../../api/authService";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("employees");
+  const [activeTab, setActiveTab] = useState("reports");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -23,17 +23,18 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    {
-      id: "employees",
-      icon: "👥",
-      label: "Employee Management",
-      component: EmployeeManagement,
-    },
+    { id: "reports", icon: "📊", label: "Financial Reports", component: ReportManagement },
     {
       id: "customers",
       icon: "👤",
-      label: "Customer Management",
+      label: "Customer",
       component: CustomerManagement,
+    },
+    {
+      id: "employees",
+      icon: "👥",
+      label: "Employees",
+      component: EmployeeManagement,
     },
     {
       id: "centers",
@@ -44,7 +45,7 @@ const AdminDashboard = () => {
     {
       id: "spareParts",
       icon: "🔧",
-      label: "Spare Part Management",
+      label: "Spare Parts",
       component: SparePartManagement,
     },
     {
@@ -56,7 +57,7 @@ const AdminDashboard = () => {
     {
       id: "vehicles",
       icon: "🚙",
-      label: "Vehicle Management",
+      label: "Vehicles",
       component: VehicleManagement,
     },
     {
@@ -65,7 +66,6 @@ const AdminDashboard = () => {
       label: "Maintenance Records",
       component: MaintenanceRecordManagement,
     },
-    { id: "reports", icon: "📊", label: "Financial Reports", component: ReportManagement },
     { id: "settings", icon: "⚙️", label: "Settings", component: null },
   ];
 

@@ -76,21 +76,22 @@ html, body {
 }
 
 .btn-logout {
-  background: #fff;
-  color: #222;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
   font-size: 1.15rem;
   font-weight: 700;
   border: none;
   border-radius: 10px;
   padding: 0.9rem 2.2rem;
-  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  box-shadow: 0 4px 15px rgba(38, 166, 154, 0.3);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .btn-logout:hover {
-  background: #26a69a;
-  color: #fff;
+  background: linear-gradient(135deg, #1e8e85 0%, #4caf50 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(38, 166, 154, 0.4);
 }
 
 /* Statistics Cards */
@@ -123,7 +124,7 @@ html, body {
 
 .stats-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   background: #ffffff;
   padding: 1.5rem;
@@ -170,6 +171,18 @@ html, body {
 
 .stat-number.confirmed {
   color: #000000 !important;
+}
+
+.stat-number.in-progress {
+  color: #1976d2 !important;
+}
+
+.stat-number.waiting {
+  color: #ff9800 !important;
+}
+
+.stat-number.approved {
+  color: #4caf50 !important;
 }
 
 .stat-number.completed {
@@ -308,7 +321,7 @@ html, body {
 }
 
 .appointments-table thead {
-  background: #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #ffffff;
 }
 
@@ -319,7 +332,7 @@ html, body {
   white-space: normal;
   word-wrap: break-word;
   color: #ffffff;
-  border: 1px solid #000000;
+  border: 1px solid #26a69a;
 }
 
 .appointments-table td {
@@ -384,10 +397,28 @@ html, body {
   border: 2px solid #000000;
 }
 
-.status-badge-completed {
-  background-color: #000000;
+.status-badge-in-progress {
+  background-color: #1976d2;
   color: #ffffff;
-  border: 2px solid #000000;
+  border: 2px solid #1976d2;
+}
+
+.status-badge-waiting {
+  background-color: #ff9800;
+  color: #ffffff;
+  border: 2px solid #ff9800;
+}
+
+.status-badge-approved {
+  background-color: #4caf50;
+  color: #ffffff;
+  border: 2px solid #4caf50;
+}
+
+.status-badge-completed {
+  background: linear-gradient(135deg, #616161 0%, #424242 100%);
+  color: #ffffff;
+  border: 2px solid #616161;
 }
 
 .status-badge-cancelled {
@@ -410,21 +441,21 @@ html, body {
 
 /* Buttons */
 .btn-view {
-  background: #000000;
+  background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
   color: #ffffff;
-  border: 2px solid #000000;
+  border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
 }
 
 .btn-view:hover {
-  background: #ffffff;
-  color: #000000;
+  background: linear-gradient(135deg, #1565c0 0%, #1e88e5 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
 }
 
 /* Modal */
@@ -582,49 +613,74 @@ html, body {
 .btn-action {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  border: 2px solid #000000;
+  border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 150px;
+  font-size: 1rem;
 }
 
 .btn-start {
-  background: #000000;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
   color: #ffffff;
+  border: none;
+  box-shadow: 0 3px 10px rgba(25, 118, 210, 0.3);
 }
 
 .btn-start:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  background: #333333;
+  box-shadow: 0 6px 15px rgba(25, 118, 210, 0.5);
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
 }
 
 .btn-complete {
-  background: #000000;
+  background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
   color: #ffffff;
+  border: none;
+  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
 }
 
 .btn-complete:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  background: #333333;
+  box-shadow: 0 6px 15px rgba(76, 175, 80, 0.5);
+  background: linear-gradient(135deg, #388e3c 0%, #4caf50 100%);
 }
 
 .btn-cancel {
-  background: #ffffff;
-  color: #000000;
-  border: 2px solid #000000;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  color: #424242;
+  border: 2px solid #bdbdbd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-cancel:hover {
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .btn-action:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Waiting Message in Modal */
+.waiting-message {
+  text-align: center;
+  padding: 1.5rem;
+  background: #fff3cd;
+  border: 2px solid #ff9800;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.waiting-message p {
+  margin: 0;
+  color: #856404;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 /* Loading and Empty States */

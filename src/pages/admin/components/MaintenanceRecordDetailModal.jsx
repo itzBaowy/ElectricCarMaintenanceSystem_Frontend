@@ -66,9 +66,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
     }).format(amount);
   };
 
-  const calculateServiceItemsTotal = () => {
-    return record.serviceItems?.reduce((sum, item) => sum + (item.price || 0), 0) || 0;
-  };
+
 
   const getActionTypeBadge = (actionType) => {
     const badges = {
@@ -137,6 +135,10 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                   <div className="info-row">
                     <span className="label">ID khách hàng:</span>
                     <span className="value">{record.customerId}</span>
+                  </div>
+                  <div className="info-row">
+                    <span className="label">Trung tâm dịch vụ:</span>
+                    <span className="value">{record.serviceCenterName}</span>
                   </div>
                 </div>
 
@@ -208,7 +210,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                 <h3>Tổng quan chi phí</h3>
                 <div className="summary-row total">
                   <span>Chi phí dịch vụ:</span>
-                  <span className="amount">{formatCurrency(calculateServiceItemsTotal())}</span>
+                  <span className="amount">{formatCurrency(record.totalPrice || 0)}</span>
                 </div>
               </div>
             </div>
@@ -241,7 +243,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                 )}
               </div>
               <div className="section-total">
-                <strong>Tổng chi phí dịch vụ: {formatCurrency(calculateServiceItemsTotal())}</strong>
+                <strong>Tổng chi phí dịch vụ: {formatCurrency(record.totalPrice || 0)}</strong>
               </div>
             </div>
           )}
