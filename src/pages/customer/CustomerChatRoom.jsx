@@ -20,6 +20,8 @@ const CustomerChatRoom = () => {
   const stompClientRef = useRef(null)
   const activeSubscriptionsRef = useRef(new Map())
   const messagesEndRef = useRef(null)
+  const activeRoomIdRef = useRef(null)
+  const currentUserIdRef = useRef(null)
 
   useEffect(() => {
     initializeConnection()
@@ -31,6 +33,16 @@ const CustomerChatRoom = () => {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Update ref when activeRoomId changes
+  useEffect(() => {
+    activeRoomIdRef.current = activeRoomId
+  }, [activeRoomId])
+
+  // Update ref when currentUserId changes
+  useEffect(() => {
+    currentUserIdRef.current = currentUserId
+  }, [currentUserId])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -156,42 +168,49 @@ const CustomerChatRoom = () => {
     const subscription = stompClientRef.current.subscribe(roomTopic, (message) => {
       const chatMessage = JSON.parse(message.body)
       logger.log('Received WS message:', chatMessage)
+      logger.log('Current activeRoomId:', activeRoomIdRef.current)
       
-      // Update room status in the list
-      setMyRooms(prevRooms => {
-        return prevRooms.map(room => {
-          if (room.id === chatMessage.roomId) {
-            if (chatMessage.type === 'STAFF_JOINED') {
-              return { ...room, status: 'ACTIVE' }
-            } else if (chatMessage.type === 'CHAT_ENDED') {
-              return { ...room, status: 'CLOSED' }
-            } else if (!chatMessage.type && chatMessage.senderId !== currentUserId) {
-              // New message - mark as unread if not active room
-              if (chatMessage.roomId !== activeRoomId) {
-                return { ...room, hasNewMessage: true }
-              }
-            }
-          }
-          return room
-        })
-      })
-
-      // Only display in active chat
-      if (chatMessage.roomId !== activeRoomId) {
-        return
-      }
-
-      // Handle different message types
+      // Handle different message types first
       if (chatMessage.type === 'STAFF_JOINED') {
-        addSystemMessage(`Staff ${chatMessage.staffName} has joined the chat!`)
+        // Update room status
+        setMyRooms(prevRooms => 
+          prevRooms.map(room => 
+            room.id === chatMessage.roomId ? { ...room, status: 'ACTIVE' } : room
+          )
+        )
+        // Show system message if in active room
+        if (chatMessage.roomId === activeRoomIdRef.current) {
+          addSystemMessage(`Staff ${chatMessage.staffName} has joined the chat!`)
+        }
       } else if (chatMessage.type === 'CHAT_ENDED') {
-        addSystemMessage(`Chat ended by ${chatMessage.endedBy}`)
-      } else if (chatMessage.senderId !== currentUserId) {
-        // Regular message from staff
-        setMessages(prev => [...prev, {
-          ...chatMessage,
-          isOwn: false
-        }])
+        // Update room status
+        setMyRooms(prevRooms => 
+          prevRooms.map(room => 
+            room.id === chatMessage.roomId ? { ...room, status: 'CLOSED' } : room
+          )
+        )
+        // Show system message if in active room
+        if (chatMessage.roomId === activeRoomIdRef.current) {
+          addSystemMessage(`Chat ended by ${chatMessage.endedBy}`)
+        }
+      } else if (!chatMessage.type && chatMessage.senderId !== currentUserIdRef.current) {
+        // Regular message from other user
+        if (chatMessage.roomId === activeRoomIdRef.current) {
+          // Currently viewing this room - display message immediately
+          logger.log('✅ Displaying message in active room')
+          setMessages(prev => [...prev, {
+            ...chatMessage,
+            isOwn: false
+          }])
+        } else {
+          // Different room - mark as unread
+          logger.log('📩 Marking different room as unread')
+          setMyRooms(prevRooms => 
+            prevRooms.map(room => 
+              room.id === chatMessage.roomId ? { ...room, hasNewMessage: true } : room
+            )
+          )
+        }
       }
     })
     
