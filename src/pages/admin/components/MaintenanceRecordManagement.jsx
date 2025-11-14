@@ -164,7 +164,7 @@ const MaintenanceRecordManagement = () => {
                   <td className="service-package">{record.servicePackageName}</td>
                   <td>{record.technicianName}</td>
                   <td className="text-center">{record.serviceItems?.length || 0}</td>
-                  <td className="price">{formatCurrency(calculateTotalCost(record))}</td>
+                  <td className="price">{record.totalPrice ? formatCurrency(record.totalPrice) : 'Chưa tạo hoá đơn'}</td>
                   <td>
                     <button
                       onClick={() => handleViewDetail(record)}
