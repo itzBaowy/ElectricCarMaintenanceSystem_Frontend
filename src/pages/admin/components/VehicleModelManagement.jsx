@@ -132,7 +132,7 @@ const VehicleModelManagement = () => {
           />
         </div>
         <button className="add-model-btn" onClick={handleAddModel}>
-          ➕ Add New Model
+           Add New Model
         </button>
       </div>
 
@@ -200,21 +200,21 @@ const VehicleModelManagement = () => {
                           onClick={() => handleConfigModel(model)}
                           title="Configure Service Packages"
                         >
-                          ⚙️ Config
+                           Config
                         </button>
                         <button
                           className="action-btn edit"
                           onClick={() => handleEditModel(model)}
                           title="Edit Model"
                         >
-                          ✏️ Edit
+                           Edit
                         </button>
                         <button
                           className="action-btn delete"
                           onClick={() => handleDeleteModel(model)}
                           title="Delete Model"
                         >
-                          🗑️ Delete
+                           Delete
                         </button>
                       </td>
                     </tr>
@@ -223,7 +223,7 @@ const VehicleModelManagement = () => {
                   <tr>
                     <td colSpan="6" className="no-data">
                       <div className="no-data-content">
-                        <span className="no-data-icon">📭</span>
+                        <span className="no-data-icon"></span>
                         <p>No vehicle models found</p>
                       </div>
                     </td>

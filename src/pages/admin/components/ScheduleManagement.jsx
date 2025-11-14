@@ -129,7 +129,7 @@ const ScheduleManagement = () => {
 
         <div className="schedule-actions">
           <button onClick={saveSchedules} className="save-btn">
-            💾 Save All Schedules
+             Save All Schedules
           </button>
         </div>
       </div>

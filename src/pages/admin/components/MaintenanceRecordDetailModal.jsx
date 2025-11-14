@@ -306,8 +306,8 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                   }`}>
                     <div className="status-icon">
                       {invoiceData ? (
-                        invoiceData.status === 'PAID' ? '✅' : '⏳'
-                      ) : '📝'}
+                        invoiceData.status === 'PAID' ? '' : ''
+                      ) : ''}
                     </div>
                     <div className="status-content">
                       <h3>
@@ -386,7 +386,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                       {/* Payment Details */}
                       {invoiceData.status === 'PAID' && (
                         <div className="payment-success-card">
-                          <div className="success-icon">✅</div>
+                          <div className="success-icon"></div>
                           <h3>Payment Successful</h3>
                           <p>Invoice has been paid in full</p>
                           {invoiceData.paidAt && (
@@ -399,7 +399,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
 
                       {invoiceData.status === 'UNPAID' && (
                         <div className="payment-pending-card">
-                          <div className="pending-icon">⏳</div>
+                          <div className="pending-icon"></div>
                           <h3>Pending Payment</h3>
                           <p>Please notify customer to login to the system for payment</p>
                         </div>
@@ -407,7 +407,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                     </div>
                   ) : (
                     <div className="no-invoice-card">
-                      <div className="no-invoice-icon">📝</div>
+                      <div className="no-invoice-icon"></div>
                       <h3>Invoice Not Created</h3>
                       <p>Invoice will be automatically created after completing maintenance steps</p>
                       <ul className="invoice-steps">

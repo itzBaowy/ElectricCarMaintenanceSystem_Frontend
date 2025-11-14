@@ -97,7 +97,7 @@ const UpdateStockModal = ({ sparePart, onClose, onUpdate }) => {
           <div className="modal-body">
             {error && (
               <div className="error-alert">
-                <span className="error-icon">⚠️</span>
+                <span className="error-icon"></span>
                 {error}
               </div>
             )}
@@ -132,7 +132,7 @@ const UpdateStockModal = ({ sparePart, onClose, onUpdate }) => {
                   <span className="error-text">{validationErrors.changeQuantity}</span>
                 )}
                 <div className="input-help">
-                  <span>💡 Examples: +10 to add 10 units, -5 to subtract 5 units</span>
+                  <span> Examples: +10 to add 10 units, -5 to subtract 5 units</span>
                 </div>
               </div>
 
@@ -151,7 +151,7 @@ const UpdateStockModal = ({ sparePart, onClose, onUpdate }) => {
                     </div>
                     {calculatedNewStock < sparePart?.minimumStockLevel && (
                       <div className="preview-warning">
-                        ⚠️ Below minimum stock level ({sparePart?.minimumStockLevel})
+                         Below minimum stock level ({sparePart?.minimumStockLevel})
                       </div>
                     )}
                   </div>

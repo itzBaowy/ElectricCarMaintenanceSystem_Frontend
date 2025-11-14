@@ -191,32 +191,28 @@ const ReportManagement = () => {
               </div>
 
               <div className="report-stats">
-                <div className="stat-card stat-revenue">
-                  <div className="stat-icon"></div>
+                <div className="financial-stat-card stat-revenue">
                   <div className="stat-details">
                     <h4>Total Revenue</h4>
                     <p className="stat-value">{formatCurrency(reportData.totalRevenue)}</p>
                   </div>
                 </div>
 
-                <div className="stat-card stat-invoices">
-                  <div className="stat-icon"></div>
+                <div className="financial-stat-card stat-invoices">
                   <div className="stat-details">
                     <h4>Paid Invoices</h4>
                     <p className="stat-value">{reportData.totalPaidInvoices}</p>
                   </div>
                 </div>
 
-                <div className="stat-card stat-appointments">
-                  <div className="stat-icon"></div>
+                <div className="financial-stat-card stat-appointments">
                   <div className="stat-details">
                     <h4>Completed Appointments</h4>
                     <p className="stat-value">{reportData.totalCompletedAppointments}</p>
                   </div>
                 </div>
 
-                <div className="stat-card stat-average">
-                  <div className="stat-icon"></div>
+                <div className="financial-stat-card stat-average">
                   <div className="stat-details">
                     <h4>Average / Invoice</h4>
                     <p className="stat-value">

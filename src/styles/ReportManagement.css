@@ -1,3 +1,35 @@
+/* Isolated stat card style for financial report */
+.financial-stat-card {
+  background: white !important;
+  padding: 36px 32px 32px 32px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 18px;
+  transition: box-shadow 0.2s, border 0.2s;
+  border: 2.5px solid #e5f5f6;
+  min-width: 260px;
+  min-height: 160px;
+}
+
+.financial-stat-card h4 {
+  margin-bottom: 18px;
+  color: #4a5a5a;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.financial-stat-card .stat-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #222;
+  margin-top: 0;
+}
+
 /* Outermost layout background */
 .financial-report-layout {
   background: #f5f6fa;
@@ -7,7 +39,7 @@
 
 /* Content wrapper background */
 .financial-report-content {
-  background: #dcf0e8;
+  background: #e5f5f6;
   border-radius: 18px;
   padding: 32px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
@@ -66,11 +98,12 @@
 
 /* Filters Section */
 .report-filters {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 25px;
+  background: #f8fcfa;
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.07);
+  margin-bottom: 32px;
+  border: 1.5px solid #dcf0e8;
 }
 
 .date-filters {
@@ -97,12 +130,12 @@
 
 .date-input {
   color: #222 !important;
-  background: #fff !important;
+  background: #f6fbf8 !important;
   border: 2px solid #b2dfdb !important;
-  border-radius: 12px !important;
-  font-size: 1.15rem !important;
-  padding: 0.8rem 1.2rem !important;
-  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.08) !important;
+  border-radius: 14px !important;
+  font-size: 1.18rem !important;
+  padding: 1rem 1.5rem !important;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.06) !important;
   transition: border 0.2s !important;
 }
 
@@ -111,20 +144,20 @@
 }
 
 .btn-generate {
-  background: linear-gradient(135deg, #43cea2 0%, #26a69a 100%) !important;
+  background: linear-gradient(90deg, #7ecb89 0%, #43cea2 100%) !important;
   color: #fff !important;
   border: none !important;
-  border-radius: 14px !important;
+  border-radius: 18px !important;
   font-size: 1.18rem !important;
   font-weight: 700 !important;
-  padding: 0.9rem 2.4rem !important;
+  padding: 1rem 2.6rem !important;
   box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10) !important;
   cursor: pointer !important;
   transition: background 0.2s, color 0.2s !important;
 }
 
 .btn-generate:hover:not(:disabled) {
-  background: #26a69a !important;
+  background: linear-gradient(90deg, #43cea2 0%, #7ecb89 100%) !important;
   color: #fff !important;
 }
 
@@ -155,29 +188,21 @@
 
 .btn-quick {
   padding: 10px 32px;
-  background: white;
-  color: #000000;
-  border: none;
+  background: #f6fbf8;
+  color: #106f6f;
+  border: 2.5px solid #7ecb89;
   border-radius: 999px;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 0 0 2px #43cea2;
-  outline: 2px solid transparent;
-  outline-offset: -2px;
-  background-clip: padding-box;
-  /* Gradient border effect */
-  box-shadow: 0 0 0 2px #43cea2, 0 0 0 4px #26a69a;
-  font-weight: 500;
-  font-size: 0.9rem;
+  font-weight: 600;
+  font-size: 1.05rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: none;
 }
 
 .btn-quick:hover {
-  background: #106f6f;
-  color: white;
+  background: #e6f7f1;
+  color: #106f6f;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
 }
 
 /* Error Message */
@@ -214,24 +239,28 @@
 }
 
 .report-period {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: #f8fcfa;
+  padding: 36px 0 32px 0;
+  border-radius: 18px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.07);
   text-align: center;
+  border: 1.5px solid #dcf0e8;
 }
 
 .report-period h3 {
-  margin: 0 0 10px 0;
-  color: #333;
-  font-size: 1.2rem;
+  margin: 0 0 18px 0;
+  color: #1a3c34;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 1px;
 }
 
 .report-period p {
   margin: 0;
-  color: #666;
-  font-size: 1rem;
+  color: #3d4d46;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 /* Statistics Cards */
@@ -261,22 +290,22 @@
 
 .stat-revenue {
   border-left-color: #10b981;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+  background: white;
 }
 
 .stat-invoices {
   border-left-color: #3b82f6;
-  background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+  background: white;
 }
 
 .stat-appointments {
   border-left-color: #8b5cf6;
-  background: linear-gradient(135deg, #ffffff 0%, #f5f3ff 100%);
+  background: white;
 }
 
 .stat-average {
   border-left-color: #f59e0b;
-  background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+  background: white;
 }
 
 .stat-icon {

@@ -148,7 +148,7 @@ const ServiceCenterManagement = () => {
   }
 
   if (loading) {
-    return <div className="loading">⏳ Loading...</div>
+    return <div className="loading"> Loading...</div>
   }
 
   const handleNextPage = () => {
@@ -376,7 +376,7 @@ const ServiceCenterManagement = () => {
                   Cancel
                 </button>
                 <button type="submit" className="submit-btn">
-                  {editingCenter ? '💾 Update' : '➕ Add New'}
+                  {editingCenter ? ' Update' : ' Add New'}
                 </button>
               </div>
             </form>

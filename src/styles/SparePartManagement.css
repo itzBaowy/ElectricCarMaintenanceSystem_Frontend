@@ -32,7 +32,7 @@
   transform: translateY(-1px);
 }
 .action-btn.delete {
-  background: #ffcdd2 !important;
+  background: white !important;
   color: #c62828 !important;
   box-shadow: 0 0 10px rgba(244, 67, 54, 0.3) !important;
 }
@@ -459,7 +459,7 @@
 }
 
 .action-btn.delete:hover {
-  background: #ffcdd2;
+  background: white;
 }
 
 /* No Data */

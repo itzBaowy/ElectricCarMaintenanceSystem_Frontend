@@ -194,7 +194,7 @@ const SparePartManagement = () => {
     return (
       <div className="spare-part-management">
         <div className="error-container">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon"></div>
           <h3>Error Loading Spare Parts</h3>
           <p>{error}</p>
           <button onClick={fetchSpareParts} className="retry-btn">
@@ -285,7 +285,7 @@ const SparePartManagement = () => {
               <tr>
                 <td colSpan="7" className="no-data">
                   <div className="no-data-message">
-                    <span className="no-data-icon">📦</span>
+                    <span className="no-data-icon"></span>
                     <p>No spare parts found</p>
                   </div>
                 </td>
@@ -314,21 +314,21 @@ const SparePartManagement = () => {
                       title="Edit Part Info"
                       onClick={() => handleEdit(part)}
                     >
-                      ✏️ Edit
+                       Edit
                     </button>
                     <button 
                       className="action-btn stock"
                       title="Update Stock"
                       onClick={() => handleUpdateStock(part)}
                     >
-                      📦 Stock
+                       Stock
                     </button>
                     <button 
                       className="action-btn delete"
                       title="Delete"
                       onClick={() => alert(`Delete: ${part.name}\n(Feature coming soon)`)}
                     >
-                      🗑️ Delete
+                       Delete
                     </button>
                   </td>
                 </tr>
@@ -391,7 +391,7 @@ const SparePartManagement = () => {
 
       {/* Add Button */}
       <button className="add-spare-part-btn" onClick={handleAddNew}>
-        <span className="btn-icon">➕</span>
+        <span className="btn-icon"></span>
         Add New Spare Part
       </button>
 

@@ -300,7 +300,7 @@ const EmployeeManagement = () => {
             disabled={isLoading}
             title="Refresh employee list"
           >
-            {isLoading ? "⌛" : "↻"}
+            {isLoading ? "" : "↻"}
           </button>
         </div>
 
@@ -464,8 +464,8 @@ const EmployeeManagement = () => {
                       id="currentRole"
                       value={
                         formData.role === "TECHNICIAN"
-                          ? "🔧 Technician"
-                          : "👥 Staff"
+                          ? " Technician"
+                          : " Staff"
                       }
                       disabled
                       className="disabled-input"
@@ -536,7 +536,7 @@ const EmployeeManagement = () => {
 
         {isLoading ? (
           <div className="loading-state">
-            <p>⏳ Loading employees...</p>
+            <p> Loading employees...</p>
           </div>
         ) : (
           <div className="employee-table">

@@ -32,7 +32,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
       )
 
       if (result.success) {
-        alert('✅ Configuration cloned successfully!')
+        alert(' Configuration cloned successfully!')
         onSuccess()
       } else {
         setError(result.message || 'Failed to clone configuration')
@@ -88,7 +88,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
           </div>
 
           <div className="clone-warning">
-            <span className="warning-icon">⚠️</span>
+            <span className="warning-icon"></span>
             <div className="warning-text">
               <strong>Note:</strong>
               <ul>
@@ -101,7 +101,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
 
           {error && (
             <div className="error-message">
-              <span className="error-icon">❌</span>
+              <span className="error-icon"></span>
               <span>{error}</span>
             </div>
           )}
@@ -127,7 +127,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
               </>
             ) : (
               <>
-                📋 Confirm Clone
+                 Confirm Clone
               </>
             )}
           </button>

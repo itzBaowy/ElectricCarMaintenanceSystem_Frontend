@@ -134,15 +134,15 @@ const ServiceItemManagement = () => {
         const response = await serviceItemService.deleteServiceItem(item.id)
         
         if (response.code === 1000) {
-          alert('✅ Service item deleted successfully!')
+          alert(' Service item deleted successfully!')
           // Refresh the current page
           await fetchServiceItems(currentPage)
         } else {
-          alert(`❌ Failed to delete: ${response.message}`)
+          alert(` Failed to delete: ${response.message}`)
         }
       } catch (error) {
         console.error('Error deleting service item:', error)
-        alert('❌ An error occurred while deleting the service item')
+        alert(' An error occurred while deleting the service item')
       }
     }
   }
@@ -201,7 +201,7 @@ const ServiceItemManagement = () => {
           </p>
         </div>
         <button className="btn-add" onClick={handleAddNew}>
-          ➕ Add New Service Item
+           Add New Service Item
         </button>
       </div>
 
@@ -230,7 +230,7 @@ const ServiceItemManagement = () => {
       {/* Error Message */}
       {error && (
         <div className="error-message">
-          ⚠️ {error}
+           {error}
           <button onClick={() => fetchServiceItems(currentPage)}>Retry</button>
         </div>
       )}
@@ -291,14 +291,14 @@ const ServiceItemManagement = () => {
                           onClick={() => handleEdit(item)}
                           title="Edit service item"
                         >
-                          ✏️
+                          
                         </button>
                         <button
                           className="btn-action btn-delete"
                           onClick={() => handleDelete(item)}
                           title="Delete service item"
                         >
-                          🗑️
+                          
                         </button>
                       </div>
                     </td>

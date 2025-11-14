@@ -73,7 +73,7 @@ const AdminDashboard = () => {
       label: "Maintenance Records",
       component: MaintenanceRecordManagement,
     },
-    // { id: "settings", icon: "⚙️", label: "Settings", component: null },
+    // { id: "settings", icon: "", label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(
