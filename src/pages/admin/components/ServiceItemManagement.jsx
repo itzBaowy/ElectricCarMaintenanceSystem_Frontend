@@ -195,7 +195,7 @@ const ServiceItemManagement = () => {
       {/* Header */}
       <div className="management-header">
         <div className="header-left">
-          <h2>🔧 Service Item Management</h2>
+          <h2> Service Item Management</h2>
           <p className="subtitle">
             Total: {pagination.totalElements} item{pagination.totalElements !== 1 ? 's' : ''}
           </p>
