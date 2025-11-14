@@ -291,14 +291,14 @@ const ServiceItemManagement = () => {
                           onClick={() => handleEdit(item)}
                           title="Edit service item"
                         >
-                          
+                          ✏️ Edit
                         </button>
                         <button
                           className="btn-action btn-delete"
                           onClick={() => handleDelete(item)}
                           title="Delete service item"
                         >
-                          
+                          🗑️ Delete
                         </button>
                       </div>
                     </td>
