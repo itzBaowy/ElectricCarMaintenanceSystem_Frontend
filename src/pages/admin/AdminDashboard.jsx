@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeeManagement from "./components/EmployeeManagement";
-import CustomerManagement from "./components/CustomerManagement";
 import ServiceCenterManagement from "./components/ServiceCenterManagement";
 import SparePartManagement from "./components/SparePartManagement";
 import VehicleModelManagement from "./components/VehicleModelManagement";
-import VehicleManagement from "./components/VehicleManagement";
-import MaintenanceRecordManagement from "./components/MaintenanceRecordManagement";
-import ReportManagement from "./components/ReportManagement";
 import "../../styles/AdminDashboard.css";
 import authService from "../../api/authService";
 
@@ -25,48 +21,30 @@ const AdminDashboard = () => {
   const menuItems = [
     {
       id: "employees",
-      icon: "👥",
+      icon: "",
       label: "Employee Management",
       component: EmployeeManagement,
     },
     {
-      id: "customers",
-      icon: "👤",
-      label: "Customer Management",
-      component: CustomerManagement,
-    },
-    {
       id: "centers",
-      icon: "🏢",
+      icon: "",
       label: "Service Centers",
       component: ServiceCenterManagement,
     },
     {
       id: "spareParts",
-      icon: "🔧",
+      icon: "",
       label: "Spare Part Management",
       component: SparePartManagement,
     },
     {
       id: "vehicleModels",
-      icon: "🚗",
+      icon: "",
       label: "Vehicle Models",
       component: VehicleModelManagement,
     },
-    {
-      id: "vehicles",
-      icon: "🚙",
-      label: "Vehicle Management",
-      component: VehicleManagement,
-    },
-    {
-      id: "maintenanceRecords",
-      icon: "📋",
-      label: "Maintenance Records",
-      component: MaintenanceRecordManagement,
-    },
-    { id: "reports", icon: "📊", label: "Financial Reports", component: ReportManagement },
-    { id: "settings", icon: "⚙️", label: "Settings", component: null },
+    { id: "reports", icon: "", label: "Reports", component: null },
+    { id: "settings", icon: "", label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(
@@ -132,13 +110,11 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="admin-main">
         {/* Top Header */}
-        {activeTab !== 'centers' && (
-          <header className="admin-header" style={{ background: 'linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)', color: '#fff', padding: '2rem 2.5rem' }}>
-            <div className="header-title">
-              <h1 style={{ margin: 0, fontWeight: 700, fontSize: '2rem', color: '#fff' }}>{menuItems.find(item => item.id === activeTab)?.label || ''}</h1>
-            </div>
-          </header>
-        )}
+        <header className="admin-header" style={{ background: 'linear-gradient(135deg, #26a69a 0%, #66bb6a 100%)', color: '#fff', padding: '2rem 2.5rem' }}>
+          <div className="header-title">
+            <h1 style={{ margin: 0, fontWeight: 700, fontSize: '2rem', color: '#fff' }}>{menuItems.find(item => item.id === activeTab)?.label || ''}</h1>
+          </div>
+        </header>
 
         {/* Content Area */}
         <div className="admin-content">
