@@ -9,14 +9,15 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 10px;
 }
 
 .maintenance-detail-modal {
   background: white;
   border-radius: 12px;
-  width: 100%;
-  max-width: 1200px;
+  width: 95%;
+  max-width: 1800px;
+  min-width: 1200px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -109,7 +110,7 @@
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -222,7 +223,7 @@
 
 .services-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 15px;
 }
 
@@ -595,7 +596,18 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1400px) {
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
+  .maintenance-detail-modal {
+    min-width: auto;
+    width: 98%;
+  }
+  
   .info-grid {
     grid-template-columns: 1fr;
   }
