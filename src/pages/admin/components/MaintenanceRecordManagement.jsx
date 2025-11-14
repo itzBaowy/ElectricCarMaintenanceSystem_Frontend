@@ -24,7 +24,7 @@ const MaintenanceRecordManagement = () => {
         setRecords(response.result);
       }
     } catch (err) {
-      setError('Không thể tải danh sách hồ sơ bảo dưỡng');
+      setError('Unable to load maintenance records list');
       console.error('Error fetching maintenance records:', err);
     } finally {
       setLoading(false);
@@ -77,7 +77,7 @@ const MaintenanceRecordManagement = () => {
   const uniqueTechnicians = [...new Set(records.map(r => r.technicianName).filter(Boolean))];
 
   if (loading) {
-    return <div className="loading">Đang tải dữ liệu...</div>;
+    return <div className="loading">Loading data...</div>;
   }
 
   if (error) {
@@ -87,9 +87,9 @@ const MaintenanceRecordManagement = () => {
   return (
     <div className="maintenance-record-management">
       <div className="management-header">
-        <h2>Quản Lý Hồ Sơ Bảo Dưỡng</h2>
+        <h2>Maintenance Record Management</h2>
         <button onClick={fetchMaintenanceRecords} className="btn-refresh">
-          🔄 Làm mới
+          🔄 Refresh
         </button>
       </div>
 
@@ -97,7 +97,7 @@ const MaintenanceRecordManagement = () => {
         <div className="filter-group">
           <input
             type="text"
-            placeholder="Tìm kiếm (khách hàng, biển số, xe, gói dịch vụ...)"
+            placeholder="Search (customer, license plate, vehicle, service package...)"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -109,7 +109,7 @@ const MaintenanceRecordManagement = () => {
             onChange={(e) => setFilterTechnician(e.target.value)}
             className="filter-select"
           >
-            <option value="">Tất cả kỹ thuật viên</option>
+            <option value="">All technicians</option>
             {uniqueTechnicians.map(tech => (
               <option key={tech} value={tech}>{tech}</option>
             ))}
@@ -119,11 +119,11 @@ const MaintenanceRecordManagement = () => {
 
       <div className="records-stats">
         <div className="stat-card">
-          <h4>Tổng số hồ sơ</h4>
+          <h4>Total Records</h4>
           <p>{filteredRecords.length}</p>
         </div>
         <div className="stat-card">
-          <h4>Tổng giá trị</h4>
+          <h4>Total Value</h4>
           <p>{formatCurrency(filteredRecords.reduce((sum, r) => sum + calculateTotalCost(r), 0))}</p>
         </div>
       </div>
@@ -133,23 +133,23 @@ const MaintenanceRecordManagement = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Ngày thực hiện</th>
-              <th>Khách hàng</th>
-              <th>Xe</th>
-              <th>Biển số</th>
-              <th>Số km</th>
-              <th>Gói dịch vụ</th>
-              <th>Kỹ thuật viên</th>
-              <th>Số lượng dịch vụ</th>
-              <th>Tổng chi phí</th>
-              <th>Thao tác</th>
+              <th>Performed Date</th>
+              <th>Customer</th>
+              <th>Vehicle</th>
+              <th>License Plate</th>
+              <th>Mileage</th>
+              <th>Service Package</th>
+              <th>Technician</th>
+              <th>Service Count</th>
+              <th>Total Cost</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredRecords.length === 0 ? (
               <tr>
                 <td colSpan="11" className="no-data">
-                  Không có hồ sơ bảo dưỡng nào
+                  No maintenance records found
                 </td>
               </tr>
             ) : (
@@ -164,13 +164,13 @@ const MaintenanceRecordManagement = () => {
                   <td className="service-package">{record.servicePackageName}</td>
                   <td>{record.technicianName}</td>
                   <td className="text-center">{record.serviceItems?.length || 0}</td>
-                  <td className="price">{record.totalPrice ? formatCurrency(record.totalPrice) : 'Chưa tạo hoá đơn'}</td>
+                  <td className="price">{record.totalPrice ? formatCurrency(record.totalPrice) : 'Invoice not created'}</td>
                   <td>
                     <button
                       onClick={() => handleViewDetail(record)}
                       className="btn-view-detail"
                     >
-                      Xem chi tiết
+                      View Details
                     </button>
                   </td>
                 </tr>

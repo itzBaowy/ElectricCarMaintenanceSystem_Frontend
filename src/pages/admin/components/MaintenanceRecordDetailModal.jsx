@@ -70,17 +70,17 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
 
   const getActionTypeBadge = (actionType) => {
     const badges = {
-      CHECK: { text: 'Kiểm tra', className: 'badge-check' },
-      REPLACE: { text: 'Thay thế', className: 'badge-replace' },
-      REFILL: { text: 'Bổ sung', className: 'badge-refill' }
+      CHECK: { text: 'Check', className: 'badge-check' },
+      REPLACE: { text: 'Replace', className: 'badge-replace' },
+      REFILL: { text: 'Refill', className: 'badge-refill' }
     };
     return badges[actionType] || { text: actionType, className: 'badge-default' };
   };
 
   const getUsageTypeBadge = (usageType) => {
     const badges = {
-      INCLUDED: { text: 'Bao gồm', className: 'usage-included' },
-      ADDITIONAL: { text: 'Phát sinh', className: 'usage-additional' }
+      INCLUDED: { text: 'Included', className: 'usage-included' },
+      ADDITIONAL: { text: 'Additional', className: 'usage-additional' }
     };
     return badges[usageType] || { text: usageType, className: 'usage-default' };
   };
@@ -89,7 +89,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content maintenance-detail-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Chi Tiết Hồ Sơ Bảo Dưỡng #{record.id}</h2>
+          <h2>Maintenance Record Details #{record.id}</h2>
           <button className="close-btn" onClick={onClose}>&times;</button>
         </div>
 
@@ -99,25 +99,25 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
               className={`tab ${activeTab === 'info' ? 'active' : ''}`}
               onClick={() => setActiveTab('info')}
             >
-              Thông tin chung
+              General Info
             </button>
             <button 
               className={`tab ${activeTab === 'services' ? 'active' : ''}`}
               onClick={() => setActiveTab('services')}
             >
-              Dịch vụ ({record.serviceItems?.length || 0})
+              Services ({record.serviceItems?.length || 0})
             </button>
             <button 
               className={`tab ${activeTab === 'parts' ? 'active' : ''}`}
               onClick={() => setActiveTab('parts')}
             >
-              Phụ tùng ({partsUsage.length})
+              Parts ({partsUsage.length})
             </button>
             <button 
               className={`tab ${activeTab === 'invoice' ? 'active' : ''}`}
               onClick={() => setActiveTab('invoice')}
             >
-              Hóa đơn
+              Invoice
             </button>
           </div>
         </div>
@@ -127,25 +127,25 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
             <div className="info-section">
               <div className="info-grid">
                 <div className="info-card">
-                  <h3>Thông tin khách hàng</h3>
+                  <h3>Customer Information</h3>
                   <div className="info-row">
-                    <span className="label">Tên khách hàng:</span>
+                    <span className="label">Customer Name:</span>
                     <span className="value">{record.customerName}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">ID khách hàng:</span>
+                    <span className="label">Customer ID:</span>
                     <span className="value">{record.customerId}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">Trung tâm dịch vụ:</span>
+                    <span className="label">Service Center:</span>
                     <span className="value">{record.serviceCenterName}</span>
                   </div>
                 </div>
 
                 <div className="info-card">
-                  <h3>Thông tin xe</h3>
+                  <h3>Vehicle Information</h3>
                   <div className="info-row">
-                    <span className="label">Biển số:</span>
+                    <span className="label">License Plate:</span>
                     <span className="value license-plate-badge">{record.vehicleLicensePlate}</span>
                   </div>
                   <div className="info-row">
@@ -153,47 +153,47 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                     <span className="value">{record.vehicleModel}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">ID xe:</span>
+                    <span className="label">Vehicle ID:</span>
                     <span className="value">{record.vehicleId}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">Số km:</span>
+                    <span className="label">Mileage:</span>
                     <span className="value">{record.odometer?.toLocaleString('vi-VN')} km</span>
                   </div>
                 </div>
 
                 <div className="info-card">
-                  <h3>Thông tin dịch vụ</h3>
+                  <h3>Service Information</h3>
                   <div className="info-row">
-                    <span className="label">Gói dịch vụ:</span>
+                    <span className="label">Service Package:</span>
                     <span className="value">{record.servicePackageName}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">Kỹ thuật viên:</span>
+                    <span className="label">Technician:</span>
                     <span className="value">{record.technicianName}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">ID kỹ thuật viên:</span>
+                    <span className="label">Technician ID:</span>
                     <span className="value">{record.technicianId}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">ID lịch hẹn:</span>
+                    <span className="label">Appointment ID:</span>
                     <span className="value">{record.appointmentId}</span>
                   </div>
                 </div>
 
                 <div className="info-card">
-                  <h3>Thời gian</h3>
+                  <h3>Time Information</h3>
                   <div className="info-row">
-                    <span className="label">Thực hiện:</span>
+                    <span className="label">Performed At:</span>
                     <span className="value">{formatDate(record.performedAt)}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">Tạo lúc:</span>
+                    <span className="label">Created At:</span>
                     <span className="value">{formatDate(record.createdAt)}</span>
                   </div>
                   <div className="info-row">
-                    <span className="label">Cập nhật:</span>
+                    <span className="label">Updated At:</span>
                     <span className="value">{formatDate(record.updatedAt)}</span>
                   </div>
                 </div>
@@ -201,15 +201,15 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
 
               {record.notes && (
                 <div className="notes-section">
-                  <h3>Ghi chú</h3>
+                  <h3>Notes</h3>
                   <p>{record.notes}</p>
                 </div>
               )}
 
               <div className="summary-card">
-                <h3>Tổng quan chi phí</h3>
+                <h3>Cost Summary</h3>
                 <div className="summary-row total">
-                  <span>Chi phí dịch vụ:</span>
+                  <span>Service Cost:</span>
                   <span className="amount">{formatCurrency(record.totalPrice || 0)}</span>
                 </div>
               </div>
@@ -239,11 +239,11 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                     );
                   })
                 ) : (
-                  <div className="no-data">Không có dịch vụ nào</div>
+                  <div className="no-data">No services found</div>
                 )}
               </div>
               <div className="section-total">
-                <strong>Tổng chi phí dịch vụ: {formatCurrency(record.totalPrice || 0)}</strong>
+                <strong>Total Service Cost: {formatCurrency(record.totalPrice || 0)}</strong>
               </div>
             </div>
           )}
@@ -251,17 +251,17 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
           {activeTab === 'parts' && (
             <div className="parts-section">
               {loadingParts ? (
-                <div className="loading">Đang tải phụ tùng...</div>
+                <div className="loading">Loading parts...</div>
               ) : partsUsage.length > 0 ? (
                 <>
                   <table className="parts-table">
                     <thead>
                       <tr>
-                        <th>Tên phụ tùng</th>
-                        <th>Mã phụ tùng</th>
-                        <th>Số lượng</th>
-                        <th>Loại</th>
-                        <th>Thời gian</th>
+                        <th>Part Name</th>
+                        <th>Part Number</th>
+                        <th>Quantity</th>
+                        <th>Type</th>
+                        <th>Time</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -285,7 +285,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                   </table>
                 </>
               ) : (
-                <div className="no-data">Không có phụ tùng nào được sử dụng</div>
+                <div className="no-data">No parts used</div>
               )}
             </div>
           )}
@@ -293,7 +293,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
           {activeTab === 'invoice' && (
             <div className="invoice-section">
               {loadingInvoice ? (
-                <div className="loading">Đang tải thông tin hóa đơn...</div>
+                <div className="loading">Loading invoice information...</div>
               ) : (
                 <>
                   {/* Invoice Status Banner */}
@@ -313,14 +313,14 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                       <h3>
                         {invoiceData
                           ? invoiceData.status === 'PAID'
-                            ? 'Đã thanh toán'
-                            : 'Chưa thanh toán'
-                          : 'Hóa đơn chưa được tạo'}
+                            ? 'Paid'
+                            : 'Unpaid'
+                          : 'Invoice Not Created'}
                       </h3>
                       <p>
                         {invoiceData
-                          ? `Mã hóa đơn: #${invoiceData.id}`
-                          : 'Hóa đơn sẽ được tạo sau khi hoàn thành bảo dưỡng'}
+                          ? `Invoice ID: #${invoiceData.id}`
+                          : 'Invoice will be created after maintenance completion'}
                       </p>
                     </div>
                   </div>
@@ -329,38 +329,38 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                     <div className="invoice-details">
                       {/* Invoice Information */}
                       <div className="info-card">
-                        <h3>Thông tin hóa đơn</h3>
+                        <h3>Invoice Information</h3>
                         <div className="info-row">
-                          <span className="label">Mã hóa đơn:</span>
+                          <span className="label">Invoice ID:</span>
                           <span className="value">#{invoiceData.id}</span>
                         </div>
                         <div className="info-row">
-                          <span className="label">Trạng thái:</span>
+                          <span className="label">Status:</span>
                           <span className="value">
                             <span className={`status-badge-inline ${
                               invoiceData.status === 'PAID' ? 'paid' : 'unpaid'
                             }`}>
-                              {invoiceData.status === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                              {invoiceData.status === 'PAID' ? 'Paid' : 'Unpaid'}
                             </span>
                           </span>
                         </div>
                         <div className="info-row">
-                          <span className="label">Tổng số tiền:</span>
+                          <span className="label">Total Amount:</span>
                           <span className="value price-highlight">{formatCurrency(invoiceData.totalAmount)}</span>
                         </div>
                         <div className="info-row">
-                          <span className="label">Ngày tạo:</span>
+                          <span className="label">Created Date:</span>
                           <span className="value">{formatDate(invoiceData.createdAt)}</span>
                         </div>
                         {invoiceData.paidAt && (
                           <div className="info-row">
-                            <span className="label">Ngày thanh toán:</span>
+                            <span className="label">Payment Date:</span>
                             <span className="value">{formatDate(invoiceData.paidAt)}</span>
                           </div>
                         )}
                         {invoiceData.paymentMethod && (
                           <div className="info-row">
-                            <span className="label">Phương thức thanh toán:</span>
+                            <span className="label">Payment Method:</span>
                             <span className="value">{invoiceData.paymentMethod}</span>
                           </div>
                         )}
@@ -369,14 +369,14 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                       {/* Service Center Info */}
                       {invoiceData.serviceCenterName && (
                         <div className="info-card">
-                          <h3>Trung tâm dịch vụ</h3>
+                          <h3>Service Center</h3>
                           <div className="info-row">
-                            <span className="label">Tên trung tâm:</span>
+                            <span className="label">Center Name:</span>
                             <span className="value">{invoiceData.serviceCenterName}</span>
                           </div>
                           {invoiceData.serviceCenterAddress && (
                             <div className="info-row">
-                              <span className="label">Địa chỉ:</span>
+                              <span className="label">Address:</span>
                               <span className="value">{invoiceData.serviceCenterAddress}</span>
                             </div>
                           )}
@@ -387,11 +387,11 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                       {invoiceData.status === 'PAID' && (
                         <div className="payment-success-card">
                           <div className="success-icon">✅</div>
-                          <h3>Thanh toán thành công</h3>
-                          <p>Hóa đơn đã được thanh toán đầy đủ</p>
+                          <h3>Payment Successful</h3>
+                          <p>Invoice has been paid in full</p>
                           {invoiceData.paidAt && (
                             <p className="payment-time">
-                              Thời gian: {formatDate(invoiceData.paidAt)}
+                              Time: {formatDate(invoiceData.paidAt)}
                             </p>
                           )}
                         </div>
@@ -400,21 +400,21 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
                       {invoiceData.status === 'UNPAID' && (
                         <div className="payment-pending-card">
                           <div className="pending-icon">⏳</div>
-                          <h3>Chờ thanh toán</h3>
-                          <p>Vui lòng thông báo khách hàng đăng nhập hệ thống để thanh toán</p>
+                          <h3>Pending Payment</h3>
+                          <p>Please notify customer to login to the system for payment</p>
                         </div>
                       )}
                     </div>
                   ) : (
                     <div className="no-invoice-card">
                       <div className="no-invoice-icon">📝</div>
-                      <h3>Hóa đơn chưa được tạo</h3>
-                      <p>Hóa đơn sẽ được tạo tự động sau khi hoàn thành các bước bảo dưỡng</p>
+                      <h3>Invoice Not Created</h3>
+                      <p>Invoice will be automatically created after completing maintenance steps</p>
                       <ul className="invoice-steps">
-                        <li>✓ Hoàn thành bảo dưỡng</li>
-                        <li>✓ Kỹ thuật viên xác nhận</li>
-                        <li>✓ Khách hàng duyệt dịch vụ</li>
-                        <li>→ Tạo hóa đơn</li>
+                        <li>✓ Complete maintenance</li>
+                        <li>✓ Technician confirmation</li>
+                        <li>✓ Customer approval</li>
+                        <li>→ Create invoice</li>
                       </ul>
                     </div>
                   )}
@@ -425,7 +425,7 @@ const MaintenanceRecordDetailModal = ({ record, onClose }) => {
         </div>
 
         <div className="modal-footer">
-          <button onClick={onClose} className="btn-close">Đóng</button>
+          <button onClick={onClose} className="btn-close">Close</button>
         </div>
       </div>
     </div>
