@@ -33,9 +33,6 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
         </button>
       </nav>
     </div>
-    <div className="sidebar-footer">
-      <button className="sidebar-logout">Logout</button>
-    </div>
   </aside>
 );
 import { useState, useEffect } from "react";
