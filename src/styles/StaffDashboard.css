@@ -155,14 +155,22 @@
 }
 
 .primary-btn {
-  background: #000000;
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 24px;
+  padding: 1.2rem 0;
+  width: 100%;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-bottom: 18px;
 }
 
 .primary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
 }
 
 .secondary-btn {
@@ -1529,5 +1537,42 @@
 
 .staff-container {
   margin-left: 270px;
+}
+
+.sidebar-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 32px 0 0 0;
+  align-items: stretch;
+}
+
+.sidebar-tab {
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 22px 0;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #b2dfdb 0%, #aee9f7 100%);
+  color: #222;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin: 0 12px;
+}
+
+.sidebar-tab.active {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
+}
+
+.sidebar-tab:hover {
+  background: linear-gradient(135deg, #aee9f7 0%, #b2dfdb 100%);
+  color: #222;
+}
+
+.sidebar-tab:active {
+  transform: scale(0.98);
 }
 
