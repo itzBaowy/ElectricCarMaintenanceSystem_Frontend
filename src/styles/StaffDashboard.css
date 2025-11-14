@@ -242,11 +242,26 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  border: 2px solid #000000;
+  border: none !important;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+  border-radius: 18px;
+  overflow: hidden;
 }
 
 .data-table thead {
-  background: #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+}
+
+.data-table thead tr {
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+}
+
+.data-table th {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  padding: 1.1rem 0.5rem;
 }
 
 .data-table thead th {
