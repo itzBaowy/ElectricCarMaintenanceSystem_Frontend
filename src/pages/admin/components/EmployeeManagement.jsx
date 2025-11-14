@@ -27,6 +27,10 @@ const EmployeeManagement = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingCenters, setIsLoadingCenters] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employeesPerPage] = useState(10);
+
   // Load employees and centers from API
   useEffect(() => {
     loadEmployees();
@@ -263,14 +267,37 @@ const EmployeeManagement = () => {
 
   // Filter employees
   const filteredEmployees = employees.filter((emp) => {
+    const empId = emp.id;
     const matchesSearch =
+      empId?.toString().includes(searchTerm) ||
       emp.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       emp.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchTerm.toLowerCase());
+      emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (emp.phone && emp.phone.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesRole =
       filterRole === "all" || emp.role === filterRole.toUpperCase();
     return matchesSearch && matchesRole;
   });
+
+  // Calculate pagination
+  const indexOfLastEmployee = currentPage * employeesPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  const currentEmployees = filteredEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+  const totalPages = Math.ceil(filteredEmployees.length / employeesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleRoleFilterChange = (value) => {
+    setFilterRole(value);
+    setCurrentPage(1); // Reset to first page when filtering
+  };
 
   return (
     <div className="employee-management-layout">
@@ -280,14 +307,14 @@ const EmployeeManagement = () => {
           <div className="employee-search-bar">
             <input
               type="text"
-              placeholder="Search employees..."
+              placeholder="Search by ID, name, username, email, or phone..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="search-input"
             />
             <select
               value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
+              onChange={(e) => handleRoleFilterChange(e.target.value)}
               className="role-filter"
             >
               <option value="all">All Roles</option>
@@ -555,7 +582,7 @@ const EmployeeManagement = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEmployees.map((employee) => (
+                  {currentEmployees.map((employee) => (
                     <tr key={employee.id}>
                       <td>{employee.id}</td>
                       <td>{employee.fullName}</td>
@@ -606,6 +633,36 @@ const EmployeeManagement = () => {
               {filteredEmployees.length === 0 && (
                 <div className="empty-state">
                   <p>No employees found matching your criteria.</p>
+                </div>
+              )}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="pagination-container">
+                  <button
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    ← Previous
+                  </button>
+                  
+                  <div className="pagination-info">
+                    <span>
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <span className="pagination-details">
+                      Showing {indexOfFirstEmployee + 1} - {Math.min(indexOfLastEmployee, filteredEmployees.length)} of {filteredEmployees.length}
+                    </span>
+                  </div>
+                  
+                  <button
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next →
+                  </button>
                 </div>
               )}
             </div>

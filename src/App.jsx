@@ -10,6 +10,8 @@ import StaffDashboard from "./pages/staff/StaffDashboard";
 import TechnicianDashboard from "./pages/technician/TechnicianDashboard";
 import Contact from "./pages/customer/Contact";
 import PaymentSuccess from "./pages/customer/PaymentSuccess";
+import CustomerChatRoom from "./pages/customer/CustomerChatRoom";
+import StaffChatRoom from "./pages/staff/StaffChatRoom";
 
 function App() {
   return (
@@ -89,6 +91,25 @@ function App() {
                 allowedRoles={["ROLE_CUSTOMER"]}
               >
                 <PaymentSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customer/chat"
+            element={
+              <ProtectedRoute
+                requireAuth={true}
+                allowedRoles={["ROLE_CUSTOMER"]}
+              >
+                <CustomerChatRoom />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/staff/chat"
+            element={
+              <ProtectedRoute requireAuth={true} allowedRoles={["ROLE_STAFF"]}>
+                <StaffChatRoom />
               </ProtectedRoute>
             }
           />

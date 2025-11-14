@@ -14,11 +14,15 @@ import CustomerInvoiceDetail from './CustomerInvoiceDetail'
 import Footer from '../../components/layout/Footer'
 import '../../styles/CustomerDashboard.css'
 import customerService from '../../api/customerService'
+import { useNavigate } from 'react-router-dom'
+import { ChatProvider, useChatNotifications } from '../../contexts/ChatContext'
 import CustomerSidebar from '../../components/layout/CustomerSidebar'
 
 const SIDEBAR_WIDTH = 260;
 
-const CustomerDashboard = () => {
+const CustomerDashboardContent = () => {
+  const navigate = useNavigate()
+  const { unreadCount, clearUnreadCount } = useChatNotifications()
   const [customer, setCustomer] = useState(null)
   const [vehicles, setVehicles] = useState([])
   const [vehicleModels, setVehicleModels] = useState([])
@@ -345,6 +349,45 @@ const CustomerDashboard = () => {
   const customerName = customer?.fullName || 'User';
 
   return (
+    <div className="customer-dashboard">
+      {/* Navigation Header */}
+      <div className="customer-dashboard-header">
+        <div className="nav-brand">
+          <h2>ElectricCare</h2>
+          <span>Customer Portal</span>
+        </div>
+        <div className="header-actions">
+          <span className="welcome-text">Hello {customer.fullName}, How's your day?</span>
+          <button 
+            onClick={() => {
+              clearUnreadCount()
+              navigate('/customer/chat')
+            }} 
+            className="header-btn chat-btn"
+          >
+            💬 Support Chat
+            {unreadCount > 0 && (
+              <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
+            )}
+          </button>
+          <button onClick={handleEditProfile} className="header-btn">
+            Edit Profile
+          </button>
+          <button onClick={handleChangePassword} className="header-btn">
+            Change Password
+          </button>
+          <button onClick={handleLogout} className="header-btn">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Welcome Header */}
+      <div className="welcome-header">
+        <div className="welcome-content">
+          <div className="customer-info">
+            <div className="customer-avatar">
+              {customer.fullName.charAt(0).toUpperCase()}
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
       <CustomerSidebar
         active={true}
@@ -678,6 +721,36 @@ const CustomerDashboard = () => {
         </div>
       </main>
     </div>
+  )
+}
+
+const CustomerDashboard = () => {
+  const [customer, setCustomer] = useState(null)
+  const [userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userResult = await customerService.getMyInfo()
+        if (userResult.success) {
+          setCustomer(userResult.data)
+          setUserId(userResult.data.id)
+        }
+      } catch (error) {
+        logger.error('Error loading user:', error)
+      }
+    }
+    loadUser()
+  }, [])
+
+  if (!userId) {
+    return <div className="loading">Loading...</div>
+  }
+
+  return (
+    <ChatProvider userRole="ROLE_CUSTOMER" userId={userId}>
+      <CustomerDashboardContent />
+    </ChatProvider>
   )
 }
 

@@ -1648,6 +1648,52 @@
   transform: scale(0.98);
 }
 
+.sidebar-tab.chat-tab {
+  background: linear-gradient(135deg, #b2dfdb 0%, #aee9f7 100%);
+  color: #222;
+  margin-top: 12px;
+  border-top: 2px solid rgba(255,255,255,0.2);
+  padding-top: 22px;
+  padding-bottom: 22px;
+  position: relative;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.sidebar-tab.chat-tab:hover {
+  background: linear-gradient(135deg, #aee9f7 0%, #b2dfdb 100%);
+  color: #222;
+}
+
+/* Notification Badge for Chat */
+.sidebar-tab .notification-badge {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: #ff3b30;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+  animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
 /* Invoice Status Badges */
 .invoice-status-pending {
   background: #fff9e6;

@@ -26,6 +26,10 @@ const CustomerManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [customersPerPage] = useState(10);
+
   // Load customers from API
   useEffect(() => {
     loadCustomers();
@@ -216,7 +220,9 @@ const CustomerManagement = () => {
 
   // Filter customers
   const filteredCustomers = customers.filter((customer) => {
+    const customerId = customer.customerId || customer.id;
     const matchesSearch =
+      customerId?.toString().includes(searchTerm) ||
       customer.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -225,6 +231,21 @@ const CustomerManagement = () => {
     return matchesSearch;
   });
 
+  // Calculate pagination
+  const indexOfLastCustomer = currentPage * customersPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
+  const currentCustomers = filteredCustomers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+  const totalPages = Math.ceil(filteredCustomers.length / customersPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
   return (
     <div className="customer-management">
       {/* Header Actions */}
@@ -232,9 +253,9 @@ const CustomerManagement = () => {
         <div className="search-filters">
           <input
             type="text"
-            placeholder="Search customers..."
+            placeholder="Search by ID, name, username, email, or phone..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="search-input"
           />
 
@@ -511,7 +532,7 @@ const CustomerManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredCustomers.map((customer) => (
+                {currentCustomers.map((customer) => (
                   <tr key={customer.id}>
                     <td>{customer.id}</td>
                     <td>{customer.fullName}</td>
@@ -554,6 +575,36 @@ const CustomerManagement = () => {
             {filteredCustomers.length === 0 && (
               <div className="empty-state">
                 <p>No customers found matching your criteria.</p>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  ← Previous
+                </button>
+                
+                <div className="pagination-info">
+                  <span>
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <span className="pagination-details">
+                    Showing {indexOfFirstCustomer + 1} - {Math.min(indexOfLastCustomer, filteredCustomers.length)} of {filteredCustomers.length}
+                  </span>
+                </div>
+                
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next →
+                </button>
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 // Staff Sidebar (no nav buttons yet)
-const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
+const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, clearUnreadCount = () => {} }) => (
   <aside className="staff-sidebar">
     <div className="sidebar-header">
       <h2>ElectricCare Staff</h2>
@@ -31,10 +31,19 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
         >
           Invoices & Payment
         </button>
+        <button
+          className="sidebar-tab chat-tab"
+          onClick={() => {
+            clearUnreadCount()
+            navigate('/staff/chat')
+          }}
+        >
+          💬 Support Chat
+          {unreadCount > 0 && (
+            <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
+          )}
+        </button>
       </nav>
-    </div>
-    <div className="sidebar-footer">
-      <button className="sidebar-logout">Logout</button>
     </div>
   </aside>
 );
@@ -51,9 +60,11 @@ import logger from "../../utils/logger";
 import "../../styles/StaffDashboard.css";
 import authService from "../../api/authService";
 import invoiceService from "../../api/invoiceService";
+import { ChatProvider, useChatNotifications } from "../../contexts/ChatContext";
 
-const StaffDashboard = () => {
+const StaffDashboardContent = () => {
   const navigate = useNavigate();
+  const { unreadCount, clearUnreadCount } = useChatNotifications();
   const [appointments, setAppointments] = useState([]);
   const [technicians, setTechnicians] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -705,7 +716,13 @@ const StaffDashboard = () => {
 
   return (
     <div className="staff-dashboard">
-      <StaffSidebar sidebarTab={sidebarTab} setSidebarTab={setSidebarTab} />
+      <StaffSidebar 
+        sidebarTab={sidebarTab} 
+        setSidebarTab={setSidebarTab} 
+        navigate={navigate} 
+        unreadCount={unreadCount}
+        clearUnreadCount={clearUnreadCount}
+      />
       {/* Header removed as requested */}
       <div className="staff-container">
         <div className="staff-header">
@@ -2298,5 +2315,33 @@ const StaffDashboard = () => {
     </div>
   );
 };
+
+const StaffDashboard = () => {
+  const [userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userProfile = await authService.getUserProfile()
+        if (userProfile.success && userProfile.data) {
+          setUserId(userProfile.data.userId)
+        }
+      } catch (error) {
+        logger.error('Error loading user:', error)
+      }
+    }
+    loadUser()
+  }, [])
+
+  if (!userId) {
+    return <div className="loading">Loading...</div>
+  }
+
+  return (
+    <ChatProvider userRole="ROLE_STAFF" userId={userId}>
+      <StaffDashboardContent />
+    </ChatProvider>
+  )
+}
 
 export default StaffDashboard;
