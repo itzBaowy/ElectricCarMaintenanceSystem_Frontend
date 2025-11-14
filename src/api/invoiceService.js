@@ -112,6 +112,34 @@ const invoiceService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Get all invoices (for staff/admin)
+  getAllInvoices: async () => {
+    try {
+      const response = await api.get('/api/invoices')
+      
+      if (response.data.code === 1000 || response.data.code === 0) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Invoices fetched successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to get invoices',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Get all invoices error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to get invoices',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

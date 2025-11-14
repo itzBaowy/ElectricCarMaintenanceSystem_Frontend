@@ -13,7 +13,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("walk-in")}
         >
-          Khách Hàng Walk-in
+          Quản Lý Khách Hàng
         </button>
         <button
           className={`sidebar-tab${
@@ -50,6 +50,7 @@ import vehicleService from "../../api/vehicleService";
 import logger from "../../utils/logger";
 import "../../styles/StaffDashboard.css";
 import authService from "../../api/authService";
+import invoiceService from "../../api/invoiceService";
 
 const StaffDashboard = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ const StaffDashboard = () => {
   const [technicians, setTechnicians] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [vehicleModels, setVehicleModels] = useState([]);
+  const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [assignLoading, setAssignLoading] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -75,6 +77,8 @@ const StaffDashboard = () => {
     useState(false);
   const [showInvoiceModal, setShowInvoiceModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [sidebarTab, setSidebarTab] = useState("appointments"); // appointments, walk-ins, invoices
   const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
 
@@ -120,11 +124,13 @@ const StaffDashboard = () => {
         techniciansResult,
         customersResult,
         vehicleModelsResult,
+        invoicesResult,
       ] = await Promise.all([
         appointmentService.getAllAppointments(),
         technicianService.getAllTechnicians(),
         customerService.getAllCustomers(),
         vehicleService.getAllVehicleModels(),
+        invoiceService.getAllInvoices(),
       ]);
 
       if (appointmentsResult.success) {
@@ -159,6 +165,13 @@ const StaffDashboard = () => {
           "Failed to fetch vehicle models:",
           vehicleModelsResult.message
         );
+      }
+
+      if (invoicesResult.success) {
+        setInvoices(invoicesResult.data || []);
+        logger.log("Invoices fetched:", invoicesResult.data?.length || 0);
+      } else {
+        logger.error("Failed to fetch invoices:", invoicesResult.message);
       }
     } catch (error) {
       logger.error("Error fetching data:", error);
@@ -554,6 +567,27 @@ const StaffDashboard = () => {
     setInvoiceAppointmentId(null);
   };
 
+  const handleViewInvoiceDetail = async (invoiceId) => {
+    try {
+      const result = await invoiceService.getInvoiceById(invoiceId);
+      if (result.success) {
+        logger.log("Invoice details:", result.data);
+        setSelectedInvoice(result.data);
+        setShowInvoiceDetailModal(true);
+      } else {
+        alert("Không thể tải thông tin hoá đơn!");
+      }
+    } catch (error) {
+      logger.error("Error viewing invoice:", error);
+      alert("Có lỗi xảy ra khi xem hoá đơn!");
+    }
+  };
+
+  const handleCloseInvoiceDetailModal = () => {
+    setShowInvoiceDetailModal(false);
+    setSelectedInvoice(null);
+  };
+
   const formatTimeFromDate = (dateString) => {
     if (!dateString) return "N/A";
     // Extract time from ISO format "2025-11-01T14:36:00"
@@ -579,6 +613,26 @@ const StaffDashboard = () => {
       INCOMPLETED: "Cần bổ sung",
       COMPLETED: "Hoàn thành",
       CANCELLED: "Đã huỷ",
+    };
+    return statusTextMap[status] || status;
+  };
+
+  const getInvoiceStatusBadgeClass = (status) => {
+    const statusMap = {
+      UNPAID: "invoice-status-pending",
+      PAID: "invoice-status-paid",
+      CANCELLED: "invoice-status-cancelled",
+      REFUNDED: "invoice-status-refunded",
+    };
+    return statusMap[status] || "invoice-status-default";
+  };
+
+  const getInvoiceStatusText = (status) => {
+    const statusTextMap = {
+      UNPAID: "Chờ thanh toán",
+      PAID: "Đã thanh toán",
+      CANCELLED: "Đã huỷ",
+      REFUNDED: "Đã hoàn tiền",
     };
     return statusTextMap[status] || status;
   };
@@ -644,7 +698,7 @@ const StaffDashboard = () => {
         {sidebarTab === "walk-in" && (
           <div className="walk-in-section">
             <div className="section-header">
-              <h2>Đăng Ký Khách Hàng Walk-in</h2>
+              <h2>Quản Lý Khách Hàng</h2>
               <p>
                 Khách hàng đến trực tiếp trung tâm, ghi nhận thông tin và tạo
                 tài khoản
@@ -960,24 +1014,108 @@ const StaffDashboard = () => {
               <p>Xem và quản lý các hoá đơn đã phát hành</p>
             </div>
 
+            <div className="invoices-stats">
+              <div className="stat-card">
+                <div className="stat-info">
+                  <h3>{invoices.length}</h3>
+                  <p>Tổng Hoá Đơn</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-info">
+                  <h3>
+                    {invoices.filter((inv) => inv.status === "PAID").length}
+                  </h3>
+                  <p>Đã Thanh Toán</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-info">
+                  <h3>
+                    {invoices.filter((inv) => inv.status === "UNPAID").length}
+                  </h3>
+                  <p>Chờ Thanh Toán</p>
+                </div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-info">
+                  <h3>
+                    {formatCurrency(
+                      invoices
+                        .filter((inv) => inv.status === "PAID")
+                        .reduce((sum, inv) => sum + (inv.totalAmount || 0), 0)
+                    )}
+                  </h3>
+                  <p>Tổng Doanh Thu</p>
+                </div>
+              </div>
+            </div>
+
             <div className="invoices-table-container">
-              <table className="invoices-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Khách Hàng</th>
-                    <th>Biển Số</th>
-                    <th>Xe</th>
-                    <th>Ngày Xuất Hoá Đơn</th>
-                    <th>Tổng Tiền</th>
-                    <th>Trạng Thái</th>
-                    <th>Hành Động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* Render invoices data here */}
-                </tbody>
-              </table>
+              {invoices.length === 0 ? (
+                <div className="no-data">
+                  <p>Chưa có hoá đơn nào</p>
+                </div>
+              ) : (
+                <table className="invoices-table">
+                  <thead>
+                    <tr>
+                      <th>ID Hoá Đơn</th>
+                      <th>ID Appointment</th>
+                      <th>Khách Hàng</th>
+                      <th>Biển Số</th>
+                      <th>Ngày Xuất</th>
+                      <th>Tổng Tiền</th>
+                      <th>Phương Thức</th>
+                      <th>Trạng Thái</th>
+                      <th>Hành Động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoices.map((invoice) => (
+                      <tr key={invoice.invoiceId || invoice.id}>
+                        <td>#{invoice.invoiceId || invoice.id}</td>
+                        <td>#{invoice.maintenanceRecord.appointmentId || "N/A"}</td>
+                        <td>{invoice.maintenanceRecord.customerName || "N/A"}</td>
+                        <td>{invoice.maintenanceRecord.vehicleLicensePlate || "N/A"}</td>
+                        <td>
+                          {invoice.createdAt
+                            ? new Date(invoice.createdAt).toLocaleDateString(
+                                "vi-VN"
+                              )
+                            : "N/A"}
+                        </td>
+                        <td className="price-cell">
+                          <strong>{formatCurrency(invoice.totalAmount)}</strong>
+                        </td>
+                        <td>
+                          VNPay
+                        </td>
+                        <td>
+                          <span
+                            className={`status-badge ${getInvoiceStatusBadgeClass(
+                              invoice.status
+                            )}`}
+                          >
+                            {getInvoiceStatusText(invoice.status)}
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            className="appointment-action-btn detail"
+                            onClick={() =>
+                              handleViewInvoiceDetail(invoice.invoiceId || invoice.id)
+                            }
+                            title="Xem chi tiết hoá đơn"
+                          >
+                            📄 Chi tiết
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}
@@ -1808,7 +1946,256 @@ const StaffDashboard = () => {
         />
       )}
 
-      <Footer />
+      {/* Invoice Detail View Modal */}
+      {showInvoiceDetailModal && selectedInvoice && (
+        <div className="modal-overlay" onClick={handleCloseInvoiceDetailModal}>
+          <div
+            className="modal-content detail-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-header">
+              <h2>📋 Chi Tiết Hoá Đơn</h2>
+              <button className="close-btn" onClick={handleCloseInvoiceDetailModal}>
+                ×
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {/* Invoice Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Hoá Đơn</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Mã Hoá Đơn:</label>
+                    <span>
+                      #{selectedInvoice.invoiceId || selectedInvoice.id}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Mã Appointment:</label>
+                    <span>#{selectedInvoice.maintenanceRecord.appointmentId || "N/A"}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Ngày Xuất:</label>
+                    <span>
+                      {selectedInvoice.createdAt
+                       ? new Date(selectedInvoice.createdAt).toLocaleDateString("vi-VN")
+                        : "N/A"}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Trạng Thái:</label>
+                    <span
+                      className={`status-badge ${getInvoiceStatusBadgeClass(
+                        selectedInvoice.status
+                      )}`}
+                    >
+                      {getInvoiceStatusText(selectedInvoice.status)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Customer Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Khách Hàng</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Tên Khách Hàng:</label>
+                    <span>{selectedInvoice.maintenanceRecord?.customerName || "N/A"}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>ID Khách Hàng:</label>
+                    <span>#{selectedInvoice.maintenanceRecord?.customerId || "N/A"}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vehicle Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Xe</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Biển Số:</label>
+                    <span>{selectedInvoice.maintenanceRecord?.vehicleLicensePlate || "N/A"}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Model:</label>
+                    <span>{selectedInvoice.maintenanceRecord?.vehicleModel || "N/A"}</span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Số Km:</label>
+                    <span>{selectedInvoice.maintenanceRecord?.odometer?.toLocaleString("vi-VN") || "N/A"} km</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Package */}
+              {selectedInvoice.maintenanceRecord?.servicePackageName && (
+                <div className="detail-section">
+                  <h3>Gói Dịch Vụ</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Tên Gói:</label>
+                      <span>{selectedInvoice.maintenanceRecord.servicePackageName}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Trung Tâm:</label>
+                      <span>{selectedInvoice.serviceCenterName || selectedInvoice.maintenanceRecord.serviceCenterName || "N/A"}</span>
+                    </div>
+                    <div className="detail-item">
+                      <label>Kỹ Thuật Viên:</label>
+                      <span>{selectedInvoice.maintenanceRecord.technicianName || "N/A"}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Service Items */}
+              {selectedInvoice.maintenanceRecord?.serviceItems && selectedInvoice.maintenanceRecord.serviceItems.length > 0 && (
+                <div className="detail-section">
+                  <h3>Danh Sách Dịch Vụ & Phụ Tùng</h3>
+                  <div className="service-items-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>STT</th>
+                          <th>Tên Hạng Mục</th>
+                          <th>Mô Tả</th>
+                          <th>Loại Thao Tác</th>
+                          <th>Đơn Giá</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedInvoice.maintenanceRecord.serviceItems.map((item, index) => (
+                          <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td><strong>{item.serviceItem?.name || "N/A"}</strong></td>
+                            <td>
+                              <small>{item.serviceItem?.description || "N/A"}</small>
+                            </td>
+                            <td>
+                              <span className={`action-type-badge ${item.actionType?.toLowerCase()}`}>
+                                {item.actionType === "CHECK" ? "Kiểm tra" : 
+                                 item.actionType === "REPLACE" ? "Thay thế" : 
+                                 item.actionType === "REPAIR" ? "Sửa chữa" :
+                                 item.actionType || "N/A"}
+                              </span>
+                            </td>
+                            <td className="price-cell">
+                              <strong>{formatCurrency(item.price)}</strong>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot>
+                        <tr style={{ borderTop: "2px solid #26a69a", fontWeight: "bold" }}>
+                          <td colSpan="4" style={{ textAlign: "right", paddingRight: "20px" }}>
+                            Tổng Cộng:
+                          </td>
+                          <td className="price-cell" style={{ fontSize: "1.1rem" }}>
+                            <strong>{formatCurrency(selectedInvoice.totalAmount)}</strong>
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Payment Information */}
+              <div className="detail-section">
+                <h3>Thông Tin Thanh Toán</h3>
+                <div className="detail-grid">
+                  <div className="detail-item">
+                    <label>Tổng Tiền:</label>
+                    <span className="price-highlight" style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#27ae60" }}>
+                      {formatCurrency(selectedInvoice.totalAmount)}
+                    </span>
+                  </div>
+                  <div className="detail-item">
+                    <label>Trạng Thái Thanh Toán:</label>
+                    <span
+                      className={`status-badge ${getInvoiceStatusBadgeClass(
+                        selectedInvoice.status
+                      )}`}
+                    >
+                      {getInvoiceStatusText(selectedInvoice.status)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Maintenance Record Details */}
+              {selectedInvoice.maintenanceRecord && (
+                <div className="detail-section">
+                  <h3>Chi Tiết Bảo Dưỡng</h3>
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <label>Thời Gian Thực Hiện:</label>
+                      <span>
+                        {selectedInvoice.maintenanceRecord.performedAt
+                          ? new Date(selectedInvoice.maintenanceRecord.performedAt).toLocaleString("vi-VN")
+                          : "N/A"}
+                      </span>
+                    </div>
+                    {selectedInvoice.maintenanceRecord.notes && (
+                      <div className="detail-item" style={{ gridColumn: "1 / -1" }}>
+                        <label>Ghi Chú:</label>
+                        <p style={{ padding: "10px", background: "#f5f9f8", borderRadius: "8px", color: "#555", marginTop: "5px" }}>
+                          {selectedInvoice.maintenanceRecord.notes}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Timestamps */}
+              {(selectedInvoice.createdAt || selectedInvoice.updatedAt) && (
+                <div className="detail-section">
+                  <h3>Thời Gian</h3>
+                  <div className="detail-grid">
+                    {selectedInvoice.createdAt && (
+                      <div className="detail-item">
+                        <label>Tạo Lúc:</label>
+                        <span>
+                          {new Date(selectedInvoice.createdAt).toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                    )}
+                    {selectedInvoice.updatedAt && (
+                      <div className="detail-item">
+                        <label>Cập Nhật Lúc:</label>
+                        <span>
+                          {new Date(selectedInvoice.updatedAt).toLocaleString("vi-VN")}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Notes */}
+              {selectedInvoice.notes && (
+                <div className="detail-section">
+                  <h3>Ghi Chú</h3>
+                  <p style={{ padding: "10px", background: "#f5f9f8", borderRadius: "8px", color: "#555" }}>
+                    {selectedInvoice.notes}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={handleCloseInvoiceDetailModal}>
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
