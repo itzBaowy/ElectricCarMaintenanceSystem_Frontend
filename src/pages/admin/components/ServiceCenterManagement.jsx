@@ -8,6 +8,14 @@ const ServiceCenterManagement = () => {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingCenter, setEditingCenter] = useState(null)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [pageSize] = useState(8)
+  const [pagination, setPagination] = useState({
+    totalElements: 0,
+    totalPages: 0,
+    first: true,
+    last: false
+  })
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -18,15 +26,16 @@ const ServiceCenterManagement = () => {
 
   useEffect(() => {
     loadCenters()
-  }, [])
+  }, [currentPage])
 
   const loadCenters = async () => {
     try {
       setLoading(true)
-      const result = await centerService.getAllCenters()
+      const result = await centerService.getAllCenters(currentPage, pageSize)
       
       if (result.success) {
         setCenters(result.data)
+        setPagination(result.pagination)
       } else {
         alert(`Error: ${result.message}`)
       }
@@ -102,6 +111,7 @@ const ServiceCenterManagement = () => {
       if (result.success) {
         alert(editingCenter ? 'Service center updated successfully!' : 'New service center added successfully!')
         handleCloseModal()
+        setCurrentPage(0)
         loadCenters()
       } else {
         alert(`Lỗi: ${result.message}`)
@@ -122,7 +132,12 @@ const ServiceCenterManagement = () => {
       
       if (result.success) {
         alert('Service center deleted successfully!')
-        loadCenters()
+        // If we're on the last page and it only had 1 item, go back a page
+        if (centers.length === 1 && currentPage > 0) {
+          setCurrentPage(currentPage - 1)
+        } else {
+          loadCenters()
+        }
       } else {
         alert(`Lỗi: ${result.message}`)
       }
@@ -134,6 +149,18 @@ const ServiceCenterManagement = () => {
 
   if (loading) {
     return <div className="loading">⏳ Loading...</div>
+  }
+
+  const handleNextPage = () => {
+    if (!pagination.last) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const handlePreviousPage = () => {
+    if (!pagination.first) {
+      setCurrentPage(currentPage - 1)
+    }
   }
 
   return (
@@ -158,7 +185,7 @@ const ServiceCenterManagement = () => {
             </svg>
           </div>
           <div className="stat-info">
-            <span className="stat-number">{centers.length}</span>
+            <span className="stat-number">{pagination.totalElements}</span>
             <span className="stat-label">Total Service Centers</span>
           </div>
         </div>
@@ -243,6 +270,29 @@ const ServiceCenterManagement = () => {
           ))
         )}
       </div>
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="pagination">
+          <button 
+            className="pagination-btn" 
+            onClick={handlePreviousPage}
+            disabled={pagination.first}
+          >
+            ← Previous
+          </button>
+          <span className="pagination-info">
+            Page {currentPage + 1} of {pagination.totalPages}
+          </span>
+          <button 
+            className="pagination-btn" 
+            onClick={handleNextPage}
+            disabled={pagination.last}
+          >
+            Next →
+          </button>
+        </div>
+      )}
 
       {/* Modal Add/Edit Center */}
       {showModal && (

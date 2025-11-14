@@ -2,17 +2,26 @@ import api from './apiConfig'
 import logger from '../utils/logger'
 
 const centerService = {
-  // Get all maintenance centers
-  getAllCenters: async () => {
+  // Get all maintenance centers with pagination
+  getAllCenters: async (page = 0, size = 15) => {
     try {
-      const response = await api.get('/api/service-centers')
+      const response = await api.get('/api/service-centers', {
+        params: { page, size }
+      })
       
       if (response.data.code === 1000) {
-        // API returns result.content array
-        const centers = response.data.result?.content || []
+        // API returns result with content and pagination info
         return {
           success: true,
-          data: centers,
+          data: response.data.result?.content || [],
+          pagination: {
+            totalElements: response.data.result?.totalElements || 0,
+            totalPages: response.data.result?.totalPages || 0,
+            currentPage: response.data.result?.number || 0,
+            pageSize: response.data.result?.size || size,
+            first: response.data.result?.first || false,
+            last: response.data.result?.last || false
+          },
           message: response.data.message || 'Centers loaded successfully'
         }
       } else {
