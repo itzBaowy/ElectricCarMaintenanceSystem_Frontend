@@ -36,11 +36,11 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
         setOriginalData(profileData)
         logger.log('Profile loaded:', profileData)
       } else {
-        alert('Không thể tải thông tin người dùng')
+        alert('Unable to load user information')
       }
     } catch (error) {
       logger.error('Error loading profile:', error)
-      alert('Có lỗi xảy ra khi tải thông tin')
+      alert('An error occurred while loading information')
     } finally {
       setLoadingProfile(false)
     }
@@ -66,28 +66,28 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
 
     // Full name validation
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Họ tên không được để trống'
+      newErrors.fullName = 'Full name is required'
     } else if (formData.fullName.trim().length < 2) {
-      newErrors.fullName = 'Họ tên phải có ít nhất 2 ký tự'
+      newErrors.fullName = 'Full name must be at least 2 characters'
     }
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = 'Email không được để trống'
+      newErrors.email = 'Email is required'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ'
+      newErrors.email = 'Invalid email format'
     }
 
     // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Số điện thoại không được để trống'
+      newErrors.phone = 'Phone number is required'
     } else if (!/^[0-9]{10,11}$/.test(formData.phone)) {
-      newErrors.phone = 'Số điện thoại phải có 10-11 chữ số'
+      newErrors.phone = 'Phone number must be 10-11 digits'
     }
 
     // Gender validation
     if (!formData.gender) {
-      newErrors.gender = 'Vui lòng chọn giới tính'
+      newErrors.gender = 'Please select gender'
     }
 
     setErrors(newErrors)
@@ -107,7 +107,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
     }
 
     if (!hasChanges()) {
-      alert('Không có thay đổi nào để lưu')
+      alert('No changes to save')
       return
     }
 
@@ -116,7 +116,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
       const result = await customerService.updateMyInfo(formData)
 
       if (result.success) {
-        alert('✅ Cập nhật thông tin thành công!')
+        alert('✅ Profile updated successfully!')
         logger.log('Profile updated:', result.data)
         
         // Update original data
@@ -132,11 +132,11 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
           onClose()
         }, 1000)
       } else {
-        alert(`❌ Cập nhật thất bại: ${result.message}`)
+        alert(`❌ Update failed: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error updating profile:', error)
-      alert('❌ Có lỗi xảy ra khi cập nhật thông tin')
+      alert('❌ An error occurred while updating profile')
     } finally {
       setLoading(false)
     }
@@ -154,7 +154,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content edit-profile-modal" onClick={(e) => e.stopPropagation()}>
           <div className="loading-container">
-            <p>⏳ Đang tải thông tin...</p>
+            <p>⏳ Loading information...</p>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content edit-profile-modal" onClick={(e) => e.stopPropagation()}>
         <div className="edit-profile-header-custom" data-component="edit-profile" style={{ backgroundColor: '#000000', color: '#ffffff', backgroundImage: 'none' }}>
-          <h2 style={{ color: '#ffffff', margin: 0 }}> Chỉnh Sửa Thông Tin</h2>
+          <h2 style={{ color: '#ffffff', margin: 0 }}>Edit Profile</h2>
           <button className="edit-profile-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'transparent' }}>✕</button>
         </div>
 
@@ -173,7 +173,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
           {/* Full Name */}
           <div className="form-group">
             <label htmlFor="fullName">
-              Họ và Tên <span className="required">*</span>
+              Full Name <span className="required">*</span>
             </label>
             <input
               type="text"
@@ -182,7 +182,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
               value={formData.fullName}
               onChange={handleChange}
               className={errors.fullName ? 'error' : ''}
-              placeholder="Nhập họ và tên"
+              placeholder="Enter full name"
               disabled={loading}
             />
             {errors.fullName && (
@@ -213,7 +213,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
           {/* Phone */}
           <div className="form-group">
             <label htmlFor="phone">
-              Số Điện Thoại <span className="required">*</span>
+              Phone Number <span className="required">*</span>
             </label>
             <input
               type="tel"
@@ -233,7 +233,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
           {/* Gender */}
           <div className="form-group">
             <label htmlFor="gender">
-              Giới Tính <span className="required">*</span>
+              Gender <span className="required">*</span>
             </label>
             <select
               id="gender"
@@ -243,9 +243,9 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
               className={errors.gender ? 'error' : ''}
               disabled={loading}
             >
-              <option value="MALE">Nam</option>
-              <option value="FEMALE">Nữ</option>
-              <option value="OTHER">Khác</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="OTHER">Other</option>
             </select>
             {errors.gender && (
               <span className="error-message">{errors.gender}</span>
@@ -260,7 +260,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
               className="btn-reset"
               disabled={loading || !hasChanges()}
             >
-              🔄 Khôi phục
+              🔄 Reset
             </button>
             <button 
               type="button" 
@@ -268,14 +268,14 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
               className="btn-secondary" 
               disabled={loading}
             >
-              Hủy
+              Cancel
             </button>
             <button 
               type="submit" 
               className="btn-primary" 
               disabled={loading || !hasChanges()}
             >
-              {loading ? '⏳ Đang lưu...' : '✓ Lưu thay đổi'}
+              {loading ? '⏳ Saving...' : '✓ Save Changes'}
             </button>
           </div>
         </form>

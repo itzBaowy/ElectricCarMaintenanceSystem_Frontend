@@ -36,23 +36,23 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
 
     // Old password validation
     if (!formData.oldPassword) {
-      newErrors.oldPassword = 'Vui lòng nhập mật khẩu hiện tại'
+      newErrors.oldPassword = 'Please enter your current password'
     }
 
     // New password validation
     if (!formData.newPassword) {
-      newErrors.newPassword = 'Vui lòng nhập mật khẩu mới'
+      newErrors.newPassword = 'Please enter a new password'
     } else if (formData.newPassword.length < 6) {
-      newErrors.newPassword = 'Mật khẩu mới phải có ít nhất 6 ký tự'
+      newErrors.newPassword = 'New password must be at least 6 characters'
     } else if (formData.newPassword === formData.oldPassword) {
-      newErrors.newPassword = 'Mật khẩu mới phải khác mật khẩu hiện tại'
+      newErrors.newPassword = 'New password must be different from current password'
     }
 
     // Confirm password validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu mới'
+      newErrors.confirmPassword = 'Please confirm your new password'
     } else if (formData.confirmPassword !== formData.newPassword) {
-      newErrors.confirmPassword = 'Mật khẩu xác nhận không khớp'
+      newErrors.confirmPassword = 'Passwords do not match'
     }
 
     setErrors(newErrors)
@@ -74,7 +74,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
       })
 
       if (result.success) {
-        alert('✅ Đổi mật khẩu thành công!')
+        alert('✅ Password changed successfully!')
         logger.log('Password changed successfully')
         
         // Reset form
@@ -94,17 +94,17 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
           onClose()
         }, 1000)
       } else {
-        alert(`❌ Đổi mật khẩu thất bại: ${result.message}`)
+        alert(`❌ Password change failed: ${result.message}`)
         // If old password is wrong, highlight the field
         if (result.message.toLowerCase().includes('password') || 
             result.message.toLowerCase().includes('incorrect') ||
             result.message.toLowerCase().includes('wrong')) {
-          setErrors({ oldPassword: 'Mật khẩu hiện tại không đúng' })
+          setErrors({ oldPassword: 'Current password is incorrect' })
         }
       }
     } catch (error) {
       logger.error('Error changing password:', error)
-      alert('❌ Có lỗi xảy ra khi đổi mật khẩu')
+      alert('❌ An error occurred while changing password')
     } finally {
       setLoading(false)
     }
@@ -123,19 +123,19 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
     <div className="modal-overlay" onClick={onClose} data-component="change-password">
       <div className="modal-content change-password-modal" onClick={(e) => e.stopPropagation()}>
         <div className="change-password-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
-          <h2>Đổi Mật Khẩu</h2>
+          <h2>Change Password</h2>
           <button className="change-password-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="change-password-form">
           <div className="info-message">
-            <p>Mật khẩu mới phải có ít nhất 6 ký tự và khác với mật khẩu hiện tại</p>
+            <p>New password must be at least 6 characters and different from current password</p>
           </div>
 
           {/* Old Password */}
           <div className="form-group">
             <label htmlFor="oldPassword">
-              Mật khẩu hiện tại <span className="required">*</span>
+              Current Password <span className="required">*</span>
             </label>
             <div className="password-input-wrapper">
               <input
@@ -145,7 +145,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
                 value={formData.oldPassword}
                 onChange={handleChange}
                 className={errors.oldPassword ? 'error' : ''}
-                placeholder="Nhập mật khẩu hiện tại"
+                placeholder="Enter current password"
                 disabled={loading}
                 autoComplete="current-password"
               />
@@ -166,7 +166,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
           {/* New Password */}
           <div className="form-group">
             <label htmlFor="newPassword">
-              Mật khẩu mới <span className="required">*</span>
+              New Password <span className="required">*</span>
             </label>
             <div className="password-input-wrapper">
               <input
@@ -176,7 +176,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
                 value={formData.newPassword}
                 onChange={handleChange}
                 className={errors.newPassword ? 'error' : ''}
-                placeholder="Nhập mật khẩu mới"
+                placeholder="Enter new password"
                 disabled={loading}
                 autoComplete="new-password"
               />
@@ -201,8 +201,8 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
                   <div className="strength-fill"></div>
                 </div>
                 <span className="strength-text">
-                  {formData.newPassword.length < 6 ? 'Yếu' :
-                   formData.newPassword.length < 10 ? 'Trung bình' : 'Mạnh'}
+                  {formData.newPassword.length < 6 ? 'Weak' :
+                   formData.newPassword.length < 10 ? 'Medium' : 'Strong'}
                 </span>
               </div>
             )}
@@ -211,7 +211,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
           {/* Confirm Password */}
           <div className="form-group">
             <label htmlFor="confirmPassword">
-              Xác nhận mật khẩu mới <span className="required">*</span>
+              Confirm New Password <span className="required">*</span>
             </label>
             <div className="password-input-wrapper">
               <input
@@ -221,7 +221,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 className={errors.confirmPassword ? 'error' : ''}
-                placeholder="Nhập lại mật khẩu mới"
+                placeholder="Re-enter new password"
                 disabled={loading}
                 autoComplete="new-password"
               />
@@ -239,7 +239,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
             )}
             {formData.confirmPassword && formData.newPassword && 
              formData.confirmPassword === formData.newPassword && (
-              <span className="success-message">Mật khẩu khớp</span>
+              <span className="success-message">Passwords match</span>
             )}
           </div>
 
@@ -251,7 +251,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
               className="btn-reset"
               disabled={loading}
             >
-              Xóa
+              Clear
             </button>
             <button 
               type="button" 
@@ -259,14 +259,14 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
               className="btn-secondary" 
               disabled={loading}
             >
-              Hủy
+              Cancel
             </button>
             <button 
               type="submit" 
               className="btn-primary" 
               disabled={loading}
             >
-              {loading ? 'Đang xử lý...' : 'Đổi mật khẩu'}
+              {loading ? 'Processing...' : 'Change Password'}
             </button>
           </div>
         </form>

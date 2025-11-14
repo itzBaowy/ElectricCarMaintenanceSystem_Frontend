@@ -23,8 +23,8 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      PAID: { text: 'Đã thanh toán', class: 'paid', icon: '✅' },
-      UNPAID: { text: 'Chưa thanh toán', class: 'unpaid', icon: '⏳' }
+      PAID: { text: 'Paid', class: 'paid', icon: '✅' },
+      UNPAID: { text: 'Unpaid', class: 'unpaid', icon: '⏳' }
     }
     return statusMap[status] || statusMap.UNPAID
   }
@@ -38,7 +38,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
     <div className="modal-overlay">
       <div className="invoice-list-modal">
         <div className="modal-header">
-          <h2>💳 Danh Sách Hoá Đơn</h2>
+          <h2>💳 Invoice List</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -51,19 +51,19 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
               className={`filter-btn ${filterStatus === 'ALL' ? 'active' : ''}`}
               onClick={() => setFilterStatus('ALL')}
             >
-              Tất cả ({invoices.length})
+              All ({invoices.length})
             </button>
             <button
               className={`filter-btn ${filterStatus === 'PAID' ? 'active' : ''}`}
               onClick={() => setFilterStatus('PAID')}
             >
-              Đã thanh toán ({invoices.filter(i => i.status === 'PAID').length})
+              Paid ({invoices.filter(i => i.status === 'PAID').length})
             </button>
             <button
               className={`filter-btn ${filterStatus === 'UNPAID' ? 'active' : ''}`}
               onClick={() => setFilterStatus('UNPAID')}
             >
-              Chưa thanh toán ({invoices.filter(i => i.status === 'UNPAID').length})
+              Unpaid ({invoices.filter(i => i.status === 'UNPAID').length})
             </button>
           </div>
         </div>
@@ -74,8 +74,8 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
               <div className="no-invoices-icon">💳</div>
               <p>
                 {filterStatus === 'ALL' 
-                  ? 'Bạn chưa có hoá đơn nào.' 
-                  : `Không có hoá đơn ${filterStatus === 'PAID' ? 'đã thanh toán' : 'chưa thanh toán'}.`}
+                  ? 'You have no invoices yet.' 
+                  : `No ${filterStatus === 'PAID' ? 'paid' : 'unpaid'} invoices.`}
               </p>
             </div>
           ) : (
@@ -92,7 +92,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                   >
                     <div className="invoice-card-header">
                       <div className="invoice-id">
-                        <span className="label">Mã hoá đơn:</span>
+                        <span className="label">Invoice ID:</span>
                         <span className="value">#{invoice.id}</span>
                       </div>
                       <span className={`status-badge ${statusInfo.class}`}>
@@ -105,7 +105,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                       <div className="info-row">
                         <span className="icon">🚗</span>
                         <div className="info-content">
-                          <span className="info-label">Xe:</span>
+                          <span className="info-label">Vehicle:</span>
                           <span className="info-value">
                             {maintenanceRecord?.vehicleModel} - {maintenanceRecord?.vehicleLicensePlate}
                           </span>
@@ -116,7 +116,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                       <div className="info-row">
                         <span className="icon">🏢</span>
                         <div className="info-content">
-                          <span className="info-label">Trung tâm:</span>
+                          <span className="info-label">Center:</span>
                           <span className="info-value">{invoice.serviceCenterName}</span>
                         </div>
                       </div>
@@ -126,7 +126,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                         <div className="info-row">
                           <span className="icon">📦</span>
                           <div className="info-content">
-                            <span className="info-label">Gói dịch vụ:</span>
+                            <span className="info-label">Service package:</span>
                             <span className="info-value">{maintenanceRecord.servicePackageName}</span>
                           </div>
                         </div>
@@ -137,7 +137,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                         <div className="info-row">
                           <span className="icon">🔧</span>
                           <div className="info-content">
-                            <span className="info-label">Kỹ thuật viên:</span>
+                            <span className="info-label">Technician:</span>
                             <span className="info-value">{maintenanceRecord.technicianName}</span>
                           </div>
                         </div>
@@ -147,7 +147,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                       <div className="info-row">
                         <span className="icon">📅</span>
                         <div className="info-content">
-                          <span className="info-label">Ngày thực hiện:</span>
+                          <span className="info-label">Service date:</span>
                           <span className="info-value">{formatDate(maintenanceRecord?.performedAt)}</span>
                         </div>
                       </div>
@@ -157,8 +157,8 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
                         <div className="info-row">
                           <span className="icon">🔨</span>
                           <div className="info-content">
-                            <span className="info-label">Số hạng mục:</span>
-                            <span className="info-value">{maintenanceRecord.serviceItems.length} dịch vụ</span>
+                            <span className="info-label">Service items:</span>
+                            <span className="info-value">{maintenanceRecord.serviceItems.length} services</span>
                           </div>
                         </div>
                       )}
@@ -166,11 +166,11 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
 
                     <div className="invoice-card-footer">
                       <div className="total-amount">
-                        <span className="label">Tổng tiền:</span>
+                        <span className="label">Total:</span>
                         <span className="amount">{formatCurrency(invoice.totalAmount)}</span>
                       </div>
                       <button className="view-detail-btn">
-                        Xem chi tiết →
+                        View details →
                       </button>
                     </div>
                   </div>
@@ -182,7 +182,7 @@ const InvoiceList = ({ invoices, onClose, onViewDetail }) => {
 
         <div className="modal-footer">
           <button className="close-footer-btn" onClick={onClose}>
-            Đóng
+            Close
           </button>
         </div>
       </div>

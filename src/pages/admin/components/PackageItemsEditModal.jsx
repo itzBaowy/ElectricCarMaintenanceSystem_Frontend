@@ -58,7 +58,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
   const handleSaveItem = async (item) => {
     const changes = editedItems[item.id]
     if (!changes) {
-      alert('Không có thay đổi nào để lưu')
+      alert('No changes to save')
       return
     }
 
@@ -78,7 +78,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       const result = await modelPackageItemService.update(item.id, updateData)
 
       if (result.success) {
-        alert('✅ Cập nhật thành công!')
+        alert('✅ Updated successfully!')
         // Update local state
         setItems(prevItems => 
           prevItems.map(i => 
@@ -107,11 +107,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
   const handleSaveAll = async () => {
     const changedItemIds = Object.keys(editedItems)
     if (changedItemIds.length === 0) {
-      alert('Không có thay đổi nào để lưu')
+      alert('No changes to save')
       return
     }
 
-    if (!window.confirm(`Bạn có chắc chắn muốn lưu ${changedItemIds.length} thay đổi?`)) {
+    if (!window.confirm(`Are you sure you want to save ${changedItemIds.length} changes?`)) {
       return
     }
 
@@ -144,12 +144,12 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       }
 
       if (errorCount === 0) {
-        alert(`✅ Đã lưu thành công ${successCount} thay đổi!`)
+        alert(`✅ Successfully saved ${successCount} changes!`)
         setEditedItems({})
         fetchData()
         if (onSuccess) onSuccess()
       } else {
-        alert(`Đã lưu ${successCount} thay đổi, ${errorCount} lỗi`)
+        alert(`Saved ${successCount} changes, ${errorCount} errors`)
         fetchData()
       }
     } catch (err) {
@@ -184,7 +184,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       <div className="modal-content package-items-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h3>Chỉnh sửa Hạng mục - {pkg.name}</h3>
+            <h3>Edit Service Items - {pkg.name}</h3>
             <p className="modal-subtitle">
               {model.name} ({model.modelYear}) - {pkg.milestoneKm.toLocaleString('vi-VN')} km
             </p>
@@ -196,24 +196,24 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Đang tải hạng mục...</p>
+              <p>Loading items...</p>
             </div>
           ) : error ? (
             <div className="error-state">
               <span className="error-icon">⚠️</span>
               <p>{error}</p>
-              <button className="btn-retry" onClick={fetchData}>Thử lại</button>
+              <button className="btn-retry" onClick={fetchData}>Retry</button>
             </div>
           ) : (
             <>
               {/* Summary */}
               <div className="items-summary">
                 <span className="summary-item">
-                  📋 <strong>{items.length}</strong> hạng mục
+                  📋 <strong>{items.length}</strong> items
                 </span>
                 {changedItemsCount > 0 && (
                   <span className="summary-item changed">
-                    ✏️ <strong>{changedItemsCount}</strong> thay đổi
+                    ✏️ <strong>{changedItemsCount}</strong> changes
                   </span>
                 )}
               </div>
@@ -223,11 +223,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                 <table className="items-table">
                   <thead>
                     <tr>
-                      <th>Hạng mục</th>
-                      <th>Loại</th>
-                      <th>Giá (VNĐ)</th>
-                      <th>Phụ tùng</th>
-                      <th>Số lượng</th>
+                      <th>Service Item</th>
+                      <th>Type</th>
+                      <th>Price (VND)</th>
+                      <th>Spare Part</th>
+                      <th>Quantity</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -257,8 +257,8 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             onChange={(e) => handleFieldChange(item.id, 'actionType', e.target.value)}
                             disabled={saving}
                           >
-                            <option value="CHECK">Kiểm tra</option>
-                            <option value="REPLACE">Thay</option>
+                            <option value="CHECK">Check</option>
+                            <option value="REPLACE">Replace</option>
                           </select>
                         </td>
                         <td>
@@ -279,7 +279,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             onChange={(e) => handleFieldChange(item.id, 'includedSparePartId', e.target.value ? parseInt(e.target.value) : null)}
                             disabled={saving}
                           >
-                            <option value="">-- Không có --</option>
+                            <option value="">-- None --</option>
                             {spareParts.map(part => (
                               <option key={part.id} value={part.id}>
                                 {part.partNumber} - {part.name}
@@ -304,7 +304,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             onClick={() => handleSaveItem(item)}
                             disabled={!hasChanges(item.id) || saving}
                           >
-                            💾 Lưu
+                            💾 Save
                           </button>
                         </td>
                       </tr>
@@ -322,7 +322,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
             onClick={onClose}
             disabled={saving}
           >
-            Đóng
+            Close
           </button>
           {changedItemsCount > 0 && (
             <button 
@@ -333,11 +333,11 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
               {saving ? (
                 <>
                   <span className="spinner-small"></span>
-                  Đang lưu...
+                  Saving...
                 </>
               ) : (
                 <>
-                  💾 Lưu tất cả ({changedItemsCount})
+                  💾 Save All ({changedItemsCount})
                 </>
               )}
             </button>

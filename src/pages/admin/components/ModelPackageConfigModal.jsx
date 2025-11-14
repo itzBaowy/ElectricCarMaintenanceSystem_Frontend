@@ -31,7 +31,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
         result.data.forEach(item => {
           // Use milestoneKm as the key
           const milestoneKm = item.milestoneKm || 0
-          const packageName = `Bảo dưỡng ${milestoneKm.toLocaleString('vi-VN')} km`
+          const packageName = `Maintenance ${milestoneKm.toLocaleString('en-US')} km`
           
           if (!grouped[milestoneKm]) {
             grouped[milestoneKm] = {
@@ -126,7 +126,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
       <div className="modal-content package-config-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h3>Cấu hình Gói Dịch Vụ</h3>
+            <h3>Service Package Configuration</h3>
             <p className="modal-subtitle">{model.name} ({model.modelYear})</p>
           </div>
           <button className="close-btn" onClick={onClose}>✕</button>
@@ -136,14 +136,14 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Đang tải cấu hình...</p>
+              <p>Loading configuration...</p>
             </div>
           ) : error ? (
             <div className="error-state">
               <span className="error-icon">⚠️</span>
               <p>{error}</p>
               <button className="btn-retry" onClick={fetchModelPackages}>
-                Thử lại
+                Retry
               </button>
             </div>
           ) : (
@@ -154,14 +154,14 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                   className="btn-clone"
                   onClick={handleCloneConfig}
                 >
-                  📋 Sao chép từ mẫu xe khác
+                  📋 Clone from another model
                 </button>
                 <div className="config-stats">
                   <span className="stat-badge">
-                    {packageArray.length} mốc bảo dưỡng
+                    {packageArray.length} maintenance milestones
                   </span>
                   <span className="stat-badge">
-                    {packageArray.reduce((sum, pkg) => sum + pkg.items.length, 0)} hạng mục
+                    {packageArray.reduce((sum, pkg) => sum + pkg.items.length, 0)} items
                   </span>
                 </div>
               </div>
@@ -170,9 +170,9 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
               {hasNoConfig ? (
                 <div className="empty-state">
                   <div className="empty-icon">📦</div>
-                  <h4>Chưa có cấu hình</h4>
-                  <p>Mẫu xe này chưa có cấu hình gói dịch vụ nào.</p>
-                  <p>Nhấn "Sao chép từ mẫu xe khác" để bắt đầu.</p>
+                  <h4>No configuration yet</h4>
+                  <p>This model doesn't have any service package configuration.</p>
+                  <p>Click "Clone from another model" to get started.</p>
                 </div>
               ) : (
                 <div className="packages-list">
@@ -193,13 +193,13 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                             className="btn-edit-package"
                             onClick={() => handleEditPackage(pkg)}
                           >
-                            ✏️ Chỉnh sửa
+                            ✏️ Edit
                           </button>
                         </div>
                       </div>
                       <div className="package-summary">
                         <span className="items-count">
-                          📋 {pkg.items.length} hạng mục
+                          📋 {pkg.items.length} items
                         </span>
                         <span className="items-preview">
                           {pkg.items.slice(0, 3).map(item => item.serviceItemName).join(', ')}
@@ -216,7 +216,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
 
         <div className="modal-footer">
           <button className="btn-close" onClick={onClose}>
-            Đóng
+            Close
           </button>
         </div>
       </div>

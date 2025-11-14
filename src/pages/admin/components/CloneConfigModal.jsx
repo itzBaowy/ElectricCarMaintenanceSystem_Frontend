@@ -10,13 +10,13 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
 
   const handleClone = async () => {
     if (!selectedSourceModel) {
-      setError('Vui lòng chọn mẫu xe nguồn')
+      setError('Please select a source model')
       return
     }
 
-    const confirmMsg = `Bạn có chắc chắn muốn sao chép cấu hình từ "${
+    const confirmMsg = `Are you sure you want to copy configuration from "${
       allModels.find(m => m.id === parseInt(selectedSourceModel))?.name
-    }" sang "${targetModel.name}"?\n\nCảnh báo: Điều này sẽ xóa toàn bộ cấu hình hiện tại (nếu có) của ${targetModel.name}.`
+    }" to "${targetModel.name}"?\n\nWarning: This will delete all current configurations (if any) of ${targetModel.name}.`
 
     if (!window.confirm(confirmMsg)) {
       return
@@ -32,7 +32,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
       )
 
       if (result.success) {
-        alert('✅ Sao chép cấu hình thành công!')
+        alert('✅ Configuration cloned successfully!')
         onSuccess()
       } else {
         setError(result.message || 'Failed to clone configuration')
@@ -49,7 +49,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
     <div className="modal-overlay clone-modal-overlay" onClick={onClose}>
       <div className="modal-content clone-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Sao chép Cấu hình</h3>
+          <h3>Clone Configuration</h3>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -57,7 +57,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
           <div className="clone-info">
             <div className="clone-direction">
               <div className="model-box source">
-                <label>Từ mẫu xe:</label>
+                <label>From model:</label>
                 <select
                   value={selectedSourceModel}
                   onChange={(e) => {
@@ -67,7 +67,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
                   className="model-select"
                   disabled={loading}
                 >
-                  <option value="">-- Chọn mẫu xe nguồn --</option>
+                  <option value="">-- Select source model --</option>
                   {allModels.map(model => (
                     <option key={model.id} value={model.id}>
                       {model.name} ({model.modelYear})
@@ -79,7 +79,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
               <div className="arrow-icon">→</div>
 
               <div className="model-box target">
-                <label>Sang mẫu xe:</label>
+                <label>To model:</label>
                 <div className="target-model">
                   {targetModel.name} ({targetModel.modelYear})
                 </div>
@@ -90,11 +90,11 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
           <div className="clone-warning">
             <span className="warning-icon">⚠️</span>
             <div className="warning-text">
-              <strong>Lưu ý:</strong>
+              <strong>Note:</strong>
               <ul>
-                <li>Toàn bộ cấu hình hiện tại của <strong>{targetModel.name}</strong> sẽ bị xóa</li>
-                <li>Tất cả các mốc bảo dưỡng và hạng mục sẽ được sao chép từ mẫu nguồn</li>
-                <li>Sau khi sao chép, bạn có thể chỉnh sửa giá và phụ tùng cho từng hạng mục</li>
+                <li>All current configurations of <strong>{targetModel.name}</strong> will be deleted</li>
+                <li>All maintenance milestones and items will be copied from the source model</li>
+                <li>After cloning, you can edit the price and spare parts for each item</li>
               </ul>
             </div>
           </div>
@@ -113,7 +113,7 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
             onClick={onClose}
             disabled={loading}
           >
-            Hủy
+            Cancel
           </button>
           <button 
             className="btn-clone" 
@@ -123,11 +123,11 @@ const CloneConfigModal = ({ targetModel, allModels, onClose, onSuccess }) => {
             {loading ? (
               <>
                 <span className="spinner-small"></span>
-                Đang sao chép...
+                Cloning...
               </>
             ) : (
               <>
-                📋 Xác nhận sao chép
+                📋 Confirm Clone
               </>
             )}
           </button>

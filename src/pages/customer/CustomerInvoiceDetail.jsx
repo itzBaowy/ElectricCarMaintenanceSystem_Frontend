@@ -21,8 +21,8 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
 
   const getStatusBadge = (status) => {
     const statusMap = {
-      PAID: { text: 'Đã thanh toán', class: 'paid', icon: '✅' },
-      UNPAID: { text: 'Chưa thanh toán', class: 'unpaid', icon: '⏳' }
+      PAID: { text: 'Paid', class: 'paid', icon: '✅' },
+      UNPAID: { text: 'Unpaid', class: 'unpaid', icon: '⏳' }
     }
     return statusMap[status] || statusMap.UNPAID
   }
@@ -34,7 +34,7 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
     if (isProcessingPayment) return
 
     const confirmed = window.confirm(
-      `Xác nhận thanh toán hoá đơn #${invoice.id}\n\nSố tiền: ${formatCurrency(invoice.totalAmount)}\n\nBạn sẽ được chuyển đến trang thanh toán VNPay.`
+      `Confirm payment for invoice #${invoice.id}\n\nAmount: ${formatCurrency(invoice.totalAmount)}\n\nYou will be redirected to VNPay payment page.`
     )
 
     if (!confirmed) return
@@ -53,12 +53,12 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
         // Open payment URL in new tab
         window.open(result.data.paymentUrl, '_blank')
       } else {
-        alert(`Không thể tạo thanh toán: ${result.message}`)
+        alert(`Unable to create payment: ${result.message}`)
         logger.error('Payment creation failed:', result.message)
       }
     } catch (error) {
       logger.error('Payment error:', error)
-      alert('Có lỗi xảy ra khi tạo thanh toán. Vui lòng thử lại!')
+      alert('An error occurred while creating payment. Please try again!')
     } finally {
       setIsProcessingPayment(false)
     }
@@ -68,7 +68,7 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
     <div className="modal-overlay">
       <div className="customer-invoice-modal">
         <div className="modal-header">
-          <h2>🧾 Chi Tiết Hoá Đơn</h2>
+          <h2>🧾 Invoice Details</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -77,20 +77,20 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
         <div className="modal-body">
           {/* Invoice Status Banner */}
           <div className={`invoice-status-banner ${statusInfo.class}`}>
-            {statusInfo.icon} Trạng thái: <strong>{statusInfo.text}</strong>
-            <div className="invoice-id">Mã hoá đơn: #{invoice.id}</div>
+            {statusInfo.icon} Status: <strong>{statusInfo.text}</strong>
+            <div className="invoice-id">Invoice ID: #{invoice.id}</div>
           </div>
 
           {/* Customer Information */}
           <div className="invoice-section">
-            <h3>👤 Thông Tin Khách Hàng</h3>
+            <h3>👤 Customer Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Tên Khách Hàng:</label>
+                <label>Customer Name:</label>
                 <span>{maintenanceRecord?.customerName || 'N/A'}</span>
               </div>
               <div className="info-item">
-                <label>Mã Khách Hàng:</label>
+                <label>Customer ID:</label>
                 <span>#{maintenanceRecord?.customerId}</span>
               </div>
             </div>
@@ -98,10 +98,10 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
 
           {/* Vehicle Information */}
           <div className="invoice-section">
-            <h3>🚗 Thông Tin Xe</h3>
+            <h3>🚗 Vehicle Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Biển Số:</label>
+                <label>License Plate:</label>
                 <span>{maintenanceRecord?.vehicleLicensePlate || 'N/A'}</span>
               </div>
               <div className="info-item">
@@ -109,12 +109,12 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
                 <span>{maintenanceRecord?.vehicleModel || 'N/A'}</span>
               </div>
               <div className="info-item">
-                <label>Mã Xe:</label>
+                <label>Vehicle ID:</label>
                 <span>#{maintenanceRecord?.vehicleId}</span>
               </div>
               {maintenanceRecord?.odometer && (
                 <div className="info-item">
-                  <label>Số Km:</label>
+                  <label>Mileage:</label>
                   <span>{maintenanceRecord.odometer.toLocaleString()} km</span>
                 </div>
               )}
@@ -123,22 +123,22 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
 
           {/* Service Center Information */}
           <div className="invoice-section">
-            <h3>🏢 Thông Tin Dịch Vụ</h3>
+            <h3>🏢 Service Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Trung Tâm:</label>
+                <label>Service Center:</label>
                 <span>{invoice.serviceCenterName}</span>
               </div>
               <div className="info-item">
-                <label>Mã Appointment:</label>
+                <label>Appointment ID:</label>
                 <span>#{maintenanceRecord?.appointmentId}</span>
               </div>
               <div className="info-item">
-                <label>Ngày Thực Hiện:</label>
+                <label>Service Date:</label>
                 <span>{formatDate(maintenanceRecord?.performedAt)}</span>
               </div>
               <div className="info-item">
-                <label>Ngày Tạo Hoá Đơn:</label>
+                <label>Invoice Date:</label>
                 <span>{formatDate(invoice.createdAt)}</span>
               </div>
             </div>
@@ -147,14 +147,14 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Technician Information */}
           {maintenanceRecord?.technicianName && (
             <div className="invoice-section">
-              <h3>🔧 Kỹ Thuật Viên</h3>
+              <h3>🔧 Technician</h3>
               <div className="info-grid">
                 <div className="info-item">
-                  <label>Tên Kỹ Thuật Viên:</label>
+                  <label>Technician Name:</label>
                   <span>{maintenanceRecord.technicianName}</span>
                 </div>
                 <div className="info-item">
-                  <label>Mã KTV:</label>
+                  <label>Technician ID:</label>
                   <span>#{maintenanceRecord.technicianId}</span>
                 </div>
               </div>
@@ -164,7 +164,7 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Service Package */}
           {maintenanceRecord?.servicePackageName && (
             <div className="invoice-section">
-              <h3>📦 Gói Dịch Vụ</h3>
+              <h3>📦 Service Package</h3>
               <div className="package-info">
                 <div className="package-name">{maintenanceRecord.servicePackageName}</div>
               </div>
@@ -174,16 +174,16 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Service Items */}
           {maintenanceRecord?.serviceItems && maintenanceRecord.serviceItems.length > 0 && (
             <div className="invoice-section">
-              <h3>🔨 Các Hạng Mục Dịch Vụ ({maintenanceRecord.serviceItems.length})</h3>
+              <h3>🔨 Service Items ({maintenanceRecord.serviceItems.length})</h3>
               <div className="service-table">
                 <table>
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Tên Dịch Vụ</th>
-                      <th>Mô Tả</th>
-                      <th>Loại</th>
-                      <th className="text-right">Giá</th>
+                      <th>No.</th>
+                      <th>Service Name</th>
+                      <th>Description</th>
+                      <th>Type</th>
+                      <th className="text-right">Price</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -211,16 +211,16 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Spare Parts */}
           {maintenanceRecord?.partUsages && maintenanceRecord.partUsages.length > 0 && (
             <div className="invoice-section">
-              <h3>🔧 Phụ Tùng Thay Thế ({maintenanceRecord.partUsages.length})</h3>
+              <h3>🔧 Replaced Spare Parts ({maintenanceRecord.partUsages.length})</h3>
               <div className="service-table">
                 <table>
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Tên Phụ Tùng</th>
-                      <th>Số Lượng</th>
-                      <th className="text-right">Đơn Giá</th>
-                      <th className="text-right">Thành Tiền</th>
+                      <th>No.</th>
+                      <th>Part Name</th>
+                      <th>Quantity</th>
+                      <th className="text-right">Unit Price</th>
+                      <th className="text-right">Subtotal</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -242,7 +242,7 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Notes */}
           {maintenanceRecord?.notes && (
             <div className="invoice-section">
-              <h3>📝 Ghi Chú</h3>
+              <h3>📋 Notes</h3>
               <div className="notes-content">{maintenanceRecord.notes}</div>
             </div>
           )}
@@ -250,18 +250,18 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
           {/* Total Amount */}
           <div className="invoice-section total-section">
             <div className="total-row">
-              <span className="total-label">💰 TỔNG CỘNG:</span>
+              <span className="total-label">💰 TOTAL:</span>
               <span className="total-amount">{formatCurrency(invoice.totalAmount)}</span>
             </div>
             <div className="invoice-status">
-              <span className="status-label">Trạng thái:</span>
+              <span className="status-label">Status:</span>
               <span className={`status-badge ${statusInfo.class}`}>
                 {statusInfo.icon} {statusInfo.text}
               </span>
             </div>
             {invoice.status === 'UNPAID' && (
               <div className="payment-notice">
-                ⚠️ Vui lòng thanh toán hoá đơn để hoàn tất dịch vụ
+                ⚠️ Please pay the invoice to complete the service
               </div>
             )}
           </div>
@@ -274,11 +274,11 @@ const CustomerInvoiceDetail = ({ invoice, onClose }) => {
               onClick={handlePayment}
               disabled={isProcessingPayment}
             >
-              {isProcessingPayment ? '⏳ Đang xử lý...' : '💳 Thanh Toán Ngay'}
+              {isProcessingPayment ? '⏳ Processing...' : '💳 Pay Now'}
             </button>
           )}
           <button className="close-footer-btn" onClick={onClose}>
-            Đóng
+            Close
           </button>
         </div>
       </div>

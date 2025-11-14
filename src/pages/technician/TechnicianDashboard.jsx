@@ -65,7 +65,7 @@ const TechnicianDashboard = () => {
   const handleStartService = async () => {
     if (!selectedAppointment) return
 
-    if (!window.confirm('Xác nhận bắt đầu làm việc với appointment này?')) {
+    if (!window.confirm('Confirm starting work on this appointment?')) {
       return
     }
 
@@ -77,15 +77,15 @@ const TechnicianDashboard = () => {
       )
 
       if (result.success) {
-        alert('Đã bắt đầu làm việc!')
+        alert('Started working!')
         setShowDetailModal(false)
         fetchAppointments(currentUser.userId)
       } else {
-        alert(`Lỗi: ${result.message}`)
+        alert(`Error: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error starting service:', error)
-      alert('Có lỗi khi bắt đầu dịch vụ!')
+      alert('Error starting service!')
     } finally {
       setUpdateLoading(false)
     }
@@ -123,11 +123,11 @@ const TechnicianDashboard = () => {
       // Validate that all selected items have notes
       const missingNotes = upgradeItems.some(item => !item.notes || item.notes.trim() === '')
       if (missingNotes) {
-        alert('Vui lòng nhập ghi chú cho tất cả các dịch vụ cần thay thế!')
+        alert('Please enter notes for all replacement services!')
         return
       }
 
-      if (!window.confirm(`Bạn có chắc chắn muốn yêu cầu thêm ${upgradeItems.length} dịch vụ thay thế?`)) {
+      if (!window.confirm(`Are you sure you want to request ${upgradeItems.length} additional replacement services?`)) {
         return
       }
 
@@ -139,23 +139,23 @@ const TechnicianDashboard = () => {
         )
 
         if (result.success) {
-          alert('Yêu cầu dịch vụ thêm đã được gửi! Đang chờ khách hàng xác nhận.')
+          alert('Additional service request sent! Waiting for customer confirmation.')
           setShowDetailModal(false)
           setRequestAdditionalService(false)
           setUpgradeItems([])
           fetchAppointments(currentUser.userId)
         } else {
-          alert(`Lỗi: ${result.message}`)
+          alert(`Error: ${result.message}`)
         }
       } catch (error) {
         logger.error('Error requesting upgrades:', error)
-        alert('Có lỗi khi gửi yêu cầu dịch vụ thêm!')
+        alert('Error sending additional service request!')
       } finally {
         setUpdateLoading(false)
       }
     } else {
       // Normal completion without additional services
-      if (!window.confirm('Xác nhận hoàn thành dịch vụ?')) {
+      if (!window.confirm('Confirm service completion?')) {
         return
       }
 
@@ -167,15 +167,15 @@ const TechnicianDashboard = () => {
         )
 
         if (result.success) {
-          alert('Dịch vụ đã hoàn thành!')
+          alert('Service completed!')
           setShowDetailModal(false)
           fetchAppointments(currentUser.userId)
         } else {
-          alert(`Lỗi: ${result.message}`)
+          alert(`Error: ${result.message}`)
         }
       } catch (error) {
         logger.error('Error completing service:', error)
-        alert('Có lỗi khi hoàn thành dịch vụ!')
+        alert('Error completing service!')
       } finally {
         setUpdateLoading(false)
       }
@@ -484,7 +484,7 @@ const TechnicianDashboard = () => {
               {/* Service Items List */}
               {selectedAppointment.serviceItems && selectedAppointment.serviceItems.length > 0 && (
                 <div className="detail-section">
-                  <h3>Danh Sách Dịch Vụ</h3>
+                  <h3>Service List</h3>
                   
                   {/* Additional Service Option */}
                   {selectedAppointment.status === 'IN_PROGRESS' && (
@@ -500,7 +500,7 @@ const TechnicianDashboard = () => {
                             }
                           }}
                         />
-                        <span>Yêu cầu dịch vụ thêm (cần thay thế linh kiện)</span>
+                        <span>Request additional service (parts replacement needed)</span>
                       </label>
                     </div>
                   )}
@@ -537,9 +537,9 @@ const TechnicianDashboard = () => {
                           {/* Notes input when item is selected */}
                           {isSelected && (
                             <div className="service-item-notes">
-                              <label>Ghi chú nguyên nhân cần thay thế: *</label>
+                              <label>Notes on reason for replacement: *</label>
                               <textarea
-                                placeholder="Ví dụ: Má phanh trước mòn quá giới hạn..."
+                                placeholder="e.g., Front brake pads worn beyond limit..."
                                 value={upgradeItem?.notes || ''}
                                 onChange={(e) => handleUpdateUpgradeItemNote(serviceItem.id, e.target.value)}
                                 rows="2"
@@ -554,7 +554,7 @@ const TechnicianDashboard = () => {
                   
                   {requestAdditionalService && upgradeItems.length > 0 && (
                     <div className="upgrade-summary">
-                      <strong>Đã chọn {upgradeItems.length} dịch vụ cần thay thế</strong>
+                      <strong>Selected {upgradeItems.length} services for replacement</strong>
                     </div>
                   )}
                 </div>
@@ -575,7 +575,7 @@ const TechnicianDashboard = () => {
                     className="btn-action btn-start"
                     disabled={updateLoading}
                   >
-                    {updateLoading ? 'Đang xử lý...' : '🚀 Bắt đầu làm việc'}
+                    {updateLoading ? 'Processing...' : '🚀 Start Service'}
                   </button>
                 )}
 
@@ -585,16 +585,16 @@ const TechnicianDashboard = () => {
                     className="btn-action btn-complete"
                     disabled={updateLoading}
                   >
-                    {updateLoading ? 'Đang xử lý...' : 
+                    {updateLoading ? 'Processing...' : 
                       requestAdditionalService && upgradeItems.length > 0 
-                        ? '✅ Gửi yêu cầu dịch vụ thêm' 
-                        : '✅ Hoàn thành dịch vụ'}
+                        ? '✅ Send Additional Service Request' 
+                        : '✅ Complete Service'}
                   </button>
                 )}
 
                 {selectedAppointment.status === 'WAITING_FOR_APPROVAL' && (
                   <div className="waiting-message">
-                    <p>⏳ Đang chờ khách hàng phê duyệt yêu cầu dịch vụ thêm...</p>
+                    <p>⏳ Waiting for customer approval of additional service request...</p>
                   </div>
                 )}
 
@@ -606,7 +606,7 @@ const TechnicianDashboard = () => {
                   }}
                   className="btn-action btn-cancel"
                 >
-                  Đóng
+                  Close
                 </button>
               </div>
             </div>

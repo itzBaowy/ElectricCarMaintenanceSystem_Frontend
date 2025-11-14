@@ -13,7 +13,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("walk-in")}
         >
-          Quản Lý Khách Hàng
+          Customer Management
         </button>
         <button
           className={`sidebar-tab${
@@ -21,7 +21,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("appointments")}
         >
-          Quản Lý Appointments
+          Appointment Management
         </button>
         <button
           className={`sidebar-tab${
@@ -29,7 +29,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab }) => (
           }`}
           onClick={() => setSidebarTab("invoices")}
         >
-          Hoá Đơn & Thanh Toán
+          Invoices & Payment
         </button>
       </nav>
     </div>
@@ -192,7 +192,7 @@ const StaffDashboard = () => {
       !customerForm.phoneNumber ||
       !customerForm.email
     ) {
-      alert("Vui lòng điền đầy đủ thông tin khách hàng!");
+      alert("Please fill in all customer information!");
       return;
     }
 
@@ -211,7 +211,7 @@ const StaffDashboard = () => {
 
       if (result.success) {
         alert(
-          `Tài khoản đã được tạo thành công!\nUsername: ${customerForm.phoneNumber}\nPassword: ${customerForm.phoneNumber}\n\nVui lòng thông báo cho khách hàng.`
+          `Account created successfully!\nUsername: ${customerForm.phoneNumber}\nPassword: ${customerForm.phoneNumber}\n\nPlease inform the customer.`
         );
         setShowCreateCustomerModal(false);
         setCustomerForm({
@@ -226,7 +226,7 @@ const StaffDashboard = () => {
       }
     } catch (error) {
       logger.error("Error creating customer:", error);
-      alert("Có lỗi xảy ra khi tạo tài khoản!");
+      alert("An error occurred while creating account!");
     }
   };
 
@@ -266,7 +266,7 @@ const StaffDashboard = () => {
       !vehicleForm.licensePlate ||
       !vehicleForm.model
     ) {
-      alert("Vui lòng điền đầy đủ thông tin xe!");
+      alert("Please fill in all vehicle information!");
       return;
     }
 
@@ -284,7 +284,7 @@ const StaffDashboard = () => {
       const result = await vehicleService.createVehicle(vehicleData);
 
       if (result.success) {
-        alert("Xe đã được thêm thành công!");
+        alert("Vehicle added successfully!");
 
         // Fetch service recommendations based on km/time
         const vehicleId = result.data.id || result.data.vehicleId;
@@ -308,7 +308,7 @@ const StaffDashboard = () => {
       }
     } catch (error) {
       logger.error("Error adding vehicle:", error);
-      alert("Có lỗi xảy ra khi thêm xe!");
+      alert("An error occurred while adding vehicle!");
     }
   };
 
@@ -336,7 +336,7 @@ const StaffDashboard = () => {
     try {
       // Notify customer to login and confirm booking
       alert(
-        `Vui lòng liên hệ khách hàng:\n\n"Xe của anh/chị sau khi kiểm tra dựa trên số km đi được / thời gian mua xe, bên em có đề xuất gói dịch vụ như đã hiển thị. Anh/chị vui lòng đăng nhập vào hệ thống để xác nhận đặt lịch bảo dưỡng."\n\nUsername: [số điện thoại khách hàng]`
+        `Please contact customer:\n\n"Based on your vehicle's mileage/purchase time, we recommend the displayed service package. Please login to the system to confirm your maintenance appointment."\n\nUsername: [customer phone number]`
       );
 
       setShowServiceRecommendationModal(false);

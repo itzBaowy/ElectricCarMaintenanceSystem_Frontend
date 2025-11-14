@@ -28,11 +28,11 @@ const ServiceCenterManagement = () => {
       if (result.success) {
         setCenters(result.data)
       } else {
-        alert(`Lỗi: ${result.message}`)
+        alert(`Error: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error loading centers:', error)
-      alert('Có lỗi khi tải danh sách trung tâm!')
+      alert('Error loading service centers list!')
     } finally {
       setLoading(false)
     }
@@ -85,7 +85,7 @@ const ServiceCenterManagement = () => {
     e.preventDefault()
 
     if (!formData.name || !formData.address || !formData.district || !formData.city || !formData.phone) {
-      alert('Vui lòng điền đầy đủ thông tin bắt buộc!')
+      alert('Please fill in all required information!')
       return
     }
 
@@ -100,7 +100,7 @@ const ServiceCenterManagement = () => {
       }
 
       if (result.success) {
-        alert(editingCenter ? 'Cập nhật trung tâm thành công!' : 'Thêm trung tâm mới thành công!')
+        alert(editingCenter ? 'Service center updated successfully!' : 'New service center added successfully!')
         handleCloseModal()
         loadCenters()
       } else {
@@ -108,12 +108,12 @@ const ServiceCenterManagement = () => {
       }
     } catch (error) {
       logger.error('Error saving center:', error)
-      alert('Có lỗi khi lưu thông tin trung tâm!')
+      alert('Error saving service center information!')
     }
   }
 
   const handleDelete = async (center) => {
-    if (!window.confirm(`Bạn có chắc chắn muốn xóa trung tâm "${center.name}"?`)) {
+    if (!window.confirm(`Are you sure you want to delete service center "${center.name}"?`)) {
       return
     }
 
@@ -121,30 +121,30 @@ const ServiceCenterManagement = () => {
       const result = await centerService.deleteCenter(center.id)
       
       if (result.success) {
-        alert('Xóa trung tâm thành công!')
+        alert('Service center deleted successfully!')
         loadCenters()
       } else {
         alert(`Lỗi: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error deleting center:', error)
-      alert('Có lỗi khi xóa trung tâm!')
+      alert('Error deleting service center!')
     }
   }
 
   if (loading) {
-    return <div className="loading">⏳ Đang tải...</div>
+    return <div className="loading">⏳ Loading...</div>
   }
 
   return (
     <div className="service-center-management">
       <div className="management-header">
         <div>
-          <h2>Quản Lý Trung Tâm Dịch Vụ</h2>
-          <p>Quản lý thông tin các trung tâm bảo dưỡng xe điện</p>
+          <h2>Service Center Management</h2>
+          <p>Manage information of electric vehicle service centers</p>
         </div>
         <button className="add-center-btn" onClick={() => handleOpenModal()}>
-           Thêm Trung Tâm Mới
+           Add New Service Center
         </button>
       </div>
 
@@ -159,7 +159,7 @@ const ServiceCenterManagement = () => {
           </div>
           <div className="stat-info">
             <span className="stat-number">{centers.length}</span>
-            <span className="stat-label">Tổng số trung tâm</span>
+            <span className="stat-label">Total Service Centers</span>
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@ const ServiceCenterManagement = () => {
       <div className="centers-grid">
         {centers.length === 0 ? (
           <div className="no-centers">
-              <p>Chưa có trung tâm nào. Hãy thêm trung tâm mới!</p>
+              <p>No service centers yet. Add a new service center!</p>
             </div>
         ) : (
           centers.map(center => (
@@ -178,8 +178,8 @@ const ServiceCenterManagement = () => {
                   <button 
                     className="edit-btn"
                     onClick={() => handleOpenModal(center)}
-                    title="Chỉnh sửa"
-                    aria-label="Chỉnh sửa"
+                    title="Edit"
+                    aria-label="Edit"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="#fff" opacity="0.95"/>
@@ -188,8 +188,8 @@ const ServiceCenterManagement = () => {
                   <button 
                     className="delete-btn"
                     onClick={() => handleDelete(center)}
-                    title="Xóa"
-                    aria-label="Xóa"
+                    title="Delete"
+                    aria-label="Delete"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M6 7h12v13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7z" fill="#fff" opacity="0.95"/>
@@ -249,13 +249,13 @@ const ServiceCenterManagement = () => {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>{editingCenter ? ' Chỉnh Sửa Trung Tâm' : ' Thêm Trung Tâm Mới'}</h2>
+              <h2>{editingCenter ? ' Edit Service Center' : ' Add New Service Center'}</h2>
               <button className="close-btn" onClick={handleCloseModal}>×</button>
             </div>
 
             <form className="modal-body" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="name">Tên Trung Tâm *</label>
+                <label htmlFor="name">Service Center Name *</label>
                 <input
                   type="text"
                   id="name"
@@ -268,7 +268,7 @@ const ServiceCenterManagement = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="address">Địa Chỉ *</label>
+                <label htmlFor="address">Address *</label>
                 <input
                   type="text"
                   id="address"
@@ -282,7 +282,7 @@ const ServiceCenterManagement = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="district">Quận/Huyện *</label>
+                  <label htmlFor="district">District *</label>
                   <input
                     type="text"
                     id="district"
@@ -295,7 +295,7 @@ const ServiceCenterManagement = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="city">Thành Phố *</label>
+                  <label htmlFor="city">City *</label>
                   <input
                     type="text"
                     id="city"
@@ -309,7 +309,7 @@ const ServiceCenterManagement = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="phone">Số Điện Thoại *</label>
+                <label htmlFor="phone">Phone Number *</label>
                 <input
                   type="tel"
                   id="phone"
@@ -323,10 +323,10 @@ const ServiceCenterManagement = () => {
 
               <div className="modal-footer">
                 <button type="button" className="cancel-btn" onClick={handleCloseModal}>
-                  Hủy
+                  Cancel
                 </button>
                 <button type="submit" className="submit-btn">
-                  {editingCenter ? '💾 Cập Nhật' : '➕ Thêm Mới'}
+                  {editingCenter ? '💾 Update' : '➕ Add New'}
                 </button>
               </div>
             </form>

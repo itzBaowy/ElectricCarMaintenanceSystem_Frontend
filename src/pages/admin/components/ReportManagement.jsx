@@ -31,12 +31,12 @@ const ReportManagement = () => {
 
   const handleFetchReport = async () => {
     if (!startDate || !endDate) {
-      setError('Vui lòng chọn ngày bắt đầu và ngày kết thúc')
+      setError('Please select start date and end date')
       return
     }
 
     if (new Date(startDate) > new Date(endDate)) {
-      setError('Ngày bắt đầu phải trước ngày kết thúc')
+      setError('Start date must be before end date')
       return
     }
 
@@ -54,11 +54,11 @@ const ReportManagement = () => {
         setReportData(response.data)
         logger.log('📊 Report loaded:', response.data)
       } else {
-        setError(response.message || 'Không thể tải báo cáo. Vui lòng thử lại.')
+        setError(response.message || 'Cannot load report. Please try again.')
       }
     } catch (err) {
       logger.error('❌ Error loading report:', err)
-      setError('Không thể tải báo cáo. Vui lòng thử lại.')
+      setError('Cannot load report. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -118,14 +118,14 @@ const ReportManagement = () => {
   return (
     <div className="report-management">
       <div className="report-header">
-        <h2>📊 Báo Cáo Tài Chính</h2>
-        <p>Xem tổng quan doanh thu và hoạt động kinh doanh</p>
+        <h2>📊 Financial Report</h2>
+        <p>View revenue overview and business activities</p>
       </div>
 
       <div className="report-filters">
         <div className="date-filters">
           <div className="filter-group">
-            <label htmlFor="startDate">Từ ngày:</label>
+            <label htmlFor="startDate">From date:</label>
             <input
               type="datetime-local"
               id="startDate"
@@ -136,7 +136,7 @@ const ReportManagement = () => {
           </div>
 
           <div className="filter-group">
-            <label htmlFor="endDate">Đến ngày:</label>
+            <label htmlFor="endDate">To date:</label>
             <input
               type="datetime-local"
               id="endDate"
@@ -151,26 +151,26 @@ const ReportManagement = () => {
             disabled={loading}
             className="btn-generate"
           >
-            {loading ? '⏳ Đang tải...' : '📊 Xem Báo Cáo'}
+            {loading ? '⏳ Loading...' : '📊 View Report'}
           </button>
         </div>
 
         <div className="quick-select">
-          <span>Chọn nhanh:</span>
+          <span>Quick select:</span>
           <button onClick={() => handleQuickSelect('today')} className="btn-quick">
-            Hôm nay
+            Today
           </button>
           <button onClick={() => handleQuickSelect('thisWeek')} className="btn-quick">
-            Tuần này
+            This Week
           </button>
           <button onClick={() => handleQuickSelect('thisMonth')} className="btn-quick">
-            Tháng này
+            This Month
           </button>
           <button onClick={() => handleQuickSelect('lastMonth')} className="btn-quick">
-            Tháng trước
+            Last Month
           </button>
           <button onClick={() => handleQuickSelect('thisYear')} className="btn-quick">
-            Năm nay
+            This Year
           </button>
         </div>
       </div>
@@ -184,11 +184,11 @@ const ReportManagement = () => {
       {reportData && (
         <div className="report-content">
           <div className="report-period">
-            <h3>Kỳ báo cáo</h3>
+            <h3>Report Period</h3>
             <p>
-              <strong>Từ:</strong> {formatDateTime(reportData.startDate)}
+              <strong>From:</strong> {formatDateTime(reportData.startDate)}
               {' → '}
-              <strong>Đến:</strong> {formatDateTime(reportData.endDate)}
+              <strong>To:</strong> {formatDateTime(reportData.endDate)}
             </p>
           </div>
 
@@ -196,7 +196,7 @@ const ReportManagement = () => {
             <div className="stat-card stat-revenue">
               <div className="stat-icon">💰</div>
               <div className="stat-details">
-                <h4>Tổng Doanh Thu</h4>
+                <h4>Total Revenue</h4>
                 <p className="stat-value">{formatCurrency(reportData.totalRevenue)}</p>
               </div>
             </div>
@@ -204,7 +204,7 @@ const ReportManagement = () => {
             <div className="stat-card stat-invoices">
               <div className="stat-icon">📄</div>
               <div className="stat-details">
-                <h4>Hóa Đơn Đã Thanh Toán</h4>
+                <h4>Paid Invoices</h4>
                 <p className="stat-value">{reportData.totalPaidInvoices}</p>
               </div>
             </div>
@@ -212,7 +212,7 @@ const ReportManagement = () => {
             <div className="stat-card stat-appointments">
               <div className="stat-icon">✅</div>
               <div className="stat-details">
-                <h4>Lịch Hẹn Hoàn Thành</h4>
+                <h4>Completed Appointments</h4>
                 <p className="stat-value">{reportData.totalCompletedAppointments}</p>
               </div>
             </div>
@@ -220,7 +220,7 @@ const ReportManagement = () => {
             <div className="stat-card stat-average">
               <div className="stat-icon">📈</div>
               <div className="stat-details">
-                <h4>Trung Bình / Hóa Đơn</h4>
+                <h4>Average / Invoice</h4>
                 <p className="stat-value">
                   {reportData.totalPaidInvoices > 0
                     ? formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)
@@ -233,26 +233,26 @@ const ReportManagement = () => {
           {reportData.serviceCenterId && (
             <div className="report-info">
               <p>
-                <strong>Trung tâm dịch vụ:</strong> {reportData.serviceCenterId}
+                <strong>Service Center:</strong> {reportData.serviceCenterId}
               </p>
             </div>
           )}
 
           <div className="report-summary">
-            <h3>📝 Tóm Tắt</h3>
+            <h3>📝 Summary</h3>
             <ul>
               <li>
-                Tổng cộng <strong>{reportData.totalCompletedAppointments}</strong> lịch hẹn đã hoàn thành trong kỳ báo cáo
+                Total <strong>{reportData.totalCompletedAppointments}</strong> appointments completed in the report period
               </li>
               <li>
-                Có <strong>{reportData.totalPaidInvoices}</strong> hóa đơn đã được thanh toán
+                There are <strong>{reportData.totalPaidInvoices}</strong> invoices that have been paid
               </li>
               <li>
-                Tổng doanh thu đạt được: <strong>{formatCurrency(reportData.totalRevenue)}</strong>
+                Total revenue achieved: <strong>{formatCurrency(reportData.totalRevenue)}</strong>
               </li>
               {reportData.totalPaidInvoices > 0 && (
                 <li>
-                  Giá trị trung bình mỗi hóa đơn:{' '}
+                  Average value per invoice:{' '}
                   <strong>
                     {formatCurrency(reportData.totalRevenue / reportData.totalPaidInvoices)}
                   </strong>
@@ -265,7 +265,7 @@ const ReportManagement = () => {
 
       {!reportData && !loading && !error && (
         <div className="no-data">
-          <p>📊 Chọn khoảng thời gian và nhấn "Xem Báo Cáo" để xem dữ liệu tài chính</p>
+          <p>📊 Select a time period and click "View Report" to see financial data</p>
         </div>
       )}
     </div>

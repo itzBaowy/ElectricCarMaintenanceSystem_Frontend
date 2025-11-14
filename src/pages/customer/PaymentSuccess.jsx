@@ -82,37 +82,37 @@ const PaymentSuccess = () => {
           </svg>
         </div>
 
-        <h1 className="success-title">Thanh toán thành công!</h1>
+        <h1 className="success-title">Payment Successful!</h1>
         <p className="success-message">
-          Cảm ơn bạn đã hoàn tất thanh toán. Đơn đặt lịch của bạn đã được xác nhận.
+          Thank you for completing the payment. Your appointment has been confirmed.
         </p>
 
         <div className="payment-details">
-          <h3>Thông tin thanh toán</h3>
+          <h3>Payment Information</h3>
           <div className="detail-row">
-            <span className="detail-label">Mã giao dịch:</span>
+            <span className="detail-label">Transaction ID:</span>
             <span className="detail-value">{paymentInfo.transactionId}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Số tiền:</span>
+            <span className="detail-label">Amount:</span>
             <span className="detail-value amount">{paymentInfo.amount}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Mã đặt lịch:</span>
+            <span className="detail-label">Appointment ID:</span>
             <span className="detail-value">{paymentInfo.appointmentId}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Trạng thái:</span>
-            <span className="detail-value status-success">Thành công</span>
+            <span className="detail-label">Status:</span>
+            <span className="detail-value status-success">Successful</span>
           </div>
         </div>
 
         <div className="next-steps">
-          <h3>Bước tiếp theo</h3>
+          <h3>Next Steps</h3>
           <ul>
-            <li>Chúng tôi sẽ gửi email xác nhận đến địa chỉ email của bạn</li>
-            <li>Vui lòng đến trung tâm đúng giờ đã đặt</li>
-            <li>Mang theo giấy tờ xe và CMND/CCCD</li>
+            <li>We will send a confirmation email to your email address</li>
+            <li>Please arrive at the center on time</li>
+            <li>Bring your vehicle documents and ID card</li>
           </ul>
         </div>
 
@@ -121,13 +121,13 @@ const PaymentSuccess = () => {
             className="btn btn-primary"
             onClick={handleViewAppointment}
           >
-            Xem chi tiết đặt lịch
+            View Appointment Details
           </button>
           <button
             className="btn btn-secondary"
             onClick={handleBackToDashboard}
           >
-            Về trang chủ
+            Back to Dashboard
           </button>
         </div>
       </div>

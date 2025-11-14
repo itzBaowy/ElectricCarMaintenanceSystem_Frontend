@@ -60,19 +60,19 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           setSelectedRecommendation(recommendationList[0])
         } else {
           setSelectedRecommendation(null)
-          alert('Xe chưa đến hạn bảo dưỡng')
+          alert('Vehicle is not due for maintenance')
         }
       } else {
         logger.error('Failed to load recommendations:', result.message)
         setRecommendations([])
         setSelectedRecommendation(null)
-        alert(result.message || 'Xe chưa đến hạn bảo dưỡng')
+        alert(result.message || 'Vehicle is not due for maintenance')
       }
     } catch (error) {
       logger.error('Error loading recommendations:', error)
       setRecommendations([])
       setSelectedRecommendation(null)
-      alert('Không thể tải đề xuất bảo dưỡng')
+      alert('Unable to load maintenance recommendations')
     } finally {
       setLoadingRecommendations(false)
     }
@@ -88,17 +88,17 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
 
   const validateForm = () => {
     if (!selectedCenter) {
-      alert('Vui lòng chọn trung tâm bảo dưỡng')
+      alert('Please select a maintenance center')
       return false
     }
 
     if (!selectedRecommendation) {
-      alert('Không có gói bảo dưỡng được đề xuất cho xe này')
+      alert('No maintenance package recommended for this vehicle')
       return false
     }
 
     if (!appointmentDate) {
-      alert('Vui lòng chọn ngày và giờ hẹn')
+      alert('Please select appointment date and time')
       return false
     }
 
@@ -128,17 +128,17 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       const result = await appointmentService.createAppointment(appointmentData)
       
       if (result.success) {
-        alert('✅ Đặt lịch bảo dưỡng thành công! Trạng thái: PENDING')
+        alert('✅ Maintenance appointment created successfully! Status: PENDING')
         if (onAppointmentCreated) {
           onAppointmentCreated(result.data)
         }
         onClose()
       } else {
-        alert(`❌ Đặt lịch thất bại: ${result.message}`)
+        alert(`❌ Appointment failed: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error creating appointment:', error)
-      alert('❌ Có lỗi xảy ra khi đặt lịch bảo dưỡng')
+      alert('❌ An error occurred while creating appointment')
     } finally {
       setLoading(false)
     }
@@ -161,17 +161,17 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const getReasonText = (reason) => {
     switch (reason) {
       case 'MISSED_MILESTONES_KM_TIME':
-        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo KM và thời gian)'
+        return '⚠️ Vehicle missed maintenance milestone (by KM and time)'
       case 'MISSED_MILESTONES_KM':
-        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo KM)'
+        return '⚠️ Vehicle missed maintenance milestone (by KM)'
       case 'MISSED_MILESTONES_TIME':
-        return '⚠️ Xe đã bỏ lỡ mốc bảo dưỡng (theo thời gian)'
+        return '⚠️ Vehicle missed maintenance milestone (by time)'
       case 'DUE_BY_KM':
-        return '🔧 Đến hạn bảo dưỡng theo KM'
+        return '🔧 Due for maintenance by KM'
       case 'DUE_BY_TIME':
-        return '📅 Đến hạn bảo dưỡng theo thời gian'
+        return '📅 Due for maintenance by time'
       default:
-        return '🔧 Đề xuất bảo dưỡng'
+        return '🔧 Recommended maintenance'
     }
   }
 
@@ -179,17 +179,17 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content book-maintenance-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>📅 Đặt Lịch Bảo Dưỡng</h2>
+          <h2>📅 Book Maintenance Appointment</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="book-maintenance-form">
           {/* Vehicle Information */}
           <div className="form-section">
-            <h3>🚗 Thông Tin Xe</h3>
+            <h3>🚗 Vehicle Information</h3>
             <div className="vehicle-info-grid">
               <div className="form-group">
-                <label>Dòng Xe</label>
+                <label>Model</label>
                 <input
                   type="text"
                   value={vehicleModel?.name || 'N/A'}
@@ -198,7 +198,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Biển Số</label>
+                <label>License Plate</label>
                 <input
                   type="text"
                   value={vehicle?.licensePlate || 'N/A'}
@@ -207,7 +207,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Số VIN</label>
+                <label>VIN Number</label>
                 <input
                   type="text"
                   value={vehicle?.vin || 'N/A'}
@@ -216,7 +216,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Số KM Hiện Tại</label>
+                <label>Current Mileage</label>
                 <input
                   type="text"
                   value={vehicle?.currentKm ? parseInt(vehicle.currentKm).toLocaleString() + ' km' : 'N/A'}
@@ -225,7 +225,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Tháng/Năm Mua</label>
+                <label>Purchase Date (Month/Year)</label>
                 <input
                   type="text"
                   value={vehicle?.purchaseYear || 'N/A'}
@@ -238,10 +238,10 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
 
           {/* Center Selection */}
           <div className="form-section">
-            <h3>🏢 Chọn Trung Tâm Bảo Dưỡng <span className="required">*</span></h3>
+            <h3>🏢 Select Maintenance Center <span className="required">*</span></h3>
             <div className="centers-list">
               {centers.length === 0 ? (
-                <p className="no-data">Không có trung tâm nào</p>
+                <p className="no-data">No centers available</p>
               ) : (
                 centers.map(center => (
                   <label
@@ -269,30 +269,30 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Maintenance Recommendations */}
           {selectedCenter && (
             <div className="form-section">
-              <h3>🔧 Gói Bảo Dưỡng Đề Xuất</h3>
+              <h3>🔧 Recommended Maintenance Package</h3>
               
               {loadingRecommendations ? (
-                <p className="loading-text">⏳ Đang tải đề xuất bảo dưỡng...</p>
+                <p className="loading-text">⏳ Loading maintenance recommendations...</p>
               ) : recommendations.length === 0 ? (
-                <p className="no-data">❌ Xe chưa đến hạn bảo dưỡng</p>
+                <p className="no-data">❌ Vehicle is not due for maintenance</p>
               ) : (
                 <div className="recommendations-list">
                   {recommendations.map((rec, index) => (
                     <div key={index} className="recommendation-item">
                       <div className="recommendation-header">
-                        <h4>📦 Gói bảo dưỡng mốc {rec.milestoneKm.toLocaleString()} km</h4>
+                        <h4>📦 Maintenance package at {rec.milestoneKm.toLocaleString()} km milestone</h4>
                         <p className="recommendation-reason">{getReasonText(rec.reason)}</p>
                       </div>
                       
                       <div className="recommendation-details">
                         {rec.dueAtKm > 0 && (
-                          <p className="due-info">🚗 Đến hạn sau: <strong>{rec.dueAtKm.toLocaleString()} km</strong></p>
+                          <p className="due-info">🚗 Due in: <strong>{rec.dueAtKm.toLocaleString()} km</strong></p>
                         )}
                         {rec.dueAtMonths > 0 && (
-                          <p className="due-info">📅 Đến hạn sau: <strong>{rec.dueAtMonths} tháng</strong></p>
+                          <p className="due-info">📅 Due in: <strong>{rec.dueAtMonths} months</strong></p>
                         )}
-                        <p className="estimated-total">💰 Tổng chi phí ước tính: <strong>{formatCurrency(rec.estimatedTotal)}</strong></p>
-                        <p className="items-count">📋 Gồm <strong>{rec.items.length}</strong> hạng mục</p>
+                        <p className="estimated-total">💰 Estimated total cost: <strong>{formatCurrency(rec.estimatedTotal)}</strong></p>
+                        <p className="items-count">📋 Includes <strong>{rec.items.length}</strong> service items</p>
                       </div>
 
                       <button
@@ -300,18 +300,18 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                         className="btn-view-details"
                         onClick={() => setShowItemsDetail(!showItemsDetail)}
                       >
-                        {showItemsDetail ? '▼ Ẩn chi tiết' : '▶ Xem chi tiết các hạng mục'}
+                        {showItemsDetail ? '▼ Hide details' : '▶ View service items'}
                       </button>
 
                       {showItemsDetail && (
                         <div className="items-detail">
-                          <h5>Chi Tiết Các Hạng Mục Bảo Dưỡng:</h5>
+                          <h5>Service Items Details:</h5>
                           <div className="items-grid">
                             {rec.items.map((item, idx) => (
                               <div key={idx} className="service-item-card">
                                 <div className="item-header">
                                   <span className={`action-badge ${item.actionType.toLowerCase()}`}>
-                                    {item.actionType === 'REPLACE' ? '🔄 Thay thế' : '🔍 Kiểm tra'}
+                                    {item.actionType === 'REPLACE' ? '🔄 Replace' : '🔍 Check'}
                                   </span>
                                   <span className="item-price">{formatCurrency(item.price)}</span>
                                 </div>
@@ -332,9 +332,9 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Appointment Date */}
           {selectedRecommendation && (
             <div className="form-section">
-              <h3>� Chọn Ngày & Giờ Hẹn <span className="required">*</span></h3>
+              <h3>🗓️ Select Date & Time <span className="required">*</span></h3>
               <div className="form-group">
-                <label>Ngày và Giờ <span className="required">*</span></label>
+                <label>Date and Time <span className="required">*</span></label>
                 <input
                   type="datetime-local"
                   value={appointmentDate}
@@ -350,22 +350,22 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Summary */}
           {selectedRecommendation && (
             <div className="form-section summary-section">
-              <h3>📝 Tóm Tắt Đặt Lịch</h3>
+              <h3>📝 Appointment Summary</h3>
               <div className="summary-content">
                 <div className="summary-row">
-                  <span className="summary-label">Trung tâm:</span>
+                  <span className="summary-label">Center:</span>
                   <span className="summary-value">{selectedCenter?.name}</span>
                 </div>
                 <div className="summary-row">
-                  <span className="summary-label">Xe:</span>
+                  <span className="summary-label">Vehicle:</span>
                   <span className="summary-value">{vehicle?.licensePlate} - {vehicleModel?.name}</span>
                 </div>
                 <div className="summary-row">
-                  <span className="summary-label">Gói bảo dưỡng:</span>
-                  <span className="summary-value">Mốc {selectedRecommendation.milestoneKm.toLocaleString()} km</span>
+                  <span className="summary-label">Maintenance package:</span>
+                  <span className="summary-value">Milestone {selectedRecommendation.milestoneKm.toLocaleString()} km</span>
                 </div>
                 <div className="summary-row">
-                  <span className="summary-label">Tổng chi phí:</span>
+                  <span className="summary-label">Total cost:</span>
                   <span className="summary-value cost">{formatCurrency(selectedRecommendation.estimatedTotal)}</span>
                 </div>
               </div>
@@ -375,14 +375,14 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {/* Form Actions */}
           <div className="form-actions">
             <button type="button" onClick={onClose} className="btn-secondary" disabled={loading}>
-              ✕ Hủy
+              ✕ Cancel
             </button>
             <button 
               type="submit" 
               className="btn-primary" 
               disabled={loading || !selectedCenter || !selectedRecommendation || !appointmentDate}
             >
-              {loading ? '⏳ Đang xử lý...' : '✓ Xác Nhận Đặt Lịch'}
+              {loading ? '⏳ Processing...' : '✓ Confirm Appointment'}
             </button>
           </div>
         </form>
