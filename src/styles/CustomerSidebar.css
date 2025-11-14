@@ -89,11 +89,52 @@
   max-width: 90%;
   text-align: center;
   letter-spacing: 0.5px;
+  position: relative;
 }
 .sidebar-btn:hover {
   background: linear-gradient(135deg, #c8e6c9 0%, #eafbe7 100%);
   color: #00796b;
   box-shadow: 0 4px 16px rgba(38, 166, 154, 0.18);
+}
+
+/* Chat button with special styling */
+.sidebar-btn.chat-btn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: #fff;
+  margin-bottom: 8px;
+}
+.sidebar-btn.chat-btn:hover {
+  background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+  color: #fff;
+}
+
+/* Notification Badge */
+.sidebar-btn .notification-badge {
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  background: #ff3b30;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+  animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 @media (max-width: 900px) {
   .customer-sidebar {

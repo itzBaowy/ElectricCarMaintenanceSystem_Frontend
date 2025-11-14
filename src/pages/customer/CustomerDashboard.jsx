@@ -337,6 +337,10 @@ const CustomerDashboardContent = () => {
   };
   const handleSidebarEditProfile = () => setShowEditProfile(true);
   const handleSidebarChangePassword = () => setShowChangePassword(true);
+  const handleSidebarSupportChat = () => {
+    clearUnreadCount();
+    navigate('/customer/chat');
+  };
   const handleSidebarLogout = () => {
     authService.logout();
     window.location.reload();
@@ -349,53 +353,16 @@ const CustomerDashboardContent = () => {
   const customerName = customer?.fullName || 'User';
 
   return (
-    <div className="customer-dashboard">
-      {/* Navigation Header */}
-      <div className="customer-dashboard-header">
-        <div className="nav-brand">
-          <h2>ElectricCare</h2>
-          <span>Customer Portal</span>
-        </div>
-        <div className="header-actions">
-          <span className="welcome-text">Hello {customer.fullName}, How's your day?</span>
-          <button 
-            onClick={() => {
-              clearUnreadCount()
-              navigate('/customer/chat')
-            }} 
-            className="header-btn chat-btn"
-          >
-            💬 Support Chat
-            {unreadCount > 0 && (
-              <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
-            )}
-          </button>
-          <button onClick={handleEditProfile} className="header-btn">
-            Edit Profile
-          </button>
-          <button onClick={handleChangePassword} className="header-btn">
-            Change Password
-          </button>
-          <button onClick={handleLogout} className="header-btn">
-            Logout
-          </button>
-        </div>
-      </div>
-
-      {/* Welcome Header */}
-      <div className="welcome-header">
-        <div className="welcome-content">
-          <div className="customer-info">
-            <div className="customer-avatar">
-              {customer.fullName.charAt(0).toUpperCase()}
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
       <CustomerSidebar
         active={true}
         onNavigate={handleSidebarNavigate}
         onEditProfile={handleSidebarEditProfile}
         onChangePassword={handleSidebarChangePassword}
+        onSupportChat={handleSidebarSupportChat}
         onLogout={handleSidebarLogout}
         greeting={`Hello ${customerName}, How's your day?`}
+        unreadCount={unreadCount}
       />
       <main style={{ flex: 1, marginLeft: SIDEBAR_WIDTH, padding: '32px 24px 24px 24px', maxWidth: '1800px' }}>
         <div className="customer-dashboard-content-bg">
