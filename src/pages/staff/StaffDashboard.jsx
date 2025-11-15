@@ -918,10 +918,10 @@ const StaffDashboardContent = () => {
                   Confirmed ({appointments.filter((a) => a.status === "CONFIRMED").length})
                 </button>
                 <button
-                  className={`status-btn ${filterStatus === "INCOMPLETED" ? "active" : ""}`}
-                  onClick={() => setFilterStatus("INCOMPLETED")}
+                  className={`status-btn ${filterStatus === "IN_PROGRESS" ? "active" : ""}`}
+                  onClick={() => setFilterStatus("IN_PROGRESS")}
                 >
-                  Incomplete ({appointments.filter((a) => a.status === "INCOMPLETED").length})
+                  In Progress ({appointments.filter((a) => a.status === "IN_PROGRESS").length})
                 </button>
                 <button
                   className={`status-btn ${filterStatus === "COMPLETED" ? "active" : ""}`}
