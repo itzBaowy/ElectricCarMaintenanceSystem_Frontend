@@ -113,7 +113,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
       <div className="modal-overlay">
         <div className="invoice-modal">
           <div className="modal-header">
-            <h2>Chi Tiết Hóa Đơn</h2>
+            <h2>Invoice Details</h2>
             <button className="close-btn" onClick={onClose}>
               &times;
             </button>
@@ -155,7 +155,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
     <div className="modal-overlay">
       <div className="invoice-modal">
         <div className="modal-header">
-          <h2> Chi Tiết Hóa Đơn</h2>
+          <h2>Invoice Detail</h2>
           <button className="close-btn" onClick={onClose}>
             &times;
           </button>
@@ -174,26 +174,26 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           >
             {invoiceData ? (
               <>
-                {invoiceData.status === "PAID" ? "" : ""} Hóa đơn:{" "}
+                {invoiceData.status === "PAID" ? "" : ""} Invoice:{" "}
                 {invoiceData.status === "PAID"
-                  ? "Đã thanh toán"
-                  : "Chưa thanh toán"}
-                <div className="invoice-id">Mã hóa đơn: #{invoiceData.id}</div>
+                  ? "Paid"
+                  : "Unpaid"}
+                <div className="invoice-id">Invoice ID: #{invoiceData.id}</div>
               </>
             ) : (
               <>
-                 Trạng thái hóa đơn: <strong>NOT CREATED</strong>
-                <div className="invoice-id">Hóa đơn chưa được tạo</div>
+                 Invoice Status: <strong>NOT CREATED</strong>
+                <div className="invoice-id">Invoice not created</div>
               </>
             )}
           </div>
 
           {/* Customer Information */}
           <div className="invoice-section">
-            <h3> Thông Tin Khách Hàng</h3>
+            <h3> Customer Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Tên Khách Hàng:</label>
+                <label>Customer Name:</label>
                 <span>
                   {invoiceData?.maintenanceRecord?.customerName ||
                     appointmentData.customerName ||
@@ -201,7 +201,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
                 </span>
               </div>
               <div className="info-item">
-                <label>Mã Khách Hàng:</label>
+                <label>Customer ID:</label>
                 <span>
                   #
                   {invoiceData?.maintenanceRecord?.customerId ||
@@ -213,10 +213,10 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
 
           {/* Vehicle Information */}
           <div className="invoice-section">
-            <h3> Thông Tin Xe</h3>
+            <h3>Vehicle Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Biển Số:</label>
+                <label>License Plate:</label>
                 <span>
                   {invoiceData?.maintenanceRecord?.vehicleLicensePlate ||
                     appointmentData.vehiclePlate ||
@@ -233,7 +233,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
                 </span>
               </div>
               <div className="info-item">
-                <label>Mã Xe:</label>
+                <label>Vehicle ID:</label>
                 <span>
                   #
                   {invoiceData?.maintenanceRecord?.vehicleId ||
@@ -242,7 +242,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
               </div>
               {invoiceData?.maintenanceRecord?.odometer && (
                 <div className="info-item">
-                  <label>Số Km:</label>
+                  <label>Odometer (km):</label>
                   <span>
                     {invoiceData.maintenanceRecord.odometer.toLocaleString()} km
                   </span>
@@ -253,10 +253,10 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
 
           {/* Service Center Information */}
           <div className="invoice-section">
-            <h3> Thông Tin Appointment & Trung Tâm</h3>
+            <h3> Appointment & Service Center Information</h3>
             <div className="info-grid">
               <div className="info-item">
-                <label>Mã Appointment:</label>
+                <label>Appointment ID:</label>
                 <span>
                   #
                   {invoiceData?.maintenanceRecord?.appointmentId ||
@@ -265,7 +265,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
                 </span>
               </div>
               <div className="info-item">
-                <label>Ngày Hẹn:</label>
+                <label>Appointment Date:</label>
                 <span>
                   {formatDate(
                     invoiceData?.maintenanceRecord?.performedAt ||
@@ -274,7 +274,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
                 </span>
               </div>
               <div className="info-item">
-                <label>Trạng Thái:</label>
+                <label>Status:</label>
                 <span
                   className={`status-badge ${appointmentData.status?.toLowerCase()}`}
                 >
@@ -284,7 +284,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
               {(invoiceData?.serviceCenterName ||
                 appointmentData.centerName) && (
                 <div className="info-item">
-                  <label>Trung Tâm:</label>
+                  <label>Service Center:</label>
                   <span>
                     {invoiceData?.serviceCenterName ||
                       appointmentData.centerName}
@@ -298,17 +298,17 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {(invoiceData?.maintenanceRecord?.technicianName ||
             appointmentData.technicianName) && (
             <div className="invoice-section">
-              <h3> Kỹ Thuật Viên</h3>
+              <h3> Technician Information</h3>
               <div className="info-grid">
                 <div className="info-item">
-                  <label>Tên Kỹ Thuật Viên:</label>
+                  <label>Technician Name:</label>
                   <span>
                     {invoiceData?.maintenanceRecord?.technicianName ||
                       appointmentData.technicianName}
                   </span>
                 </div>
                 <div className="info-item">
-                  <label>Mã KTV:</label>
+                  <label>Technician ID:</label>
                   <span>
                     #
                     {invoiceData?.maintenanceRecord?.technicianId ||
@@ -323,10 +323,10 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {(invoiceData?.maintenanceRecord?.servicePackageName ||
             appointmentData.servicePackageName) && (
             <div className="invoice-section">
-              <h3> Gói Dịch Vụ</h3>
+              <h3> Service Package</h3>
               <div className="info-grid">
                 <div className="info-item">
-                  <label>Tên Gói:</label>
+                  <label>Package Name:</label>
                   <span>
                     {invoiceData?.maintenanceRecord?.servicePackageName ||
                       appointmentData.servicePackageName}
@@ -342,16 +342,16 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
             (appointmentData.serviceItems &&
               appointmentData.serviceItems.length > 0)) && (
             <div className="invoice-section">
-              <h3> Các Hạng Mục Dịch Vụ</h3>
+              <h3> Service Items</h3>
               <div className="service-table">
                 <table>
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Tên Dịch Vụ</th>
-                      <th>Mô Tả</th>
-                      <th>Loại</th>
-                      <th className="text-right">Giá</th>
+                      <th>No.</th>
+                      <th>Service Name</th>
+                      <th>Description</th>
+                      <th>Type</th>
+                      <th className="text-right">Price</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -390,7 +390,7 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {/* Notes */}
           {appointmentData.notes && (
             <div className="invoice-section">
-              <h3> Ghi Chú</h3>
+              <h3> Notes</h3>
               <div className="notes-content">{appointmentData.notes}</div>
             </div>
           )}
@@ -398,13 +398,13 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
           {/* Total Amount */}
           <div className="invoice-section total-section">
             <div className="total-row">
-              <span className="total-label">💰 TỔNG CỘNG:</span>
+              <span className="total-label">💰 TOTAL:</span>
               <span className="total-amount">
                 {formatCurrency(getTotalAmount())}
               </span>
             </div>
             <div className="invoice-status">
-              <span className="status-label">Trạng thái hóa đơn:</span>
+              <span className="status-label">Invoice Status:</span>
               <span
                 className={`status-badge ${
                   invoiceData
@@ -425,11 +425,11 @@ const InvoiceDetailModal = ({ appointmentId, onClose, onSuccess }) => {
               onClick={handleGenerateInvoice}
               disabled={generating}
             >
-              {generating ? " Đang tạo..." : " Xác Nhận Tạo Hóa Đơn"}
+              {generating ? " Creating..." : " Confirm Create Invoice"}
             </button>
           )}
           <button className="cancel-btn" onClick={onClose}>
-            Đóng
+            Close
           </button>
         </div>
       </div>
