@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../styles/CustomerSidebar.css';
 
-const CustomerSidebar = ({ active, onNavigate, onEditProfile, onChangePassword, onLogout, onSupportChat, greeting, unreadCount = 0 }) => {
+const CustomerSidebar = ({ active, activeSection, onNavigate, onEditProfile, onChangePassword, onLogout, onSupportChat, greeting, unreadCount = 0 }) => {
   return (
     <aside className={`customer-sidebar${active ? ' active' : ''}`}>  
       <div className="sidebar-title">Customer Dashboard</div>
@@ -9,9 +9,9 @@ const CustomerSidebar = ({ active, onNavigate, onEditProfile, onChangePassword, 
       <div className="sidebar-divider"></div>
       <nav>
         <ul>
-          <li className="active" onClick={() => onNavigate('your-vehicle')}>Your Vehicle</li>
-          <li onClick={() => onNavigate('invoice')}>Invoice</li>
-          <li onClick={() => onNavigate('appointment')}>Appointment</li>
+          <li className={activeSection === 'your-vehicle' ? 'active' : ''} onClick={() => onNavigate('your-vehicle')}>Your Vehicle</li>
+          <li className={activeSection === 'invoice' ? 'active' : ''} onClick={() => onNavigate('invoice')}>Invoice</li>
+          <li className={activeSection === 'appointment' ? 'active' : ''} onClick={() => onNavigate('appointment')}>Appointment</li>
         </ul>
       </nav>
       <div className="sidebar-footer">

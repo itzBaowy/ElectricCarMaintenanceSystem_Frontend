@@ -28,6 +28,7 @@ const CustomerDashboardContent = () => {
   const [vehicleModels, setVehicleModels] = useState([])
   const [recentAppointments, setRecentAppointments] = useState([])
   const [invoices, setInvoices] = useState([])
+  const [activeSection, setActiveSection] = useState('your-vehicle')
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
@@ -323,17 +324,7 @@ const CustomerDashboardContent = () => {
   }
 
   const handleSidebarNavigate = (section) => {
-    let el = null;
-    if (section === 'your-vehicle') {
-      el = document.getElementById('your-electric-vehicles');
-    } else if (section === 'invoice') {
-      el = document.getElementById('customer-invoice-section');
-    } else if (section === 'appointment') {
-      el = document.getElementById('view-all-appointments');
-    }
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setActiveSection(section);
   };
   const handleSidebarEditProfile = () => setShowEditProfile(true);
   const handleSidebarChangePassword = () => setShowChangePassword(true);
@@ -356,6 +347,7 @@ const CustomerDashboardContent = () => {
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
       <CustomerSidebar
         active={true}
+        activeSection={activeSection}
         onNavigate={handleSidebarNavigate}
         onEditProfile={handleSidebarEditProfile}
         onChangePassword={handleSidebarChangePassword}
@@ -382,21 +374,21 @@ const CustomerDashboardContent = () => {
 
             {/* Quick Stats */}
             <div className="quick-stats">
-              <div className="customer-dashboard-stat-card">
+              <div className="customer-dashboard-stat-card" onClick={() => setActiveSection('your-vehicle')} style={{ cursor: 'pointer' }}>
                 <span className="stat-number">{vehicles.length}</span>
                 <span className="stat-label">Your Vehicles</span>
               </div>
-              <div className="customer-dashboard-stat-card stat-appointments">
+              <div className="customer-dashboard-stat-card stat-appointments" onClick={() => setActiveSection('appointment')} style={{ cursor: 'pointer' }}>
                 <span className="stat-number">
                   {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
                 </span>
                 <span className="stat-label">Upcoming Appointments</span>
               </div>
-              <div className="customer-dashboard-stat-card">
+              <div className="customer-dashboard-stat-card" onClick={() => setActiveSection('appointment')} style={{ cursor: 'pointer' }}>
                 <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
                 <span className="stat-label">Completed Services</span>
               </div>
-              <div className="customer-dashboard-stat-card" onClick={handleViewInvoices} style={{ cursor: 'pointer' }}>
+              <div className="customer-dashboard-stat-card" onClick={() => setActiveSection('invoice')} style={{ cursor: 'pointer' }}>
                 <span className="stat-number">{invoices.length}</span>
                 <span className="stat-label">Invoices</span>
                 <div className="stat-badge">
@@ -410,6 +402,7 @@ const CustomerDashboardContent = () => {
             {/* Main Content */}
             <div className="dashboard-content">
               {/* Vehicles Section */}
+              {activeSection === 'your-vehicle' && (
               <div className="section vehicles-section" id="your-electric-vehicles">
                 <div className="vehicles-header-black">
                   <h2>Your Electric Vehicles</h2>
@@ -468,13 +461,15 @@ const CustomerDashboardContent = () => {
                   </div>
                 </div>
               </div>
+              )}
 
               {/* Invoice Section */}
+              {activeSection === 'invoice' && (
               <div className="section invoice-section" id="customer-invoice-section">
                 {/* Invoice Header */}
                 <div className="customer-invoice-header">
                   <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '2.4rem', margin: 0 }}>Hoá Đơn Thanh Toán</h1>
-                  <button className="view-all-invoices-btn">Xem Tất Cả</button>
+                  <button className="view-all-invoices-btn" onClick={handleViewInvoices}>Xem Tất Cả</button>
                 </div>
                 <div className="invoices-list">
                   {invoices.length === 0 ? (
@@ -539,8 +534,10 @@ const CustomerDashboardContent = () => {
                   )}
                 </div>
               </div>
+              )}
 
               {/* View All Appointments Section */}
+              {activeSection === 'appointment' && (
               <div className="section vehicles-section" id="view-all-appointments">
                 <div className="vehicles-header-black" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h2>Recent Appointments</h2>
@@ -606,6 +603,7 @@ const CustomerDashboardContent = () => {
                   )}
                 </div>
               </div>
+              )}
             </div>
 
             {/* Book Maintenance Modal */}
