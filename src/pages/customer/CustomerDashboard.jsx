@@ -468,19 +468,19 @@ const CustomerDashboardContent = () => {
               <div className="section invoice-section" id="customer-invoice-section">
                 {/* Invoice Header */}
                 <div className="customer-invoice-header">
-                  <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '2.4rem', margin: 0 }}>Hoá Đơn Thanh Toán</h1>
-                  <button className="view-all-invoices-btn" onClick={handleViewInvoices}>Xem Tất Cả</button>
+                  <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '2.4rem', margin: 0 }}>Invoices</h1>
+                  <button className="view-all-invoices-btn" onClick={handleViewInvoices}>View All</button>
                 </div>
                 <div className="invoices-list">
                   {invoices.length === 0 ? (
                     <div className="no-invoices">
-                      <p>Bạn chưa có hoá đơn nào.</p>
+                      <p>You have no invoices.</p>
                     </div>
                   ) : (
                     invoices.slice(0, 3).map(invoice => {
                       const statusInfo = invoice.status === 'PAID' 
-                        ? { text: 'Đã thanh toán', class: 'paid', icon: '✅' }
-                        : { text: 'Chưa thanh toán', class: 'unpaid', icon: '⏳' }
+                        ? { text: 'Paid', class: 'paid', icon: '✅' }
+                        : { text: 'Unpaid', class: 'unpaid', icon: '⏳' }
                     
                       const maintenanceRecord = invoice.maintenanceRecord
                     
@@ -493,7 +493,7 @@ const CustomerDashboardContent = () => {
                         >
                           <div className="invoice-header">
                             <div className="invoice-id">
-                              <span className="label">Mã hoá đơn:</span>
+                              <span className="label">Invoice ID:</span>
                               <span className="value">#{invoice.id}</span>
                             </div>
                             <span className={`status-badge ${statusInfo.class}`}>
@@ -502,30 +502,30 @@ const CustomerDashboardContent = () => {
                           </div>
                           <div className="invoice-details">
                             <div className="invoice-info">
-                              <span className="info-label">Xe:</span>
+                              <span className="info-label">Vehicle:</span>
                               <span className="info-value">
                                 {maintenanceRecord?.vehicleModel} - {maintenanceRecord?.vehicleLicensePlate}
                               </span>
                             </div>
                             <div className="invoice-info">
-                              <span className="info-label">Trung tâm:</span>
+                              <span className="info-label">Service Center:</span>
                               <span className="info-value">{invoice.serviceCenterName}</span>
                             </div>
                             {maintenanceRecord?.servicePackageName && (
                               <div className="invoice-info">
-                                <span className="info-label">Gói dịch vụ:</span>
+                                <span className="info-label">Service Package:</span>
                                 <span className="info-value">{maintenanceRecord.servicePackageName}</span>
                               </div>
                             )}
                             <div className="invoice-info">
-                              <span className="info-label">Ngày tạo:</span>
+                              <span className="info-label">Created Date:</span>
                               <span className="info-value">
                                 {new Date(invoice.createdAt).toLocaleDateString('vi-VN')}
                               </span>
                             </div>
                           </div>
                           <div className="invoice-footer">
-                            <span className="total-label">Tổng tiền:</span>
+                            <span className="total-label">Total Amount:</span>
                             <span className="total-amount">{formatCurrency(invoice.totalAmount)}</span>
                           </div>
                         </div>

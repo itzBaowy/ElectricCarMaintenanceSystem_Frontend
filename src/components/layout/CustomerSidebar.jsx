@@ -9,9 +9,9 @@ const CustomerSidebar = ({ active, activeSection, onNavigate, onEditProfile, onC
       <div className="sidebar-divider"></div>
       <nav>
         <ul>
-          <li className={activeSection === 'your-vehicle' ? 'active' : ''} onClick={() => onNavigate('your-vehicle')}>Your Vehicle</li>
-          <li className={activeSection === 'invoice' ? 'active' : ''} onClick={() => onNavigate('invoice')}>Invoice</li>
-          <li className={activeSection === 'appointment' ? 'active' : ''} onClick={() => onNavigate('appointment')}>Appointment</li>
+          <li className={activeSection === 'your-vehicle' ? 'active' : ''} onClick={() => onNavigate('your-vehicle')}>My Vehicles</li>
+          <li className={activeSection === 'invoice' ? 'active' : ''} onClick={() => onNavigate('invoice')}>My Invoices</li>
+          <li className={activeSection === 'appointment' ? 'active' : ''} onClick={() => onNavigate('appointment')}>My Appointments</li>
         </ul>
       </nav>
       <div className="sidebar-footer">
