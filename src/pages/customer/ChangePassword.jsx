@@ -122,9 +122,9 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
   return (
     <div className="modal-overlay" onClick={onClose} data-component="change-password">
       <div className="modal-content change-password-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="change-password-header-custom" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+        <div className="edit-profile-header" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
           <h2>Change Password</h2>
-          <button className="change-password-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
+          <button className="close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="change-password-form">
@@ -248,7 +248,7 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
             <button 
               type="button" 
               onClick={handleReset}
-              className="btn-reset"
+              className="edit-profile-btn"
               disabled={loading}
             >
               Clear
@@ -256,14 +256,14 @@ const ChangePassword = ({ onClose, onPasswordChanged }) => {
             <button 
               type="button" 
               onClick={onClose} 
-              className="btn-secondary" 
+              className="edit-profile-btn" 
               disabled={loading}
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="btn-primary" 
+              className="edit-profile-btn" 
               disabled={loading}
             >
               {loading ? 'Processing...' : 'Change Password'}
