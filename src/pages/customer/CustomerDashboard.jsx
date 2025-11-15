@@ -369,9 +369,6 @@ const CustomerDashboardContent = () => {
           <div className="customer-dashboard">
             {/* Welcome Header */}
             <div className="customer-welcome-banner">
-              <div className="customer-avatar">
-                {customer.fullName.charAt(0).toUpperCase()}
-              </div>
               <div className="customer-details">
                 <h1>Welcome back, {customer.fullName}!</h1>
                 <p>Ready to take care of your electric vehicle today?</p>
@@ -385,34 +382,26 @@ const CustomerDashboardContent = () => {
 
             {/* Quick Stats */}
             <div className="quick-stats">
-              <div className="stat-card">
-                <div className="stat-info">
-                  <span className="stat-number">{vehicles.length}</span>
-                  <span className="stat-label">Your Vehicles</span>
-                </div>
+              <div className="customer-dashboard-stat-card">
+                <span className="stat-number">{vehicles.length}</span>
+                <span className="stat-label">Your Vehicles</span>
               </div>
-              <div className="stat-card">
-                <div className="stat-info">
-                  <span className="stat-number">
-                    {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
-                  </span>
-                  <span className="stat-label">Upcoming Appointments</span>
-                </div>
+              <div className="customer-dashboard-stat-card stat-appointments">
+                <span className="stat-number">
+                  {recentAppointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED').length}
+                </span>
+                <span className="stat-label">Upcoming Appointments</span>
               </div>
-              <div className="stat-card">
-                <div className="stat-info">
-                  <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
-                  <span className="stat-label">Completed Services</span>
-                </div>
+              <div className="customer-dashboard-stat-card">
+                <span className="stat-number">{recentAppointments.filter(a => a.status === 'COMPLETED').length}</span>
+                <span className="stat-label">Completed Services</span>
               </div>
-              <div className="stat-card" onClick={handleViewInvoices} style={{ cursor: 'pointer' }}>
-                <div className="stat-info">
-                  <span className="stat-number">{invoices.length}</span>
-                  <span className="stat-label">Invoices</span>
-                </div>
+              <div className="customer-dashboard-stat-card" onClick={handleViewInvoices} style={{ cursor: 'pointer' }}>
+                <span className="stat-number">{invoices.length}</span>
+                <span className="stat-label">Invoices</span>
                 <div className="stat-badge">
                   {invoices.filter(i => i.status === 'UNPAID').length > 0 && (
-                    <span className="unpaid-badge">{invoices.filter(i => i.status === 'UNPAID').length} chưa thanh toán</span>
+                    <span className="unpaid-invoice-badge-custom">{invoices.filter(i => i.status === 'UNPAID').length} chưa thanh toán</span>
                   )}
                 </div>
               </div>
@@ -482,14 +471,10 @@ const CustomerDashboardContent = () => {
 
               {/* Invoice Section */}
               <div className="section invoice-section" id="customer-invoice-section">
-                <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h2>Hoá Đơn Thanh Toán</h2>
-                  <button 
-                    className="view-all-btn"
-                    onClick={handleViewInvoices}
-                  >
-                    Xem Tất Cả
-                  </button>
+                {/* Invoice Header */}
+                <div className="customer-invoice-header">
+                  <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '2.4rem', margin: 0 }}>Hoá Đơn Thanh Toán</h1>
+                  <button className="view-all-invoices-btn">Xem Tất Cả</button>
                 </div>
                 <div className="invoices-list">
                   {invoices.length === 0 ? (
@@ -556,11 +541,11 @@ const CustomerDashboardContent = () => {
               </div>
 
               {/* View All Appointments Section */}
-              <div className="section appointments-section" id="view-all-appointments">
-                <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="section vehicles-section" id="view-all-appointments">
+                <div className="vehicles-header-black" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h2>Recent Appointments</h2>
                   <button 
-                    className="view-all-btn"
+                    className="view-all-appointments-btn"
                     onClick={handleViewAllAppointments}
                   >
                     View All
