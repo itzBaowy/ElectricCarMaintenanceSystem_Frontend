@@ -116,7 +116,7 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
       const result = await customerService.updateMyInfo(formData)
 
       if (result.success) {
-        alert('✅ Profile updated successfully!')
+        alert(' Profile updated successfully!')
         logger.log('Profile updated:', result.data)
         
         // Update original data
@@ -132,11 +132,11 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
           onClose()
         }, 1000)
       } else {
-        alert(`❌ Update failed: ${result.message}`)
+        alert(` Update failed: ${result.message}`)
       }
     } catch (error) {
       logger.error('Error updating profile:', error)
-      alert('❌ An error occurred while updating profile')
+      alert(' An error occurred while updating profile')
     } finally {
       setLoading(false)
     }
@@ -164,9 +164,9 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content edit-profile-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="edit-profile-header-custom" data-component="edit-profile" style={{ backgroundColor: '#000000', color: '#ffffff', backgroundImage: 'none' }}>
-          <h2 style={{ color: '#ffffff', margin: 0 }}>Edit Profile</h2>
-          <button className="edit-profile-close-btn" onClick={onClose} style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'transparent' }}>✕</button>
+        <div className="edit-profile-header">
+          <h2>Edit Profile</h2>
+          <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit} className="edit-profile-form">
@@ -257,25 +257,25 @@ const EditProfile = ({ onClose, onProfileUpdated }) => {
             <button 
               type="button" 
               onClick={handleReset}
-              className="btn-reset"
+              className="edit-profile-btn"
               disabled={loading || !hasChanges()}
             >
-              🔄 Reset
+               Reset
             </button>
             <button 
               type="button" 
               onClick={onClose} 
-              className="btn-secondary" 
+              className="edit-profile-btn" 
               disabled={loading}
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="btn-primary" 
+              className="edit-profile-btn" 
               disabled={loading || !hasChanges()}
             >
-              {loading ? '⏳ Saving...' : '✓ Save Changes'}
+              {loading ? ' Saving...' : ' Save Changes'}
             </button>
           </div>
         </form>

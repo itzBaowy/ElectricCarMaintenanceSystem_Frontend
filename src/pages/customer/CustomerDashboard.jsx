@@ -544,11 +544,11 @@ const CustomerDashboardContent = () => {
               </div>
 
               {/* View All Appointments Section */}
-              <div className="section appointments-section" id="view-all-appointments">
-                <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="section vehicles-section" id="view-all-appointments">
+                <div className="vehicles-header-black" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h2>Recent Appointments</h2>
                   <button 
-                    className="view-all-btn"
+                    className="view-all-appointments-btn"
                     onClick={handleViewAllAppointments}
                   >
                     View All
