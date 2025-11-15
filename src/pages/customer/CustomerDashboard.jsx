@@ -369,9 +369,6 @@ const CustomerDashboardContent = () => {
           <div className="customer-dashboard">
             {/* Welcome Header */}
             <div className="customer-welcome-banner">
-              <div className="customer-avatar">
-                {customer.fullName.charAt(0).toUpperCase()}
-              </div>
               <div className="customer-details">
                 <h1>Welcome back, {customer.fullName}!</h1>
                 <p>Ready to take care of your electric vehicle today?</p>
