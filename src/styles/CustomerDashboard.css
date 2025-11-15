@@ -105,59 +105,35 @@
 }
 /* Welcome Banner for Customer Dashboard */
 .customer-welcome-banner {
-  background: linear-gradient(135deg, #7ecb89 0%, #5cb88a 100%);
-  color: #222;
-  box-shadow: 0 4px 18px rgba(38, 166, 154, 0.10);
-  padding: 36px 64px 28px 64px;
+  background: linear-gradient(90deg, #43cea2 0%, #26a69a 100%);
+  border-radius: 20px;
+  padding: 38px 67px 24px 67px;
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-start;
-  border-radius: 48px;
-  min-height: 120px;
-  max-width: 100%;
-  font-family: 'Inter', 'Roboto', 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
-  gap: 32px;
-  box-sizing: border-box;
-  max-width: 98vw;
-}
-.customer-welcome-banner .customer-avatar {
-  display: none;
-}
-.customer-welcome-banner .customer-details {
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
   width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-left: 0;
-  box-sizing: border-box;
+  max-width: 100%;
 }
-.customer-welcome-banner .customer-details h1 {
-  margin: 0 0 16px 0;
-  font-size: 2.1rem;
-  font-weight: 800;
+.customer-welcome-banner h1 {
   color: #fff;
+  font-weight: 700;
+  font-size: 2.8rem;
+  margin: 0 0 18px 0;
   letter-spacing: 1px;
-  text-align: left;
-  word-break: break-word;
 }
-.customer-welcome-banner .customer-details p {
-  margin: 0 0 12px 0;
-  font-size: 1.08rem;
-  color: #fff;
-  text-align: left;
-  word-break: break-word;
+.customer-welcome-banner p {
+  color: #eafbe7;
+  font-size: 1.35rem;
+  margin: 0 0 18px 0;
+  font-weight: 500;
 }
 .customer-welcome-banner .customer-meta {
-  margin-top: 4px;
-  font-size: 1rem;
-  color: #fff;
-  font-weight: 500;
-  text-align: left;
-  word-break: break-word;
+  color: #222;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 0;
 }
 /* Customer Dashboard Styles */
 .customer-dashboard {
