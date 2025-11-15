@@ -28,7 +28,7 @@ const AdminDashboard = () => {
     {
       id: "customers",
       icon: "",
-      label: "Customer",
+      label: "Customers",
       component: CustomerManagement,
     },
     {
