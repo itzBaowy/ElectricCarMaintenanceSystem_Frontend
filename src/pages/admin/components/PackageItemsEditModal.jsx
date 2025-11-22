@@ -327,8 +327,6 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                       <th>Service Item</th>
                       <th>Type</th>
                       <th>Price (VND)</th>
-                      <th>Spare Part</th>
-                      <th>Quantity</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -340,7 +338,9 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                         </td>
                       </tr>
                     ) : (
-                      items.map((item) => (
+                      items.map((item) => {
+                        const currentActionType = getDisplayValue(item, 'actionType');
+                        return (
                       <tr 
                         key={item.id} 
                         className={hasChanges(item.id) ? 'changed-row' : ''}
@@ -352,7 +352,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                               <span className="changed-indicator">●</span>
                             )}
                           </div>
-                          {item.includedSparePartName && (
+                          {currentActionType === 'REPLACE' && item.includedSparePartName && (
                             <small className="item-spare-part">
                               🔧 {item.includedSparePartName} {item.includedQuantity ? `(x${item.includedQuantity})` : ''}
                             </small>
@@ -361,13 +361,49 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                         <td>
                           <select
                             className="action-type-select"
-                            value={getDisplayValue(item, 'actionType') || ''}
-                            onChange={(e) => handleFieldChange(item.id, 'actionType', e.target.value)}
+                            value={currentActionType || ''}
+                            onChange={(e) => {
+                              handleFieldChange(item.id, 'actionType', e.target.value);
+                              // Clear spare part fields when switching to CHECK
+                              if (e.target.value === 'CHECK') {
+                                handleFieldChange(item.id, 'includedSparePartId', null);
+                                handleFieldChange(item.id, 'includedQuantity', 0);
+                              }
+                            }}
                             disabled={saving}
                           >
                             <option value="CHECK">Check</option>
                             <option value="REPLACE">Replace</option>
                           </select>
+                          {currentActionType === 'REPLACE' && (
+                            <div style={{ marginTop: '8px' }}>
+                              <select
+                                className="spare-part-select"
+                                value={getDisplayValue(item, 'includedSparePartId') || ''}
+                                onChange={(e) => handleFieldChange(item.id, 'includedSparePartId', e.target.value ? parseInt(e.target.value) : null)}
+                                disabled={saving}
+                                style={{ fontSize: '0.85em', marginBottom: '4px' }}
+                              >
+                                <option value="">-- Select Spare Part --</option>
+                                {spareParts.map(part => (
+                                  <option key={part.id} value={part.id}>
+                                    {part.partNumber} - {part.name}
+                                  </option>
+                                ))}
+                              </select>
+                              <input
+                                type="number"
+                                className="quantity-input"
+                                value={getDisplayValue(item, 'includedQuantity') || 0}
+                                onChange={(e) => handleFieldChange(item.id, 'includedQuantity', e.target.value)}
+                                disabled={saving}
+                                min="0"
+                                step="1"
+                                placeholder="Qty"
+                                style={{ fontSize: '0.85em' }}
+                              />
+                            </div>
+                          )}
                         </td>
                         <td>
                           <input
@@ -378,32 +414,6 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                             disabled={saving}
                             min="0"
                             step="1000"
-                          />
-                        </td>
-                        <td>
-                          <select
-                            className="spare-part-select"
-                            value={getDisplayValue(item, 'includedSparePartId') || ''}
-                            onChange={(e) => handleFieldChange(item.id, 'includedSparePartId', e.target.value ? parseInt(e.target.value) : null)}
-                            disabled={saving}
-                          >
-                            <option value="">-- None --</option>
-                            {spareParts.map(part => (
-                              <option key={part.id} value={part.id}>
-                                {part.partNumber} - {part.name}
-                              </option>
-                            ))}
-                          </select>
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            className="quantity-input"
-                            value={getDisplayValue(item, 'includedQuantity') || 0}
-                            onChange={(e) => handleFieldChange(item.id, 'includedQuantity', e.target.value)}
-                            disabled={saving}
-                            min="0"
-                            step="1"
                           />
                         </td>
                         <td>
@@ -424,7 +434,9 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                           </button>
                         </td>
                       </tr>
-                    )))}
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -468,7 +480,16 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                   <label>Action Type *</label>
                   <select
                     value={newItem.actionType}
-                    onChange={(e) => setNewItem({ ...newItem, actionType: e.target.value })}
+                    onChange={(e) => {
+                      const newActionType = e.target.value;
+                      setNewItem({ 
+                        ...newItem, 
+                        actionType: newActionType,
+                        // Clear spare part fields when switching to CHECK
+                        includedSparePartId: newActionType === 'CHECK' ? null : newItem.includedSparePartId,
+                        includedQuantity: newActionType === 'CHECK' ? 0 : newItem.includedQuantity
+                      });
+                    }}
                     disabled={saving}
                   >
                     <option value="CHECK">Check</option>
@@ -488,33 +509,37 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>Spare Part (Optional)</label>
-                  <select
-                    value={newItem.includedSparePartId || ''}
-                    onChange={(e) => setNewItem({ ...newItem, includedSparePartId: e.target.value ? e.target.value : null })}
-                    disabled={saving}
-                  >
-                    <option value="">-- None --</option>
-                    {spareParts.map(part => (
-                      <option key={part.id} value={part.id}>
-                        {part.partNumber} - {part.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {newItem.actionType === 'REPLACE' && (
+                  <>
+                    <div className="form-group">
+                      <label>Spare Part (Optional)</label>
+                      <select
+                        value={newItem.includedSparePartId || ''}
+                        onChange={(e) => setNewItem({ ...newItem, includedSparePartId: e.target.value ? e.target.value : null })}
+                        disabled={saving}
+                      >
+                        <option value="">-- None --</option>
+                        {spareParts.map(part => (
+                          <option key={part.id} value={part.id}>
+                            {part.partNumber} - {part.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                <div className="form-group">
-                  <label>Quantity</label>
-                  <input
-                    type="number"
-                    value={newItem.includedQuantity}
-                    onChange={(e) => setNewItem({ ...newItem, includedQuantity: e.target.value })}
-                    disabled={saving}
-                    min="0"
-                    step="1"
-                  />
-                </div>
+                    <div className="form-group">
+                      <label>Quantity</label>
+                      <input
+                        type="number"
+                        value={newItem.includedQuantity}
+                        onChange={(e) => setNewItem({ ...newItem, includedQuantity: e.target.value })}
+                        disabled={saving}
+                        min="0"
+                        step="1"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="add-item-footer">
