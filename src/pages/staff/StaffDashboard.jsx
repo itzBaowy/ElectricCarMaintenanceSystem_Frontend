@@ -3,7 +3,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
   <aside className="staff-sidebar">
     <div className="sidebar-header">
       <h2>ElectricCare Staff</h2>
-      <p className="sidebar-desc">Staff Panel</p>
+      <p className="sidebar-desc"></p>
     </div>
     <div className="sidebar-section">
       <nav className="sidebar-tabs">
@@ -38,7 +38,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
             navigate('/staff/chat')
           }}
         >
-          💬 Support Chat
+           Support Chat
           {unreadCount > 0 && (
             <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
           )}
