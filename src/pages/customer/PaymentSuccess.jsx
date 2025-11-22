@@ -84,7 +84,8 @@ const PaymentSuccess = () => {
 
         <h1 className="success-title">Payment Successful!</h1>
         <p className="success-message">
-          Thank you for completing the payment. Your appointment has been confirmed.
+          Thank you for completing the payment. Your transaction has been
+          processed successfully.
         </p>
 
         <div className="payment-details">
@@ -107,22 +108,7 @@ const PaymentSuccess = () => {
           </div>
         </div>
 
-        <div className="next-steps">
-          <h3>Next Steps</h3>
-          <ul>
-            <li>We will send a confirmation email to your email address</li>
-            <li>Please arrive at the center on time</li>
-            <li>Bring your vehicle documents and ID card</li>
-          </ul>
-        </div>
-
         <div className="action-buttons">
-          <button
-            className="btn btn-primary"
-            onClick={handleViewAppointment}
-          >
-            View Appointment Details
-          </button>
           <button
             className="btn btn-secondary"
             onClick={handleBackToDashboard}
