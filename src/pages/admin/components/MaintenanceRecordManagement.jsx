@@ -11,6 +11,8 @@ const MaintenanceRecordManagement = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterTechnician, setFilterTechnician] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
 
   useEffect(() => {
     fetchMaintenanceRecords();
@@ -76,6 +78,17 @@ const MaintenanceRecordManagement = () => {
   // Get unique technician names for filter
   const uniqueTechnicians = [...new Set(records.map(r => r.technicianName).filter(Boolean))];
 
+  // Pagination
+  const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterTechnician]);
+
   if (loading) {
     return <div className="loading">Loading data...</div>;
   }
@@ -134,14 +147,14 @@ const MaintenanceRecordManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRecords.length === 0 ? (
+            {currentRecords.length === 0 ? (
               <tr>
                 <td colSpan="11" className="no-data">
                   No maintenance records found
                 </td>
               </tr>
             ) : (
-              filteredRecords.map((record) => (
+              currentRecords.map((record) => (
                 <tr key={record.id}>
                   <td>{record.id}</td>
                   <td>{formatDate(record.performedAt)}</td>
@@ -167,6 +180,56 @@ const MaintenanceRecordManagement = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {filteredRecords.length > recordsPerPage && (
+        <div className="pagination-controls" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+          marginTop: '20px',
+          padding: '15px'
+        }}>
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: currentPage === 1 ? '#e0e0e0' : '#4CAF50',
+              color: currentPage === 1 ? '#999' : 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+              fontWeight: '500'
+            }}
+          >
+            Previous
+          </button>
+          <span style={{
+            padding: '8px 16px',
+            fontWeight: '600',
+            color: '#333'
+          }}>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage >= totalPages}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: currentPage >= totalPages ? '#e0e0e0' : '#4CAF50',
+              color: currentPage >= totalPages ? '#999' : 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              fontWeight: '500'
+            }}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {showDetailModal && selectedRecord && (
         <MaintenanceRecordDetailModal
