@@ -202,7 +202,7 @@ const ReportManagement = () => {
             </div>
             
             {loadingChart ? (
-              <div className="chart-loading">Đang tải biểu đồ...</div>
+              <div className="chart-loading">Loading...</div>
             ) : (
               <div className="chart-container">
                 <ResponsiveContainer width="100%" height={400}>
@@ -224,7 +224,7 @@ const ReportManagement = () => {
                     <Bar 
                       dataKey="revenue" 
                       fill="#2563eb" 
-                      name="Doanh thu (VND)"
+                      name="Revenue (VND)"
                       radius={[8, 8, 0, 0]}
                     />
                   </BarChart>
