@@ -146,6 +146,36 @@ const vehicleService = {
     }
   },
 
+  // Update vehicle current KM only
+  updateCurrentKm: async (vehicleId, currentKm) => {
+    try {
+      const response = await api.put(`/api/vehicles/${vehicleId}`, {
+        currentKm: currentKm
+      })
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Current KM updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update current KM',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Update current KM error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update current KM',
+        error: error.response?.data || error.message
+      }
+    }
+  },
+
   // Delete vehicle
   deleteVehicle: async (vehicleId) => {
     try {

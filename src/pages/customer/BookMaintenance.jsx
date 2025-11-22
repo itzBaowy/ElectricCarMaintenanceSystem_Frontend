@@ -15,6 +15,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const [selectedRecommendation, setSelectedRecommendation] = useState(null)
   const [showItemsDetail, setShowItemsDetail] = useState(false)
   const [appointmentDate, setAppointmentDate] = useState('')
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
 
   // Load centers when component mounts
   useEffect(() => {
@@ -99,6 +100,11 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
 
     if (!appointmentDate) {
       alert('Please select appointment date and time')
+      return false
+    }
+
+    if (!agreedToTerms) {
+      alert('Please agree to the terms and responsibility declaration')
       return false
     }
 
@@ -347,6 +353,27 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
             </div>
           )}
 
+          {/* Agreement Checkbox */}
+          {selectedRecommendation && (
+            <div className="form-section agreement-section">
+              <div className="agreement-box">
+                <label className="agreement-label">
+                  <input
+                    type="checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="agreement-checkbox"
+                  />
+                  <span className="agreement-text">
+                    <strong>I agree</strong> and take full responsibility for any inaccurate information provided 
+                    regarding my vehicle details, mileage, and maintenance history. I understand that providing 
+                    incorrect information may affect the service quality and warranty coverage.
+                  </span>
+                </label>
+              </div>
+            </div>
+          )}
+
           {/* Summary */}
           {selectedRecommendation && (
             <div className="form-section summary-section">
@@ -380,7 +407,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
             <button 
               type="submit" 
               className="btn-primary" 
-              disabled={loading || !selectedCenter || !selectedRecommendation || !appointmentDate}
+              disabled={loading || !selectedCenter || !selectedRecommendation || !appointmentDate || !agreedToTerms}
             >
               {loading ? '⏳ Processing...' : '✓ Confirm Appointment'}
             </button>

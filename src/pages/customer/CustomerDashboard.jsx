@@ -11,6 +11,7 @@ import EditProfile from './EditProfile'
 import ChangePassword from './ChangePassword'
 import InvoiceList from './InvoiceList'
 import CustomerInvoiceDetail from './CustomerInvoiceDetail'
+import UpdateVehicleKmModal from '../../components/customer/UpdateVehicleKmModal'
 import Footer from '../../components/layout/Footer'
 import '../../styles/CustomerDashboard.css'
 import customerService from '../../api/customerService'
@@ -31,6 +32,7 @@ const CustomerDashboardContent = () => {
   const [activeSection, setActiveSection] = useState('your-vehicle')
   const [showBookMaintenance, setShowBookMaintenance] = useState(false)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
+  const [showUpdateKm, setShowUpdateKm] = useState(false)
   const [showAppointmentDetail, setShowAppointmentDetail] = useState(false)
   const [selectedAppointment, setSelectedAppointment] = useState(null)
   const [showAllAppointments, setShowAllAppointments] = useState(false)
@@ -203,6 +205,20 @@ const CustomerDashboardContent = () => {
   const handleCloseBookMaintenance = () => {
     setShowBookMaintenance(false)
     setSelectedVehicle(null)
+  }
+
+  const handleUpdateKm = (vehicle) => {
+    setSelectedVehicle(vehicle)
+    setShowUpdateKm(true)
+  }
+
+  const handleCloseUpdateKm = () => {
+    setShowUpdateKm(false)
+    setSelectedVehicle(null)
+  }
+
+  const handleKmUpdated = () => {
+    loadVehicles() // Reload vehicles to show updated KM
   }
 
   const handleAppointmentCreated = (appointment) => {
@@ -453,6 +469,12 @@ const CustomerDashboardContent = () => {
                               onClick={() => handleBookMaintenance(vehicle)}
                             >
                               Book Maintenance
+                            </button>
+                            <button 
+                              className="action-btn secondary" 
+                              onClick={() => handleUpdateKm(vehicle)}
+                            >
+                              Update KM
                             </button>
                             <button 
                               className="action-btn danger" 
@@ -745,6 +767,15 @@ const CustomerDashboardContent = () => {
                 vehicleModel={getVehicleModel(selectedVehicle.modelId)}
                 onClose={handleCloseBookMaintenance}
                 onAppointmentCreated={handleAppointmentCreated}
+              />
+            )}
+
+            {/* Update Vehicle KM Modal */}
+            {showUpdateKm && selectedVehicle && (
+              <UpdateVehicleKmModal
+                vehicle={selectedVehicle}
+                onClose={handleCloseUpdateKm}
+                onSuccess={handleKmUpdated}
               />
             )}
 

@@ -832,6 +832,59 @@
   font-weight: 700;
 }
 
+/* Agreement Section */
+.agreement-section {
+  margin: 24px 0;
+}
+
+.agreement-box {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 2px solid #ff9800;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.agreement-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.agreement-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #ff9800;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.agreement-text {
+  font-size: 14px;
+  color: #e65100;
+  line-height: 1.6;
+}
+
+.agreement-text strong {
+  font-weight: 700;
+  color: #bf360c;
+}
+
+.agreement-box:has(.agreement-checkbox:checked) {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-color: #4caf50;
+}
+
+.agreement-box:has(.agreement-checkbox:checked) .agreement-text {
+  color: #2e7d32;
+}
+
+.agreement-box:has(.agreement-checkbox:checked) .agreement-text strong {
+  color: #1b5e20;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .modal-content.book-maintenance-modal {
