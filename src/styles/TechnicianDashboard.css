@@ -48,6 +48,7 @@ html, body {
   box-shadow: 0 4px 18px rgba(38, 166, 154, 0.12);
   padding: 32px 32px 24px 32px;
   margin-bottom: 32px;
+  border-radius: 20px !important;
 }
 
 .dashboard-header h1 {
@@ -57,7 +58,7 @@ html, body {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
- 
+ border: 20px;
 }
 
 .header-actions {
@@ -113,6 +114,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 20px !important;
+  border-radius: 20px 20px 0 0 !important;
 }
 
 .stats-header h2 {
@@ -134,10 +137,22 @@ html, body {
   box-sizing: border-box;
 }
 
+.stats-container .stat-card {
+  background: #fff !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.08) !important;
+  border: 2px solid #b2dfdb !important;
+}
+
+.stats-container .stat-card .stat-number {
+  color: #222 !important;
+  background: none !important;
+}
+
 .stat-card {
   background: white;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 20px !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease;
@@ -167,26 +182,32 @@ html, body {
 
 .stat-number.pending {
   color: #000000 !important;
+  background-color: white !important;
 }
 
 .stat-number.confirmed {
   color: #000000 !important;
+  background-color: white !important;
 }
 
 .stat-number.in-progress {
   color: #1976d2 !important;
+  background-color: white !important;
 }
 
 .stat-number.waiting {
   color: #ff9800 !important;
+  background-color: white !important;
 }
 
 .stat-number.approved {
   color: #4caf50 !important;
+  background-color: white !important;
 }
 
 .stat-number.completed {
   color: #000000 !important;
+  background-color: white !important;
 }
 
 /* Filters Section */
@@ -202,20 +223,23 @@ html, body {
 .filters-header {
   background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #fff;
-  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
-  padding: 24px 32px 16px 32px;
-  font-size: 1.6rem;
-  font-weight: 700;
+  border-radius: 15px 15px 0 0;
+  padding: 38px 0 15px 0;
   margin-bottom: 0;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
 }
 
 .filters-header h2 {
   color: #fff;
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
-  margin: 0;
+  margin: 0 0 0 38px;
+  letter-spacing: 1px;
+  text-align: left;
 }
 
 .filters-container {
@@ -298,7 +322,7 @@ html, body {
 
 .appointments-section h2 {
   color: #ffffff;
-  background: #000000;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   margin: -2rem -2rem 1.5rem -2rem;
   padding: 1rem 2rem;
   font-size: 1.25rem;
@@ -321,18 +345,22 @@ html, body {
 }
 
 .appointments-table thead {
-  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #6fcf97 0%, #56b4b4 100%) !important;
+  border-radius: 32px 32px 0 0 !important;
 }
 
 .appointments-table th {
-  padding: 1rem;
-  text-align: left;
-  font-weight: 600;
-  white-space: normal;
-  word-wrap: break-word;
-  color: #ffffff;
-  border: 1px solid #26a69a;
+  color: #fff !important;
+  font-size: 1.18rem !important;
+  font-weight: 700 !important;
+  border: none !important;
+  padding: 18px 0 !important;
+}
+
+.appointments-table thead tr {
+  border-radius: 32px 32px 0 0 !important;
+  overflow: hidden !important;
+  display: table-row !important;
 }
 
 .appointments-table td {
@@ -416,9 +444,14 @@ html, body {
 }
 
 .status-badge-completed {
-  background: linear-gradient(135deg, #616161 0%, #424242 100%);
-  color: #ffffff;
-  border: 2px solid #616161;
+  background: #6fcf97 !important;
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 1.08rem;
+  border-radius: 32px;
+  padding: 12px 32px;
+  box-shadow: none;
+  border: none;
 }
 
 .status-badge-cancelled {
@@ -989,4 +1022,18 @@ html, body {
 
 .service-items-list::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.technician-dashboard-header {
+  background: linear-gradient(135deg, #6fcf97 0%, #56b4b4 100%) !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  padding: 48px 56px 32px 56px !important;
+  margin-bottom: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08) !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
