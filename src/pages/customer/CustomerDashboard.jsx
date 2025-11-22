@@ -39,6 +39,8 @@ const CustomerDashboardContent = () => {
   const [showInvoiceList, setShowInvoiceList] = useState(false)
   const [showInvoiceDetail, setShowInvoiceDetail] = useState(false)
   const [selectedInvoice, setSelectedInvoice] = useState(null)
+  const [appointmentPage, setAppointmentPage] = useState(1)
+  const appointmentsPerPage = 5
 
   // Load customer data from auth service
   useEffect(() => {
@@ -558,51 +560,113 @@ const CustomerDashboardContent = () => {
                       <p>Book your first maintenance service now!</p>
                     </div>
                   ) : (
-                    recentAppointments.slice(0, 5).map(appointment => {
-                      const statusInfo = getStatusBadge(appointment.status)
-                    
-                      // Format date and time from appointmentDate
-                      const appointmentDateTime = new Date(appointment.appointmentDate)
-                      const dateStr = appointmentDateTime.toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: 'numeric' 
-                      })
-                      const timeStr = appointmentDateTime.toLocaleTimeString('en-US', { 
-                        hour: '2-digit', 
-                        minute: '2-digit',
-                        hour12: true
-                      })
-                    
-                      return (
-                        <div 
-                          key={appointment.id} 
-                          className="appointment-card"
-                          onClick={() => handleViewAppointment(appointment)}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <div className="appointment-date">
-                            <span className="date">{dateStr}</span>
-                            <span className="time">{timeStr}</span>
-                          </div>
-                          <div className="appointment-details">
-                            <h4>
-                              {appointment.servicePackageName || 'Maintenance Service'}
-                              {appointment.serviceItems && appointment.serviceItems.length > 0 && 
-                                ` + ${appointment.serviceItems.length} service(s)`}
-                            </h4>
-                            <p>{appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
-                            <p>Technician: {appointment.technicianName || 'Not assigned yet'}</p>
-                          </div>
-                          <div className="appointment-status">
-                            <span className={`status-badge ${statusInfo.class}`}>
-                              {statusInfo.icon} {statusInfo.text}
-                            </span>
-                            <span className="price">{formatCurrency(appointment.estimatedCost)}</span>
-                          </div>
+                    <>
+                      {recentAppointments
+                        .slice((appointmentPage - 1) * appointmentsPerPage, appointmentPage * appointmentsPerPage)
+                        .map(appointment => {
+                          const statusInfo = getStatusBadge(appointment.status)
+                        
+                          // Format date and time from appointmentDate
+                          const appointmentDateTime = new Date(appointment.appointmentDate)
+                          const dateStr = appointmentDateTime.toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })
+                          const timeStr = appointmentDateTime.toLocaleTimeString('en-US', { 
+                            hour: '2-digit', 
+                            minute: '2-digit',
+                            hour12: true
+                          })
+                        
+                          return (
+                            <div 
+                              key={appointment.id} 
+                              className="appointment-card"
+                              onClick={() => handleViewAppointment(appointment)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <div className="appointment-date">
+                                <span className="date">{dateStr}</span>
+                                <span className="time">{timeStr}</span>
+                              </div>
+                              <div className="appointment-details">
+                                <h4>
+                                  {appointment.servicePackageName || 'Maintenance Service'}
+                                  {appointment.serviceItems && appointment.serviceItems.length > 0 && 
+                                    ` + ${appointment.serviceItems.length} service(s)`}
+                                </h4>
+                                <p>{appointment.vehicleModel} - {appointment.vehicleLicensePlate}</p>
+                                <p>Technician: {appointment.technicianName || 'Not assigned yet'}</p>
+                              </div>
+                              <div className="appointment-status">
+                                <span className={`status-badge ${statusInfo.class}`}>
+                                  {statusInfo.icon} {statusInfo.text}
+                                </span>
+                                <span className="price">{formatCurrency(appointment.estimatedCost)}</span>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      
+                      {/* Pagination Controls */}
+                      {recentAppointments.length > appointmentsPerPage && (
+                        <div className="pagination-controls" style={{ 
+                          display: 'flex', 
+                          justifyContent: 'center', 
+                          alignItems: 'center', 
+                          gap: '10px', 
+                          marginTop: '20px',
+                          padding: '15px'
+                        }}>
+                          <button
+                            onClick={() => setAppointmentPage(prev => Math.max(1, prev - 1))}
+                            disabled={appointmentPage === 1}
+                            style={{
+                              padding: '8px 16px',
+                              backgroundColor: appointmentPage === 1 ? '#e0e0e0' : '#4CAF50',
+                              color: appointmentPage === 1 ? '#999' : 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: appointmentPage === 1 ? 'not-allowed' : 'pointer',
+                              fontWeight: '500'
+                            }}
+                          >
+                            Previous
+                          </button>
+                          <span style={{ 
+                            padding: '8px 16px', 
+                            fontWeight: '600',
+                            color: '#333'
+                          }}>
+                            Page {appointmentPage} of {Math.ceil(recentAppointments.length / appointmentsPerPage)}
+                          </span>
+                          <button
+                            onClick={() => setAppointmentPage(prev => 
+                              Math.min(Math.ceil(recentAppointments.length / appointmentsPerPage), prev + 1)
+                            )}
+                            disabled={appointmentPage >= Math.ceil(recentAppointments.length / appointmentsPerPage)}
+                            style={{
+                              padding: '8px 16px',
+                              backgroundColor: appointmentPage >= Math.ceil(recentAppointments.length / appointmentsPerPage) 
+                                ? '#e0e0e0' 
+                                : '#4CAF50',
+                              color: appointmentPage >= Math.ceil(recentAppointments.length / appointmentsPerPage) 
+                                ? '#999' 
+                                : 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: appointmentPage >= Math.ceil(recentAppointments.length / appointmentsPerPage) 
+                                ? 'not-allowed' 
+                                : 'pointer',
+                              fontWeight: '500'
+                            }}
+                          >
+                            Next
+                          </button>
                         </div>
-                      )
-                    })
+                      )}
+                    </>
                   )}
                 </div>
               </div>
