@@ -26,6 +26,9 @@ export const ChatProvider = ({ children, userRole, userId }) => {
   const location = useLocation()
   const stompClientRef = useRef(null)
   const subscriptionsRef = useRef(new Map())
+  const activeRoomRef = useRef(null)
+  const roomsCacheRef = useRef([])
+  const hasFetchedRoomsRef = useRef(false)
 
   // Check if currently on chat page
   const isOnChatPage = location.pathname.includes('/chat')
@@ -43,6 +46,13 @@ export const ChatProvider = ({ children, userRole, userId }) => {
       disconnect()
     }
   }, [userId, userRole, isOnChatPage])
+
+  // Fetch rooms only once on mount
+  useEffect(() => {
+    if (userId && userRole && !hasFetchedRoomsRef.current) {
+      fetchAndCacheRooms()
+    }
+  }, [userId, userRole])
 
   const connectWebSocket = () => {
     const token = localStorage.getItem('accessToken')
@@ -85,20 +95,35 @@ export const ChatProvider = ({ children, userRole, userId }) => {
     }
   }
 
-  const subscribeToNotifications = async () => {
+  const fetchAndCacheRooms = async () => {
     try {
-      // Load initial unread count
       const result = await chatRoomService.getMyChatRooms()
       if (result.success) {
-        const rooms = result.data || []
-        
-        // Subscribe to each room for new messages
-        rooms.forEach(room => {
-          if (room.status !== 'CLOSED') {
-            subscribeToRoom(room.id)
-          }
-        })
+        roomsCacheRef.current = result.data || []
+        hasFetchedRoomsRef.current = true
+        logger.log('📦 Chat rooms cached:', roomsCacheRef.current.length)
       }
+    } catch (error) {
+      logger.error('Failed to fetch chat rooms:', error)
+    }
+  }
+
+  const subscribeToNotifications = async () => {
+    try {
+      // Use cached rooms instead of fetching again
+      const rooms = roomsCacheRef.current
+      
+      if (rooms.length === 0 && !hasFetchedRoomsRef.current) {
+        // Only fetch if cache is empty and hasn't been fetched yet
+        await fetchAndCacheRooms()
+      }
+
+      // Subscribe to each room for new messages
+      roomsCacheRef.current.forEach(room => {
+        if (room.status !== 'CLOSED') {
+          subscribeToRoom(room.id)
+        }
+      })
 
       // Subscribe to lobby for staff
       if (userRole === 'ROLE_STAFF') {
