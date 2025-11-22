@@ -9,6 +9,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 import HistoryIcon from '@mui/icons-material/History';
+import EventIcon from '@mui/icons-material/Event';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EmployeeManagement from "./components/EmployeeManagement";
 import CustomerManagement from "./components/CustomerManagement";
@@ -19,6 +20,7 @@ import VehicleManagement from "./components/VehicleManagement";
 import MaintenanceRecordManagement from "./components/MaintenanceRecordManagement";
 import ReportManagement from "./components/ReportManagement";
 import ServiceItemManagement from "./components/ServiceItemManagement";
+import AppointmentManagement from "./components/AppointmentManagement";
 import "../../styles/AdminDashboard.css";
 import authService from "../../api/authService";
 
@@ -46,6 +48,12 @@ const AdminDashboard = () => {
       icon: <BadgeIcon />,
       label: "Employees",
       component: EmployeeManagement,
+    },
+    {
+      id: "appointments",
+      icon: <EventIcon />,
+      label: "Appointments",
+      component: AppointmentManagement,
     },
     {
       id: "centers",

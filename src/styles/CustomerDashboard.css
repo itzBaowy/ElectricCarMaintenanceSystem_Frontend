@@ -315,8 +315,6 @@
   padding: 24px 32px 20px 32px;
   margin-bottom: 24px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   border-radius: 18px;
   min-height: 90px;
   max-width: 100%;
