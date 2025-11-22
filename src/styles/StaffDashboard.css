@@ -769,15 +769,12 @@
 }
 
 .stat-card {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  transition: all 0.3s ease;
-  border: 2px solid #000000;
+  background: #fff !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.08) !important;
+  border: 2px solid #b2dfdb !important;
+  position: relative;
+  overflow: hidden;
 }
 
 .stat-card:hover {
@@ -809,6 +806,10 @@
   color: #ffffff;
 }
 
+.stat-card .stat-icon {
+  display: none !important;
+}
+
 .stat-info h3 {
   color: #000000;
   font-size: 2rem;
@@ -819,6 +820,14 @@
   color: #000000;
   margin: 0;
   font-size: 0.95rem;
+}
+
+.stat-card h3,
+.stat-card .stat-label,
+.stat-card .stat-number,
+.stat-card span,
+.stat-card p {
+  color: #222 !important;
 }
 
 /* Modal */
