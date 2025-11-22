@@ -99,10 +99,6 @@ const PaymentSuccess = () => {
             <span className="detail-value amount">{paymentInfo.amount}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Appointment ID:</span>
-            <span className="detail-value">{paymentInfo.appointmentId}</span>
-          </div>
-          <div className="detail-row">
             <span className="detail-label">Status:</span>
             <span className="detail-value status-success">Successful</span>
           </div>
