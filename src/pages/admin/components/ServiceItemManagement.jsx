@@ -18,6 +18,7 @@ const ServiceItemManagement = () => {
     currentPage: 0,
     size: 10
   })
+  const [tableSearch, setTableSearch] = useState("")
 
   const PAGE_SIZE = 10
 
@@ -206,27 +207,7 @@ const ServiceItemManagement = () => {
       </div>
 
       {/* Search and Filters */}
-      <div className="filters-section">
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="🔍 Search by name or description..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          {searchTerm && (
-            <button
-              className="clear-search"
-              onClick={() => setSearchTerm('')}
-              title="Clear search"
-            >
-              ✕
-            </button>
-          )}
-        </div>
-      </div>
-
+   
       {/* Error Message */}
       {error && (
         <div className="error-message">
@@ -249,6 +230,22 @@ const ServiceItemManagement = () => {
       ) : (
         <>
           <div className="table-container">
+            <div className="table-search-row">
+              <input
+                className="table-search-input"
+                type="text"
+                placeholder="Search by name or description"
+                value={tableSearch}
+                onChange={e => setTableSearch(e.target.value)}
+              />
+              <button
+                className="table-search-clear"
+                onClick={() => setTableSearch("")}
+                disabled={!tableSearch}
+              >
+                Clear
+              </button>
+            </div>
             <table className="service-items-table">
               <thead>
                 <tr>
@@ -261,7 +258,10 @@ const ServiceItemManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredServiceItems.map((item) => (
+                {serviceItems.filter(item =>
+                  item.name.toLowerCase().includes(tableSearch.toLowerCase()) ||
+                  item.description.toLowerCase().includes(tableSearch.toLowerCase())
+                ).map(item => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>
@@ -291,14 +291,14 @@ const ServiceItemManagement = () => {
                           onClick={() => handleEdit(item)}
                           title="Edit service item"
                         >
-                          ✏️ Edit
+                           Edit
                         </button>
                         <button
                           className="btn-action btn-delete"
                           onClick={() => handleDelete(item)}
                           title="Delete service item"
                         >
-                          🗑️ Delete
+                           Delete
                         </button>
                       </div>
                     </td>
