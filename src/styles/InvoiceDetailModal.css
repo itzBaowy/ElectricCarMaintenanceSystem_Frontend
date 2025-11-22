@@ -144,7 +144,7 @@
 }
 
 .service-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #66eaac 0%, #47aba4 100%);
   color: white;
 }
 
@@ -178,7 +178,7 @@
 
 .service-table tfoot td {
   padding: 15px 12px;
-  border-top: 2px solid #667eea;
+  border-top: 2px solid #93c8c4;
 }
 
 .text-right {
@@ -223,12 +223,12 @@
   border: 1px solid #e0e0e0;
   font-size: 14px;
   line-height: 1.6;
-  color: #555;
+  color: #f4f4f4;
 }
 
 /* Total Section */
 .total-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #77d9c9 0%, #5da2c8 100%);
   color: white;
   border-left: none;
 }
@@ -245,6 +245,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: white;
 }
 
 .total-amount {

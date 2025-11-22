@@ -553,9 +553,22 @@
   }
 }
 
+.service-center-header {
+  background: linear-gradient(135deg, #43cea2 0%, #26a69a 100%) !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  padding: 32px 48px 24px 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.08);
+}
+
 .service-center-header h1,
-.service-center-header h2,
-.service-center-header p,
+.service-center-header p {
+  color: #fff !important;
+}
+
 .service-center-header .service-center-title,
 .service-center-header .service-center-desc {
   color: #fff !important;
