@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import BadgeIcon from '@mui/icons-material/Badge';
+import StoreIcon from '@mui/icons-material/Store';
+import BuildIcon from '@mui/icons-material/Build';
+import SettingsIcon from '@mui/icons-material/Settings';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
+import HistoryIcon from '@mui/icons-material/History';
+import LogoutIcon from '@mui/icons-material/Logout';
 import EmployeeManagement from "./components/EmployeeManagement";
 import CustomerManagement from "./components/CustomerManagement";
 import ServiceCenterManagement from "./components/ServiceCenterManagement";
@@ -24,56 +34,56 @@ const AdminDashboard = () => {
   };
 
   const menuItems = [
-    { id: "reports", icon: "", label: "Financial Reports", component: ReportManagement },
+    { id: "reports", icon: <DashboardIcon />, label: "Dashboard", component: ReportManagement },
     {
       id: "customers",
-      icon: "",
+      icon: <PeopleIcon />,
       label: "Customers",
       component: CustomerManagement,
     },
     {
       id: "employees",
-      icon: "",
+      icon: <BadgeIcon />,
       label: "Employees",
       component: EmployeeManagement,
     },
     {
       id: "centers",
-      icon: "",
+      icon: <StoreIcon />,
       label: "Service Centers",
       component: ServiceCenterManagement,
     },
     {
       id: "serviceItems",
-      icon: "",
+      icon: <BuildIcon />,
       label: "Service Items",
       component: ServiceItemManagement,
     },
     {
       id: "spareParts",
-      icon: "",
+      icon: <SettingsIcon />,
       label: "Spare Parts",
       component: SparePartManagement,
     },
     {
       id: "vehicleModels",
-      icon: "",
+      icon: <DirectionsCarIcon />,
       label: "Vehicle Models",
       component: VehicleModelManagement,
     },
     {
       id: "vehicles",
-      icon: "",
+      icon: <TimeToLeaveIcon />,
       label: "Vehicles",
       component: VehicleManagement,
     },
     {
       id: "maintenanceRecords",
-      icon: "",
+      icon: <HistoryIcon />,
       label: "Maintenance Records",
       component: MaintenanceRecordManagement,
     },
-    // { id: "settings", icon: "", label: "Settings", component: null },
+    // { id: "settings", icon: <SettingsIcon />, label: "Settings", component: null },
   ];
 
   const ActiveComponent = menuItems.find(
@@ -130,7 +140,7 @@ const AdminDashboard = () => {
 
         <div className="sidebar-footer">
           <button className="logout-btn" onClick={handleLogout}>
-            <span className="nav-icon"></span>
+            <span className="nav-icon"><LogoutIcon /></span>
             <span className="nav-label">Logout</span>
           </button>
         </div>
