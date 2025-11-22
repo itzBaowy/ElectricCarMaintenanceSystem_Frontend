@@ -41,6 +41,8 @@ const CustomerDashboardContent = () => {
   const [selectedInvoice, setSelectedInvoice] = useState(null)
   const [appointmentPage, setAppointmentPage] = useState(1)
   const appointmentsPerPage = 5
+  const [invoicePage, setInvoicePage] = useState(1)
+  const invoicesPerPage = 3
 
   // Load customer data from auth service
   useEffect(() => {
@@ -482,7 +484,10 @@ const CustomerDashboardContent = () => {
                       <p>You have no invoices.</p>
                     </div>
                   ) : (
-                    invoices.slice(0, 3).map(invoice => {
+                    <>
+                    {invoices
+                      .slice((invoicePage - 1) * invoicesPerPage, invoicePage * invoicesPerPage)
+                      .map(invoice => {
                       const statusInfo = invoice.status === 'PAID' 
                         ? { text: 'Paid', class: 'paid', icon: '✅' }
                         : { text: 'Unpaid', class: 'unpaid', icon: '⏳' }
@@ -535,7 +540,67 @@ const CustomerDashboardContent = () => {
                           </div>
                         </div>
                       )
-                    })
+                    })}
+                    
+                    {/* Pagination Controls */}
+                    {invoices.length > invoicesPerPage && (
+                      <div className="pagination-controls" style={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        gap: '10px', 
+                        marginTop: '20px',
+                        padding: '15px',
+                        gridColumn: '1 / -1'
+                      }}>
+                        <button
+                          onClick={() => setInvoicePage(prev => Math.max(1, prev - 1))}
+                          disabled={invoicePage === 1}
+                          style={{
+                            padding: '8px 16px',
+                            backgroundColor: invoicePage === 1 ? '#e0e0e0' : '#4CAF50',
+                            color: invoicePage === 1 ? '#999' : 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: invoicePage === 1 ? 'not-allowed' : 'pointer',
+                            fontWeight: '500'
+                          }}
+                        >
+                          Previous
+                        </button>
+                        <span style={{ 
+                          padding: '8px 16px', 
+                          fontWeight: '600',
+                          color: '#333'
+                        }}>
+                          Page {invoicePage} of {Math.ceil(invoices.length / invoicesPerPage)}
+                        </span>
+                        <button
+                          onClick={() => setInvoicePage(prev => 
+                            Math.min(Math.ceil(invoices.length / invoicesPerPage), prev + 1)
+                          )}
+                          disabled={invoicePage >= Math.ceil(invoices.length / invoicesPerPage)}
+                          style={{
+                            padding: '8px 16px',
+                            backgroundColor: invoicePage >= Math.ceil(invoices.length / invoicesPerPage) 
+                              ? '#e0e0e0' 
+                              : '#4CAF50',
+                            color: invoicePage >= Math.ceil(invoices.length / invoicesPerPage) 
+                              ? '#999' 
+                              : 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: invoicePage >= Math.ceil(invoices.length / invoicesPerPage) 
+                              ? 'not-allowed' 
+                              : 'pointer',
+                            fontWeight: '500'
+                          }}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                    </>
                   )}
                 </div>
               </div>
