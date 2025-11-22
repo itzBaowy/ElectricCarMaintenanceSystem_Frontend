@@ -64,6 +64,9 @@ const AppointmentDetail = ({ appointment, onClose, onAppointmentUpdated }) => {
     const statusMap = {
       PENDING: { text: 'Pending', class: 'pending', icon: '🟡', description: 'Waiting for confirmation' },
       CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '✅', description: 'Appointment confirmed' },
+      IN_PROGRESS: { text: 'In Progress', class: 'in-progress', icon: '🔧', description: 'Service is being performed' },
+      WAITING_FOR_APPROVAL: { text: 'Waiting for Approval', class: 'waiting-approval', icon: '⏳', description: 'Waiting for your approval' },
+      CUSTOMER_APPROVED: { text: 'Customer Approved', class: 'customer-approved', icon: '✔️', description: 'You have approved the service' },
       COMPLETED: { text: 'Completed', class: 'completed', icon: '🟢', description: 'Service completed' },
       CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '❌', description: 'Appointment cancelled' }
     }

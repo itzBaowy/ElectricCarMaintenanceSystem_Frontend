@@ -205,9 +205,8 @@ const StaffDashboardContent = () => {
     }
   };
 
-  // ===== NEW WORKFLOW FUNCTIONS =====
 
-  // Step 1: Create customer account (walk-in customer)
+  // Create customer account
   const handleCreateCustomer = async (e) => {
     e.preventDefault();
 
@@ -280,7 +279,7 @@ const StaffDashboardContent = () => {
     }
   };
 
-  // Step 2: Add vehicle for customer (Staff only)
+  // Add vehicle for customer
   const handleAddVehicle = async (e) => {
     e.preventDefault();
 
@@ -299,7 +298,7 @@ const StaffDashboardContent = () => {
       const vehicleData = {
         licensePlate: vehicleForm.licensePlate,
         vin: vehicleForm.vinNumber,
-        currentKm: parseInt(vehicleForm.currentKilometers) || 0,
+        currentKm: parseInt(vehicleForm.currentKilometers),
         purchaseYear: vehicleForm.purchaseYear,
         modelId: parseInt(vehicleForm.model), // model ID from select box
         customerId: parseInt(vehicleForm.customerId),
@@ -336,7 +335,7 @@ const StaffDashboardContent = () => {
     }
   };
 
-  // Step 3: Fetch service recommendations
+  // Fetch service recommendations
   const fetchServiceRecommendations = async (vehicleId) => {
     try {
       const result = await vehicleService.getServiceRecommendations(vehicleId);
@@ -353,7 +352,7 @@ const StaffDashboardContent = () => {
     }
   };
 
-  // Step 4: Confirm service package
+  // Confirm service package
   const handleConfirmServicePackage = async () => {
     if (!selectedVehicleForService) return;
 
@@ -371,7 +370,7 @@ const StaffDashboardContent = () => {
     }
   };
 
-  // Step 5: Assign technician to appointment
+  // Assign technician to appointment
   const handleAssignClick = (appointment) => {
     logger.log("Selected appointment:", appointment);
     setSelectedAppointment(appointment);

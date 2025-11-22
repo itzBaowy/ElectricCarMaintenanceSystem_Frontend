@@ -352,7 +352,6 @@ const TechnicianDashboard = () => {
                       <th>Date</th>
                       <th>Time</th>
                       <th>Status</th>
-                      <th>Price</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -375,7 +374,6 @@ const TechnicianDashboard = () => {
                             {appointment.status || 'UNKNOWN'}
                           </span>
                         </td>
-                        <td>{formatCurrency(appointment.totalPrice)}</td>
                         <td>
                           <button
                             onClick={() => handleViewDetails(appointment)}
