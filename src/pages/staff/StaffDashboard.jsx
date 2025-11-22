@@ -98,7 +98,7 @@ const StaffDashboardContent = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [sidebarTab, setSidebarTab] = useState("appointments"); // appointments, walk-ins, invoices
+  const [sidebarTab, setSidebarTab] = useState("walk-in"); // appointments, walk-in, invoices
   const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
   const [invoiceFilterStatus, setInvoiceFilterStatus] = useState("ALL"); // Filter for invoices: ALL, PAID, UNPAID
 
