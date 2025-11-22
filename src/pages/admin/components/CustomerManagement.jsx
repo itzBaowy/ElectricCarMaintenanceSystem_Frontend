@@ -283,7 +283,7 @@ const CustomerManagement = () => {
         <div className="modal-overlay">
           <div className="customer-form-modal">
             <div className="modal-header">
-              <h3>Tạo Tài Khoản Khách Hàng</h3>
+              <h3>Add Customer Account</h3>
               <button className="close-btn" onClick={resetAddForm}>
                 ✕
               </button>
@@ -292,7 +292,7 @@ const CustomerManagement = () => {
             <form onSubmit={handleAddSubmit} className="customer-form">
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="add-fullName">Họ và Tên *</label>
+                  <label htmlFor="add-fullName">Full Name *</label>
                   <input
                     type="text"
                     id="add-fullName"
@@ -300,12 +300,11 @@ const CustomerManagement = () => {
                     value={addFormData.fullName}
                     onChange={handleAddInputChange}
                     required
-                    placeholder="Nguyễn Văn A"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="add-phoneNumber">Số Điện Thoại *</label>
+                  <label htmlFor="add-phoneNumber">Phone Number *</label>
                   <input
                     type="tel"
                     id="add-phoneNumber"
@@ -313,7 +312,6 @@ const CustomerManagement = () => {
                     value={addFormData.phoneNumber}
                     onChange={handleAddInputChange}
                     required
-                    placeholder="0123456789"
                   />
                 </div>
               </div>
@@ -328,12 +326,11 @@ const CustomerManagement = () => {
                     value={addFormData.email}
                     onChange={handleAddInputChange}
                     required
-                    placeholder="email@example.com"
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="add-gender">Giới Tính *</label>
+                  <label htmlFor="add-gender">Gender *</label>
                   <select
                     id="add-gender"
                     name="gender"
@@ -341,9 +338,9 @@ const CustomerManagement = () => {
                     onChange={handleAddInputChange}
                     required
                   >
-                    <option value="MALE">Nam</option>
-                    <option value="FEMALE">Nữ</option>
-                    <option value="OTHER">Khác</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
                   </select>
                 </div>
               </div>
@@ -356,10 +353,10 @@ const CustomerManagement = () => {
                 marginBottom: "20px"
               }}>
                 <p style={{ margin: 0, fontSize: "0.9rem", color: "#1976d2" }}>
-                  <strong>📝 Lưu ý:</strong> Tài khoản sẽ được tạo với thông tin:<br/>
-                  • Username: Số điện thoại<br/>
-                  • Password: Số điện thoại<br/>
-                  • Khách hàng nên đổi mật khẩu sau khi đăng nhập lần đầu
+                  <strong>📝 Note:</strong> The account will be created with the following information:<br/>
+                  • Username: Phone number<br/>
+                  • Password: Phone number<br/>
+                  • Customers should change their password after the first login
                 </p>
               </div>
 

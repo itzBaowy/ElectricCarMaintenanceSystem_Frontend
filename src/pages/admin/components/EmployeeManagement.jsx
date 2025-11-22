@@ -517,6 +517,7 @@ const EmployeeManagement = () => {
                         name="serviceCenterId"
                         value={formData.serviceCenterId || ""}
                         onChange={handleInputChange}
+                        disabled
                       >
                         <option value="">-- Not assigned --</option>
                         {centers.map((center) => (
@@ -534,7 +535,7 @@ const EmployeeManagement = () => {
                         display: "block",
                       }}
                     >
-                      Select a service center or leave unassigned
+                        Service Center cannot be changed after creation
                     </small>
                   </div>
                 </div>
