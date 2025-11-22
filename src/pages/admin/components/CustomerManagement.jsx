@@ -16,6 +16,7 @@ const CustomerManagement = () => {
     email: "",
     phone: "",
     gender: "MALE",
+    recordStatus: "ACTIVE",
   });
   const [addFormData, setAddFormData] = useState({
     fullName: "",
@@ -89,6 +90,7 @@ const CustomerManagement = () => {
       email: "",
       phone: "",
       gender: "MALE",
+      recordStatus: "ACTIVE",
     });
     setEditingCustomer(null);
     setShowEditForm(false);
@@ -119,6 +121,7 @@ const CustomerManagement = () => {
         email: formData.email,
         phone: formData.phone,
         gender: formData.gender,
+        recordStatus: formData.recordStatus,
       };
       logger.log("Updating customer with data:", updateData);
 
@@ -474,6 +477,22 @@ const CustomerManagement = () => {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="recordStatus">Status *</label>
+                  <select
+                    id="recordStatus"
+                    name="recordStatus"
+                    value={formData.recordStatus}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
                   <label htmlFor="joinDate">Join Date</label>
                   <input
                     type="text"
@@ -483,6 +502,9 @@ const CustomerManagement = () => {
                     className="disabled-input"
                     style={{ background: "#f0f4f8", cursor: "not-allowed" }}
                   />
+                </div>
+                <div className="form-group">
+                  {/* Empty for layout balance */}
                 </div>
               </div>
 
@@ -524,6 +546,7 @@ const CustomerManagement = () => {
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Gender</th>
+                  <th>Status</th>
                   <th>Join Date</th>
                   <th>Actions</th>
                 </tr>
@@ -544,6 +567,9 @@ const CustomerManagement = () => {
                           ? " Female"
                           : " Other"}
                       </span>
+                    </td>
+                    <td>
+                     {customer.recordStatus}
                     </td>
                     <td>{customer.joinDate}</td>
                     <td>
