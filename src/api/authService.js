@@ -354,6 +354,36 @@ export const authService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Reset password with token
+  resetPassword: async (resetData) => {
+    try {
+      logger.log('🔑 Resetting password with token')
+      const response = await api.post('/api/auth/reset-password', resetData)
+      
+      if (response.data.code === 1000) {
+        logger.log('✅ Password reset successfully')
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Password reset successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to reset password',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('❌ Reset password error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to reset password',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

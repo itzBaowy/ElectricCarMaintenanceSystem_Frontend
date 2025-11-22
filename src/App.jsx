@@ -3,6 +3,7 @@ import "./styles/App.css";
 import LandingPage from "./pages/LandingPage";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
+import ResetPassword from "./components/auth/ResetPassword";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import CustomerDashboard from "./pages/customer/CustomerDashboard";
@@ -118,6 +119,14 @@ function App() {
             element={
               <ProtectedRoute requireAuth={false}>
                 <ForgotPassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <ProtectedRoute requireAuth={false}>
+                <ResetPassword />
               </ProtectedRoute>
             }
           />
