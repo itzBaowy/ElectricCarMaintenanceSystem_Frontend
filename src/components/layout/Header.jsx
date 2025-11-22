@@ -49,11 +49,12 @@ const Header = () => {
     <header className="header">
       <nav className="navbar">
         <div className="nav-container">
-          <div className="nav-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <h2>ElectricCare</h2>
-            <span className="logo-subtitle">Electric Vehicle Maintenance System</span>
+          <div className="hamburger" onClick={toggleMenu} aria-label="Open menu" role="button" tabIndex={0}>
+            <span className="bar"></span>
+            <span className="bar"></span>
+            <span className="bar"></span>
           </div>
-          
+
           <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
             <a 
               href="#home" 
@@ -122,6 +123,9 @@ const Header = () => {
               </div>
             )}
           </div>
+          <div className="nav-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+            <h2 className="brand">ElectricCare</h2>
+          </div>
 
           {!isDashboardPage && (
             <div className="nav-buttons">
@@ -133,12 +137,6 @@ const Header = () => {
               </button>
             </div>
           )}
-
-          <div className="hamburger" onClick={toggleMenu}>
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </div>
         </div>
       </nav>
     </header>

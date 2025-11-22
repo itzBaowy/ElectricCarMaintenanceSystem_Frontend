@@ -1,16 +1,10 @@
-import logger from '../../utils/logger'
+import { useState } from 'react'
 import '../../styles/Hero.css'
 import carImage from '../../assets/ba4007af-a864-474d-860a-70fd92cc726d.png'
-import image1 from '../../assets/download (1).jpeg'
-import image2 from '../../assets/download.jpeg'
-import image3 from '../../assets/images.jpeg'
-import image4 from '../../assets/istockphoto-1347150429-612x612.jpg'
-
-const Hero = () => {
-  const handleBookingClick = () => {
-    // TODO: Navigate to booking page
-    logger.log('Booking clicked')
-  }
+const Hero = ({ videoUrl: propVideoUrl, poster: propPoster }) => {
+  const videoUrl = propVideoUrl || import.meta.env.VITE_HERO_VIDEO || '/hero-video.mp4'
+  const poster = propPoster || carImage
+  const [videoError, setVideoError] = useState(false)
 
   const handleLearnMoreClick = () => {
     // TODO: Scroll to services section or navigate to about page
@@ -20,53 +14,47 @@ const Hero = () => {
     }
   }
 
+  const milestones = [12000,24000,36000,48000,60000,72000,84000,96000,108000,120000]
+
   return (
     <section id="home" className="hero">
       <div className="hero-container">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Smart Electric Vehicle 
-            <span className="highlight"> Maintenance System</span>
+        <div className="hero-content centered">
+          <h1 className="hero-title" onClick={handleLearnMoreClick} style={{ cursor: 'pointer' }}>
+            Maintenance System
           </h1>
-          <p className="hero-description">
-            Manage and maintain your electric vehicle efficiently with advanced technology. 
-            Book appointments online, track vehicle status, and receive periodic maintenance notifications.
+          <p className="hero-description light">
+            Expert electric vehicle maintenance, fast diagnostics, and transparent pricing — book online for fast, reliable service from certified technicians.
           </p>
-          <div className="hero-buttons">
-            <button 
-              className="btn-primary"
-              onClick={handleBookingClick}
-            >
-              Book Now
-            </button>
-            <button 
-              className="btn-secondary"
-              onClick={handleLearnMoreClick}
-            >
-              Learn More
-            </button>
+          <div className="hero-image-center">
+            {!videoError ? (
+              <video
+                className="hero-car-video"
+                autoPlay
+                muted
+                loop
+                playsInline
+                onError={(e) => {
+                  console.error('Hero video failed to load:', videoUrl, e)
+                  setVideoError(true)
+                }}
+              >
+                <source src={videoUrl} type="video/mp4" />
+              </video>
+            ) : (
+              <img src={poster} alt="Hero poster" className="hero-car-image" />
+            )}
           </div>
         </div>
-        <div className="hero-image">
-          <div className="hero-image-wrapper">
-            <div className="hero-car-container">
-              <div className="hero-car-background"></div>
-              <img src={carImage} alt="Electric Vehicle" className="hero-car-image" />
-            </div>
-            <div className="hero-image-grid">
-              <div className="hero-image-box">
-                <img src={image1} alt="Service 1" />
-              </div>
-              <div className="hero-image-box">
-                <img src={image2} alt="Service 2" />
-              </div>
-              <div className="hero-image-box">
-                <img src={image3} alt="Service 3" />
-              </div>
-              <div className="hero-image-box">
-                <img src={image4} alt="Service 4" />
-              </div>
-            </div>
+      </div>
+
+      <div className="booking-card">
+        <h3 className="booking-card-title">Vehicle Maintenance Milestones</h3>
+        <div className="booking-row">
+          <div className="milestones">
+            {milestones.map((m) => (
+              <div key={m} className="milestone">{m.toLocaleString()}</div>
+            ))}
           </div>
         </div>
       </div>

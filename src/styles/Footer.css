@@ -1,8 +1,8 @@
 /* Footer */
 .footer {
-  background: #1a1a1a;
-  color: white;
-  padding: 3rem 2rem 1rem;
+  background: transparent;
+  color: inherit;
+  padding: 0;
   margin-top: auto;
 }
 
@@ -96,9 +96,9 @@
 
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px solid #333;
+  padding: 1rem 0;
+  margin-top: 0;
+  background: #1a1a1a;
   color: #999;
   font-size: 0.9rem;
 }

@@ -1,160 +1,278 @@
-/* Features Section */
-.features {
-  padding: 4rem 0;
-  background: #f5f5f5;
+/* Features / Appointment section styles */
+.features-section {
+  background: #f4f4f3;
+  padding: 40px 20px;
 }
 
-.features .section-title {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #333;
-  text-transform: uppercase;
-  font-weight: bold;
+.features-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 24px;
+  align-items: stretch; /* make both columns equal height */
 }
 
-.section-underline {
-  width: 80px;
-  height: 3px;
-  background-color: #2E5A88;
-  margin: 0 auto 2rem;
+.features-left {
+  background: #1f63b6; /* deep blue */
+  color: #fff;
+  padding: 52px 48px;
+  position: relative;
+  overflow: visible;
 }
 
-.car-display {
-  text-align: center;
-  margin-bottom: 3rem;
+.features-left-inner {
+  max-width: 640px;
 }
 
-.car-placeholder {
+.features-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 1px;
+}
+
+.meta-icon {
+  width: 36px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  display: inline-block;
+  border-radius: 2px;
+  transform: rotate(-6deg);
+}
+
+.features-title {
+  font-size: 2rem;
+  margin: 18px 0 12px;
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.features-desc {
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-list li {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.contact-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 120px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: #ffffff; /* icon color */
+  margin-right: 12px;
+  flex: 0 0 auto;
+  font-size: 22px;
 }
 
-.car-placeholder i {
-  font-size: 4rem;
-  color: #2E5A88;
+.contact-icon svg {
+  width: 22px;
+  height: 22px;
+  color: inherit;
 }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  width: 100%;
-  max-width: 100%;
-}
-
-.feature-item {
-  background: white;
-  padding: 2.5rem 2rem;
-  border-radius: 8px;
-  text-align: center;
-  transition: all 0.3s ease;
-  width: 100%;
-  max-width: 100%;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.feature-content {
-  width: 100%;
-}
-
-.feature-item h3 {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: #2E5A88;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.feature-item p {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-}
-
-.feature-price {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #1a1a1a;
-  margin-bottom: 1.5rem;
-}
-
-.feature-btn {
-  background: #2E5A88;
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+.contact-label {
+  font-weight: 800;
   font-size: 0.9rem;
-  letter-spacing: 0.5px;
+}
+.contact-value {
+  font-size: 0.9rem;
+  opacity: 0.95;
 }
 
-.feature-btn:hover {
-  background: #234669;
-  transform: translateY(-2px);
+.features-right {
+  display: flex;
+  justify-content: flex-end;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .features {
-    padding: 4rem 0;
-  }
+.contact-card {
+  background: #fff;
+  width: 420px;
+  padding: 0; /* inner form wrapper handles padding */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: visible;
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
 
-  .features .section-title {
-    font-size: 2rem;
-  }
+.contact-form-wrap {
+  background: #ffffff;
+  padding: 26px;
+  width: 320px; /* leave room on the right for the background image to show */
+  box-sizing: border-box;
+  z-index: 2;
+}
 
-  .car-placeholder {
-    width: 160px;
-    height: 100px;
-  }
+.contact-title {
+  margin: 0 0 12px;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #213537;
+  font-weight: 900;
+}
 
-  .car-placeholder i {
-    font-size: 3rem;
-  }
+.contact-title-image {
+  display: block;
+  height: auto;
+  max-height: 86px; /* reduced height */
+  object-fit: contain;
+  margin-bottom: 12px;
+  /* extend image to touch the viewport right edge on wide screens */
+  width: calc(100% + ((100vw - 1180px) / 2));
+  margin-right: calc((1180px - 100vw) / 2);
+}
 
-  .features-grid {
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 12px 10px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #213537;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Decorative: tire mark mockup */
+.features-left::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  bottom: -40px;
+  width: 420px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.04);
+  transform: rotate(-12deg);
+  border-radius: 4px;
+}
+
+@media (max-width: 1000px) {
+  .features-container {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    padding: 0 10px;
   }
-
-  .feature-item {
-    padding: 2rem 1.5rem;
+  .features-right {
+    justify-content: center;
+    margin-top: 18px;
+  }
+  .contact-card {
+    width: 100%;
+    max-width: 520px;
+  }
+  .features-left {
+    padding: 36px 20px;
+  }
+  .contact-title-image {
+    width: 100%;
+    margin-right: 0;
+    object-fit: contain;
+    max-height: none;
   }
 }
 
-@media (max-width: 480px) {
-  .feature-item h3 {
-    font-size: 1.3rem;
-  }
+/* FAQ styles */
+.faq-section {
+  padding: 40px 20px 60px;
+  background: transparent;
+}
+.faq-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.faq-header .meta {
+  color: #1f6b85;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.faq-title {
+  margin: 0 0 18px;
+  font-size: 1.8rem;
+  color: #22393b;
+  font-weight: 900;
+}
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.faq-card {
+  background: #fff;
+  padding: 18px 24px;
+  border-left: 6px solid #2b9bd3;
+  position: relative;
+  cursor: pointer;
+  display: block;
+}
+.faq-card .faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-q-text {
+  font-weight: 800;
+  color: #213537;
+}
+.faq-toggle svg {
+  color: #2b9bd3;
+  transition: transform 240ms ease;
+}
+.expand-icon.rotated {
+  transform: rotate(180deg);
+}
+.faq-card.open {
+  padding: 18px 24px 12px;
+}
 
-  .feature-price {
-    font-size: 1.8rem;
-  }
+/* Answer slide animation */
+.faq-answer {
+  margin-top: 0;
+  color: #47585a;
+  position: relative;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 320ms ease, opacity 220ms ease;
+  padding-top: 0;
+}
+.faq-card.open .faq-answer {
+  max-height: 260px; /* large enough for content */
+  opacity: 1;
+  padding-top: 12px;
+}
+/* removed .faq-close (X button) - answers now render below the question */
 
-  .car-placeholder {
-    width: 140px;
-    height: 90px;
-  }
-
-  .car-placeholder i {
-    font-size: 2.5rem;
+@media (max-width: 900px) {
+  .faq-grid {
+    grid-template-columns: 1fr;
   }
 }
