@@ -245,20 +245,28 @@
 }
 
 .view-detail-btn {
-  padding: 8px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #4db6ac 0%, #2196f3 100%);
   color: white;
-  border: none;
-  border-radius: 8px;
+  border: 2px solid #1976d2;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   transition: all 0.3s ease;
+  margin-left: 32px;
+  vertical-align: bottom;
+  display: inline-block;
+  position: relative;
+  top: 8px;
 }
 
 .view-detail-btn:hover {
   transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #1976d2 0%, #4db6ac 100%);
+  color: #eafbe7;
+  border-color: #2196f3;
 }
 
 /* Modal Footer */
