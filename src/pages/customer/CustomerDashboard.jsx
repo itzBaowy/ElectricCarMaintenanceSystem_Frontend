@@ -318,7 +318,10 @@ const CustomerDashboardContent = () => {
       PENDING: { text: 'Pending', class: 'pending', icon: '' },
       CONFIRMED: { text: 'Confirmed', class: 'confirmed', icon: '' },
       COMPLETED: { text: 'Completed', class: 'completed', icon: '' },
-      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '' }
+      CANCELLED: { text: 'Cancelled', class: 'cancelled', icon: '' },
+      IN_PROGRESS: { text: 'In Progress', class: 'in-progress', icon: '' },
+      WAITING_FOR_APPROVAL: { text: 'Waiting for Approval', class: 'waiting', icon: '' },
+      CUSTOMER_APPROVED: { text: 'Customer Approved', class: 'approved', icon: '' } 
     }
     return statusMap[status] || statusMap.PENDING
   }
@@ -393,7 +396,7 @@ const CustomerDashboardContent = () => {
                 <span className="stat-label">Invoices</span>
                 <div className="stat-badge">
                   {invoices.filter(i => i.status === 'UNPAID').length > 0 && (
-                    <span className="unpaid-invoice-badge-custom">{invoices.filter(i => i.status === 'UNPAID').length} chưa thanh toán</span>
+                    <span className="unpaid-invoice-badge-custom">{invoices.filter(i => i.status === 'UNPAID').length} not paid yet</span>
                   )}
                 </div>
               </div>

@@ -13,6 +13,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
           }`}
           onClick={() => setSidebarTab("walk-in")}
         >
+          <PeopleIcon style={{ marginRight: '8px', fontSize: '20px', verticalAlign: 'middle' }} />
           Customers
         </button>
         <button
@@ -21,6 +22,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
           }`}
           onClick={() => setSidebarTab("appointments")}
         >
+          <EventNoteIcon style={{ marginRight: '8px', fontSize: '20px', verticalAlign: 'middle' }} />
           Appointments
         </button>
         <button
@@ -29,6 +31,7 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
           }`}
           onClick={() => setSidebarTab("invoices")}
         >
+          <ReceiptIcon style={{ marginRight: '8px', fontSize: '20px', verticalAlign: 'middle' }} />
           Invoices & Payment
         </button>
         <button
@@ -38,7 +41,8 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
             navigate('/staff/chat')
           }}
         >
-           Support Chat
+          <ChatIcon style={{ marginRight: '8px', fontSize: '20px', verticalAlign: 'middle' }} />
+          Support Chat
           {unreadCount > 0 && (
             <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
           )}
@@ -49,6 +53,10 @@ const StaffSidebar = ({ sidebarTab, setSidebarTab, navigate, unreadCount = 0, cl
 );
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PeopleIcon from '@mui/icons-material/People';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import ChatIcon from '@mui/icons-material/Chat';
 // import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import InvoiceDetailModal from "../admin/components/InvoiceDetailModal";
@@ -728,7 +736,6 @@ const StaffDashboardContent = () => {
         <div className="staff-header">
           <div className="header-content">
             <h1> Staff Dashboard - Maintenance Management</h1>
-            <p>Manage walk-in customers, vehicles, appointments and invoices</p>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
             <span style={{ color: "#ffffff", fontSize: "0.95rem" }}>
@@ -747,10 +754,6 @@ const StaffDashboardContent = () => {
           <div className="walk-in-section">
             <div className="section-header">
               <h2>Customer Management</h2>
-              <p>
-                Walk-in customers at the center, record information and create
-                accounts
-              </p>
             </div>
 
             <div className="action-buttons">
@@ -822,6 +825,7 @@ const StaffDashboardContent = () => {
                     <thead>
                       <tr>
                         <th>ID</th>
+                        <th>Username</th>
                         <th>Full Name</th>
                         <th>Phone Number</th>
                         <th>Email</th>
@@ -832,6 +836,7 @@ const StaffDashboardContent = () => {
                       {currentCustomers.map((customer) => (
                         <tr key={customer.customerId || customer.id}>
                           <td>#{customer.customerId || customer.id}</td>
+                          <td>{customer.username}</td>
                           <td>{customer.fullName}</td>
                           <td>{customer.phone}</td>
                           <td>{customer.email}</td>
