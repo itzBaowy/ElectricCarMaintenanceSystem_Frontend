@@ -103,18 +103,6 @@ const MaintenanceRecordManagement = () => {
             className="search-input"
           />
         </div>
-        <div className="filter-group">
-          <select
-            value={filterTechnician}
-            onChange={(e) => setFilterTechnician(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All technicians</option>
-            {uniqueTechnicians.map(tech => (
-              <option key={tech} value={tech}>{tech}</option>
-            ))}
-          </select>
-        </div>
       </div>
 
       <div className="records-stats">

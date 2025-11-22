@@ -247,7 +247,7 @@ const SparePartManagement = () => {
             />
             <span className="search-icon"></span>
           </div>
-
+          <br />
           <button onClick={fetchSpareParts} className="refresh-btn">
              Refresh
           </button>

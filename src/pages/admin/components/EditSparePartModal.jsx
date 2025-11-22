@@ -133,6 +133,7 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                   onChange={handleChange}
                   className={validationErrors.partNumber ? 'error' : ''}
                   placeholder="e.g., FLT-VF3"
+                  disabled
                 />
                 {validationErrors.partNumber && (
                   <span className="error-text">{validationErrors.partNumber}</span>
@@ -152,6 +153,7 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                   onChange={handleChange}
                   className={validationErrors.name ? 'error' : ''}
                   placeholder="e.g., Cabin air filter VF 3"
+                  disabled
                 />
                 {validationErrors.name && (
                   <span className="error-text">{validationErrors.name}</span>
@@ -173,6 +175,7 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                   placeholder="0"
                   min="0"
                   step="1000"
+                  disabled
                 />
                 {validationErrors.unitPrice && (
                   <span className="error-text">{validationErrors.unitPrice}</span>
@@ -199,16 +202,6 @@ const EditSparePartModal = ({ sparePart, onClose, onUpdate }) => {
                 )}
               </div>
 
-              {/* Current Stock Display */}
-              <div className="form-group full-width">
-                <div className="stock-info-display">
-                  <span className="info-label">Current Stock:</span>
-                  <span className="info-value">{sparePart?.quantityInStock || 0} units</span>
-                  <span className="info-note">
-                    ℹ To update stock quantity, use the "Update Stock" button in the table
-                  </span>
-                </div>
-              </div>
             </div>
           </div>
 
