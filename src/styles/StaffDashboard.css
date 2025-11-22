@@ -1562,18 +1562,21 @@
   font-weight: 700;
   border-bottom: 1px solid rgba(255,255,255,0.12);
   letter-spacing: 1px;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  
 }
 
 .sidebar-header h2 {
-  margin: 0 0 0.5rem 0;
+  
   font-size: 2rem;
   font-weight: 800;
   color: #fff;
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
 }
 
 .sidebar-desc {
   margin: 0;
-  color: #e0f7fa;
+  color: #000000;
   font-size: 1.08rem;
   font-weight: 500;
 }
@@ -1625,7 +1628,7 @@
   padding: 22px 0;
   border: none;
   border-radius: 18px;
-  background: linear-gradient(135deg, #b2dfdb 0%, #aee9f7 100%);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #222;
   box-shadow: 0 2px 12px rgba(38, 166, 154, 0.10);
   cursor: pointer;
@@ -1634,7 +1637,7 @@
 }
 
 .sidebar-tab.active {
-  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
+  background: #7acaaa;
   color: #fff;
   box-shadow: 0 4px 18px rgba(38, 166, 154, 0.18);
 }
@@ -1649,7 +1652,7 @@
 }
 
 .sidebar-tab.chat-tab {
-  background: linear-gradient(135deg, #b2dfdb 0%, #aee9f7 100%);
+  background: linear-gradient(135deg, #26a69a 0%, #66bb6a 100%);
   color: #222;
   margin-top: 12px;
   border-top: 2px solid rgba(255,255,255,0.2);
