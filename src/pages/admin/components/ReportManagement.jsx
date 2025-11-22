@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import reportService from '../../../api/reportService'
 import logger from '../../../utils/logger'
 import '../../../styles/ReportManagement.css'
@@ -7,6 +8,9 @@ const ReportManagement = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [reportData, setReportData] = useState(null)
+  const [yearlyRevenue, setYearlyRevenue] = useState([])
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  const [loadingChart, setLoadingChart] = useState(false)
   
   // Set default date range (1 month ago to now)
   const getDefaultDates = () => {
@@ -27,7 +31,36 @@ const ReportManagement = () => {
   // Auto-load report on component mount
   useEffect(() => {
     handleFetchReport()
+    handleFetchYearlyRevenue()
   }, [])
+
+  // Fetch yearly revenue when year changes
+  useEffect(() => {
+    handleFetchYearlyRevenue()
+  }, [selectedYear])
+
+  const handleFetchYearlyRevenue = async () => {
+    setLoadingChart(true)
+    try {
+      const response = await reportService.getRevenueByYear(selectedYear)
+      if (response.success) {
+        // Transform data for the chart
+        const chartData = response.data.map(item => ({
+          month: `T${item.month}`,
+          revenue: item.totalRevenue,
+          monthNumber: item.month
+        }))
+        setYearlyRevenue(chartData)
+        logger.log('Yearly revenue loaded:', chartData)
+      } else {
+        logger.error('Failed to load yearly revenue:', response.message)
+      }
+    } catch (err) {
+      logger.error('Error loading yearly revenue:', err)
+    } finally {
+      setLoadingChart(false)
+    }
+  }
 
   const handleFetchReport = async () => {
     if (!startDate || !endDate) {
@@ -69,6 +102,36 @@ const ReportManagement = () => {
       style: 'currency',
       currency: 'VND'
     }).format(amount)
+  }
+
+  const formatCurrencyShort = (amount) => {
+    if (amount >= 1000000000) {
+      return `${(amount / 1000000000).toFixed(1)}B`
+    } else if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)}M`
+    } else if (amount >= 1000) {
+      return `${(amount / 1000).toFixed(1)}K`
+    }
+    return amount.toString()
+  }
+
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip" style={{
+          backgroundColor: '#fff',
+          padding: '10px',
+          border: '1px solid #ccc',
+          borderRadius: '4px'
+        }}>
+          <p style={{ margin: 0, fontWeight: 'bold' }}>{payload[0].payload.month}</p>
+          <p style={{ margin: '5px 0 0 0', color: '#2563eb' }}>
+            {formatCurrency(payload[0].value)}
+          </p>
+        </div>
+      )
+    }
+    return null
   }
 
   const formatDateTime = (dateString) => {
@@ -119,6 +182,56 @@ const ReportManagement = () => {
     <div className="financial-report-layout">
       <div className="financial-report-content">
         <div className="report-management">
+          {/* Yearly Revenue Chart */}
+          <div className="revenue-chart-section">
+            <div className="chart-header">
+              <h3>Monthly Revenue</h3>
+              <div className="year-selector">
+                <label htmlFor="yearSelect">Year:</label>
+                <select
+                  id="yearSelect"
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(Number(e.target.value))}
+                  className="year-select"
+                >
+                  {[2023, 2024, 2025, 2026].map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            {loadingChart ? (
+              <div className="chart-loading">Đang tải biểu đồ...</div>
+            ) : (
+              <div className="chart-container">
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart
+                    data={yearlyRevenue}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="month" 
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis 
+                      tickFormatter={formatCurrencyShort}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend />
+                    <Bar 
+                      dataKey="revenue" 
+                      fill="#2563eb" 
+                      name="Doanh thu (VND)"
+                      radius={[8, 8, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+          </div>
           {/* Removed .rm-header section as requested */}
           <div className="report-filters">
             <div className="date-filters">
@@ -178,6 +291,8 @@ const ReportManagement = () => {
               <span> {error}</span>
             </div>
           )}
+
+          
 
           {reportData && (
             <div className="report-content">

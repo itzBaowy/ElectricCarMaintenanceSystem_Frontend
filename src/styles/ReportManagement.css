@@ -354,6 +354,87 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Revenue Chart Section */
+.revenue-chart-section {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(38, 166, 154, 0.07);
+  margin-bottom: 25px;
+  border: 1.5px solid #dcf0e8;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.chart-header h3 {
+  margin: 0;
+  color: #1a3c34;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.year-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-selector label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.year-select {
+  padding: 8px 16px;
+  border: 2px solid #b2dfdb;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+  background: #f6fbf8;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.year-select:hover {
+  border-color: #26a69a;
+}
+
+.year-select:focus {
+  border-color: #26a69a;
+  box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.1);
+}
+
+.chart-container {
+  padding: 10px 0;
+}
+
+.chart-loading {
+  text-align: center;
+  padding: 60px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.custom-tooltip {
+  background: white;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
 .report-summary h3 {
   margin: 0 0 15px 0;
   color: #333;
