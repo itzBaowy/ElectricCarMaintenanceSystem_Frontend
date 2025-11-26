@@ -146,7 +146,13 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       let formattedDate
       if (vehicleAtCenter) {
         const now = new Date()
-        formattedDate = now.toISOString().slice(0, 16).replace('T', ' ')
+        // Format to local timezone: "YYYY-MM-DD HH:mm"
+        const year = now.getFullYear()
+        const month = String(now.getMonth() + 1).padStart(2, '0')
+        const day = String(now.getDate()).padStart(2, '0')
+        const hours = String(now.getHours()).padStart(2, '0')
+        const minutes = String(now.getMinutes()).padStart(2, '0')
+        formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`
       } else {
         // Format datetime: "YYYY-MM-DD HH:mm" (remove T and seconds)
         formattedDate = appointmentDate.replace('T', ' ')
