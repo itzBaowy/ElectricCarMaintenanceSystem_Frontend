@@ -141,12 +141,10 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
 
     setLoading(true)
     try {
-      // If vehicle is at center, use current date and time
-      // Otherwise, use the selected appointment date
       let formattedDate
       if (vehicleAtCenter) {
+        // Use current date and time for immediate service
         const now = new Date()
-        // Format to local timezone: "YYYY-MM-DD HH:mm"
         const year = now.getFullYear()
         const month = String(now.getMonth() + 1).padStart(2, '0')
         const day = String(now.getDate()).padStart(2, '0')
@@ -154,8 +152,8 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
         const minutes = String(now.getMinutes()).padStart(2, '0')
         formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`
       } else {
-        // Format datetime: "YYYY-MM-DD HH:mm" (remove T and seconds)
-        formattedDate = appointmentDate.replace('T', ' ')
+        // Format datetime: "YYYY-MM-DD HH:mm"
+        formattedDate = appointmentDate.replace('T', ' ').substring(0, 16)
       }
       
       // Prepare appointment data according to new API format
