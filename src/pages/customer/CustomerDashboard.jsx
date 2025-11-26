@@ -207,15 +207,6 @@ const CustomerDashboardContent = () => {
     setSelectedVehicle(null)
   }
 
-  const handleUpdateKm = (vehicle) => {
-    setSelectedVehicle(vehicle)
-    setShowUpdateKm(true)
-  }
-
-  const handleCloseUpdateKm = () => {
-    setShowUpdateKm(false)
-    setSelectedVehicle(null)
-  }
 
   const handleKmUpdated = () => {
     loadVehicles() // Reload vehicles to show updated KM
@@ -227,23 +218,6 @@ const CustomerDashboardContent = () => {
     logger.log('Appointment created:', appointment)
   }
 
-  const handleDeleteVehicle = async (vehicleId, licensePlate) => {
-    if (window.confirm(`Are you sure you want to delete vehicle ${licensePlate}?`)) {
-      try {
-        const result = await vehicleService.deleteVehicle(vehicleId)
-        
-        if (result.success) {
-          alert('Vehicle deleted successfully!')
-          loadVehicles() // Refresh the vehicle list
-        } else {
-          alert(`Failed to delete vehicle: ${result.message}`)
-        }
-      } catch (error) {
-        logger.error('Error deleting vehicle:', error)
-        alert('An error occurred while deleting the vehicle')
-      }
-    }
-  }
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -469,18 +443,6 @@ const CustomerDashboardContent = () => {
                               onClick={() => handleBookMaintenance(vehicle)}
                             >
                               Book Maintenance
-                            </button>
-                            <button 
-                              className="action-btn secondary" 
-                              onClick={() => handleUpdateKm(vehicle)}
-                            >
-                              Update KM
-                            </button>
-                            <button 
-                              className="action-btn danger" 
-                              onClick={() => handleDeleteVehicle(vehicle.id, vehicle.licensePlate)}
-                            >
-                              Delete
                             </button>
                           </div>
                         </div>
@@ -767,15 +729,6 @@ const CustomerDashboardContent = () => {
                 vehicleModel={getVehicleModel(selectedVehicle.modelId)}
                 onClose={handleCloseBookMaintenance}
                 onAppointmentCreated={handleAppointmentCreated}
-              />
-            )}
-
-            {/* Update Vehicle KM Modal */}
-            {showUpdateKm && selectedVehicle && (
-              <UpdateVehicleKmModal
-                vehicle={selectedVehicle}
-                onClose={handleCloseUpdateKm}
-                onSuccess={handleKmUpdated}
               />
             )}
 
