@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import modelPackageItemService from '../../../api/modelPackageItemService'
+import serviceItemService from '../../../api/serviceItemService'
+import sparePartService from '../../../api/sparePartService'
 import CloneConfigModal from './CloneConfigModal'
 import PackageItemsEditModal from './PackageItemsEditModal'
 import '../../../styles/ModelPackageConfigModal.css'
@@ -13,10 +15,19 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
   const [showAddMilestoneModal, setShowAddMilestoneModal] = useState(false)
   const [selectedPackage, setSelectedPackage] = useState(null)
   const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
   const [milestoneFormData, setMilestoneFormData] = useState({
     milestoneKm: '',
-    milestoneMonth: ''
+    milestoneMonth: '',
+    serviceItemId: '',
+    price: '',
+    actionType: 'CHECK',
+    includedSparePartId: '',
+    includedQuantity: ''
   })
+  const [serviceItems, setServiceItems] = useState([])
+  const [spareParts, setSpareParts] = useState([])
+  const [loadingItems, setLoadingItems] = useState(false)
 
   useEffect(() => {
     fetchModelPackages()
@@ -98,26 +109,62 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     if (onConfigUpdated) onConfigUpdated()
   }
 
-  const handleAddMilestone = () => {
-    setMilestoneFormData({ milestoneKm: '', milestoneMonth: '' })
+  const handleAddMilestone = async () => {
+    setMilestoneFormData({
+      milestoneKm: '',
+      milestoneMonth: '',
+      serviceItemId: '',
+      price: '',
+      actionType: 'CHECK',
+      includedSparePartId: '',
+      includedQuantity: ''
+    })
+    
+    // Load service items and spare parts
+    setLoadingItems(true)
+    try {
+      const [serviceItemsResponse, sparePartsResponse] = await Promise.all([
+        serviceItemService.getAllServiceItems(0, 1000),
+        sparePartService.getAllSpareParts(0, 1000)
+      ])
+      
+      if (serviceItemsResponse.code === 1000) {
+        setServiceItems(serviceItemsResponse.result.content || [])
+      }
+      if (sparePartsResponse.code === 1000) {
+        setSpareParts(sparePartsResponse.result.content || [])
+      }
+    } catch (err) {
+      console.error('Error loading items:', err)
+    } finally {
+      setLoadingItems(false)
+    }
+    
     setShowAddMilestoneModal(true)
   }
 
   const handleSubmitMilestone = async (e) => {
     e.preventDefault()
     
-    const milestoneKm = parseInt(milestoneFormData.milestoneKm)
-    const milestoneMonth = parseInt(milestoneFormData.milestoneMonth)
-    
     // Validation
-    if (!milestoneKm || milestoneKm <= 0) {
+    if (!milestoneFormData.milestoneKm || parseInt(milestoneFormData.milestoneKm) <= 0) {
       alert('Please enter a valid milestone km (greater than 0)')
       return
     }
-    if (!milestoneMonth || milestoneMonth <= 0) {
+    if (!milestoneFormData.milestoneMonth || parseInt(milestoneFormData.milestoneMonth) <= 0) {
       alert('Please enter a valid milestone month (greater than 0)')
       return
     }
+    if (!milestoneFormData.serviceItemId) {
+      alert('Please select a service item')
+      return
+    }
+    if (!milestoneFormData.price || parseFloat(milestoneFormData.price) <= 0) {
+      alert('Price must be greater than 0')
+      return
+    }
+    
+    const milestoneKm = parseInt(milestoneFormData.milestoneKm)
     
     // Check if milestone already exists
     if (groupedPackages[milestoneKm]) {
@@ -126,17 +173,33 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     }
     
     try {
-      const requestData = {
+      setSaving(true)
+      
+      const createData = {
         vehicleModelId: model.id,
-        milestoneKm: milestoneKm,
-        milestoneMonth: milestoneMonth
+        milestoneKm: parseInt(milestoneFormData.milestoneKm),
+        milestoneMonth: parseInt(milestoneFormData.milestoneMonth),
+        serviceItemId: parseInt(milestoneFormData.serviceItemId),
+        price: parseFloat(milestoneFormData.price),
+        actionType: milestoneFormData.actionType,
+        includedSparePartId: milestoneFormData.includedSparePartId ? parseInt(milestoneFormData.includedSparePartId) : null,
+        includedQuantity: milestoneFormData.includedQuantity ? parseInt(milestoneFormData.includedQuantity) : 0
       }
       
-      const result = await modelPackageItemService.create(requestData)
+      const result = await modelPackageItemService.create(createData)
       
       if (result.success) {
-        alert('Maintenance milestone created successfully!')
+        alert('✅ Maintenance milestone created successfully!')
         setShowAddMilestoneModal(false)
+        setMilestoneFormData({
+          milestoneKm: '',
+          milestoneMonth: '',
+          serviceItemId: '',
+          price: '',
+          actionType: 'CHECK',
+          includedSparePartId: '',
+          includedQuantity: ''
+        })
         fetchModelPackages()
         if (onConfigUpdated) onConfigUpdated()
       } else {
@@ -145,6 +208,8 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     } catch (err) {
       alert('An error occurred while creating milestone')
       console.error('Error creating milestone:', err)
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -298,46 +363,153 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
       {/* Add Milestone Modal */}
       {showAddMilestoneModal && (
         <div className="modal-overlay" onClick={() => setShowAddMilestoneModal(false)}>
-          <div className="modal-content milestone-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content milestone-modal large-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Add Maintenance Milestone</h3>
               <button className="close-btn" onClick={() => setShowAddMilestoneModal(false)}>✕</button>
             </div>
             <form onSubmit={handleSubmitMilestone} className="milestone-form">
-              <div className="form-group">
-                <label>Milestone KM *</label>
-                <input
-                  type="number"
-                  value={milestoneFormData.milestoneKm}
-                  onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneKm: e.target.value })}
-                  required
-                  placeholder="e.g., 5000"
-                  min="1"
-                />
-                <small>Enter the kilometer milestone for this maintenance</small>
-              </div>
-              <div className="form-group">
-                <label>Milestone Month *</label>
-                <input
-                  type="number"
-                  value={milestoneFormData.milestoneMonth}
-                  onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneMonth: e.target.value })}
-                  required
-                  placeholder="e.g., 6"
-                  min="1"
-                />
-                <small>Enter the month milestone for this maintenance</small>
-              </div>
+              {loadingItems ? (
+                <div className="loading-state">
+                  <div className="spinner"></div>
+                  <p>Loading service items...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Milestone KM *</label>
+                      <input
+                        type="number"
+                        value={milestoneFormData.milestoneKm}
+                        onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneKm: e.target.value })}
+                        required
+                        placeholder="e.g., 5000"
+                        min="1"
+                      />
+                      <small>Kilometer milestone</small>
+                    </div>
+                    <div className="form-group">
+                      <label>Milestone Month *</label>
+                      <input
+                        type="number"
+                        value={milestoneFormData.milestoneMonth}
+                        onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneMonth: e.target.value })}
+                        required
+                        placeholder="e.g., 6"
+                        min="1"
+                      />
+                      <small>Month milestone</small>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Service Item *</label>
+                    <select
+                      value={milestoneFormData.serviceItemId}
+                      onChange={(e) => setMilestoneFormData({ ...milestoneFormData, serviceItemId: e.target.value })}
+                      required
+                    >
+                      <option value="">-- Select Service Item --</option>
+                      {serviceItems.map(item => (
+                        <option key={item.id} value={item.id}>
+                          {item.name} - {item.category}
+                        </option>
+                      ))}
+                    </select>
+                    <small>Choose the service to be performed</small>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Price *</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        value={milestoneFormData.price}
+                        onChange={(e) => setMilestoneFormData({ ...milestoneFormData, price: e.target.value })}
+                        required
+                        placeholder="e.g., 100000"
+                        min="0.01"
+                      />
+                      <small>Service price (VND)</small>
+                    </div>
+                    <div className="form-group">
+                      <label>Action Type *</label>
+                      <select
+                        value={milestoneFormData.actionType}
+                        onChange={(e) => {
+                          const newActionType = e.target.value;
+                          setMilestoneFormData({ 
+                            ...milestoneFormData, 
+                            actionType: newActionType,
+                            // Clear spare part fields when switching to CHECK
+                            includedSparePartId: newActionType === 'CHECK' ? '' : milestoneFormData.includedSparePartId,
+                            includedQuantity: newActionType === 'CHECK' ? '' : milestoneFormData.includedQuantity
+                          });
+                        }}
+                        required
+                        disabled={saving}
+                      >
+                        <option value="CHECK">Check</option>
+                        <option value="REPLACE">Replace</option>
+                      </select>
+                      <small>Type of maintenance action</small>
+                    </div>
+                  </div>
+
+                  {milestoneFormData.actionType === 'REPLACE' && (
+                    <>
+                      <div className="form-section-divider">
+                        <span>Spare Part (Optional for REPLACE)</span>
+                      </div>
+
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Included Spare Part</label>
+                          <select
+                            value={milestoneFormData.includedSparePartId}
+                            onChange={(e) => setMilestoneFormData({ ...milestoneFormData, includedSparePartId: e.target.value })}
+                            disabled={saving}
+                          >
+                            <option value="">-- None --</option>
+                            {spareParts.map(part => (
+                              <option key={part.id} value={part.id}>
+                                {part.partNumber} - {part.name} (Stock: {part.stockQuantity})
+                              </option>
+                            ))}
+                          </select>
+                          <small>Optional spare part included in service</small>
+                        </div>
+                        <div className="form-group">
+                          <label>Included Quantity</label>
+                          <input
+                            type="number"
+                            value={milestoneFormData.includedQuantity}
+                            onChange={(e) => setMilestoneFormData({ ...milestoneFormData, includedQuantity: e.target.value })}
+                            placeholder="0"
+                            min="0"
+                            disabled={saving || !milestoneFormData.includedSparePartId}
+                          />
+                          <small>Quantity of spare part</small>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+
               <div className="form-actions">
                 <button
                   type="button"
                   className="btn-cancel"
                   onClick={() => setShowAddMilestoneModal(false)}
+                  disabled={saving}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn-submit">
-                  Create Milestone
+                <button type="submit" className="btn-submit" disabled={loadingItems || saving}>
+                  {saving ? 'Creating...' : 'Create Milestone'}
                 </button>
               </div>
             </form>
