@@ -502,24 +502,26 @@ const TechnicianDashboard = () => {
                     </div>
                   )}
                 </div>
-                <div style={{marginTop: '15px'}}>
-                  <button
-                    className="action-btn update-km-btn"
-                    onClick={() => handleUpdateVehicleKm(selectedAppointment)}
-                    style={{
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      padding: '10px 20px',
-                      borderRadius: '8px',
-                      border: 'none',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    🔧 Update Vehicle Odometer
-                  </button>
-                </div>
+                {selectedAppointment.status !== 'COMPLETED' && (
+                  <div style={{marginTop: '15px'}}>
+                    <button
+                      className="action-btn update-km-btn"
+                      onClick={() => handleUpdateVehicleKm(selectedAppointment)}
+                      style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease'
+                      }}
+                    >
+                      🔧 Update Vehicle Odometer
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="detail-section">

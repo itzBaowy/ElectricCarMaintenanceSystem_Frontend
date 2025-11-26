@@ -13,9 +13,9 @@ This feature implements a complete workflow for handling customer-reported odome
 - **Step 3:** Backend uses customer-reported value (25,000) instead of database value (12,000) for recommendations
 - **Step 4:** System returns accurate maintenance package recommendation (e.g., 24,000km milestone)
 - **Step 5:** Customer books appointment with selected package
-- **Step 6:** Customer-reported odometer is saved in `appointment.notes` field for reference
+- **Step 6:** Customer-reported odometer is sent as `currentOdo` field in appointment creation request
 
-**Note:** At this point, `vehicle.currentKm` in database remains unchanged (12,000).
+**Note:** At this point, `vehicle.currentKm` in database remains unchanged (12,000). The `currentOdo` is stored in the appointment record for reference.
 
 ### 2. Staff/Technician Side (At Service Center)
 
@@ -56,7 +56,7 @@ This feature implements a complete workflow for handling customer-reported odome
 - Added optional input field for customer to enter current odometer reading
 - Added validation: prevents invalid/negative values, warns if less than recorded km
 - Modified `loadMaintenanceRecommendations()` to pass `currentOdo` parameter to API
-- Modified `handleSubmit()` to save customer-reported km in `appointment.notes`
+- Modified `handleSubmit()` to include customer-reported km as `currentOdo` field in appointment data
 - Shows customer-reported km info message after input
 
 **Key Code:**
@@ -77,8 +77,7 @@ const result = await maintenanceService.getMaintenanceRecommendations(
 
 // In handleSubmit:
 if (customerReportedKm && customerReportedKm.trim() !== "") {
-  const kmValue = parseInt(customerReportedKm);
-  appointmentData.notes = `Customer reported odometer: ${kmValue.toLocaleString()} km`;
+  appointmentData.currentOdo = parseInt(customerReportedKm);
 }
 ```
 
@@ -166,12 +165,14 @@ POST /api/appointments/customer
 
 ```json
 {
-  "appointmentDate": "2024-12-01 10:00",
+  "appointmentDate": "2025-11-01 14:36",
   "vehicleId": 1,
   "centerId": 2,
-  "notes": "Customer reported odometer: 25,000 km"
+  "currentOdo": 25000
 }
 ```
+
+**Note:** `currentOdo` is optional. If customer doesn't provide it, the field can be omitted or set to 0.
 
 ### 3. Update Vehicle Odometer
 
@@ -342,7 +343,7 @@ This feature successfully implements the complete business flow for handling cus
 
 ✅ Customer can enter current odometer for accurate recommendations
 ✅ Backend uses customer value without modifying database
-✅ Customer-reported value saved in appointment notes
+✅ Customer-reported value sent as `currentOdo` field in appointment creation
 ✅ Staff/Technician can update actual odometer after verification
 ✅ Database maintains data integrity
 ✅ Clear UI/UX for all user roles

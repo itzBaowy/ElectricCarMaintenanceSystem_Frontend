@@ -7,7 +7,7 @@ const appointmentService = {
   // Create new appointment (customer) - New flow with center selection
   createAppointment: async (appointmentData) => {
     try {
-      // appointmentData format: { appointmentDate, vehicleId, centerId }
+      // appointmentData format: { appointmentDate, vehicleId, centerId, currentOdo (optional) }
       const response = await api.post('/api/appointments/customer', appointmentData)
       
       if (response.data.code === 1000) {

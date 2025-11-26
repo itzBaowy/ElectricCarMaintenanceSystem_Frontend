@@ -159,10 +159,9 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
         centerId: selectedCenter.id
       }
 
-      // Add customer-reported km to notes if provided
+      // Add customer-reported km as currentOdo if provided
       if (customerReportedKm && customerReportedKm.trim() !== '') {
-        const kmValue = parseInt(customerReportedKm)
-        appointmentData.notes = `Customer reported odometer: ${kmValue.toLocaleString()} km`
+        appointmentData.currentOdo = parseInt(customerReportedKm)
       }
 
       logger.log('Submitting appointment data:', appointmentData)
