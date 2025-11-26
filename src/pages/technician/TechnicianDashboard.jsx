@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import technicianService from '../../api/technicianService'
 import appointmentService from '../../api/appointmentService'
+import vehicleService from '../../api/vehicleService'
 import authService from '../../api/authService'
+import UpdateVehicleKmModal from '../../components/admin/UpdateVehicleKmModal'
 import logger from '../../utils/logger'
 import '../../styles/TechnicianDashboard.css'
 
@@ -18,6 +20,8 @@ const TechnicianDashboard = () => {
   const [currentUser, setCurrentUser] = useState(null)
   const [requestAdditionalService, setRequestAdditionalService] = useState(false)
   const [upgradeItems, setUpgradeItems] = useState([]) // [{ serviceItemId, newActionType, notes }]
+  const [showUpdateKmModal, setShowUpdateKmModal] = useState(false)
+  const [selectedVehicle, setSelectedVehicle] = useState(null)
 
   useEffect(() => {
     initializeUser()
@@ -179,6 +183,35 @@ const TechnicianDashboard = () => {
       } finally {
         setUpdateLoading(false)
       }
+    }
+  }
+
+  const handleUpdateVehicleKm = async (appointment) => {
+    // Load vehicle details
+    try {
+      const result = await vehicleService.getVehicleById(appointment.vehicleId)
+      if (result.success) {
+        setSelectedVehicle(result.data)
+        setShowUpdateKmModal(true)
+      } else {
+        alert('Failed to load vehicle details')
+      }
+    } catch (error) {
+      logger.error('Error loading vehicle:', error)
+      alert('Error loading vehicle details')
+    }
+  }
+
+  const handleCloseUpdateKmModal = () => {
+    setShowUpdateKmModal(false)
+    setSelectedVehicle(null)
+  }
+
+  const handleKmUpdated = (updatedVehicle) => {
+    logger.log('Vehicle km updated:', updatedVehicle)
+    // Refresh appointments if needed
+    if (currentUser && currentUser.userId) {
+      fetchAppointments(currentUser.userId)
     }
   }
 
@@ -460,6 +493,32 @@ const TechnicianDashboard = () => {
                     <label>Brand:</label>
                     <span>Vinfast</span>
                   </div>
+                  {selectedAppointment.notes && selectedAppointment.notes.includes('Customer reported odometer') && (
+                    <div className="detail-item" style={{gridColumn: '1 / -1'}}>
+                      <label>📊 Customer Reported:</label>
+                      <span style={{color: '#2196f3', fontWeight: '600'}}>
+                        {selectedAppointment.notes}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div style={{marginTop: '15px'}}>
+                  <button
+                    className="action-btn update-km-btn"
+                    onClick={() => handleUpdateVehicleKm(selectedAppointment)}
+                    style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    🔧 Update Vehicle Odometer
+                  </button>
                 </div>
               </div>
 
@@ -610,6 +669,15 @@ const TechnicianDashboard = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Update Vehicle KM Modal */}
+      {showUpdateKmModal && selectedVehicle && (
+        <UpdateVehicleKmModal
+          vehicle={selectedVehicle}
+          onClose={handleCloseUpdateKmModal}
+          onUpdate={handleKmUpdated}
+        />
       )}
     </div>
   );

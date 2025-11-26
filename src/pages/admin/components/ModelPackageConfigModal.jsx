@@ -13,7 +13,9 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
   const [showCloneModal, setShowCloneModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showAddMilestoneModal, setShowAddMilestoneModal] = useState(false)
+  const [showEditMilestoneModal, setShowEditMilestoneModal] = useState(false)
   const [selectedPackage, setSelectedPackage] = useState(null)
+  const [editingMilestone, setEditingMilestone] = useState(null)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [milestoneFormData, setMilestoneFormData] = useState({
@@ -107,6 +109,89 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     setShowEditModal(false)
     fetchModelPackages()
     if (onConfigUpdated) onConfigUpdated()
+  }
+
+  const handleEditMilestone = (pkg) => {
+    setEditingMilestone(pkg)
+    setMilestoneFormData({
+      milestoneKm: pkg.milestoneKm.toString(),
+      milestoneMonth: pkg.milestoneMonth.toString(),
+      serviceItemId: '',
+      price: '',
+      actionType: 'CHECK',
+      includedSparePartId: '',
+      includedQuantity: ''
+    })
+    setShowEditMilestoneModal(true)
+  }
+
+  const handleSubmitMilestoneEdit = async (e) => {
+    e.preventDefault()
+    
+    // Validation
+    if (!milestoneFormData.milestoneKm || parseInt(milestoneFormData.milestoneKm) <= 0) {
+      alert('Please enter a valid milestone km (greater than 0)')
+      return
+    }
+    if (!milestoneFormData.milestoneMonth || parseInt(milestoneFormData.milestoneMonth) <= 0) {
+      alert('Please enter a valid milestone month (greater than 0)')
+      return
+    }
+    
+    const newMilestoneKm = parseInt(milestoneFormData.milestoneKm)
+    const oldMilestoneKm = editingMilestone.milestoneKm
+    
+    // Check if new milestone already exists (and it's not the same milestone)
+    if (newMilestoneKm !== oldMilestoneKm && groupedPackages[newMilestoneKm]) {
+      alert(`Milestone ${newMilestoneKm} km already exists`)
+      return
+    }
+    
+    try {
+      setSaving(true)
+      
+      // Update all items in this milestone
+      const items = editingMilestone.items
+      let successCount = 0
+      let errorCount = 0
+      
+      for (const item of items) {
+        const updateData = {
+          vehicleModelId: model.id,
+          milestoneKm: parseInt(milestoneFormData.milestoneKm),
+          milestoneMonth: parseInt(milestoneFormData.milestoneMonth),
+          serviceItemId: item.serviceItemId,
+          price: item.price,
+          actionType: item.actionType,
+          includedSparePartId: item.includedSparePartId,
+          includedQuantity: item.includedQuantity
+        }
+        
+        const result = await modelPackageItemService.update(item.id, updateData)
+        
+        if (result.success) {
+          successCount++
+        } else {
+          errorCount++
+        }
+      }
+      
+      if (errorCount === 0) {
+        alert(`✅ Milestone updated successfully! (${successCount} items updated)`)
+        setShowEditMilestoneModal(false)
+        setEditingMilestone(null)
+        fetchModelPackages()
+        if (onConfigUpdated) onConfigUpdated()
+      } else {
+        alert(`Updated ${successCount} items, ${errorCount} errors occurred`)
+        fetchModelPackages()
+      }
+    } catch (err) {
+      alert('An error occurred while updating milestone')
+      console.error('Error updating milestone:', err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const handleAddMilestone = async () => {
@@ -309,10 +394,18 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                             {formatCurrency(calculatePackageTotal(pkg))}
                           </span>
                           <button
+                            className="btn-edit-milestone"
+                            onClick={() => handleEditMilestone(pkg)}
+                            title="Edit milestone km and month"
+                          >
+                             Edit Milestone
+                          </button>
+                          <button
                             className="btn-edit-package"
                             onClick={() => handleEditPackage(pkg)}
+                            title="Edit service items"
                           >
-                             Edit
+                             Edit Items
                           </button>
                         </div>
                       </div>
@@ -358,6 +451,66 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
           onClose={() => setShowEditModal(false)}
           onSuccess={handleEditSuccess}
         />
+      )}
+
+      {/* Edit Milestone Modal */}
+      {showEditMilestoneModal && editingMilestone && (
+        <div className="modal-overlay" onClick={() => setShowEditMilestoneModal(false)}>
+          <div className="modal-content milestone-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Milestone</h3>
+              <button className="close-btn" onClick={() => setShowEditMilestoneModal(false)}>✕</button>
+            </div>
+            <form onSubmit={handleSubmitMilestoneEdit} className="milestone-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Milestone KM *</label>
+                  <input
+                    type="number"
+                    value={milestoneFormData.milestoneKm}
+                    onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneKm: e.target.value })}
+                    required
+                    placeholder="e.g., 5000"
+                    min="1"
+                    disabled={saving}
+                  />
+                  <small>Kilometer milestone</small>
+                </div>
+                <div className="form-group">
+                  <label>Milestone Month *</label>
+                  <input
+                    type="number"
+                    value={milestoneFormData.milestoneMonth}
+                    onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneMonth: e.target.value })}
+                    required
+                    placeholder="e.g., 6"
+                    min="1"
+                    disabled={saving}
+                  />
+                  <small>Month milestone</small>
+                </div>
+              </div>
+
+              <div className="form-info-box">
+                <p><strong>Note:</strong> This will update the milestone for all {editingMilestone.items.length} service item(s) in this package.</p>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => setShowEditMilestoneModal(false)}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit" disabled={saving}>
+                  {saving ? 'Updating...' : 'Update Milestone'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* Add Milestone Modal */}

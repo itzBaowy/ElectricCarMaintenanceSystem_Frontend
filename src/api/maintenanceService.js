@@ -3,9 +3,16 @@ import logger from '../utils/logger'
 
 const maintenanceService = {
   // Get maintenance recommendations for a vehicle
-  getMaintenanceRecommendations: async (vehicleId) => {
+  // currentOdo: optional parameter - customer-reported odometer reading
+  getMaintenanceRecommendations: async (vehicleId, currentOdo = null) => {
     try {
-      const response = await api.get(`/api/maintenance/recommendations/${vehicleId}`)
+      // Build URL with optional currentOdo query parameter
+      let url = `/api/maintenance/recommendations/${vehicleId}`
+      if (currentOdo !== null && currentOdo > 0) {
+        url += `?currentOdo=${currentOdo}`
+      }
+      
+      const response = await api.get(url)
       
       if (response.data.code === 1000) {
         return {

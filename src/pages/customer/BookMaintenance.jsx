@@ -17,6 +17,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const [appointmentDate, setAppointmentDate] = useState('')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [vehicleAtCenter, setVehicleAtCenter] = useState(false) // New state for vehicle at center option
+  const [customerReportedKm, setCustomerReportedKm] = useState('') // Customer-reported odometer reading
 
   // Load centers when component mounts
   useEffect(() => {
@@ -48,9 +49,27 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   }
 
   const loadMaintenanceRecommendations = async () => {
+    // Validate customer-reported km if provided
+    if (customerReportedKm && customerReportedKm.trim() !== '') {
+      const kmValue = parseInt(customerReportedKm)
+      if (isNaN(kmValue) || kmValue < 0) {
+        alert('Please enter a valid odometer reading (positive number)')
+        return
+      }
+      if (vehicle?.currentKm && kmValue < parseInt(vehicle.currentKm)) {
+        alert(`Warning: Entered km (${kmValue.toLocaleString()}) is less than recorded km (${parseInt(vehicle.currentKm).toLocaleString()})`)
+        return
+      }
+    }
+
     setLoadingRecommendations(true)
     try {
-      const result = await maintenanceService.getMaintenanceRecommendations(vehicle.id)
+      // Use customer-reported km if provided, otherwise use vehicle's current km
+      const currentOdo = customerReportedKm && customerReportedKm.trim() !== '' 
+        ? parseInt(customerReportedKm) 
+        : null
+      
+      const result = await maintenanceService.getMaintenanceRecommendations(vehicle.id, currentOdo)
       
       if (result.success) {
         const recommendationList = Array.isArray(result.data) ? result.data : []
@@ -138,6 +157,12 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
         appointmentDate: formattedDate,
         vehicleId: parseInt(vehicle.id),
         centerId: selectedCenter.id
+      }
+
+      // Add customer-reported km to notes if provided
+      if (customerReportedKm && customerReportedKm.trim() !== '') {
+        const kmValue = parseInt(customerReportedKm)
+        appointmentData.notes = `Customer reported odometer: ${kmValue.toLocaleString()} km`
       }
 
       logger.log('Submitting appointment data:', appointmentData)
@@ -235,7 +260,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
               <div className="form-group">
-                <label>Current Mileage</label>
+                <label>Recorded Mileage (in system)</label>
                 <input
                   type="text"
                   value={vehicle?.currentKm ? parseInt(vehicle.currentKm).toLocaleString() + ' km' : 'N/A'}
@@ -253,11 +278,35 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 />
               </div>
             </div>
+            
+            {/* Customer-reported odometer reading */}
+            <div className="form-group customer-km-input">
+              <label>
+                📊 Current Odometer Reading (from your vehicle) <span className="optional-label">(Optional)</span>
+              </label>
+              <input
+                type="number"
+                value={customerReportedKm}
+                onChange={(e) => setCustomerReportedKm(e.target.value)}
+                placeholder="Enter current km on your vehicle's odometer (e.g., 25000)"
+                className="km-input"
+                min="0"
+              />
+              <small className="input-hint">
+                💡 Enter your vehicle's current odometer reading for more accurate maintenance recommendations. 
+                If left empty, we'll use the recorded mileage ({vehicle?.currentKm ? parseInt(vehicle.currentKm).toLocaleString() : '0'} km) in our system.
+              </small>
+            </div>
           </div>
 
           {/* Center Selection */}
           <div className="form-section">
             <h3>🏢 Select Maintenance Center <span className="required">*</span></h3>
+            {customerReportedKm && customerReportedKm.trim() !== '' && (
+              <div className="info-message reported-km-info">
+                <p>📊 You entered: <strong>{parseInt(customerReportedKm).toLocaleString()} km</strong></p>
+              </div>
+            )}
             <div className="centers-list">
               {centers.length === 0 ? (
                 <p className="no-data">No centers available</p>

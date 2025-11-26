@@ -226,6 +226,24 @@
   box-shadow: 0 2px 8px rgba(240, 147, 251, 0.3);
 }
 
+.btn-edit-milestone {
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+  color: #222;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.btn-edit-milestone:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(251, 194, 235, 0.4);
+}
+
 .package-summary {
   display: flex;
   justify-content: space-between;
@@ -348,6 +366,25 @@
   font-weight: 600;
   color: #667eea;
   font-size: 0.95rem;
+}
+
+.form-info-box {
+  background: #f0f7ff;
+  border: 1px solid #b3d9ff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.form-info-box p {
+  margin: 0;
+  color: #0066cc;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.form-info-box strong {
+  font-weight: 700;
 }
 
 .milestone-form .form-actions {

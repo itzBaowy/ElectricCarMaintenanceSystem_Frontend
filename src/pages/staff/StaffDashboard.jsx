@@ -60,6 +60,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 // import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
 import InvoiceDetailModal from "../admin/components/InvoiceDetailModal";
+import UpdateVehicleKmModal from "../../components/admin/UpdateVehicleKmModal";
 import appointmentService from "../../api/appointmentService";
 import technicianService from "../../api/technicianService";
 import customerService from "../../api/customerService";
@@ -99,6 +100,8 @@ const StaffDashboardContent = () => {
   const [showInvoiceDetailModal, setShowInvoiceDetailModal] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [sidebarTab, setSidebarTab] = useState("walk-in"); // appointments, walk-in, invoices
+  const [showUpdateKmModal, setShowUpdateKmModal] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [invoiceAppointmentId, setInvoiceAppointmentId] = useState(null);
   const [invoiceFilterStatus, setInvoiceFilterStatus] = useState("ALL"); // Filter for invoices: ALL, PAID, UNPAID
 
@@ -468,6 +471,33 @@ const StaffDashboardContent = () => {
     setShowDetailModal(false);
     setSelectedAppointment(null);
     setServiceItemApprovals({}); // Reset approvals
+  };
+
+  const handleUpdateVehicleKm = async (appointment) => {
+    // Load vehicle details
+    try {
+      const result = await vehicleService.getVehicleById(appointment.vehicleId)
+      if (result.success) {
+        setSelectedVehicle(result.data)
+        setShowUpdateKmModal(true)
+      } else {
+        alert('Failed to load vehicle details')
+      }
+    } catch (error) {
+      logger.error('Error loading vehicle:', error)
+      alert('Error loading vehicle details')
+    }
+  };
+
+  const handleCloseUpdateKmModal = () => {
+    setShowUpdateKmModal(false)
+    setSelectedVehicle(null)
+  };
+
+  const handleKmUpdated = (updatedVehicle) => {
+    logger.log('Vehicle km updated:', updatedVehicle)
+    // Refresh appointments if needed
+    loadAppointments()
   };
 
   // Toggle service item approval
@@ -1801,6 +1831,32 @@ const StaffDashboardContent = () => {
                     <label>Manufacturer:</label>
                     <span>VinFast</span>
                   </div>
+                  {selectedAppointment.notes && selectedAppointment.notes.includes('Customer reported odometer') && (
+                    <div className="detail-item" style={{gridColumn: '1 / -1'}}>
+                      <label>📊 Customer Reported:</label>
+                      <span style={{color: '#2196f3', fontWeight: '600'}}>
+                        {selectedAppointment.notes}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div style={{marginTop: '15px'}}>
+                  <button
+                    className="action-btn update-km-btn"
+                    onClick={() => handleUpdateVehicleKm(selectedAppointment)}
+                    style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      padding: '10px 20px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    🔧 Update Vehicle Odometer
+                  </button>
                 </div>
               </div>
 
@@ -2314,6 +2370,15 @@ const StaffDashboardContent = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Update Vehicle KM Modal */}
+      {showUpdateKmModal && selectedVehicle && (
+        <UpdateVehicleKmModal
+          vehicle={selectedVehicle}
+          onClose={handleCloseUpdateKmModal}
+          onUpdate={handleKmUpdated}
+        />
       )}
 
     </div>

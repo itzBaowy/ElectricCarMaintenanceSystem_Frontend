@@ -143,18 +143,18 @@ const SparePartManagement = () => {
 
       if (response.code === 1000) {
         alert(
-          `Trạng thái của ${part.name} đã được cập nhật thành công!`
+          `Status for ${part.name} has been updated successfully!`
         )
         // Refresh the spare parts list to reflect changes
         fetchSpareParts()
       } else {
         alert(
-          `Không thể cập nhật trạng thái: ${response.message || "Lỗi không xác định"}`
+          `Cannot update status: ${response.message || "Unknown error"}`
         )
       }
     } catch (error) {
       console.error('Error updating spare part status:', error)
-      alert('Có lỗi xảy ra khi cập nhật trạng thái phụ tùng')
+      alert('An error occurred while updating spare part status')
     }
   }
 
@@ -172,6 +172,28 @@ const SparePartManagement = () => {
     setSpareParts(prevParts => [newPart, ...prevParts])
     // Reset to page 1 to see the new part
     setCurrentPage(1)
+  }
+
+  // Handle delete spare part
+  const handleDelete = async (part) => {
+    if (!window.confirm(`Are you sure you want to delete "${part.name}"?\nThis action cannot be undone.`)) {
+      return
+    }
+
+    try {
+      const response = await sparePartService.deleteSparePart(part.id)
+
+      if (response.code === 1000) {
+        alert(`✅ ${part.name} has been deleted successfully!`)
+        // Remove from the list
+        setSpareParts(prevParts => prevParts.filter(p => p.id !== part.id))
+      } else {
+        alert(`Failed to delete: ${response.message || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error deleting spare part:', error)
+      alert('An error occurred while deleting the spare part')
+    }
   }
 
   // Format price to VND
@@ -328,24 +350,17 @@ const SparePartManagement = () => {
                   </td>
                   <td className="date">{formatDate(part.updatedAt)}</td>
                   <td className="actions">
-                    <button 
+                    {/* <button 
                       className="action-btn edit"
                       title="Edit Part Info"
                       onClick={() => handleEdit(part)}
                     >
                        Edit
-                    </button>
-                    <button 
-                      className="action-btn stock"
-                      title="Update Stock"
-                      onClick={() => handleUpdateStock(part)}
-                    >
-                       Stock
-                    </button>
+                    </button> */}
                     <button 
                       className="action-btn delete"
                       title="Delete"
-                      onClick={() => alert(`Delete: ${part.name}\n(Feature coming soon)`)}
+                      onClick={() => handleDelete(part)}
                     >
                        Delete
                     </button>
