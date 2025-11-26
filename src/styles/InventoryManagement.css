@@ -100,6 +100,7 @@
   gap: 1rem;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
 }
 
 .search-row .search-box {
@@ -192,6 +193,35 @@
 }
 
 .refresh-btn:disabled {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.add-inventory-btn {
+  height: 48px;
+  padding: 0 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.add-inventory-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5568d3 0%, #6439a0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102,126,234,0.28);
+}
+
+.add-inventory-btn:disabled {
   background: #e0e0e0;
   color: #999;
   cursor: not-allowed;
@@ -592,7 +622,8 @@
     width: 100%;
   }
 
-  .refresh-btn {
+  .refresh-btn,
+  .add-inventory-btn {
     width: 100%;
     justify-content: center;
   }

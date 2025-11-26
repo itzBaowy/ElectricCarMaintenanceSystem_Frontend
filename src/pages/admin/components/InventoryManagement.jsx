@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import inventoryService from '../../../api/inventoryService'
 import centerService from '../../../api/centerService'
 import UpdateInventoryModal from './UpdateInventoryModal'
+import AddInventoryModal from './AddInventoryModal'
 import '../../../styles/InventoryManagement.css'
 
 const InventoryManagement = () => {
@@ -14,6 +15,7 @@ const InventoryManagement = () => {
   const [stockFilter, setStockFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [updatingItem, setUpdatingItem] = useState(null)
+  const [showAddModal, setShowAddModal] = useState(false)
   
   const ITEMS_PER_PAGE = 15
 
@@ -129,6 +131,34 @@ const InventoryManagement = () => {
     )
   }
 
+  // Handle add inventory
+  const handleAddInventory = () => {
+    if (!selectedCenter) {
+      alert('Please select a service center first')
+      return
+    }
+    setShowAddModal(true)
+  }
+
+  const handleCloseAddModal = () => {
+    setShowAddModal(false)
+  }
+
+  const handleInventoryAdd = (newItem) => {
+    // Check if item already exists, if yes update it, otherwise add it
+    const existingIndex = inventory.findIndex(item => item.sparePartId === newItem.sparePartId)
+    if (existingIndex >= 0) {
+      setInventory(prevInventory =>
+        prevInventory.map(item =>
+          item.sparePartId === newItem.sparePartId ? newItem : item
+        )
+      )
+    } else {
+      setInventory(prevInventory => [newItem, ...prevInventory])
+    }
+    setCurrentPage(1)
+  }
+
   // Format date
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
@@ -234,6 +264,9 @@ const InventoryManagement = () => {
           </div>
           <button onClick={fetchInventory} className="refresh-btn" disabled={!selectedCenter}>
             🔄 Refresh
+          </button>
+          <button onClick={handleAddInventory} className="add-inventory-btn" disabled={!selectedCenter}>
+            ➕ Add Spare Part
           </button>
         </div>
       </div>
@@ -386,6 +419,16 @@ const InventoryManagement = () => {
           inventory={updatingItem}
           onClose={handleCloseModal}
           onUpdate={handleStockUpdate}
+        />
+      )}
+
+      {/* Add Inventory Modal */}
+      {showAddModal && selectedCenter && (
+        <AddInventoryModal
+          serviceCenterId={selectedCenter}
+          serviceCenterName={serviceCenters.find(c => c.id.toString() === selectedCenter)?.name || ''}
+          onClose={handleCloseAddModal}
+          onAdd={handleInventoryAdd}
         />
       )}
     </div>
