@@ -10,8 +10,13 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
   const [groupedPackages, setGroupedPackages] = useState({})
   const [showCloneModal, setShowCloneModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showAddMilestoneModal, setShowAddMilestoneModal] = useState(false)
   const [selectedPackage, setSelectedPackage] = useState(null)
   const [error, setError] = useState('')
+  const [milestoneFormData, setMilestoneFormData] = useState({
+    milestoneKm: '',
+    milestoneMonth: ''
+  })
 
   useEffect(() => {
     fetchModelPackages()
@@ -92,6 +97,56 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
     if (onConfigUpdated) onConfigUpdated()
   }
 
+  const handleAddMilestone = () => {
+    setMilestoneFormData({ milestoneKm: '', milestoneMonth: '' })
+    setShowAddMilestoneModal(true)
+  }
+
+  const handleSubmitMilestone = async (e) => {
+    e.preventDefault()
+    
+    const milestoneKm = parseInt(milestoneFormData.milestoneKm)
+    const milestoneMonth = parseInt(milestoneFormData.milestoneMonth)
+    
+    // Validation
+    if (!milestoneKm || milestoneKm <= 0) {
+      alert('Please enter a valid milestone km (greater than 0)')
+      return
+    }
+    if (!milestoneMonth || milestoneMonth <= 0) {
+      alert('Please enter a valid milestone month (greater than 0)')
+      return
+    }
+    
+    // Check if milestone already exists
+    if (groupedPackages[milestoneKm]) {
+      alert(`Milestone ${milestoneKm} km already exists`)
+      return
+    }
+    
+    try {
+      const requestData = {
+        vehicleModelId: model.id,
+        milestoneKm: milestoneKm,
+        milestoneMonth: milestoneMonth
+      }
+      
+      const result = await modelPackageItemService.create(requestData)
+      
+      if (result.success) {
+        alert('Maintenance milestone created successfully!')
+        setShowAddMilestoneModal(false)
+        fetchModelPackages()
+        if (onConfigUpdated) onConfigUpdated()
+      } else {
+        alert(result.message || 'Failed to create milestone')
+      }
+    } catch (err) {
+      alert('An error occurred while creating milestone')
+      console.error('Error creating milestone:', err)
+    }
+  }
+
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -140,11 +195,17 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
               {/* Action Buttons */}
               <div className="config-actions">
                 <button 
+                  className="btn-add-milestone"
+                  onClick={handleAddMilestone}
+                >
+                   Add Milestone
+                </button>
+                {/* <button 
                   className="btn-clone"
                   onClick={handleCloneConfig}
                 >
                    Clone from another model
-                </button>
+                </button> */}
                 <div className="config-stats">
                   <span className="stat-badge">
                     {packageArray.length} maintenance milestones
@@ -228,6 +289,56 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
           onClose={() => setShowEditModal(false)}
           onSuccess={handleEditSuccess}
         />
+      )}
+
+      {/* Add Milestone Modal */}
+      {showAddMilestoneModal && (
+        <div className="modal-overlay" onClick={() => setShowAddMilestoneModal(false)}>
+          <div className="modal-content milestone-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add Maintenance Milestone</h3>
+              <button className="close-btn" onClick={() => setShowAddMilestoneModal(false)}>✕</button>
+            </div>
+            <form onSubmit={handleSubmitMilestone} className="milestone-form">
+              <div className="form-group">
+                <label>Milestone KM *</label>
+                <input
+                  type="number"
+                  value={milestoneFormData.milestoneKm}
+                  onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneKm: e.target.value })}
+                  required
+                  placeholder="e.g., 5000"
+                  min="1"
+                />
+                <small>Enter the kilometer milestone for this maintenance</small>
+              </div>
+              <div className="form-group">
+                <label>Milestone Month *</label>
+                <input
+                  type="number"
+                  value={milestoneFormData.milestoneMonth}
+                  onChange={(e) => setMilestoneFormData({ ...milestoneFormData, milestoneMonth: e.target.value })}
+                  required
+                  placeholder="e.g., 6"
+                  min="1"
+                />
+                <small>Enter the month milestone for this maintenance</small>
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => setShowAddMilestoneModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  Create Milestone
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   )
