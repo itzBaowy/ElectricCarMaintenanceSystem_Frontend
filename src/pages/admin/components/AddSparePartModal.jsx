@@ -2,28 +2,11 @@ import { useState } from 'react'
 import sparePartService from '../../../api/sparePartService'
 import '../../../styles/AddSparePartModal.css'
 
-const CATEGORIES = [
-  { code: 'FILTER', name: 'Filters' },
-  { code: 'LIQUID', name: 'Liquids & Chemicals' },
-  { code: 'ELECTRONIC', name: 'Battery & Electronics' },
-  { code: 'BRAKE', name: 'Brake System' },
-  { code: 'SUSPENSION', name: 'Suspension & Steering' },
-  { code: 'DRIVETRAIN', name: 'Drivetrain' },
-  { code: 'COOLING', name: 'Cooling System' },
-  { code: 'HIGH_VOLTAGE', name: 'High Voltage System' },
-  { code: 'TIRE', name: 'Tires & Wheels' },
-  { code: 'WIPER', name: 'Wipers' }
-]
-
 const AddSparePartModal = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     partNumber: '',
     name: '',
-    unitPrice: '',
-    quantityInStock: '',
-    minimumStockLevel: '',
-    categoryName: '',
-    categoryCode: ''
+    unitPrice: ''
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -44,26 +27,6 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
     }
   }
 
-  const handleCategoryChange = (e) => {
-    const categoryCode = e.target.value
-    const category = CATEGORIES.find(cat => cat.code === categoryCode)
-    
-    setFormData(prev => ({
-      ...prev,
-      categoryCode: categoryCode,
-      categoryName: category ? category.name : ''
-    }))
-    
-    // Clear validation errors for category fields
-    if (validationErrors.categoryCode || validationErrors.categoryName) {
-      setValidationErrors(prev => ({
-        ...prev,
-        categoryCode: null,
-        categoryName: null
-      }))
-    }
-  }
-
   const validateForm = () => {
     const errors = {}
 
@@ -77,18 +40,6 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
 
     if (!formData.unitPrice || formData.unitPrice <= 0) {
       errors.unitPrice = 'Unit price must be greater than 0'
-    }
-
-    if (formData.quantityInStock === '' || formData.quantityInStock < 0) {
-      errors.quantityInStock = 'Quantity must be 0 or greater'
-    }
-
-    if (formData.minimumStockLevel === '' || formData.minimumStockLevel < 0) {
-      errors.minimumStockLevel = 'Minimum stock level must be 0 or greater'
-    }
-
-    if (!formData.categoryCode) {
-      errors.categoryCode = 'Category is required'
     }
 
     setValidationErrors(errors)
@@ -109,11 +60,7 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
       const createData = {
         partNumber: formData.partNumber.trim(),
         name: formData.name.trim(),
-        unitPrice: parseFloat(formData.unitPrice),
-        quantityInStock: parseInt(formData.quantityInStock),
-        minimumStockLevel: parseInt(formData.minimumStockLevel),
-        categoryName: formData.categoryName,
-        categoryCode: formData.categoryCode
+        unitPrice: parseFloat(formData.unitPrice)
       }
 
       const response = await sparePartService.createSparePart(createData)
@@ -194,37 +141,6 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
                 )}
               </div>
 
-              {/* Category */}
-              <div className="form-group full-width">
-                <label htmlFor="categoryCode">
-                  Category <span className="required">*</span>
-                </label>
-                <select
-                  id="categoryCode"
-                  name="categoryCode"
-                  value={formData.categoryCode}
-                  onChange={handleCategoryChange}
-                  className={validationErrors.categoryCode ? 'error' : ''}
-                >
-                  <option value="">Select a category</option>
-                  {CATEGORIES.map((category) => (
-                    <option key={category.code} value={category.code}>
-                      {category.name} ({category.code})
-                    </option>
-                  ))}
-                </select>
-                {validationErrors.categoryCode && (
-                  <span className="error-text">{validationErrors.categoryCode}</span>
-                )}
-                {formData.categoryCode && (
-                  <div className="category-info">
-                    <span className="info-badge">
-                       {formData.categoryName} - {formData.categoryCode}
-                    </span>
-                  </div>
-                )}
-              </div>
-
               {/* Unit Price */}
               <div className="form-group">
                 <label htmlFor="unitPrice">
@@ -245,52 +161,12 @@ const AddSparePartModal = ({ onClose, onAdd }) => {
                   <span className="error-text">{validationErrors.unitPrice}</span>
                 )}
               </div>
-
-              {/* Quantity In Stock */}
-              <div className="form-group">
-                <label htmlFor="quantityInStock">
-                  Quantity in Stock <span className="required">*</span>
-                </label>
-                <input
-                  type="number"
-                  id="quantityInStock"
-                  name="quantityInStock"
-                  value={formData.quantityInStock}
-                  onChange={handleChange}
-                  className={validationErrors.quantityInStock ? 'error' : ''}
-                  placeholder="0"
-                  min="0"
-                />
-                {validationErrors.quantityInStock && (
-                  <span className="error-text">{validationErrors.quantityInStock}</span>
-                )}
-              </div>
-
-              {/* Minimum Stock Level */}
-              <div className="form-group">
-                <label htmlFor="minimumStockLevel">
-                  Minimum Stock Level <span className="required">*</span>
-                </label>
-                <input
-                  type="number"
-                  id="minimumStockLevel"
-                  name="minimumStockLevel"
-                  value={formData.minimumStockLevel}
-                  onChange={handleChange}
-                  className={validationErrors.minimumStockLevel ? 'error' : ''}
-                  placeholder="0"
-                  min="0"
-                />
-                {validationErrors.minimumStockLevel && (
-                  <span className="error-text">{validationErrors.minimumStockLevel}</span>
-                )}
-              </div>
             </div>
 
             <div className="form-note">
               <span className="note-icon"></span>
               <span className="note-text">
-                All fields are required. Select a category and the name will be auto-filled.
+                All fields are required.
               </span>
             </div>
           </div>
