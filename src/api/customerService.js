@@ -169,6 +169,34 @@ export const customerService = {
         error: error.response?.data || error.message
       }
     }
+  },
+
+  // Update customer status (admin only)
+  updateCustomerStatus: async (userId, isActive) => {
+    try {
+      const response = await api.patch(`/api/customers/${userId}/status`, { isActive })
+      
+      if (response.data.code === 1000) {
+        return {
+          success: true,
+          data: response.data.result,
+          message: response.data.message || 'Customer status updated successfully'
+        }
+      } else {
+        return {
+          success: false,
+          message: response.data.message || 'Failed to update customer status',
+          error: response.data
+        }
+      }
+    } catch (error) {
+      logger.error('Update customer status error:', error)
+      return {
+        success: false,
+        message: error.response?.data?.message || 'Failed to update customer status',
+        error: error.response?.data || error.message
+      }
+    }
   }
 }
 

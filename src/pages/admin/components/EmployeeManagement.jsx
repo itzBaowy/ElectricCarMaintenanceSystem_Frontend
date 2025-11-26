@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import technicianService from "../../../api/technicianService";
 import staffService from "../../../api/staffService";
 import centerService from "../../../api/centerService";
+import customerService from "../../../api/customerService";
 import logger from "../../../utils/logger";
 import "../../../styles/EmployeeManagement.css";
 
@@ -262,6 +263,32 @@ const EmployeeManagement = () => {
     } catch (error) {
       logger.error("Error deleting employee:", error);
       alert("An error occurred while deleting employee");
+    }
+  };
+
+  const handleStatusToggle = async (employee) => {
+    const newStatus = !employee.active;
+    
+    try {
+      const result = await customerService.updateCustomerStatus(
+        employee.id,
+        newStatus
+      );
+
+      if (result && result.success) {
+        alert(
+          `Trạng thái của ${employee.fullName} đã được cập nhật thành công!`
+        );
+        // Refresh the employee list to reflect changes
+        loadEmployees();
+      } else {
+        alert(
+          `Không thể cập nhật trạng thái: ${result?.message || "Lỗi không xác định"}`
+        );
+      }
+    } catch (error) {
+      logger.error("Error updating employee status:", error);
+      alert("Có lỗi xảy ra khi cập nhật trạng thái nhân viên");
     }
   };
 
@@ -567,6 +594,7 @@ const EmployeeManagement = () => {
                     <th>Email</th>
                     <th>Role</th>
                     <th>Service Center</th>
+                    <th>Status</th>
                     <th>Join Date</th>
                     <th>Actions</th>
                   </tr>
@@ -595,6 +623,17 @@ const EmployeeManagement = () => {
                         ) : (
                           <span className="not-assigned">Not assigned</span>
                         )}
+                      </td>
+                      <td>
+                        <label className="status-toggle-switch">
+                          <input
+                            type="checkbox"
+                            checked={employee.active}
+                            onChange={() => handleStatusToggle(employee)}
+                            title={employee.active ? "Click to deactivate" : "Click to activate"}
+                          />
+                          <span className="toggle-slider"></span>
+                        </label>
                       </td>
                       <td>{employee.joinDate}</td>
                       <td>

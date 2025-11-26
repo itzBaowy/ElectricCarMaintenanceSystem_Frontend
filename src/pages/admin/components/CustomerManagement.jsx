@@ -221,6 +221,32 @@ const CustomerManagement = () => {
     }
   };
 
+  const handleStatusToggle = async (customer) => {
+    const newStatus = !customer.active;
+    
+    try {
+      const result = await customerService.updateCustomerStatus(
+        customer.id,
+        newStatus
+      );
+
+      if (result && result.success) {
+        alert(
+          `Trạng thái của ${customer.fullName} đã được cập nhật thành công!`
+        );
+        // Refresh the customer list to reflect changes
+        loadCustomers();
+      } else {
+        alert(
+          `Không thể cập nhật trạng thái: ${result?.message || "Lỗi không xác định"}`
+        );
+      }
+    } catch (error) {
+      logger.error("Error updating customer status:", error);
+      alert("Có lỗi xảy ra khi cập nhật trạng thái khách hàng");
+    }
+  };
+
   // Filter customers
   const filteredCustomers = customers.filter((customer) => {
     const customerId = customer.customerId || customer.id;
@@ -569,7 +595,15 @@ const CustomerManagement = () => {
                       </span>
                     </td>
                     <td>
-                     {customer.recordStatus}
+                      <label className="status-toggle-switch">
+                        <input
+                          type="checkbox"
+                          checked={customer.active}
+                          onChange={() => handleStatusToggle(customer)}
+                          title={customer.active ? "Click to deactivate" : "Click to activate"}
+                        />
+                        <span className="toggle-slider"></span>
+                      </label>
                     </td>
                     <td>{customer.joinDate}</td>
                     <td>
