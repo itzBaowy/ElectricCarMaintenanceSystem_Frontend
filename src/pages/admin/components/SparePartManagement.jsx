@@ -131,6 +131,33 @@ const SparePartManagement = () => {
     )
   }
 
+  // Handle status toggle
+  const handleStatusToggle = async (part) => {
+    const newStatus = !part.active
+    
+    try {
+      const response = await sparePartService.updateSparePartStatus(
+        part.id,
+        newStatus
+      )
+
+      if (response.code === 1000) {
+        alert(
+          `Trạng thái của ${part.name} đã được cập nhật thành công!`
+        )
+        // Refresh the spare parts list to reflect changes
+        fetchSpareParts()
+      } else {
+        alert(
+          `Không thể cập nhật trạng thái: ${response.message || "Lỗi không xác định"}`
+        )
+      }
+    } catch (error) {
+      console.error('Error updating spare part status:', error)
+      alert('Có lỗi xảy ra khi cập nhật trạng thái phụ tùng')
+    }
+  }
+
   // Handle add new spare part
   const handleAddNew = () => {
     setShowAddModal(true)
@@ -171,12 +198,6 @@ const SparePartManagement = () => {
     if (quantity === 0) return 'out-of-stock'
     if (quantity <= minimumLevel) return 'low-stock'
     return 'in-stock'
-  }
-
-  const getStockLabel = (quantity, minimumLevel) => {
-    if (quantity === 0) return 'Out of Stock'
-    if (quantity <= minimumLevel) return 'Low Stock'
-    return 'In Stock'
   }
 
   if (loading) {
@@ -273,8 +294,6 @@ const SparePartManagement = () => {
               <th>Part Number</th>
               <th>Name</th>
               <th>Unit Price</th>
-              <th>Stock Quantity</th>
-              <th>Min. Level</th>
               <th>Status</th>
               <th>Last Updated</th>
               <th>Actions</th>
@@ -296,16 +315,16 @@ const SparePartManagement = () => {
                   <td className="part-number">{part.partNumber}</td>
                   <td className="part-name">{part.name}</td>
                   <td className="price">{formatPrice(part.unitPrice)}</td>
-                  <td className="quantity">
-                    <span className="quantity-badge">
-                      {part.quantityInStock}
-                    </span>
-                  </td>
-                  <td className="min-level">{part.minimumStockLevel}</td>
                   <td>
-                    <span className={`status-badge ${getStockStatus(part.quantityInStock, part.minimumStockLevel)}`}>
-                      {getStockLabel(part.quantityInStock, part.minimumStockLevel)}
-                    </span>
+                    <label className="status-toggle-switch">
+                      <input
+                        type="checkbox"
+                        checked={part.active}
+                        onChange={() => handleStatusToggle(part)}
+                        title={part.active ? "Click to deactivate" : "Click to activate"}
+                      />
+                      <span className="toggle-slider"></span>
+                    </label>
                   </td>
                   <td className="date">{formatDate(part.updatedAt)}</td>
                   <td className="actions">

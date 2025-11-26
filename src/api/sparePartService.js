@@ -70,6 +70,18 @@ const sparePartService = {
     }
   },
 
+  // Update spare part status
+  updateSparePartStatus: async (id, isActive) => {
+    try {
+      const response = await api.patch(`/api/spareParts/${id}/status`, { isActive })
+      logger.log('✅ Spare part status updated successfully:', response.data)
+      return response.data
+    } catch (error) {
+      logger.error('❌ Error updating spare part status:', error)
+      throw error
+    }
+  },
+
   // Delete spare part (for future use)
   deleteSparePart: async (id) => {
     try {
