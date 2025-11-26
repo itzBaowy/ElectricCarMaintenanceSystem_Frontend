@@ -147,6 +147,32 @@ const ServiceCenterManagement = () => {
     }
   }
 
+  const handleStatusToggle = async (center) => {
+    const newStatus = !center.active
+    
+    try {
+      const result = await centerService.updateCenterStatus(
+        center.id,
+        newStatus
+      )
+
+      if (result && result.success) {
+        alert(
+          `Trạng thái của ${center.name} đã được cập nhật thành công!`
+        )
+        // Refresh the centers list to reflect changes
+        loadCenters()
+      } else {
+        alert(
+          `Không thể cập nhật trạng thái: ${result?.message || "Lỗi không xác định"}`
+        )
+      }
+    } catch (error) {
+      logger.error('Error updating center status:', error)
+      alert('Có lỗi xảy ra khi cập nhật trạng thái trung tâm')
+    }
+  }
+
   if (loading) {
     return <div className="loading"> Loading...</div>
   }
@@ -202,6 +228,15 @@ const ServiceCenterManagement = () => {
               <div className="center-header">
                 <h3>{center.name}</h3>
                 <div className="center-actions">
+                  <label className="status-toggle-switch" onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={center.active}
+                      onChange={() => handleStatusToggle(center)}
+                      title={center.active ? "Click to deactivate" : "Click to activate"}
+                    />
+                    <span className="toggle-slider"></span>
+                  </label>
                   <button 
                     className="edit-btn"
                     onClick={() => handleOpenModal(center)}

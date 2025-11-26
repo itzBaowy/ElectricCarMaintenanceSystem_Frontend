@@ -571,6 +571,22 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
+.center-item.inactive {
+  opacity: 0.6;
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.center-item.inactive:hover {
+  border-color: #e0e0e0;
+  background: #f5f5f5;
+  box-shadow: none;
+}
+
+.center-item.inactive input[type="radio"] {
+  cursor: not-allowed;
+}
+
 .center-item input[type="radio"] {
   width: 20px;
   height: 20px;
@@ -584,11 +600,31 @@
   flex: 1;
 }
 
+.center-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
 .center-info h4 {
   font-size: 16px;
   font-weight: 600;
   color: #333;
-  margin: 0 0 8px 0;
+  margin: 0;
+}
+
+.center-status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.center-status-badge.inactive {
+  background: #ffebee;
+  color: #c62828;
 }
 
 .center-address {

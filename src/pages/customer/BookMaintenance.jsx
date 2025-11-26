@@ -265,7 +265,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                 centers.map(center => (
                   <label
                     key={center.id}
-                    className={`center-item ${selectedCenter?.id === center.id ? 'selected' : ''}`}
+                    className={`center-item ${selectedCenter?.id === center.id ? 'selected' : ''} ${!center.active ? 'inactive' : ''}`}
                   >
                     <input
                       type="radio"
@@ -273,9 +273,15 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                       value={center.id}
                       checked={selectedCenter?.id === center.id}
                       onChange={() => handleCenterSelect(center)}
+                      disabled={!center.active}
                     />
                     <div className="center-info">
-                      <h4>{center.name}</h4>
+                      <div className="center-name-row">
+                        <h4>{center.name}</h4>
+                        {!center.active && (
+                          <span className="center-status-badge inactive">Temporary Down</span>
+                        )}
+                      </div>
                       <p className="center-address">📍 {center.address}</p>
                       {center.district && <p className="center-district">{center.district}</p>}
                     </div>
