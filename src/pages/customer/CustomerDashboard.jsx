@@ -432,10 +432,6 @@ const CustomerDashboardContent = () => {
                               <span className="label">Mileage:</span>
                               <span className="value">{parseInt(vehicle.currentKm).toLocaleString()} km</span>
                             </div>
-                            <div className="detail-item">
-                              <span className="label">Basic Maintenance:</span>
-                              <span className="value">{model?.basicMaintenance || 'N/A'} km</span>
-                            </div>
                           </div>
                           <div className="vehicle-actions">
                             <button 
