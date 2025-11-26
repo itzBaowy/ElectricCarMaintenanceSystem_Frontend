@@ -832,6 +832,18 @@
   font-weight: 700;
 }
 
+.time-now {
+  color: #2e7d32;
+  font-weight: 700;
+  padding: 4px 12px;
+  background: #c8e6c9;
+  border-radius: 20px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* Agreement Section */
 .agreement-section {
   margin: 24px 0;
@@ -883,6 +895,68 @@
 
 .agreement-box:has(.agreement-checkbox:checked) .agreement-text strong {
   color: #1b5e20;
+}
+
+/* Vehicle at Center Option */
+.vehicle-at-center-option {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid #2196f3;
+  border-radius: 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-input {
+  width: 20px;
+  height: 20px;
+  accent-color: #2196f3;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-text {
+  font-size: 15px;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+.vehicle-at-center-option:has(.checkbox-input:checked) {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-color: #4caf50;
+}
+
+.vehicle-at-center-option:has(.checkbox-input:checked) .checkbox-text {
+  color: #2e7d32;
+}
+
+.info-message {
+  padding: 16px;
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.info-message p {
+  margin: 0;
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-hint {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
+  margin-top: 4px;
 }
 
 /* Responsive Design */

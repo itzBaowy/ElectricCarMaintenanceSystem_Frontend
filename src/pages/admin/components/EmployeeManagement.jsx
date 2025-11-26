@@ -277,18 +277,18 @@ const EmployeeManagement = () => {
 
       if (result && result.success) {
         alert(
-          `Trạng thái của ${employee.fullName} đã được cập nhật thành công!`
+          `Status for ${employee.fullName} has been updated successfully!`
         );
         // Refresh the employee list to reflect changes
         loadEmployees();
       } else {
         alert(
-          `Không thể cập nhật trạng thái: ${result?.message || "Lỗi không xác định"}`
+          `Failed to update status: ${result?.message || "Unknown error"}`
         );
       }
     } catch (error) {
       logger.error("Error updating employee status:", error);
-      alert("Có lỗi xảy ra khi cập nhật trạng thái nhân viên");
+      alert("An error occurred while updating employee status");
     }
   };
 

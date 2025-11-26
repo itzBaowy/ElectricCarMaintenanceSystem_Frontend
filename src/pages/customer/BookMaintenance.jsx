@@ -16,6 +16,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
   const [showItemsDetail, setShowItemsDetail] = useState(false)
   const [appointmentDate, setAppointmentDate] = useState('')
   const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [vehicleAtCenter, setVehicleAtCenter] = useState(false) // New state for vehicle at center option
 
   // Load centers when component mounts
   useEffect(() => {
@@ -98,8 +99,9 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       return false
     }
 
-    if (!appointmentDate) {
-      alert('Please select appointment date and time')
+    // Only require appointment date if vehicle is not at center
+    if (!vehicleAtCenter && !appointmentDate) {
+      alert('Please select appointment date and time, or check "Vehicle is already at the center"')
       return false
     }
 
@@ -120,8 +122,16 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
 
     setLoading(true)
     try {
-      // Format datetime: "YYYY-MM-DD HH:mm" (remove T and seconds)
-      const formattedDate = appointmentDate.replace('T', ' ')
+      // If vehicle is at center, use current date and time
+      // Otherwise, use the selected appointment date
+      let formattedDate
+      if (vehicleAtCenter) {
+        const now = new Date()
+        formattedDate = now.toISOString().slice(0, 16).replace('T', ' ')
+      } else {
+        // Format datetime: "YYYY-MM-DD HH:mm" (remove T and seconds)
+        formattedDate = appointmentDate.replace('T', ' ')
+      }
       
       // Prepare appointment data according to new API format
       const appointmentData = {
@@ -134,7 +144,10 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
       const result = await appointmentService.createAppointment(appointmentData)
       
       if (result.success) {
-        alert('✅ Maintenance appointment created successfully! Status: PENDING')
+        const successMessage = vehicleAtCenter 
+          ? '✅ Maintenance appointment created successfully! Your vehicle is ready for immediate service. Status: PENDING'
+          : '✅ Maintenance appointment created successfully! Status: PENDING'
+        alert(successMessage)
         if (onAppointmentCreated) {
           onAppointmentCreated(result.data)
         }
@@ -339,17 +352,49 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
           {selectedRecommendation && (
             <div className="form-section">
               <h3>🗓️ Select Date & Time <span className="required">*</span></h3>
-              <div className="form-group">
-                <label>Date and Time <span className="required">*</span></label>
-                <input
-                  type="datetime-local"
-                  value={appointmentDate}
-                  onChange={(e) => setAppointmentDate(e.target.value)}
-                  min={getMinDateTime()}
-                  required
-                  className="datetime-input"
-                />
+              
+              {/* Vehicle at center checkbox */}
+              <div className="form-group vehicle-at-center-option">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={vehicleAtCenter}
+                    onChange={(e) => {
+                      setVehicleAtCenter(e.target.checked)
+                      // Clear appointment date when checking this option
+                      if (e.target.checked) {
+                        setAppointmentDate('')
+                      }
+                    }}
+                    className="checkbox-input"
+                  />
+                  <span className="checkbox-text">
+                    <strong>Vehicle is already at the center</strong> (ready for immediate service)
+                  </span>
+                </label>
               </div>
+
+              {/* Date time picker - only show if vehicle is NOT at center */}
+              {!vehicleAtCenter && (
+                <div className="form-group">
+                  <label>Preferred Date and Time <span className="required">*</span></label>
+                  <input
+                    type="datetime-local"
+                    value={appointmentDate}
+                    onChange={(e) => setAppointmentDate(e.target.value)}
+                    min={getMinDateTime()}
+                    required={!vehicleAtCenter}
+                    className="datetime-input"
+                  />
+                  <small className="input-hint">Select your preferred appointment date and time</small>
+                </div>
+              )}
+
+              {vehicleAtCenter && (
+                <div className="info-message">
+                  <p>ℹ️ Your appointment will be scheduled for immediate service at the center.</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -388,6 +433,25 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
                   <span className="summary-value">{vehicle?.licensePlate} - {vehicleModel?.name}</span>
                 </div>
                 <div className="summary-row">
+                  <span className="summary-label">Appointment time:</span>
+                  <span className="summary-value">
+                    {vehicleAtCenter ? (
+                      <span className="time-now">🟢 Now (Immediate service)</span>
+                    ) : appointmentDate ? (
+                      new Date(appointmentDate).toLocaleString('vi-VN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                      })
+                    ) : (
+                      'Not selected'
+                    )}
+                  </span>
+                </div>
+                <div className="summary-row">
                   <span className="summary-label">Maintenance package:</span>
                   <span className="summary-value">Milestone {selectedRecommendation.milestoneKm.toLocaleString()} km</span>
                 </div>
@@ -407,7 +471,7 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
             <button 
               type="submit" 
               className="btn-primary" 
-              disabled={loading || !selectedCenter || !selectedRecommendation || !appointmentDate || !agreedToTerms}
+              disabled={loading || !selectedCenter || !selectedRecommendation || (!vehicleAtCenter && !appointmentDate) || !agreedToTerms}
             >
               {loading ? '⏳ Processing...' : '✓ Confirm Appointment'}
             </button>
