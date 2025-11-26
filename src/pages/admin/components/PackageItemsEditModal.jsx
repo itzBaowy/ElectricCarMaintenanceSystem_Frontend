@@ -142,6 +142,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
         const updateData = {
           vehicleModelId: item.vehicleModelId || model.id,
           milestoneKm: item.milestoneKm || pkg.milestoneKm,
+          milestoneMonth: item.milestoneMonth || pkg.milestoneMonth,
           serviceItemId: item.serviceItemId,
           price: changes.price !== undefined ? parseFloat(changes.price) : item.price,
           actionType: changes.actionType !== undefined ? changes.actionType : item.actionType,
@@ -211,6 +212,7 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       const createData = {
         vehicleModelId: model.id,
         milestoneKm: pkg.milestoneKm,
+        milestoneMonth: pkg.milestoneMonth,
         serviceItemId: parseInt(newItem.serviceItemId),
         price: parseFloat(newItem.price),
         actionType: newItem.actionType,

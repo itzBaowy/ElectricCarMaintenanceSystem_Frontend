@@ -193,6 +193,10 @@
   font-weight: 600;
 }
 
+.milestone-month-badge {
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+}
+
 .package-actions {
   display: flex;
   align-items: center;

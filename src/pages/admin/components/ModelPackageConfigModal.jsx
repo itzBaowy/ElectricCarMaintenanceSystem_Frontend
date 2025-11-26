@@ -41,6 +41,7 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
               id: milestoneKm, // Using milestoneKm as ID
               name: packageName,
               milestoneKm: milestoneKm,
+              milestoneMonth: item.milestoneMonth || 0, // Add milestoneMonth
               items: [],
               totalPrice: 0 // Will be fetched separately
             }
@@ -233,6 +234,9 @@ const ModelPackageConfigModal = ({ model, allModels, onClose, onConfigUpdated })
                           <h4>{pkg.name}</h4>
                           <span className="milestone-badge">
                             {pkg.milestoneKm.toLocaleString('vi-VN')} km
+                          </span>
+                          <span className="milestone-badge milestone-month-badge">
+                            {pkg.milestoneMonth} months
                           </span>
                         </div>
                         <div className="package-actions">
