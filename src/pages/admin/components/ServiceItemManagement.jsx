@@ -148,6 +148,33 @@ const ServiceItemManagement = () => {
     }
   }
 
+  // Handle status toggle
+  const handleStatusToggle = async (item) => {
+    const newStatus = !item.active
+    
+    try {
+      const response = await serviceItemService.updateServiceItemStatus(
+        item.id,
+        newStatus
+      )
+
+      if (response.code === 1000) {
+        alert(
+          `Trạng thái của ${item.name} đã được cập nhật thành công!`
+        )
+        // Refresh the current page to reflect changes
+        await fetchServiceItems(currentPage)
+      } else {
+        alert(
+          `Không thể cập nhật trạng thái: ${response.message || "Lỗi không xác định"}`
+        )
+      }
+    } catch (error) {
+      console.error('Error updating service item status:', error)
+      alert('Có lỗi xảy ra khi cập nhật trạng thái dịch vụ')
+    }
+  }
+
   // Generate page numbers for pagination
   const getPageNumbers = () => {
     const pages = []
@@ -252,6 +279,7 @@ const ServiceItemManagement = () => {
                   <th>ID</th>
                   <th>Service Name</th>
                   <th>Description</th>
+                  <th>Status</th>
                   <th>Created At</th>
                   <th>Updated At</th>
                   <th>Actions</th>
@@ -271,6 +299,17 @@ const ServiceItemManagement = () => {
                       <span className="description-text" title={item.description}>
                         {item.description || 'N/A'}
                       </span>
+                    </td>
+                    <td>
+                      <label className="status-toggle-switch">
+                        <input
+                          type="checkbox"
+                          checked={item.active}
+                          onChange={() => handleStatusToggle(item)}
+                          title={item.active ? "Click to deactivate" : "Click to activate"}
+                        />
+                        <span className="toggle-slider"></span>
+                      </label>
                     </td>
                     <td>
                       <small>{formatDate(item.createdAt)}</small>

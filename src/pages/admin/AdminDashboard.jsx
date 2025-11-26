@@ -10,11 +10,13 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 import HistoryIcon from '@mui/icons-material/History';
 import EventIcon from '@mui/icons-material/Event';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EmployeeManagement from "./components/EmployeeManagement";
 import CustomerManagement from "./components/CustomerManagement";
 import ServiceCenterManagement from "./components/ServiceCenterManagement";
 import SparePartManagement from "./components/SparePartManagement";
+import InventoryManagement from "./components/InventoryManagement";
 import VehicleModelManagement from "./components/VehicleModelManagement";
 import VehicleManagement from "./components/VehicleManagement";
 import MaintenanceRecordManagement from "./components/MaintenanceRecordManagement";
@@ -72,6 +74,12 @@ const AdminDashboard = () => {
       icon: <SettingsIcon />,
       label: "Spare Parts",
       component: SparePartManagement,
+    },
+    {
+      id: "inventory",
+      icon: <InventoryIcon />,
+      label: "Inventory",
+      component: InventoryManagement,
     },
     {
       id: "vehicleModels",

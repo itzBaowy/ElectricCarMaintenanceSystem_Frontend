@@ -68,6 +68,23 @@ const serviceItemService = {
       logger.error('Error deleting service item:', error)
       throw error
     }
+  },
+
+  /**
+   * Update service item status
+   * @param {number} id - Service item ID
+   * @param {boolean} isActive - Active status
+   * @returns {Promise} Response
+   */
+  updateServiceItemStatus: async (id, isActive) => {
+    try {
+      const response = await api.patch(`/api/serviceItem/${id}/status`, { isActive })
+      logger.log('Update service item status response:', response.data)
+      return response.data
+    } catch (error) {
+      logger.error('Error updating service item status:', error)
+      throw error
+    }
   }
 }
 
