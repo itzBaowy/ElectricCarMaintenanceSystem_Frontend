@@ -31,10 +31,10 @@ const PackageItemsEditModal = ({ model, package: pkg, onClose, onSuccess }) => {
       setLoading(true)
       setError('')
       
-      // Fetch package items, spare parts, and all service items
+      // Fetch package items, ALL spare parts, and all service items
       const [itemsResult, partsResult, serviceItemsResult] = await Promise.all([
         modelPackageItemService.getByModelAndMilestone(model.id, pkg.milestoneKm || pkg.id),
-        sparePartService.getSparePartsByModel(model.id),
+        sparePartService.getAllSpareParts(0, 1000), // Get ALL spare parts
         serviceItemService.getAllServiceItems(0, 1000) // Get all service items
       ])
 
