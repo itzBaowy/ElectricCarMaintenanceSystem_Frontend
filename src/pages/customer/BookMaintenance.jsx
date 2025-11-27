@@ -411,26 +411,6 @@ const BookMaintenance = ({ vehicle, vehicleModel, onClose, onAppointmentCreated 
             <div className="form-section">
               <h3>🗓️ Select Date & Time <span className="required">*</span></h3>
               
-              {/* Vehicle at center checkbox */}
-              <div className="form-group vehicle-at-center-option">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={vehicleAtCenter}
-                    onChange={(e) => {
-                      setVehicleAtCenter(e.target.checked)
-                      // Clear appointment date when checking this option
-                      if (e.target.checked) {
-                        setAppointmentDate('')
-                      }
-                    }}
-                    className="checkbox-input"
-                  />
-                  <span className="checkbox-text">
-                    <strong>Vehicle is already at the center</strong> (ready for immediate service)
-                  </span>
-                </label>
-              </div>
 
               {/* Date time picker - only show if vehicle is NOT at center */}
               {!vehicleAtCenter && (
