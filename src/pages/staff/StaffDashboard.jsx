@@ -434,6 +434,43 @@ const StaffDashboardContent = () => {
     }
   };
 
+  // Cancel appointment (for PENDING, CONFIRMED, IN_PROGRESS status)
+  const handleCancelAppointment = async (appointment) => {
+    const appointmentId =
+      appointment.appointmentId ||
+      appointment.id ||
+      appointment.appointmentID;
+
+    if (!appointmentId) {
+      logger.error("Appointment ID not found:", appointment);
+      alert("Error: Appointment ID not found");
+      return;
+    }
+
+    const confirmMessage = `Are you sure you want to cancel this appointment?\n\nAppointment ID: #${appointmentId}\nCustomer: ${appointment.customerName}\nVehicle: ${appointment.vehicleLicensePlate}\nDate: ${new Date(appointment.appointmentDate).toLocaleDateString("vi-VN")}`;
+
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      const result = await appointmentService.updateAppointmentStatus(
+        appointmentId,
+        "CANCELLED"
+      );
+
+      if (result.success) {
+        alert("✅ Appointment cancelled successfully!\nThe customer and technician (if assigned) will be notified.");
+        fetchData(); // Refresh appointments list
+      } else {
+        alert(`❌ Error: ${result.message}`);
+      }
+    } catch (error) {
+      logger.error("Error cancelling appointment:", error);
+      alert("❌ An error occurred while cancelling appointment!");
+    }
+  };
+
   // View appointment details
   const handleViewDetails = async (appointment) => {
     setSelectedAppointment(appointment);
@@ -1075,6 +1112,17 @@ const StaffDashboardContent = () => {
                                     View Invoice
                                   </button>
                                 )}
+                              {(appointment.status === "PENDING" ||
+                                appointment.status === "CONFIRMED" ||
+                                appointment.status === "IN_PROGRESS") && (
+                                <button
+                                  className="appointment-action-btn cancel"
+                                  onClick={() => handleCancelAppointment(appointment)}
+                                  title="Cancel appointment"
+                                >
+                                  ❌ Cancel
+                                </button>
+                              )}
                             </div>
                           </td>
                         </tr>

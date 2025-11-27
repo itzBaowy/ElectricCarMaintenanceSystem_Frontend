@@ -1600,6 +1600,17 @@
   transform: translateY(-1px);
 }
 
+.appointment-action-btn.cancel {
+  background: #ef5350;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.18);
+}
+.appointment-action-btn.cancel:hover {
+  background: #e53935;
+  box-shadow: 0 0 15px rgba(244, 67, 54, 0.28);
+  transform: translateY(-1px);
+}
+
 .staff-sidebar {
   width: 270px;
   min-width: 220px;
